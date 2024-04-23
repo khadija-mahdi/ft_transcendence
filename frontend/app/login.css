@@ -1,0 +1,120 @@
+#mainContainer, html{
+	background-color: black;
+	margin: 0;
+	padding: 0;
+}
+
+ #DirectLogin{
+	margin-bottom: 0;
+	background-color:  #181717;
+}
+
+p{
+	margin-top: 10px;
+	text-align: center;
+	color: #696565;
+}
+
+.login-container {
+	background-color: #181717;
+	width: 374px;
+	height: 659px;
+	max-width: 400px;
+	margin: 0 auto;
+	padding: 20px;	border-radius: 5px;
+  }
+  
+  .login-container h2 {
+	margin-bottom: 50px;
+	margin-top: 30px;
+	text-align: center;
+	color: rgb(255, 255, 255);
+  }
+  
+  .login-container label {
+	display: block;
+	color: #696565;
+	margin-bottom: 5px;
+	margin-top: 10px;
+  }
+  
+  .login-container input[type="text"],
+  .login-container input[type="password"] {
+	position: relative;
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #0c0c0c;
+	border-radius: 3px;
+	background-color: #373333;
+
+  }
+
+  .password-input-container {
+	position: relative;
+	/* background-color: #004E99; */
+  }
+  
+  .password-toggle {
+	position: absolute;
+	top: 20%;
+	right: 20px;
+	/* transform: translateY(-50%); */
+	cursor: pointer;
+  }
+  
+  .login-container button {
+	border: 1px solid #aea3a3;
+	width: 100%;
+	padding: 10px;
+	background-color: #004E99;
+	margin-top: 10px;
+	margin-bottom: 30px;
+	color: #fff;
+	border-radius: 3px;
+	cursor: pointer;
+  }
+  
+  .terms-link {
+    display: inline-block;
+    text-decoration: underline;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  #logo {
+	display: inline-flex;
+	margin-right: 10px;
+}
+
+.line-container {
+	display: flex;
+	align-items: center;
+  }
+  
+  .line {
+	margin-top: 30px;
+	flex: 1;
+	border: 1px solid #cbc6c6;
+	height: 1px;
+  }
+  
+  .left-text {
+	  color: #e6dbdb;
+	  margin: 0 30px;
+	  margin-top: 10px;
+  }
+
+  #mainLogo {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	margin-right: 10px;
+	margin-left: 50px;
+	background-color: rgb(252, 252, 248);
+	border-radius: 50%;
+  }
+
+  #mainWord {
+	color: white;
+	
+  }
