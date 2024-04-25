@@ -6,7 +6,6 @@ function NavBtn({href, name, Icon}: {
 	href:string;
 	name:string;
 	Icon: any;
-	flag: boolean;
 }) {
 	
 	const pathname = usePathname()
