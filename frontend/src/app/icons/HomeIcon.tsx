@@ -1,6 +1,10 @@
-import * as React from "react";
+import PropTypes from "prop-types";
 
-export const HomeIcon = ({ color, ...props }) => (
+interface HomeIconProps {
+  color: string;
+}
+
+const HomeIcon: React.FC<HomeIconProps> = ({ color , ...props }) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={30}
@@ -14,5 +18,9 @@ export const HomeIcon = ({ color, ...props }) => (
 		/>
 	</svg>
 );
+
+HomeIcon.propTypes = {
+	color: PropTypes.string.isRequired,
+  };
 
 export default HomeIcon;

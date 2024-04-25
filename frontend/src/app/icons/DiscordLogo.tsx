@@ -1,6 +1,10 @@
-import * as React from "react";
+import PropTypes from "prop-types";
 
-export const DiscordLogo = ({ color, ...props }) => (
+interface DiscordLogoProps {
+  color: string;
+}
+
+const DiscordLogo: React.FC<DiscordLogoProps> = ({ color, ...props }) => (
 	<svg
     xmlns="http://www.w3.org/2000/svg"
     width={20}
@@ -14,5 +18,9 @@ export const DiscordLogo = ({ color, ...props }) => (
     />
   </svg>
 )
+
+DiscordLogo.propTypes = {
+	color: PropTypes.string.isRequired,
+};
 
 export default DiscordLogo;

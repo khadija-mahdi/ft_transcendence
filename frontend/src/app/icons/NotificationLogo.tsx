@@ -1,6 +1,10 @@
-import * as React from "react";
+import PropTypes from "prop-types";
 
-export const NotificationLogo = ({ color, ...props }) => (
+interface NotificationLogoProps {
+  color: string;
+}
+
+const NotificationLogo: React.FC<NotificationLogoProps> = ({ color , ...props }) => (
 	<svg
     xmlns="http://www.w3.org/2000/svg"
     width={20}
@@ -14,5 +18,9 @@ export const NotificationLogo = ({ color, ...props }) => (
     />
   </svg>
 )
+
+NotificationLogo.propTypes = {
+	color: PropTypes.string.isRequired,
+};
 
 export default NotificationLogo;

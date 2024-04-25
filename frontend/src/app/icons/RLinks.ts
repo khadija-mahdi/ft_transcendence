@@ -1,5 +1,5 @@
 
-import RankingIcon, { BrandsLogo } from "./BrandsLogo";
+import BrandsLogo  from "./BrandsLogo";
 import IntraLogo from "./intrLogo";
 import DiscordLogo from "./DiscordLogo";
 import NotificationLogo from "./NotificationLogo";

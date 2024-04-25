@@ -23,8 +23,8 @@ const NavBar = () => {
 	const path = usePathname();
 
 	return (
-		<nav className="bg-black  w-full h-16 mt-8 max-w-[]">
-			<div className="container mx-auto flex flex-row justify-between items-center h-full">
+		<nav className="bg-black ml-[45px] mt-[40px] mb-[40px] flex flex-row justify-between items-center">
+			<div className="container  flex flex-row justify-between items-center">
 				<div className="text-white font-semibold flex space-x-9">
 					<PlayNowIcon/>
 					{Links.map((item, index) => (
@@ -36,9 +36,9 @@ const NavBar = () => {
 						/>
 					))}
 				</div>
-				<div className="space-x-2 flex flex-row items-center justify-center ">
+				<div className=" space-x-2 flex flex-row items-center justify-center ">
 					{RLinks.map((item, index) => (
-						<div key={index} className="rounded-full overflow-hidden bg-gray-700 p-2 w-5 h-5 mb-4">
+						<div key={index} className="rounded-full overflow-hidden bg-[#303030] p-2 w-5 h-5">
 							<NavBtnR
 								href={item.href}
 								Icon={item.Icon}

@@ -1,6 +1,10 @@
-import * as React from "react";
+import PropTypes from "prop-types";
 
-export const IntraLogo = ({ color}) => (
+interface IntraLogoProps {
+  color: string;
+}
+
+const IntraLogo: React.FC<IntraLogoProps> = ({ color}) => (
 	<svg
     xmlns="http://www.w3.org/2000/svg"
     width={20}
@@ -19,5 +23,9 @@ export const IntraLogo = ({ color}) => (
     </defs>
   </svg>
 )
+
+IntraLogo.propTypes = {
+	color: PropTypes.string.isRequired,
+};
 
 export default IntraLogo;

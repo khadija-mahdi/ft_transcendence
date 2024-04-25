@@ -1,6 +1,10 @@
-import * as React from "react";
+import PropTypes from "prop-types";
 
-export const TournamentsIcon = ({ color, ...props }) => (
+interface TournamentsIconProps {
+  color: string;
+}
+
+const TournamentsIcon: React.FC<TournamentsIconProps> = ({ color, ...props }) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={30}
@@ -15,4 +19,8 @@ export const TournamentsIcon = ({ color, ...props }) => (
 	</svg>
 )
 
+TournamentsIcon.propTypes = {
+	color: PropTypes.string.isRequired,
+  };
+  
 export default TournamentsIcon;
