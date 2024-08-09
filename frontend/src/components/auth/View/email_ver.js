@@ -15,6 +15,7 @@ export default () => {
 					<input type="text" id="input3" maxlength="1" class="verification-input" placeholder="--" />
 					<input type="text" id="input4" maxlength="1" class="verification-input" placeholder="--" />
 				</div>
+				<span class="error-message" style="color: red;"></span> <!-- Error message span -->
 				<button id="contInfo" type="submit" class="submit-btn">Continue</button>
 				</form>
 				</div>

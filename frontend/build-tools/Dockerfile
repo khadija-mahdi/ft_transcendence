@@ -1,9 +1,7 @@
 FROM node:alpine
 
-RUN npm install -g serve
-
-WORKDIR /var/www/html/src
+WORKDIR /var/www/html
 
 COPY . .
 
-ENTRYPOINT ["serve", "-s", ".", "-l", "3000"]
+CMD ["node", "server.js"]

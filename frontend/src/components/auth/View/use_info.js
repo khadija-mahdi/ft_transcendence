@@ -11,21 +11,22 @@ export default () => {
 				<div class="form-input">
 					<label for="username">Username</label>
 					<input type="text" id="username" name="username" placeholder="Jon Doe">
-					<span class="error-message"></span>
+					<span class="error-message_user"></span>
 				</div>
 				<div class="form-input">
 					<label for="password">Password</label>
 					<input type="password" id="password" name="password" placeholder="**********">
 					<span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
-					<span class="error-message"></span>
+					<span class="error-message_pass"></span>
 				</div>
 				<div class="form-input">
 					<label for="password">Confirm Password</label>
-					<input type="password" id="password" name="password" placeholder="**********">
+					<input type="password" id="confirm_password" name="password" placeholder="**********">
 					<span class="password-toggle-icon"><i class="fas fa-eye"></i></span>
-					<span class="error-message"></span>
+					<span class="error-message_conf"></span>
 				</div>
 				<button id="doneUp" type="submit" class="submit-btn">Continue</button>
+				<span class="error-message"></span>
 				</form>
 				</div>
 				<p id="privacy">
