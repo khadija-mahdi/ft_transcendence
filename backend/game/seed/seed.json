@@ -1,0 +1,12 @@
+[
+    {
+        "model": "game.game",
+        "pk": 1,
+        "fields": {
+            "name": "3D Online Ping Pong",
+            "description": "Experience the thrill of Ping Pong in a 3D online environment. Challenge your friends or compete with players around the world.",
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    }
+]

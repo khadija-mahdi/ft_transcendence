@@ -1,0 +1,204 @@
+:root {
+    --primary: #000000;
+    --secondary: #30475e;
+    --secondary-light: #3a5a7a;
+    --accent: #f05454;
+    --neutral: #eeeeee;
+	/* padding: 40px; */
+    font-size: 18px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-family: "Montserrat";
+}
+
+body {
+    color: var(--neutral);
+    padding: 1rem clamp(1.5rem, 6vw, 3rem);
+    background-color: var(--primary);
+}
+
+nav {
+    display: flex;
+}
+
+nav a {
+    margin-right: .75em;
+    color: var(--accent);
+}
+
+main {
+    margin: 3rem 0;
+}
+
+h1 {
+    font-size: 2.3rem;
+    margin-bottom: .5rem;
+}
+
+p {
+    margin-bottom: 2rem;
+}
+
+click-counter button {
+    font-weight: 600;
+    border: 2px solid var(--neutral);
+    border-radius: 5px;
+    color: var(--neutral);
+    background-color: var(--secondary);
+    width: 8.5rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    transition: opacity .1s, background-color .1s;
+}
+click-counter button:active {
+    background-color: var(--secondary-light);
+}
+
+@media (min-width: 1000px)  {
+    click-counter button {
+        cursor: pointer;
+    }
+    click-counter button:hover {
+        background-color: var(--secondary-light);
+    }
+    click-counter button:active {
+        opacity: .7;
+    }
+}
+
+
+.header {
+    margin: 40px;
+    display: flex;
+    justify-content: space-between; /* Align logo and authBar */
+    width: 100%; /* Full width */
+    box-sizing: border-box;
+}
+
+.authBar {
+    position: absolute; 
+    top: 40px; 
+    right: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    position: absolute; 
+    top: 40px; 
+    left: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Corrected from justify-items to justify-content */
+    gap: 10px;
+    flex-direction: row;
+}
+
+.logo img {
+    margin: 0;
+    vertical-align: middle;
+    height: 10px; /* Updated from 50px to 100px */
+    width: 10px; /* Updated from 50px to 100px */
+}
+
+.logo p {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0; /* Reset margin to ensure it doesn't affect alignment */
+    /* Optional: Adjust line-height if necessary for alignment */
+    line-height: 1; /* Adjust based on the actual height of the logo image */
+}
+
+.radio-group {
+    display: flex;
+    gap: 10px;
+}
+
+.radio-container {
+    position: relative;
+    height: 40px;
+    width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    border-radius: 2px;
+    padding: 10px;
+    font-size: 14px;
+    transition: background-color 0.3s, font-weight 0.3s, color 0.3s;
+}
+
+.radio-container input:checked + .radio-label {
+    background-color: white;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .header {
+        padding: 10px;
+    }
+
+    .authBar {
+		position: absolute; 
+		top: 0px; 
+		right: 0px;
+		display: flex;
+		align-items: center;
+		gap: 10px;
+    }
+
+    .logo {
+        top: 0; 
+        left: 0;
+        width: 100%;
+        justify-content: top;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo img {
+        height: 30px; /* Adjust logo size */
+    }
+
+    .authBar {
+        flex-direction: column; /* Stack radio buttons vertically */
+    }
+
+    .radio-group {
+        flex-direction: column; /* Stack radio buttons vertically */
+        gap: 10px;
+    }
+}
+
+#logo-42 {
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;	
+	background: #000000;
+}

@@ -1,0 +1,85 @@
+version: "3"
+services:
+  frontent:
+    restart: always
+    container_name: frontent
+    build:
+      context: ./frontend/build-tools
+    networks:
+      - mynetwork
+    ports:
+      - "3000:3000"
+    volumes:
+      - frontend_volume:/var/www/html
+    depends_on:
+      - backend
+
+  backend:
+    restart: always
+    container_name: backend
+    build:
+      context: ./backend/build-tools
+    command: ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+    networks:
+      - mynetwork
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - backend_volume:/var/app
+    depends_on:
+      - db
+      - redis
+
+  redis:
+    restart: always
+    container_name: redis
+    build:
+      context: ./redis
+    networks:
+      - mynetwork
+    expose:
+      - 6379
+
+  db:
+    image: postgres
+    restart: always
+    shm_size: 128mb
+    networks:
+      - mynetwork
+    volumes:
+      - db_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - mynetwork
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+
+volumes:
+  backend_volume:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "${PWD}/src/backend/"
+
+  frontend_volume:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: "${PWD}/src/frontend"
+  db_volume:
+
+networks:
+  mynetwork:
+    driver: bridge
