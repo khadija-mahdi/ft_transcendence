@@ -70,14 +70,14 @@ volumes:
     driver_opts:
       type: "none"
       o: "bind"
-      device: "${PWD}/src/backend/"
+      device: "${PWD}/backend/"
 
   frontend_volume:
     driver: local
     driver_opts:
       type: "none"
       o: "bind"
-      device: "${PWD}/src/frontend"
+      device: "${PWD}/frontend/"
   db_volume:
 
 networks:

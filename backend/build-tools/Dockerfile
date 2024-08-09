@@ -10,6 +10,7 @@ WORKDIR /var/app
 COPY requirements.txt /var/requirements.txt
 RUN pip3 install -r /var/requirements.txt
 EXPOSE 8000
+
 COPY start.sh /var/app/start.sh
 ENTRYPOINT [ "sh", "build-tools/start.sh" ]
 

@@ -197,8 +197,6 @@ click-counter button:active {
 }
 
 #logo-42 {
-	height: 50px;
-	width: 50px;
-	border-radius: 50%;	
-	background: #000000;
+	height: 30px;
+	width: 30px;
 }

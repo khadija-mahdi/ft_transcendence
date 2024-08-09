@@ -1,4 +1,6 @@
-export default Sign_up_ui = () => {
+import { loadCSS } from "../../../lib/loadcss.js";
+
+export default  () => {
     loadCSS('components/auth/auth.css');
 
     return /*html*/`
@@ -8,7 +10,6 @@ export default Sign_up_ui = () => {
 				<form id="authForm" class="auth-form">
 					<div class="social-auth">
 						<div class="social-auth-option intra">
-							<i mg id = "intra" src="components/auth/42_logo.svg" alt="intra logo">
 							<p class= sing>Continue with Intra</p>
 						</div>
 						<div class="social-auth-option google">
@@ -46,12 +47,3 @@ export default Sign_up_ui = () => {
     </div>
     `;
 };
-
-
-
-function loadCSS(href) {
-    let link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-}

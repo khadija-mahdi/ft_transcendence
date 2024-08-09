@@ -1,6 +1,4 @@
-
-export const Sing_inUI  = () => {
-    loadCSS('components/auth/auth.css');
+export default () => {
 
     return /*html*/`
 		<div class= "auth">
@@ -9,11 +7,11 @@ export const Sing_inUI  = () => {
 			<form id="authForm" class="auth-form">
 				<div class="social-auth">
 					<div class="social-auth-option intra">
-						<img id = "intra"  src="components/auth/42_logo.svg" alt="intra logo">
+						<img src="components/auth/assets/42_logo.svg" alt="intra logo">
 						<p class= sing>Continue with Intra</p>
 					</div>
 					<div class="social-auth-option google">
-						<img src="components/auth/google.svg" alt="intra logo">
+						<img src="components/auth/assets/google.svg" alt="intra logo">
 						<p class=sing>Continue with Google</p>
 					</div>
 				</div>
@@ -25,12 +23,7 @@ export const Sing_inUI  = () => {
 					<input type="email" id="email" name="email" placeholder="john@gmail.com">
 					<span class="error-message"></span>
 				</div>
-				<div class="form-input">
-					<label for="password">Password</label>
-					<input type="password" id="password" name="password" placeholder="**********">
-					<span class="error-message"></span>
-				</div>
-				<button type="submit" class="submit-btn">Sign in</button>
+				<button id="cont" type="submit" class="submit-btn">Continue</button>
 				</form>
 				</div>
 				<p id="privacy">
@@ -41,18 +34,4 @@ export const Sing_inUI  = () => {
 		</div>
     </div>
     `;
-};
-
-function loadCSS(href) {
-    let link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-}
-
-export default () => {
-	console.log("Sign up page");
-    const Sing_in_ui = Sing_inUI();
-	document.body.insertAdjacentHTML('beforeend',Sing_in_ui); 
-	return '<div></div>';
 };

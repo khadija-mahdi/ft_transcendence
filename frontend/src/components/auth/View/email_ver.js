@@ -1,7 +1,8 @@
-export const Email_verify  =() => {
+import { loadCSS } from "../../../lib/loadcss.js";
+
+export default () => {
     loadCSS('components/auth/auth.css');
 	
-
     return /*html*/`
 		<div class= "auth">
 		<div class="auth-container">
@@ -27,24 +28,3 @@ export const Email_verify  =() => {
     `;
 };
 
-function loadCSS(href) {
-    let link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-}
-
-export default () => {
-	console.log("Sign up page");
-    const email_verify =Email_verify ();
-	document.body.insertAdjacentHTML('beforeend',email_verify); 
-	const continueButton = document.getElementById('contInfo');
-	if (continueButton) {
-		continueButton.addEventListener('click', function(event) {
-			event.preventDefault(); 
-			history.pushState(null, null, '/sign_up_info'); 
-			window.location.reload();
-		});
-	}
-	return '<div></div>';
-};

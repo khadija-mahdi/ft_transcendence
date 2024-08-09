@@ -1,5 +1,6 @@
+import {loadCSS} from '../../../lib/loadcss.js'
 
-export const userInfo  = () => {
+export default () => {
     loadCSS('components/auth/auth.css');
 
     return /*html*/`
@@ -35,28 +36,4 @@ export const userInfo  = () => {
 		</div>
     </div>
     `;
-};
-
-function loadCSS(href) {
-    let link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-}
-
-export default () => {
-	console.log("Sign up page");
-    const user_info = userInfo();
-	document.body.insertAdjacentHTML('beforeend',user_info); 
-	const continueButton = document.getElementById('doneUp');
-	if (continueButton) {
-		continueButton.addEventListener('click', function(event) {
-			event.preventDefault(); 
-			history.pushState(null, null, '/'); 
-			window.location.reload();
-		});
-	} else {
-		console.log("continueButton not found");
-	}
-	return '<div></div>';
 };
