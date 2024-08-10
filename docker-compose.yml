@@ -1,8 +1,22 @@
 version: "3"
 services:
-  frontent:
+  nginx:
     restart: always
-    container_name: frontent
+    container_name: nginx
+    build:
+      context: ./nginx
+    networks:
+      - mynetwork
+    ports:
+      - "8022:8022"
+      - "4433:4433"
+    depends_on:
+      - frontend
+      - backend
+
+  frontend:
+    restart: always
+    container_name: frontend
     build:
       context: ./frontend/build-tools
     networks:
