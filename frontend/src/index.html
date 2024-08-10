@@ -10,13 +10,25 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="./style.css">
+	<script type="importmap">
+        {
+            "imports": {
+                "three": "/node_modules/three/build/three.module.js",
+                "OrbitControls": "/node_modules/three/examples/jsm/controls/OrbitControls.js",
+                "TextGeometry": "/node_modules/three/examples/jsm/geometries/TextGeometry.js",
+                "FontLoader": "/node_modules/three/examples/jsm/loaders/FontLoader.js",
+                "OBJLoader": "/node_modules/three/examples/jsm/loaders/OBJLoader.js",
+                "GLTFLoader": "/node_modules/three/examples/jsm/loaders/GLTFLoader.js"
+            }
+        }
+    </script>
 	<script type="module" src="./main.js"></script>
 </head>
 
 <body>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script> -->
 
 	<!-- Main application container -->
 	<main id="app"></main>
