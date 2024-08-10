@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView
 )
 urlpatterns = [
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/test/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('google/', view=views.MixinsGoogleLoginApi.as_view(), name='google-login'),
     path('intra/', view=views.IntraLoginApi.as_view(), name='inta-login'),
@@ -14,6 +14,8 @@ urlpatterns = [
     path('register-email/', view=views.RegisterEmailApi.as_view(), name='register-email'),
     path('verify-email/', view=views.VerifyEmailApi.as_view(), name='verify-email'),
     path('register-user/', view=views.RegisterUserApi.as_view(), name='register-user'),
-    path('totp/create/', views.TOTPCreateView.as_view(), name='totp-create'),
-    path(r'^totp/login/(?P<token>[0-9]{6})/$', views.TOTPVerifyView.as_view(), name='totp-login'),
+    # path('token/', view=views.CustomTokenVerifyView.as_view(), name='token_obtain_pair'),
+    path('token/', view=views.AuthView.as_view(), name='auth'),
+    path('token/verify-2fa/', view=views.Verify2FAView.as_view(), name='verify_2fa'),
+    # path('token/verify/', view=views.CustomTokenVerifyView.as_view(), name='token_verify'),
 ]

@@ -20,13 +20,19 @@ export default function init() {
 			.then(response => {
 				if (response.ok) {
 					console.log('Success:', response);
-					history.pushState(null, null, '/sign_in_2fa'); 
-					window.location.reload();
-					// response.json().then(data => {
-					// 	console.log("response:", data)
-					// 	document.cookie = `access=${data.access};` // path=/; Secure; HttpOnly
-					// 	document.cookie = `refresh=${data.refresh};`
-					// })
+					response.json().then(data => {
+						console.log("response:", data)
+						if (data.access && data.refresh){
+							document.cookie = `access=${data.access};` // path=/; Secure; HttpOnly
+							document.cookie = `refresh=${data.refresh};`
+							history.pushState(null, null, '/'); 
+							window.location.reload();
+						}
+						else{
+							history.pushState(null, null, '/sign_in_2fa'); 
+							window.location.reload();
+						}
+					})
 				} else {
 					return response.json().then(data => {
 						throw new Error(data.message || `HTTP error! Status: ${response.status}`);
