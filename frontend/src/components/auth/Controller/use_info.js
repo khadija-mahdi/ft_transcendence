@@ -2,6 +2,10 @@ export default function init() {
 	const url = new URL(window.location.href);
 	const params = new URLSearchParams(url.search);
 	const email = params.get('email'); // Get the email from query params
+	if (email === null){
+		history.pushState(null, null, `/sign_up`);
+		window.location.reload();
+	}
 	
 	const continueButton = document.getElementById('doneUp');
 	if (continueButton) {
@@ -29,6 +33,7 @@ export default function init() {
 			})
 			.then(response => {
 				if (response.ok) {
+					sessionStorage.setItem('signUpStep', 'infoEntered');
 					history.pushState(null, null, `/sign_in`); 
 					window.location.reload();
 				} else {

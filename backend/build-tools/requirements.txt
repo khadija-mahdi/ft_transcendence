@@ -18,3 +18,5 @@ shortuuid
 
 apscheduler
 django-apscheduler
+
+django_otp

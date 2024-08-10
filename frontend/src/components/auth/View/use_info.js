@@ -1,8 +1,5 @@
-import {loadCSS} from '../../../lib/loadcss.js'
 
 export default () => {
-    loadCSS('components/auth/auth.css');
-
     return /*html*/`
 		<div class= "auth">
 		<div class="auth-container">

@@ -14,4 +14,6 @@ urlpatterns = [
     path('register-email/', view=views.RegisterEmailApi.as_view(), name='register-email'),
     path('verify-email/', view=views.VerifyEmailApi.as_view(), name='verify-email'),
     path('register-user/', view=views.RegisterUserApi.as_view(), name='register-user'),
+    path('totp/create/', views.TOTPCreateView.as_view(), name='totp-create'),
+    path(r'^totp/login/(?P<token>[0-9]{6})/$', views.TOTPVerifyView.as_view(), name='totp-login'),
 ]

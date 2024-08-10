@@ -1,14 +1,10 @@
 export default function init() {
-	const continueButton = document.getElementById('contInfo');
+	const continueButton = document.getElementById('code_2fa');
 	const url = new URL(window.location.href);
 	const params = new URLSearchParams(url.search);
 	const email = params.get('email'); // 'John'
 	
 	console.log(`Name: ${email} Url: ${url}`);
-	if (email === null){
-		history.pushState(null, null, `/sign_up`); 
-		window.location.reload();
-	}
 	
 
 	if (continueButton) {
