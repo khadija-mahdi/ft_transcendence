@@ -1,11 +1,9 @@
-
-
+import * as THREE from "three";
+import { OrbitControls } from "OrbitControls";
+import { TextGeometry } from "TextGeometry";
+import { FontLoader } from "FontLoader";
+import { GLTFLoader } from "GLTFLoader";
 export default function () {
-// 	import * as THREE from 'three';
-// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-// import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
-// import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 let scene, camera, renderer, controls;
 let computer = null;
@@ -55,19 +53,19 @@ function init() {
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
 
-
     // Load the secne model
     const loader_scene = new GLTFLoader();
-    loader_scene.load('/scene_bg.glb', (glb) => {
+    loader_scene.load("/components/game/in_game/assets/models/scene_bg.glb", (glb) => {
         bg_scene = glb.scene;
         scene.add(bg_scene);
         bg_scene.position.set(0, 0, 0);
         bg_scene.scale.set(0.4, 0.4, 0.4);
     });
 
+
     // Load the ball model
     const loader_scene1 = new GLTFLoader();
-    loader_scene1.load('/scene_light.glb', (glb) => {
+    loader_scene1.load("/components/game/in_game/assets/models/scene_light.glb", (glb) => {
         tableModel = glb.scene;
         scene.add(tableModel);
         tableModel.position.set(0, 2, 0);
@@ -81,7 +79,7 @@ function init() {
     });
 
     const loader_cpm = new GLTFLoader();
-    loader_cpm.load('paddle_hock.glb', (glb) => { // computer player
+    loader_cpm.load("/components/game/in_game/assets/models/paddle_hock.glb", (glb) => { // computer player
         computer = glb.scene;
         scene.add(computer);
         computer.position.set(0, 1.4, 0.2);
@@ -91,7 +89,7 @@ function init() {
     });
     // Load the ball model
     const loader = new GLTFLoader();
-    loader.load('/ball_rca.glb', (glb) => {
+    loader.load("/components/game/in_game/assets/models/ball_rca.glb", (glb) => {
         ballModel = glb.scene;
         scene.add(ballModel);
         ballModel.position.set(0.5, 0.9, -2.5);
@@ -100,7 +98,7 @@ function init() {
 
     // Load the player paddle model
     const loader2 = new GLTFLoader();
-    loader2.load('/paddle_hock.glb', (glb) => {
+    loader2.load("/components/game/in_game/assets/models/paddle_hock.glb", (glb) => {
         player_model = glb.scene;
         scene.add(player_model);
         player_model.position.set(0, 1.4, 7);
@@ -110,7 +108,7 @@ function init() {
 
     //load the soccer board
     const loader_board = new GLTFLoader();
-    loader_board.load('/score.glb', (glb) => {
+    loader_board.load("/components/game/in_game/assets/models/score.glb", (glb) => {
         score_board = glb.scene;
         scene.add(score_board);
         score_board.position.set(0, 5, -1);
