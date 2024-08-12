@@ -1,0 +1,316 @@
+/* Converted from Tailwind */
+body.bg-dark {
+	background-color: #161616;
+}
+
+.navbar-container {
+	display: flex; 
+	flex-direction: row; 
+	justify-content: space-between; 
+	align-items: center; 
+	width: 100%; 
+	margin-top: 40px;
+	margin-bottom: 40px;
+	max-width: 100vw;
+}
+
+.nav-links {
+	display: flex; 
+	flex-direction: row; 
+	gap: 4rem; 
+	justify-content: center; 
+	align-items: center; 
+	font-weight: 600; 
+	color: #ffffff; 
+}
+
+/* Existing CSS for Play Now Button */
+.play_now_button {
+    background: linear-gradient(90deg, #Ff4106 0%, #Ff4106 37%, #FE284F 64%, #FF0099 100%);
+    border: none;
+    margin-right: 20px;
+    color: white;
+    padding: 3px 30px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 36px;
+    width: 144px;
+    display: grid;
+    place-content: center;
+    font-weight: 600;
+    text-decoration: none; /* Add this line to remove the underline */
+}
+
+.play_now_button:hover {
+    opacity: 0.8;
+}
+
+
+
+.desktop-nav {
+	display: none; 
+	@media (min-width: 1024px) { 
+	  display: block; 
+	 }
+}
+
+.desktop-nav ul.nav-list {
+	list-style-type: none;
+	display: flex; 
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem; 
+	flex-direction: column; 
+	gap: 0.5rem; 
+	justify-content: center; 
+	align-items: flex-start; 
+	@media (min-width: 1024px) { 
+	  padding-top: 0;
+	padding-bottom: 0; 
+	flex-direction: row; 
+	gap: 2rem; 
+	 }
+	
+	
+}
+
+.desktop-nav ul.nav-list li.nav-item {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem; 
+    width: 100%;
+}
+
+@media (min-width: 1024px) { 
+    .desktop-nav ul.nav-list li.nav-item {
+        padding-left: 0;
+        padding-right: 0; 
+        width: auto; 
+    }
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+.group:hover .group-child {
+    /* Example style for the child element when the parent is hovered */
+    color: #FD4106;
+}
+
+.desktop-nav ul.nav-list li.nav-item a.no-underline {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+.desktop-nav ul.nav-list li.nav-item a.no-underline:hover {
+    border-bottom-color: #FD4106; 
+}
+
+.desktop-nav ul.nav-list li.nav-item a.no-underline .nav-icons {
+    display: flex;          /* Use flexbox for layout */
+    align-items: center;    /* Vertically center items */
+    gap: 0.25rem;           /* Space between items */
+    margin-left: 0.25rem;   /* Left margin */
+    cursor: pointer;
+}
+
+.desktop-nav ul.nav-list li.nav-item a.no-underline .nav-icons svg {
+    width: 30px;            /* Adjust size as needed */
+    height: 31px;           /* Adjust size as needed */
+}
+
+.desktop-nav ul.nav-list li.nav-item a.no-underline .nav-icons p {
+    font-size: 0.875rem;    /* Font size */
+    line-height: 1.25rem;   /* Line height */
+    margin: 0;              /* Remove default margin */
+    display: flex;          /* Use flexbox for text alignment */
+    align-items: center;  
+    color: #a2a2a2;         /* Default text color */
+    transition: color 0.3s;
+}
+
+
+.desktop-nav ul.nav-list li.nav-item a.no-underline:hover .nav-icons p {
+    color: #FD4106;        
+}
+
+.desktop-nav ul.nav-list li.nav-item a.active.no-underline:hover .nav-icons p {
+    color: #FD4106;        
+}
+
+.nav-item a.active {
+    color: #FD4106;
+}
+
+@media (min-width: 1024px) { 
+    .desktop-nav ul.nav-list li.nav-item a.no-underline .nav-icons {
+        height: 3rem; 
+    }
+
+    .desktop-nav ul.nav-list li.nav-item a.no-underline .nav-icons p {
+        font-size: 1rem;
+        line-height: 1.5rem; 
+    }
+}
+
+.right-icons{
+	display: flex; 
+	margin-left: 0.5rem; 
+	align-items: center; 
+
+}
+
+.social-list{
+	display: flex; 
+	flex-direction: row; 
+	gap: 0.25rem; 
+	justify-content: center; 
+	align-items: center; 
+}
+
+
+.social-icons {
+    position: relative;
+}
+
+.icon-container {
+	aspect-ratio: 1 / 1; 
+	border-radius: 9999px; 
+	height: 30px;
+	width: 30px;
+	background: #303030;
+	
+	
+	
+	@media (min-width: 1024px) { 
+	  height: 40px;
+	width: 40px;
+	 }
+		
+}
+
+
+
+/* Profile button converted */
+.profile-button {
+    position: relative;
+    z-index: 50;
+	padding: 16px;
+	border-radius: 8px;
+
+}
+
+.profile-button .profile {
+	background: #292929;
+	display: flex; 
+	overflow: hidden; 
+	padding: 0.25rem; 
+	flex-direction: row; 
+	justify-content: space-between; 
+	align-items: center; 
+	border-radius: 4px; 
+	height: 46.9px;	
+	border: none;
+}
+
+.profile-content {
+	display: flex; 
+	align-items: center; 
+}
+
+.profile-image {
+	display: flex; 
+	align-items: flex-start; 
+}
+
+.profile-image img {
+	object-fit: cover; 
+	border-radius: 9999px; 
+	width: 2.5rem; 
+	background-color: #ffffff; 
+	height: 38.9px;
+	border: none;
+	
+}
+
+.profile-details {
+	display: flex; 
+	flex-direction: column; 
+	align-items: flex-start; 
+	max-width: 80px;	
+}
+
+.profile-name {
+	font-size: 15px; 
+	font-weight: 600; 
+	color: #ffffff; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap; 
+	margin-left: 5px;
+	width: 60px;
+	color: 15px;
+	
+}
+
+.profile-level {
+	align-items: flex-start; 
+	font-size: 8px; 
+	color: #ffffff; 
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap; 
+	margin-left: 5px;
+	color: 8px;	
+}
+
+.profile-dropdown-icon {
+    margin-left: 8px;
+    background-color: black;
+    border-radius: 50%; /* Converted from Tailwind's rounded-full */
+    width: 28px; /* Converted from Tailwind's w-7 */
+    height: 28px; /* Converted from Tailwind's h-7 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-link{
+	display: grid;
+	place-content: center; 
+	width: 100%; 
+	height: 100%; 
+
+}
+
+.icon-content{
+	display: flex; 
+	position: relative; 
+	margin-left: 0.25rem; 
+	flex-direction: row; 
+	align-items: center; 
+	cursor: pointer; 
+
+
+}
+
+.dropdown-svg {
+    width: 16px; /* Converted from Tailwind's w-4 */
+    height: 16px; /* Converted from Tailwind's h-4 */
+    color: gray;
+}
+
+/* Existing CSS for SVG color in nav items */
+.nav svg {
+    fill: #a2a2a2;
+}
+
+.nav:hover svg {
+    fill: #FD4106;
+}
+ 

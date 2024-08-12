@@ -10,6 +10,8 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="components/navBar/assets/navBar.css">
+	<script src="components/navBar/Controller/navBar.js" defer></script>
 	<script type="importmap">
         {
             "imports": {
@@ -78,15 +80,6 @@
 			});
 
 		}
-		else if(!path.startsWith('/game')) {
-			 router = `    
-			 	<nav>
-					<a href="/" data-link>Home</a>
-					<a href="/chat" data-link>Chat</a>
-					<a href="/auth" data-link>Auth</a>
-				</nav>`
-			document.body.insertAdjacentHTML('afterbegin', router);
-		} 
 
 	</script>
 	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> -->
