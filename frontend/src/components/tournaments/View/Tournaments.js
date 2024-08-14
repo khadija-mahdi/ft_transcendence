@@ -1,7 +1,7 @@
-import html from "../../../lib/html-template";
+// import html from "../../../lib/html-template"
 
 export default function tournaments() {
-	return html`
+	return `
 		<div class= "auth">
 		<div class="auth-container">
 			<h1>HERE Tournaments Page</h1>

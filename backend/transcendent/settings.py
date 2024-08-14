@@ -185,6 +185,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
     "https://192.168.122.1:3000",
     "https://192.168.122.1:3000",
+	"https://10.14.3.1:4433",
+    "https://localhost:4433",
     # Add other origins as needed
 ]
 
@@ -192,6 +194,9 @@ CSRF_TRUSTED_ORIGINS = [
     "https://localhost",
     "https://localhost:8000",
     "https://192.168.122.1:3000",
+    "https://localhost:4433",
+	"https://10.14.3.1:4433",
+
     # Add other origins as needed
 ]
 CORS_URLS_REGEX = r"^/api/.*$"

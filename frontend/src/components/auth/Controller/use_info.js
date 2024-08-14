@@ -24,7 +24,7 @@ export default function init() {
 			continueButton.disabled = true; 
 			continueButton.textContent = 'Loading ...'; 
 
-			fetch('http://localhost:8000/api/v1/auth/register-user/', {
+			fetch('https://localhost:4433/api/v1/auth/register-user/', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
