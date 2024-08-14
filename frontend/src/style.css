@@ -1,205 +1,203 @@
 :root {
-    --primary: #000000;
-    --secondary: #30475e;
-    --secondary-light: #3a5a7a;
-    --accent: #f05454;
-    --neutral: #eeeeee;
-    font-size: 18px;
+	--primary: #000000;
+	--secondary: #30475e;
+	--secondary-light: #3a5a7a;
+	--accent: #f05454;
+	--neutral: #eeeeee;
+	font-size: 18px;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    font-size: 1rem;
-    box-sizing: border-box;
-    font-family: "Montserrat";
+	margin: 0;
+	padding: 0;
+	font-family: "Inter", sans-serif;
+	font-optical-sizing: auto;
+	font-style: normal;
 }
 
 body {
-    color: var(--neutral);
-    padding: 1rem clamp(1.5rem, 6vw, 3rem);
-    background-color: var(--primary);
+	color: var(--neutral);
+	padding: 1rem clamp(1.5rem, 6vw, 3rem);
+	background-color: var(--primary);
 }
 
 nav {
-    display: flex;
+	display: flex;
 }
 
 nav a {
-    margin-right: .75em;
-    color: var(--accent);
+	margin-right: 0.75em;
+	color: var(--accent);
 }
 
 main {
-    margin: 3rem 0;
+	margin: 3rem 0;
 }
 
 h1 {
-    font-size: 2.3rem;
-    margin-bottom: .5rem;
+	font-size: 2.3rem;
+	margin-bottom: 0.5rem;
 }
 
 p {
-    margin-bottom: 2rem;
+	margin-bottom: 2rem;
 }
 
 click-counter button {
-    font-weight: 600;
-    border: 2px solid var(--neutral);
-    border-radius: 5px;
-    color: var(--neutral);
-    background-color: var(--secondary);
-    width: 8.5rem;
-    height: 3rem;
-    display: grid;
-    place-items: center;
-    transition: opacity .1s, background-color .1s;
+	font-weight: 600;
+	border: 2px solid var(--neutral);
+	border-radius: 5px;
+	color: var(--neutral);
+	background-color: var(--secondary);
+	width: 8.5rem;
+	height: 3rem;
+	display: grid;
+	place-items: center;
+	transition: opacity 0.1s, background-color 0.1s;
 }
 click-counter button:active {
-    background-color: var(--secondary-light);
+	background-color: var(--secondary-light);
 }
 
-@media (min-width: 1000px)  {
-    click-counter button {
-        cursor: pointer;
-    }
-    click-counter button:hover {
-        background-color: var(--secondary-light);
-    }
-    click-counter button:active {
-        opacity: .7;
-    }
+@media (min-width: 1000px) {
+	click-counter button {
+		cursor: pointer;
+	}
+	click-counter button:hover {
+		background-color: var(--secondary-light);
+	}
+	click-counter button:active {
+		opacity: 0.7;
+	}
 }
-
 
 .header {
-    margin: 40px;
-    display: flex;
-    justify-content: space-between; /* Align logo and authBar */
-    width: 100%; /* Full width */
-    box-sizing: border-box;
+	margin: 40px;
+	display: flex;
+	justify-content: space-between; /* Align logo and authBar */
+	width: 100%; /* Full width */
+	box-sizing: border-box;
 }
 
 .authBar {
-    position: absolute; 
-    top: 40px; 
-    right: 40px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+	position: absolute;
+	top: 40px;
+	right: 40px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .logo {
-    position: absolute; 
-    top: 40px; 
-    left: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Corrected from justify-items to justify-content */
-    gap: 10px;
-    flex-direction: row;
+	position: absolute;
+	top: 40px;
+	left: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center; /* Corrected from justify-items to justify-content */
+	gap: 10px;
+	flex-direction: row;
 }
 
 .logo img {
-    margin: 0;
-    vertical-align: middle;
-    height: 10px; /* Updated from 50px to 100px */
-    width: 10px; /* Updated from 50px to 100px */
+	margin: 0;
+	vertical-align: middle;
+	height: 10px; /* Updated from 50px to 100px */
+	width: 10px; /* Updated from 50px to 100px */
 }
 
 .logo p {
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0; /* Reset margin to ensure it doesn't affect alignment */
-    /* Optional: Adjust line-height if necessary for alignment */
-    line-height: 1; /* Adjust based on the actual height of the logo image */
+	font-size: 20px;
+	font-weight: bold;
+	margin: 0; /* Reset margin to ensure it doesn't affect alignment */
+	/* Optional: Adjust line-height if necessary for alignment */
+	line-height: 1; /* Adjust based on the actual height of the logo image */
 }
 
 .radio-group {
-    display: flex;
-    gap: 10px;
+	display: flex;
+	gap: 10px;
 }
 
 .radio-container {
-    position: relative;
-    height: 40px;
-    width: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	position: relative;
+	height: 40px;
+	width: 120px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .radio-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
 }
 
 .radio-label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
-    background-color: #000000;
-    color: white;
-    text-align: center;
-    border-radius: 2px;
-    padding: 10px;
-    font-size: 14px;
-    transition: background-color 0.3s, font-weight 0.3s, color 0.3s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	cursor: pointer;
+	background-color: #000000;
+	color: white;
+	text-align: center;
+	border-radius: 2px;
+	padding: 10px;
+	font-size: 14px;
+	transition: background-color 0.3s, font-weight 0.3s, color 0.3s;
 }
 
 .radio-container input:checked + .radio-label {
-    background-color: white;
-    font-weight: bold;
-    color: rgb(0, 0, 0);
+	background-color: white;
+	font-weight: bold;
+	color: rgb(0, 0, 0);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .header {
-        padding: 10px;
-    }
+	.header {
+		padding: 10px;
+	}
 
-    .authBar {
-		position: absolute; 
-		top: 0px; 
+	.authBar {
+		position: absolute;
+		top: 0px;
 		right: 0px;
 		display: flex;
 		align-items: center;
 		gap: 10px;
-    }
+	}
 
-    .logo {
-        top: 0; 
-        left: 0;
-        width: 100%;
-        justify-content: top;
-    }
+	.logo {
+		top: 0;
+		left: 0;
+		width: 100%;
+		justify-content: top;
+	}
 }
 
 @media (max-width: 480px) {
-    .logo img {
-        height: 30px; /* Adjust logo size */
-    }
+	.logo img {
+		height: 30px; /* Adjust logo size */
+	}
 
-    .authBar {
-        flex-direction: column; /* Stack radio buttons vertically */
-    }
+	.authBar {
+		flex-direction: column; /* Stack radio buttons vertically */
+	}
 
-    .radio-group {
-        flex-direction: column; /* Stack radio buttons vertically */
-        gap: 10px;
-    }
+	.radio-group {
+		flex-direction: column; /* Stack radio buttons vertically */
+		gap: 10px;
+	}
 }
 
 #logo-42 {
 	height: 30px;
 	width: 30px;
 }
-
 
 ::before,
 ::after {
@@ -232,9 +230,12 @@ body {
 	position: relative;
 	color: rgb(var(--foreground-rgb));
 	height: 100vh;
-	background: linear-gradient(to bottom,
+	background: linear-gradient(
+			to bottom,
 			transparent,
-			rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+			rgb(var(--background-end-rgb))
+		)
+		rgb(var(--background-start-rgb));
 	font-family: "Inter", sans-serif;
 }
 
@@ -252,11 +253,13 @@ body {
 	}
 
 	.primary-button-gradiant {
-		background: linear-gradient(90deg,
-				#fd4106 0%,
-				#fd4106 37%,
-				#fe284f 64%,
-				#ff0099 100%);
+		background: linear-gradient(
+			90deg,
+			#fd4106 0%,
+			#fd4106 37%,
+			#fe284f 64%,
+			#ff0099 100%
+		);
 		color: white;
 	}
 }
@@ -283,7 +286,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:active {
-	background: #FF3D00;
+	background: #ff3d00;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -353,11 +356,11 @@ body {
 	border-bottom-left-radius: 8px;
 }
 
-.lead-to-parent:last-child>li::after {
+.lead-to-parent:last-child > li::after {
 	border: none;
 }
 
-.top-achievement-list>li:nth-child(2) {
+.top-achievement-list > li:nth-child(2) {
 	scale: 1.2;
 	margin-left: 15px;
 	margin-right: 15px;
@@ -398,11 +401,13 @@ body {
 }
 
 .primary-gradient {
-	background: linear-gradient(90deg,
-			#ff4106 0%,
-			#ff4106 37%,
-			#fe284f 64%,
-			#ff0099 100%);
+	background: linear-gradient(
+		90deg,
+		#ff4106 0%,
+		#ff4106 37%,
+		#fe284f 64%,
+		#ff0099 100%
+	);
 	cursor: pointer;
 }
 
@@ -447,11 +452,11 @@ body {
 	transition: 0.4s;
 }
 
-.switch>input:checked+.slider {
+.switch > input:checked + .slider {
 	background-color: #262626;
 }
 
-input:checked+.slider::before {
+input:checked + .slider::before {
 	background-color: #fff;
 	right: 0;
 	transform: translateX(26px);
@@ -468,12 +473,11 @@ input:checked+.slider::before {
 
 .grid-container {
 	width: 100%;
-	
+
 	flex-grow: 1;
 	display: grid;
 	grid-template-columns: 22% 1fr 22%;
-	grid-template-areas: 
-		"a b c";
+	grid-template-areas: "a b c";
 }
 
 @media (max-width: 1423px) {
@@ -482,12 +486,11 @@ input:checked+.slider::before {
 		flex-grow: 1;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-template-areas: 
+		grid-template-areas:
 			"b b"
-			"a c"
+			"a c";
 	}
 }
-
 
 @media (max-width: 720px) {
 	.grid-container {
@@ -495,15 +498,21 @@ input:checked+.slider::before {
 		flex-grow: 1;
 		display: grid;
 		grid-template-columns: 1fr;
-		grid-template-areas: 
+		grid-template-areas:
 			"b"
 			"a"
-			"c"
+			"c";
 	}
 }
-.item-a { grid-area: a; }
-.item-b { grid-area: b; }
-.item-c { grid-area: c; }
+.item-a {
+	grid-area: a;
+}
+.item-b {
+	grid-area: b;
+}
+.item-c {
+	grid-area: c;
+}
 
 .scroll-element {
 	width: inherit;
@@ -543,14 +552,14 @@ input:checked+.slider::before {
 }
 
 /* Hide the spin buttons in Webkit browsers */
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
 
 /* Hide the spin buttons in Firefox */
-input[type=number] {
+input[type="number"] {
 	-moz-appearance: textfield;
 }
 
@@ -558,10 +567,10 @@ input[type=number] {
 	width: 100%;
 	height: 100%;
 	position: relative;
-  }
-  
-  .chart-container canvas {
+}
+
+.chart-container canvas {
 	display: block;
 	width: 100% !important;
 	height: 100% !important;
-  }
+}

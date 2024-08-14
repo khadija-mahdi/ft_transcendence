@@ -4,7 +4,7 @@ async function loadNavbar() {
     if (!path.startsWith('/game') && !path.startsWith('/sign')) {
         try {
             console.log("Loading navbar...");
-            const response = await fetch('components/navBar/View/navBar.html');
+            const response = await fetch('/components/navBar/View/navBar.html');
             if (!response.ok) throw new Error('Network response was not ok');
             const navbarHTML = await response.text();
             document.body.insertAdjacentHTML('afterbegin', navbarHTML);
