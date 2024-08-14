@@ -1,7 +1,7 @@
 import html from "../../../lib/html-template.js";
 
 export default function tournaments() {
-	return html`
+  return html`
 	 <div class="container">
       <div class="tournament-list">
         <div class="tournament-header">

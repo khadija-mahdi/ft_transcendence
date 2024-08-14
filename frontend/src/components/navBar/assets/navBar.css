@@ -50,7 +50,7 @@ body.bg-dark {
 
 .desktop-nav {
 	display: none; 
-	@media (min-width: 1024px) { 
+	@media (min-width: 1200px) { 
 	  display: block; 
 	 }
 }
@@ -64,7 +64,7 @@ body.bg-dark {
 	gap: 0.5rem; 
 	justify-content: center; 
 	align-items: flex-start; 
-	@media (min-width: 1024px) { 
+	@media (min-width: 1200px) { 
 	  padding-top: 0;
 	padding-bottom: 0; 
 	flex-direction: row; 
@@ -80,7 +80,7 @@ body.bg-dark {
     width: 100%;
 }
 
-@media (min-width: 1024px) { 
+@media (min-width: 1200px) { 
     .desktop-nav ul.nav-list li.nav-item {
         padding-left: 0;
         padding-right: 0; 
@@ -112,8 +112,8 @@ body.bg-dark {
 }
 
 .desktop-nav ul.nav-list li.nav-item a.no-underline .nav-icons {
-    display: flex;          /* Use flexbox for layout */
-    align-items: center;    /* Vertically center items */
+    display: flex;        
+    align-items: center;  
     gap: 0.25rem;           /* Space between items */
     margin-left: 0.25rem;   /* Left margin */
     cursor: pointer;
@@ -147,7 +147,7 @@ body.bg-dark {
     color: #FD4106;
 }
 
-@media (min-width: 1024px) { 
+@media (min-width: 1200px) { 
     .desktop-nav ul.nav-list li.nav-item a.no-underline .nav-icons {
         height: 3rem; 
     }
@@ -187,7 +187,7 @@ body.bg-dark {
 	
 	
 	
-	@media (min-width: 1024px) { 
+	@media (min-width: 1200px) { 
 	  height: 40px;
 	width: 40px;
 	 }
@@ -285,6 +285,9 @@ body.bg-dark {
 	place-content: center; 
 	width: 100%; 
 	height: 100%; 
+	border-radius: 50%;
+	background-color: #303030;
+	border: none;
 
 }
 
@@ -313,4 +316,181 @@ body.bg-dark {
 .nav:hover svg {
     fill: #FD4106;
 }
- 
+
+.notification-panel {
+    z-index: 50;
+    margin-top: 3px;
+    position: absolute;
+    top: 120px;
+    right: 260px;
+	height: 400px;
+    background-color: #242424;
+    width: 276px;
+    padding: 2px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.notification-title {
+    font-weight: 600;
+    font-size: 14px;
+	height: 40px;
+	align-items: center;
+	justify-content: center;
+	display: flex;
+    color: #666666;
+}
+
+.notification-divider {
+    width: 256px;
+    border-top: 2px solid #363636;
+    padding-top: 3px;
+    margin-top: 3px;
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.notification-list {
+    height: 330px;
+    overflow-y: scroll;
+}
+
+.hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+
+.hidden {
+    display: none;
+}
+
+.notification-item {
+    padding: 8px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 4px;
+    margin: 3px 0;
+    width: 260px;
+    overflow: hidden;
+    background-color: #474747;
+}
+
+.notification-item.seen {
+    background-color: transparent;
+}
+
+.notification-link {
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.notification-image-container {
+    display: flex;
+    align-items: start;
+    border-radius: 50%;
+}
+
+.notification-image {
+    background-color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.notification-text-container {
+    padding-left: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 203px;
+}
+
+.notification-text {
+    color: white;
+    font-weight: 300;
+    font-size: 12px;
+    overflow: hidden;
+    max-height: 80px;
+}
+
+.notification-time {
+    font-weight: 400;
+    color: #878787;
+    font-size: 10px;
+}
+
+.notification-menu-container {
+    display: flex;
+}
+
+.notification-menu {
+    position: relative;
+}
+
+.three-points-trigger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 7px;
+    cursor: pointer;
+}
+
+.notification-menu-content {
+    display: none;
+    background-color: #161616;
+    z-index: 50;
+    position: absolute;
+    right: 8px;
+    bottom: -42%;
+    height: 40px;
+    width: 120px;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.notification-menu-content.show {
+    display: flex;
+}
+
+.notification-menu-button {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    font-size: 16px;
+    color: #878787;
+    gap: 2px;
+    background-color: transparent;
+    padding: 2px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.notification-menu-button:hover {
+    background-color: #262626;
+}
+
+.notification-menu-text {
+    font-weight: 300;
+    font-size: 12px;
+}

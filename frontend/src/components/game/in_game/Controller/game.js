@@ -3,6 +3,9 @@ import { OrbitControls } from "OrbitControls";
 import { TextGeometry } from "TextGeometry";
 import { FontLoader } from "FontLoader";
 import { GLTFLoader } from "GLTFLoader";
+//impoprt websocket function :
+import AuthWebSocket from "../../../../lib/AuthWebSocket.js";
+
 export default function () {
 
 let scene, camera, renderer, controls;
@@ -29,7 +32,16 @@ let textMesh_player = null;
 let textMesh_score_player = null;
 let textMesh_score_computer = null;
 
-function init() {
+const currentUrl = window.location.href;
+const params = new URLSearchParams(window.location.search);
+const uuid = params.get('uuid');
+console.log(window.location.href); // Should print the full URL
+console.log(window.location.search); // Should print the query string, e.g., ?uuid=1234abcd
+console.log(uuid);
+
+function init() 
+{
+
     // Create a scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87CEEB); // Sky blue color
@@ -206,6 +218,85 @@ function init() {
         // Add the text to the scene
         scene.add(textMesh_player);
     });
+
+    // function handleWebSocketMessages (message)
+    // {
+    //     if (!message.data) return;
+    //     const data = JSON.parse(message.data);
+
+    //     switch (data.type) {
+    //       case 'update':
+    //         // Game state update
+    //         if (data.ball) {
+    //           if (ballModel && ballModel.position)
+    //           {
+    //             ballModel.position.x = data.ball.x;
+    //             ballModel.position.z = data.ball.y;
+    //           } else {
+    //             console.error('ballModel is not initialized', ballModel);
+    //           }
+    //         }
+    //         if (data.leftPaddle)     
+    //         {
+    //           player_model.position.set(data.leftPaddle.x, player_model.position.y, data.leftPaddle.z);
+    //         }
+    //         if (data.rightPaddle)
+    //         {
+    //           computer.position.set(data.rightPaddle.x, computer.position.y, data.rightPaddle.z);
+    //         }
+    //         break;
+    //       case 'goal':
+    //         // Update scores
+    //         player_score = data.first_player_score;
+    //         computer_score = data.second_player_score;
+    //         update_text();
+    //         resetBallPosition();
+    //         break;
+    //       case 'game_over':
+    //         // Handle game over scenario
+    //         alert("Game Over!");
+    //         break;
+    //       default:
+    //         console.log(data);
+    //         break;
+    //     }
+    //   }
+
+
+    // setup web socket 
+    function setupWebSocket () 
+    {
+          //// const ws = new AuthWebSocket('wss://localhost/ws/game/d9517b51-d861-4eba-96d6-28ec87f6284a/')
+          // in next js           const lobbySocket = new AuthWebSocket(`${WS_BASE_URL}/game/${uuid}/`);          
+
+          const lobbySocket = new AuthWebSocket(`wss://localhost/ws/game/${uuid}/`);
+          lobbySocket.onerror = (error) => {
+            console.error('WebSocket error: dxx', error);
+          };
+          lobbySocket.onclose = (event) => {
+            console.log('WebSocket closed:', event.code, event.reason);
+          };
+          lobbySocket.onopen = (event) => {
+              console.log("yaaaaaaaaaaaa hooo");
+          };
+          lobbySocket.addEventListener('open', () => {
+            console.log('WebSocket connected');
+          });
+  
+        //   lobbySocket.addEventListener('message', (message) => 
+        //   {
+        //     console.log("=------------------=-=--==-=i have a message");
+        //     handleWebSocketMessages(message);
+        //   });
+  
+        //   lobbySocket.addEventListener('close', () => {
+        //     console.log('WebSocket disconnected');
+        //   });
+        //   lobbySocket.addEventListener('error', (error) => {
+        //     console.error('WebSocket error:', error);
+        //   });
+    }
+
 
     // Adding bounding boxes to our cubes
     const playerBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
@@ -389,6 +480,7 @@ function animate(currentTime) {
 
     
     // Run the animation function for the first time to kick things off
+    // setupWebSocket();
     animate();
 
     // Handle window resize

@@ -10,7 +10,7 @@ export default function init() {
 			errorMessage.textContent = '';
 			continueButton.disabled = true;
 			continueButton.textContent = 'Loading ...'
-			fetch('http://localhost:8000/api/v1/auth/register-email/', {
+			fetch('https://localhost:4433/api/v1/auth/register-email/', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

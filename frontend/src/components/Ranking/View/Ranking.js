@@ -1,7 +1,7 @@
 import html from "../../../lib/html-template.js";
 
 export default function () {
-	return html`
+  return html`
     <div class="container">
       <div class="ranking-box">
         <div class="header">

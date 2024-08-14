@@ -14,8 +14,6 @@ urlpatterns = [
     path('register-email/', view=views.RegisterEmailApi.as_view(), name='register-email'),
     path('verify-email/', view=views.VerifyEmailApi.as_view(), name='verify-email'),
     path('register-user/', view=views.RegisterUserApi.as_view(), name='register-user'),
-    # path('token/', view=views.CustomTokenVerifyView.as_view(), name='token_obtain_pair'),
     path('token/', view=views.AuthView.as_view(), name='auth'),
     path('token/verify-2fa/', view=views.Verify2FAView.as_view(), name='verify_2fa'),
-    # path('token/verify/', view=views.CustomTokenVerifyView.as_view(), name='token_verify'),
 ]

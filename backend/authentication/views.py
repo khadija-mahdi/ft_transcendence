@@ -135,10 +135,10 @@ class RegisterUserApi(generics.CreateAPIView):
 
 
 class AuthView(generics.CreateAPIView):
+    permission_classes = [permissions.AllowAny]
     class AuthSerializer(serializers.Serializer):
         email = serializers.EmailField()
         password = serializers.CharField()
-    permission_classes = [permissions.AllowAny]
     serializer_class = AuthSerializer
 
     def create(self, request, *args, **kwargs):
