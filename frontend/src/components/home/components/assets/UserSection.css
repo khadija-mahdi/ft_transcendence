@@ -1,0 +1,109 @@
+#team-leader {
+    width: 100%;
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.profile-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.profile-link .profile-image  {
+    border-radius: 50%;
+    width: 62px;
+    height: 62px;
+    background-color: #ffffff;
+}
+
+.profile-info {
+    margin-left: 10px;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.profile-status {
+    font-size: 14px;
+    color: #A1A1A1;
+    margin-top: 2px;
+}
+
+.progress {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 10px;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 161px;
+    margin-top: 20px;
+}
+
+.empty-message {
+    font-size: 14px;
+    color: #A1A1A1;
+}
+
+.stats {
+	display: flex;
+	justify-content: space-between;
+    margin-top: 20px;
+	gap: 10px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #323232;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+	width: 100%;
+}
+
+.stat-label {
+    font-size: 12px;
+    font-weight: medium;
+}
+
+.stat-value {
+    background-color: #434343;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.message-link {
+    display: block;
+    text-decoration: none;
+}
+
+.message-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #323232;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.message-label {
+    font-size: 12px;
+    font-weight: medium;
+}
+
+.message-value {
+    background-color: #434343;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}

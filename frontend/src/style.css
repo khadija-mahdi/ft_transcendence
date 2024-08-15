@@ -20,8 +20,9 @@
 
 body {
 	color: var(--neutral);
-	padding: 1rem clamp(1.5rem, 6vw, 3rem);
+	padding: 40px;
 	background-color: var(--backgournd-color);
+
 }
 
 nav {
@@ -33,10 +34,19 @@ nav a {
 	color: var(--accent);
 }
 
-main {
+.main {
 	margin: 3rem 0;
 	height: 100dvh;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
 }
+
+
+.container {
+	width: 100%;
+}
+
 
 h1 {
 	font-size: 2.3rem;
@@ -59,6 +69,7 @@ click-counter button {
 	place-items: center;
 	transition: opacity 0.1s, background-color 0.1s;
 }
+
 click-counter button:active {
 	background-color: var(--secondary-light);
 }
@@ -67,19 +78,23 @@ click-counter button:active {
 	click-counter button {
 		cursor: pointer;
 	}
+
 	click-counter button:hover {
 		background-color: var(--secondary-light);
 	}
+
 	click-counter button:active {
 		opacity: 0.7;
 	}
 }
 
 .header {
-	margin: 40px;
+	margin: 45px;
 	display: flex;
-	justify-content: space-between; /* Align logo and authBar */
-	width: 100%; /* Full width */
+	justify-content: space-between;
+	/* Align logo and authBar */
+	width: 100%;
+	/* Full width */
 	box-sizing: border-box;
 }
 
@@ -98,7 +113,8 @@ click-counter button:active {
 	left: 40px;
 	display: flex;
 	align-items: center;
-	justify-content: center; /* Corrected from justify-items to justify-content */
+	justify-content: center;
+	/* Corrected from justify-items to justify-content */
 	gap: 10px;
 	flex-direction: row;
 }
@@ -106,16 +122,20 @@ click-counter button:active {
 .logo img {
 	margin: 0;
 	vertical-align: middle;
-	height: 10px; /* Updated from 50px to 100px */
-	width: 10px; /* Updated from 50px to 100px */
+	height: 10px;
+	/* Updated from 50px to 100px */
+	width: 10px;
+	/* Updated from 50px to 100px */
 }
 
 .logo p {
 	font-size: 20px;
 	font-weight: bold;
-	margin: 0; /* Reset margin to ensure it doesn't affect alignment */
+	margin: 0;
+	/* Reset margin to ensure it doesn't affect alignment */
 	/* Optional: Adjust line-height if necessary for alignment */
-	line-height: 1; /* Adjust based on the actual height of the logo image */
+	line-height: 1;
+	/* Adjust based on the actual height of the logo image */
 }
 
 .radio-group {
@@ -154,7 +174,7 @@ click-counter button:active {
 	transition: background-color 0.3s, font-weight 0.3s, color 0.3s;
 }
 
-.radio-container input:checked + .radio-label {
+.radio-container input:checked+.radio-label {
 	background-color: white;
 	font-weight: bold;
 	color: rgb(0, 0, 0);
@@ -185,15 +205,18 @@ click-counter button:active {
 
 @media (max-width: 480px) {
 	.logo img {
-		height: 30px; /* Adjust logo size */
+		height: 30px;
+		/* Adjust logo size */
 	}
 
 	.authBar {
-		flex-direction: column; /* Stack radio buttons vertically */
+		flex-direction: column;
+		/* Stack radio buttons vertically */
 	}
 
 	.radio-group {
-		flex-direction: column; /* Stack radio buttons vertically */
+		flex-direction: column;
+		/* Stack radio buttons vertically */
 		gap: 10px;
 	}
 }
@@ -234,12 +257,9 @@ body {
 	position: relative;
 	color: rgb(var(--foreground-rgb));
 	height: 100vh;
-	background: linear-gradient(
-			to bottom,
+	background: linear-gradient(to bottom,
 			transparent,
-			rgb(var(--background-end-rgb))
-		)
-		rgb(var(--background-start-rgb));
+			rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 	font-family: "Inter", sans-serif;
 }
 
@@ -257,13 +277,11 @@ body {
 	}
 
 	.primary-button-gradiant {
-		background: linear-gradient(
-			90deg,
-			#fd4106 0%,
-			#fd4106 37%,
-			#fe284f 64%,
-			#ff0099 100%
-		);
+		background: linear-gradient(90deg,
+				#fd4106 0%,
+				#fd4106 37%,
+				#fe284f 64%,
+				#ff0099 100%);
 		color: white;
 	}
 }
@@ -360,11 +378,11 @@ body {
 	border-bottom-left-radius: 8px;
 }
 
-.lead-to-parent:last-child > li::after {
+.lead-to-parent:last-child>li::after {
 	border: none;
 }
 
-.top-achievement-list > li:nth-child(2) {
+.top-achievement-list>li:nth-child(2) {
 	scale: 1.2;
 	margin-left: 15px;
 	margin-right: 15px;
@@ -405,13 +423,11 @@ body {
 }
 
 .primary-gradient {
-	background: linear-gradient(
-		90deg,
-		#ff4106 0%,
-		#ff4106 37%,
-		#fe284f 64%,
-		#ff0099 100%
-	);
+	background: linear-gradient(90deg,
+			#ff4106 0%,
+			#ff4106 37%,
+			#fe284f 64%,
+			#ff0099 100%);
 	cursor: pointer;
 }
 
@@ -456,11 +472,11 @@ body {
 	transition: 0.4s;
 }
 
-.switch > input:checked + .slider {
+.switch>input:checked+.slider {
 	background-color: #262626;
 }
 
-input:checked + .slider::before {
+input:checked+.slider::before {
 	background-color: #fff;
 	right: 0;
 	transform: translateX(26px);
@@ -508,12 +524,15 @@ input:checked + .slider::before {
 			"c";
 	}
 }
+
 .item-a {
 	grid-area: a;
 }
+
 .item-b {
 	grid-area: b;
 }
+
 .item-c {
 	grid-area: c;
 }
@@ -534,6 +553,43 @@ input:checked + .slider::before {
 .secondary {
 	animation: secondary 5s linear infinite;
 }
+
+/* sm screen and above */
+@media (min-width: 640px) {
+	.main {
+		max-width: 640px;
+	}
+}
+
+/* md screen and above */
+@media (min-width: 768px) {
+	.main {
+		max-width: 768px;
+	}
+}
+
+/* lg screen and above */
+@media (min-width: 1024px) {
+	.main {
+		max-width: 1024px;
+	}
+}
+
+/* xl screen and above */
+@media (min-width: 1280px) {
+	.main {
+		max-width: 1280px;
+	}
+}
+
+/* 2xl screen and above */
+@media (min-width: 1536px) {
+	.main {
+		max-width: 1536px;
+	}
+}
+
+
 
 @keyframes primary {
 	from {

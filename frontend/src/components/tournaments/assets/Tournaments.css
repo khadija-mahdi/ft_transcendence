@@ -40,21 +40,25 @@ a:active {
     height: 100%;
     margin-left: auto;
     margin-right: auto;
-    max-width: 1440px;
+}
+
+.tournament-container{
+    height: 80dvh;
 }
 
 /* Tournament List */
 .tournament-list {
     background-color: #292929;
+	padding: 20px;
     /* Equivalent to bg-secondary-400 */
     border-radius: 1rem;
 
     /* Rounded-xl */
-    min-height: 80dvh;
+	height: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.75rem;
-    padding: 1rem 0.5rem;
+    /* padding: 1rem 0.5rem; */
 }
 
 /* Header */
@@ -63,7 +67,6 @@ a:active {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1.25rem;
 }
 
 .header-title {
@@ -82,7 +85,7 @@ a:active {
     height: 100%;
     align-items: center;
     justify-content: flex-start;
-    gap: 0.75rem;
+    gap: 0.5rem;
     /* gap-3 */
     width: 100%;
     overflow-y: scroll;

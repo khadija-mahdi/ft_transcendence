@@ -64,7 +64,7 @@ async function navigate(path) {
     const guardedPath = routeGuard(path);
     const route = routes[guardedPath] || routes['*'];
     document.title = route.title;
-    const app = document.getElementById('app');
+    const app = document.getElementById('main');
     app.style.visibility = 'hidden';
 
     try {
