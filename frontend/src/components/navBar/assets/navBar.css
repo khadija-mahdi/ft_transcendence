@@ -357,7 +357,10 @@ body.bg-dark {
 
 .notification-list {
     height: 330px;
+    width: 100%;
+    padding: 0% 8px;
     overflow-y: scroll;
+    /* overflow-x: hidden; */
 }
 
 .hide-scrollbar {
@@ -377,13 +380,13 @@ body.bg-dark {
 .notification-item {
     padding: 8px;
     height: 50px;
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     border-radius: 4px;
     margin: 3px 0;
-    width: 260px;
     overflow: hidden;
     background-color: #474747;
 }
@@ -416,7 +419,6 @@ body.bg-dark {
     display: flex;
     flex-direction: column;
     align-items: start;
-    width: 203px;
 }
 
 .notification-text {
@@ -435,6 +437,7 @@ body.bg-dark {
 
 .notification-menu-container {
     display: flex;
+    cursor: pointer;
 }
 
 .notification-menu {

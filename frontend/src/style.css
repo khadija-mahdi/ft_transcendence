@@ -1,5 +1,6 @@
 :root {
 	--primary: #000000;
+	--backgournd-color: #161616;
 	--secondary: #30475e;
 	--secondary-light: #3a5a7a;
 	--accent: #f05454;
@@ -13,12 +14,14 @@
 	font-family: "Inter", sans-serif;
 	font-optical-sizing: auto;
 	font-style: normal;
+	color: #a2a2a2;
+	box-sizing: border-box;
 }
 
 body {
 	color: var(--neutral);
 	padding: 1rem clamp(1.5rem, 6vw, 3rem);
-	background-color: var(--primary);
+	background-color: var(--backgournd-color);
 }
 
 nav {
@@ -32,6 +35,7 @@ nav a {
 
 main {
 	margin: 3rem 0;
+	height: 100dvh;
 }
 
 h1 {
