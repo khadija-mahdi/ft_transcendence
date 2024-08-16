@@ -1,5 +1,6 @@
 import { tournamentWrapper, tournamentElement } from '../../tournaments/View/Tournaments.js';
 import UserSection from '../components/View/UserSection.js';
+import TopPlayers from '../components/View/TopPlayer.js';
 
 const elements = [tournamentElement(1, null, 'Tournament0', 'test-test-test', 12),
 tournamentElement(1, null, 'Tournament1', 'test-test-test', 12),
@@ -18,7 +19,7 @@ export default function () {
             NewTournaments
           </div>
           <div class="item-section item-c">
-            TopPlayers 
+            ${TopPlayers()} 
           </div>
         </div>
 

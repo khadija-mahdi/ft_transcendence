@@ -1,5 +1,7 @@
 import controller_Tournaments from '../../tournaments/Controller/Tournaments.js';
 import UserSection from '../components/Controller/UserSection.js';
+import TopPlayers from '../components/Controller/TopPlayer.js';
+
 
 export default function () {
     console.log("Home JS is working!");
@@ -7,7 +9,8 @@ export default function () {
 
     const cssFiles = [
         './components/tournaments/assets/Tournaments.css',
-		'./components/home/components/assets/UserSection.css'
+		'./components/home/components/assets/UserSection.css',
+		'./components/home/components/assets/TopPlayers.css',
     ];
 
     function loadCSS(href, onLoad, onError) {
@@ -27,4 +30,7 @@ export default function () {
     });
 
     controller_Tournaments();
+	UserSection();
+	TopPlayers();
+
 }
