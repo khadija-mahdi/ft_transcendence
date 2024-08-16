@@ -35,9 +35,10 @@ let textMesh_score_computer = null;
 const currentUrl = window.location.href;
 const params = new URLSearchParams(window.location.search);
 const uuid = params.get('uuid');
-console.log(window.location.href); // Should print the full URL
-console.log(window.location.search); // Should print the query string, e.g., ?uuid=1234abcd
-console.log(uuid);
+
+// console.log(window.location.href); // Should print the full URL
+// console.log(window.location.search); // Should print the query string, e.g., ?uuid=1234abcd
+// console.log(uuid);
 
 function init() 
 {
@@ -219,48 +220,54 @@ function init()
         scene.add(textMesh_player);
     });
 
-    // function handleWebSocketMessages (message)
-    // {
-    //     if (!message.data) return;
-    //     const data = JSON.parse(message.data);
-
-    //     switch (data.type) {
-    //       case 'update':
-    //         // Game state update
-    //         if (data.ball) {
-    //           if (ballModel && ballModel.position)
-    //           {
-    //             ballModel.position.x = data.ball.x;
-    //             ballModel.position.z = data.ball.y;
-    //           } else {
-    //             console.error('ballModel is not initialized', ballModel);
-    //           }
-    //         }
-    //         if (data.leftPaddle)     
-    //         {
-    //           player_model.position.set(data.leftPaddle.x, player_model.position.y, data.leftPaddle.z);
-    //         }
-    //         if (data.rightPaddle)
-    //         {
-    //           computer.position.set(data.rightPaddle.x, computer.position.y, data.rightPaddle.z);
-    //         }
-    //         break;
-    //       case 'goal':
-    //         // Update scores
-    //         player_score = data.first_player_score;
-    //         computer_score = data.second_player_score;
-    //         update_text();
-    //         resetBallPosition();
-    //         break;
-    //       case 'game_over':
-    //         // Handle game over scenario
-    //         alert("Game Over!");
-    //         break;
-    //       default:
-    //         console.log(data);
-    //         break;
-    //     }
-    //   }
+    function handleWebSocketMessages (message)
+    {
+        if (!message.data) return;
+        const data = JSON.parse(message.data);
+        switch (data.type) {
+          case 'update':
+            // Game state update
+            if (data.ball) 
+            {
+              if (ballModel && ballModel.position)
+              {
+                data.ball.x = ballModel.position.x
+                data.ball.y = ballModel.position.z;
+              }
+              else
+              {
+                console.error('ballModel is not initialized', ballModel);
+              }
+            }
+            if (data.leftPaddle)     
+            {
+            //   player_model.position.set(data.leftPaddle.x, player_model.position.y, data.leftPaddle.z);
+                 data.leftPaddle.x = player_model.position.x;
+            }
+            if (data.rightPaddle)
+            {
+            //   computer.position.set(data.rightPaddle.x, computer.position.y, data.rightPaddle.z);
+                data.leftPaddle.x = computer.position.x;
+            }
+            break;
+          case 'goal':
+            // Update scores
+            player_score = data.first_player_score;
+            computer_score = data.second_player_score;
+            update_text();
+            update_text_player();
+            resetBallPosition();
+            resetBallPosition_player();
+            break;
+          case 'game_over':
+            // Handle game over scenario
+            alert("Game Over!");
+            break;
+          default:
+            console.log(data);
+            break;
+        }
+      }
 
 
     // setup web socket 
@@ -268,33 +275,35 @@ function init()
     {
           //// const ws = new AuthWebSocket('wss://localhost/ws/game/d9517b51-d861-4eba-96d6-28ec87f6284a/')
           // in next js           const lobbySocket = new AuthWebSocket(`${WS_BASE_URL}/game/${uuid}/`);          
-
           const lobbySocket = new AuthWebSocket(`wss://localhost/ws/game/${uuid}/`);
           lobbySocket.onerror = (error) => {
             console.error('WebSocket error: dxx', error);
           };
           lobbySocket.onclose = (event) => {
+            console.log("hello dx i am close -------");
             console.log('WebSocket closed:', event.code, event.reason);
           };
-          lobbySocket.onopen = (event) => {
+          lobbySocket.onopen = (event) => 
+            {
               console.log("yaaaaaaaaaaaa hooo");
           };
-          lobbySocket.addEventListener('open', () => {
+          lobbySocket.addEventListener('open', () => 
+        {
             console.log('WebSocket connected');
           });
   
-        //   lobbySocket.addEventListener('message', (message) => 
-        //   {
-        //     console.log("=------------------=-=--==-=i have a message");
-        //     handleWebSocketMessages(message);
-        //   });
+          lobbySocket.addEventListener('message', (message) => 
+          {
+            console.log("=------------------=-=--==-=i have a message");
+            handleWebSocketMessages(message);
+          });
   
-        //   lobbySocket.addEventListener('close', () => {
-        //     console.log('WebSocket disconnected');
-        //   });
-        //   lobbySocket.addEventListener('error', (error) => {
-        //     console.error('WebSocket error:', error);
-        //   });
+          lobbySocket.addEventListener('close', () => {
+            console.log('WebSocket disconnected');
+          });
+          lobbySocket.addEventListener('error', (error) => {
+            console.error('WebSocket error:', error);
+          });
     }
 
 
@@ -480,7 +489,7 @@ function animate(currentTime) {
 
     
     // Run the animation function for the first time to kick things off
-    // setupWebSocket();
+    setupWebSocket();
     animate();
 
     // Handle window resize
