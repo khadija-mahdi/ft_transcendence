@@ -25,6 +25,7 @@ class JWTAuthMiddlewareStack():
             else:
                 raise ValueError('No token found')
         except Exception as e:
+            print(f'Error validating token: {e}')
             denier = WebsocketDenier()
             return await denier(scope, receive, send)
         return await self.app(scope, receive, send)
