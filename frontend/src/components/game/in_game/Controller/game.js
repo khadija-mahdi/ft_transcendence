@@ -36,9 +36,7 @@ const currentUrl = window.location.href;
 const params = new URLSearchParams(window.location.search);
 const uuid = params.get('uuid');
 
-// console.log(window.location.href); // Should print the full URL
-// console.log(window.location.search); // Should print the query string, e.g., ?uuid=1234abcd
-// console.log(uuid);
+console.log(uuid);
 
 function init() 
 {
@@ -51,6 +49,16 @@ function init()
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
 
+
+    // const LoadingManager = new THREE.LoadingManager();
+    // LoadingManager.onStart = function(url,item,totale)
+    // {
+    //     console.log("on start loading .... => ",url);
+    // }
+
+    // const gltf_loader = new GLTFLoader(LoadingManager);
+    
+    
     // Create a renderer and add it to the DOM
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -241,13 +249,18 @@ function init()
             }
             if (data.leftPaddle)     
             {
-            //   player_model.position.set(data.leftPaddle.x, player_model.position.y, data.leftPaddle.z);
-                 data.leftPaddle.x = player_model.position.x;
+                if (player_model && player_model.position)
+                {
+                    data.leftPaddle.x = player_model.position.x;
+                    
+                }
             }
             if (data.rightPaddle)
             {
-            //   computer.position.set(data.rightPaddle.x, computer.position.y, data.rightPaddle.z);
-                data.leftPaddle.x = computer.position.x;
+                if (computer && computer.position)
+                {
+                    data.leftPaddle.x = computer.position.x;
+                }
             }
             break;
           case 'goal':
@@ -274,24 +287,22 @@ function init()
     function setupWebSocket () 
     {
           //// const ws = new AuthWebSocket('wss://localhost/ws/game/d9517b51-d861-4eba-96d6-28ec87f6284a/')
-          // in next js           const lobbySocket = new AuthWebSocket(`${WS_BASE_URL}/game/${uuid}/`);          
-          const lobbySocket = new AuthWebSocket(`wss://localhost/ws/game/${uuid}/`);
+          // in next js           const lobbySocket = new AuthWebSocket(`${WS_BASE_URL}/game/${uuid}/`); 
+         const lobbySocket = new AuthWebSocket(`wss://localhost:4433/ws/game/${uuid}/`);
           lobbySocket.onerror = (error) => {
             console.error('WebSocket error: dxx', error);
           };
-          lobbySocket.onclose = (event) => {
+
+          lobbySocket.onclose = (event) => 
+            {
             console.log("hello dx i am close -------");
             console.log('WebSocket closed:', event.code, event.reason);
-          };
-          lobbySocket.onopen = (event) => 
-            {
-              console.log("yaaaaaaaaaaaa hooo");
-          };
-          lobbySocket.addEventListener('open', () => 
-        {
-            console.log('WebSocket connected');
-          });
-  
+            };
+        //   lobbySocket.onopen = (event) => 
+        //     {
+        //       console.log("yaaaaaaaaaaaa hooo");
+        //   };
+        console.log("i am here -------------->");
           lobbySocket.addEventListener('message', (message) => 
           {
             console.log("=------------------=-=--==-=i have a message");
