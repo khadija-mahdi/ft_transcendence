@@ -212,7 +212,7 @@ body.bg-dark {
 
 
 /* Profile button converted */
-.profile-button {
+.navbar-profile-button {
 	position: relative;
 	z-index: 50;
 	/* padding: 16px; */

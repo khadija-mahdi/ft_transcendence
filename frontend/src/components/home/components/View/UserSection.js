@@ -15,10 +15,10 @@ export default function () {
 				<div id="current-xp" class="progress-xp">7,900 / 9000</div>
 			</div>
 
-			<div id="chart-container" class="chart-container">
-				<div id="chart-message" class="empty-message">
-				You don't have progress data yet!
-			</div>
+			<div id="chart-container" class="chart-container">	
+				<div  id="chart-id" className="chart-container" style='width: 100%; height: 100%' >
+					<canvas id='user-chart' style='width: 100%; height: 161px' ></canvas>
+				</div>
 			</div>
 
 			<div class="stats">

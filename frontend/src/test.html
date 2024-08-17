@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<style>
+		:root {
+			--primary: #Ff4106;
+		}
+
+		body {
+			height: 456px;
+		}
+
+		a {
+			text-decoration: none;
+		}
+
+		* {
+			border: none;
+			color: white;
+		}
+
+		.t-container {
+			position: relative;
+			height: 100%;
+			background-color: #161616;
+			overflow: hidden;
+		}
+
+		.t-container-details {
+			padding: 4rem;
+		}
+
+		.t-cta-container {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-top: 4rem;
+		}
+
+		.highlighted {
+			background-image: linear-gradient(90deg, #ff3d0030 100%, transparent 19%);
+			border-radius: 4px;
+			width: 145px;
+			height: 23px;
+			font-size: 12px;
+			font-weight: bold;
+			color: var(--primary);
+		}
+
+		.t-title {
+			border-radius: '4px';
+			width: '145px';
+			height: '23px';
+			font-size: '12px';
+			font-weight: 'bold';
+			color: var(--primary);
+		}
+
+		.t-name {
+			padding-top: 10px;
+			display: flex;
+			flex-direction: column;
+			justify-items: center;
+			align-items: center;
+			width: 334px;
+			height: 101px;
+
+			font-size: 42px;
+			font-weight: bold;
+		}
+
+		.t-description {
+			/* padding-top: 2rem; */
+			display: flex;
+			flex-direction: column;
+			justify-items: center;
+			align-items: center;
+			width: 334px;
+			height: 45px;
+
+			font-size: 12px;
+			font-weight: normal;
+			color: #999999;
+			letter-spacing: 0.5px;
+		}
+
+		
+
+		.t-cta-list {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.t-cta {
+			font-weight: bold;
+			border-radius: 4px;
+			width: 104px;
+			height: 37px;
+			font-size: 14px;
+			background: linear-gradient(90deg, #Ff4106 0%, #Ff4106 37%, #FE284F 64%, #FF0099 100%);
+		}
+
+
+		.t-learn {
+
+			background-color: #3F3F3F;
+			border-radius: 4px;
+			width: 93px;
+			height: 37px;
+			font-size: 14px;
+			font-weight: bold;
+
+		}
+
+		.t-img-bg-container {
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+
+		.t-img-bg {
+			position: relative;
+			height: 844.63px;
+			width: 500.08px;
+		}
+
+		.t-img-bg img {
+			filter: blur(64px);
+			width: 600px;
+			height: 900px;
+			object-fit: cover;
+		}
+
+		.t-primary-img-container {
+			position: absolute;
+			top: -30px;
+			right: 44px;
+		}
+
+		.t-primary-img {
+			/* relative  h-[544.63px] w-[363.08px] */
+			position: relative;
+			height: 544.63px;
+			width: 363.08px;
+		}
+
+		.t-primary-img img {
+			transform: rotate(12.13deg);
+			width: 363.08px;
+			height: 544.63px;
+			object-fit: cover;
+		}
+	</style>
+</head>
+
+<body>
+	<div class='t-container'>
+		<div class='t-container-details'>
+			<div class="t-cta-container">
+				<button class='highlighted t-title'> REGISTRATION OPENS </button>
+			</div>
+			<div class="t-name">
+				<div> VALORANT 2024 TOURNAMENT </div>
+			</div>
+			<div class="t-description">
+				<div>lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+					et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+					aliquip ex ea commodo consequat.</div>
+			</div>
+
+			<div class='t-cta-container'>
+				<div class="t-cta-list" aria-label="Navigate to profile">
+					<a href='/tournaments' style='z-index: 99'>
+						<button class=' t-cta'>Register now</button>
+					</a>
+					<a href='/tournaments' class="t-learn-container"><button class='t-learn'>Learn more</button>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="t-img-bg-container">
+			<div class="t-img-bg">
+				<img src="./valorant1.jpg" alt="anouncement background img" />
+			</div>
+		</div>
+		<div class="t-primary-img-container">
+			<div class="t-primary-img">
+				<img src="./valorant1.jpg" alt="anouncement primary Image" />
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

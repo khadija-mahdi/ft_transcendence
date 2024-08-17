@@ -1,61 +1,105 @@
-export default function TopPlayer() {
-	document.addEventListener('DOMContentLoaded', function () {
-		const topPlayersContainer = document.getElementById('topPlayersContainer');
-		const userContainer = document.getElementById('userContainer');
+import { Empty } from "../../../../lib/Empty.js";
+import { fetchWithAuth } from '../../../../lib/apiMock.js'
 
-		const fetchTopPlayers = () => {
-			return new Promise((resolve) => {
-				setTimeout(() => {
-					resolve({
-						results: [
-							{ name: 'Player 1', score: 100 },
-							{ name: 'Player 2', score: 90 },
-							{ name: 'Player 3', score: 80 },
-							{ name: 'Player 4', score: 70 }
-						]
-					});
-				}, 1000);
+
+export function TopPlayerContainer({ name, href, number, index }) {
+	const container = document.createElement('div');
+	container.className = `${index === 1 ? 'topPlayers-container-highlight' : 'friend-container'}`;
+
+	const link = document.createElement('a');
+	link.href = `/profile/${name}`;
+	link.className = 'friend-link';
+
+	const image = document.createElement('img');
+	image.className = 'firend-profile-image';
+	image.src = href;
+	image.alt = 'Profile Image';
+	image.width = 53;
+	image.height = 53;
+
+	const textContainer = document.createElement('div');
+	textContainer.className = 'friend-text-container';
+
+	const nameDiv = document.createElement('div');
+	nameDiv.className = 'friend-name';
+	nameDiv.textContent = name;
+
+	const levelDiv = document.createElement('div');
+	levelDiv.className = 'friend-level';
+	levelDiv.textContent = `Level ${number}`;
+
+	textContainer.appendChild(nameDiv);
+	textContainer.appendChild(levelDiv);
+
+	link.appendChild(image);
+	link.appendChild(textContainer);
+
+	// New index display component
+	const indexWrapper = document.createElement('div');
+	indexWrapper.className = 'topPlayers-arrow-container';
+
+	const indexDiv = document.createElement('div');
+	indexDiv.className = `topPlayers-arrow ${index === 1 ? 'topPlayers-highlight' : ''}`;
+	indexDiv.textContent = index; // Display the index
+
+	indexWrapper.appendChild(indexDiv);
+
+	const indexLink = document.createElement('a');
+	indexLink.href = `/profile/${name}`;
+	indexLink.className = 'friend-arrow-link';
+	indexLink.appendChild(indexWrapper);
+
+	container.appendChild(link);
+	container.appendChild(indexLink);
+
+	return container;
+}
+
+
+
+
+async function fetchTopPlayer() {
+	const apiUrl = "https://localhost:4433/api/v1/users/top-players/";
+	try {
+		const response = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
+		return response.results.map((result) => ({
+			...result, image_url: result.image_url?.replace("https://localhost/",
+				"https://localhost:4433/")
+		}));
+	} catch (error) {
+		console.error("Error fetching user data:", error);
+	}
+}
+
+
+export default async function rendertopPlayers() {
+	const topPlayers = await fetchTopPlayer();
+	const topPlayersContainer = document.getElementById('topPlayer-container');
+	console.log("topPlayers", topPlayers, topPlayersContainer);
+
+	topPlayersContainer.innerHTML = '';
+
+	if (!topPlayers.length) {
+		const emptyComponent = Empty('No topPlayers Found');
+		const emptyContainer = document.createElement('div');
+		emptyContainer.className = 'emptyContainer';
+		emptyContainer.appendChild(emptyComponent);
+		topPlayersContainer.appendChild(emptyContainer);
+	} else {
+		topPlayers.slice(0, 4).forEach((friend, index) => {
+			const friendComponent = TopPlayerContainer({
+				name: friend.username,
+				href: friend.image_url,
+				number: friend.level,
+				index: index + 1, // Assuming index starts from 1
 			});
-		};
+			const friendWrapper = document.createElement('div');
+			friendWrapper.className = 'friend-wrapper';
+			friendWrapper.appendChild(friendComponent);
+			topPlayersContainer.appendChild(friendWrapper);
+		});
 
-		const displayTopPlayers = async () => {
-			const topPlayers = await fetchTopPlayers();
-
-			if (!topPlayers.results.length) {
-				topPlayersContainer.innerHTML = '<div class="empty">No Top players are available right now</div>';
-			} else {
-				const playersHtml = topPlayers.results.slice(0, 4).map((item, index) =>
-					`<div class="player">
-                    <div class="player-name">${index + 1}. ${item.name}</div>
-                    <div class="player-score">Score: ${item.score}</div>
-                </div>`
-				).join('');
-
-				topPlayersContainer.innerHTML = `<div class="players">${playersHtml}</div>`;
-			}
-		};
-
-		const displayUser = () => {
-			// Simulating a single user for demonstration
-			const user = { username: 'User1', imageUrl: 'path/to/image', isMessage: true };
-			const userElement = document.createElement('div');
-			userElement.className = 'user';
-			userElement.innerHTML = `
-            <div class="user-info">
-                <img src="${user.imageUrl}" alt="Profile Image" class="profile-image"/>
-                <span>${user.username}</span>
-            </div>
-            ${user.isMessage ? '<span class="message-icon">📩</span>' : ''}
-        `;
-			userContainer.appendChild(userElement);
-
-			// Simulate navigation on click
-			userElement.addEventListener('click', () => {
-				window.location.href = `/profile/${user.username}`;
-			});
-		};
-
-		displayTopPlayers();
-		displayUser();
-	});
+	}
 }

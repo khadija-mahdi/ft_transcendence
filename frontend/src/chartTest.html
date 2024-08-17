@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Chart.js Example</title>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+	<!-- 2. Create a Canvas Element -->
+	<canvas id="myChart" width="400" height="200"></canvas>
+
+	<!-- 3. Write JavaScript Code -->
+	<script>
+		// Get the canvas element
+		const ctx = document.getElementById('myChart').getContext('2d');
+
+		// Create a new Chart instance
+		const myChart = new Chart(ctx, {
+			type: 'bar', // Type of chart (bar, line, pie, etc.)
+			data: {
+				labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // X-axis labels
+				datasets: [{
+					label: 'My First Dataset',
+					data: [12, 19, 3, 5, 2, 3, 7], // Data points
+					backgroundColor: 'rgba(75, 192, 192, 0.2)', // Bar color
+					borderColor: 'rgba(75, 192, 192, 1)', // Bar border color
+					borderWidth: 1 // Border width
+				}]
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true // Start the y-axis at zero
+					}
+				}
+			}
+		});
+	</script>
+</body>
+
+</html>

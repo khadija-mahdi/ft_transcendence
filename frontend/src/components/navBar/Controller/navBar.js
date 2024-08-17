@@ -1,110 +1,102 @@
+import {fetchWithAuth} from '../../../lib/apiMock.js'
+
 const notifications = [
-  {
-    text: "You have a new message",
-    time: "10:24",
-    image: "components/auth/assets/google.svg",
-  },
-  {
-    text: "You have a new message",
-    time: "10:24",
-    image: "components/auth/assets/google.svg",
-  },
-  {
-    text: "You have a new message",
-    time: "10:24",
-    image: "components/auth/assets/google.svg",
-  },
-  {
-    text: "You have a new message",
-    time: "10:24",
-    image: "components/auth/assets/google.svg",
-  },
-  {
-    text: "You have a new message",
-    time: "10:24",
-    image: "components/auth/assets/google.svg",
-  },
-  {
-    text: "You have a new message",
-    time: "10:24",
-    image: "components/auth/assets/google.svg",
-  },
-  {
-    text: "You have a new message",
-    time: "10:24",
-    image: "components/auth/assets/google.svg",
-  },
-  {
-    text: "Your order has been shipped",
-    time: "11:00",
-    image: "/components/auth/assets/42_logo.svg",
-  },
+	{
+		text: "You have a new message",
+		time: "10:24",
+		image: "components/auth/assets/google.svg",
+	},
+	{
+		text: "You have a new message",
+		time: "10:24",
+		image: "components/auth/assets/google.svg",
+	},
+	{
+		text: "You have a new message",
+		time: "10:24",
+		image: "components/auth/assets/google.svg",
+	},
+	{
+		text: "You have a new message",
+		time: "10:24",
+		image: "components/auth/assets/google.svg",
+	},
+	{
+		text: "You have a new message",
+		time: "10:24",
+		image: "components/auth/assets/google.svg",
+	},
+	{
+		text: "You have a new message",
+		time: "10:24",
+		image: "components/auth/assets/google.svg",
+	},
+	{
+		text: "You have a new message",
+		time: "10:24",
+		image: "components/auth/assets/google.svg",
+	},
+	{
+		text: "Your order has been shipped",
+		time: "11:00",
+		image: "/components/auth/assets/42_logo.svg",
+	},
 ];
 
-function getCookieValue(name) {
-  const cookies = document.cookie.split(";");
-  for (let i = 0; i < cookies.length; i++) {
-    const cookie = cookies[i].trim();
-    if (cookie.startsWith(name + "=")) {
-      return cookie.substring(name.length + 1);
-    }
-  }
-  return null;
-}
+
 
 async function loadNavbar() {
-  const path = window.location.pathname;
+	const path = window.location.pathname;
 
-  if (!path.startsWith("/game") && !path.startsWith("/sign")) {
-    try {
-      const response = await fetch("/components/navBar/View/navBar.html");
-      if (!response.ok) throw new Error("Network response was not ok");
-      const navbarHTML = await response.text();
+	if (!path.startsWith("/game") && !path.startsWith("/sign")) {
+		try {
+			const response = await fetch("/components/navBar/View/navBar.html");
+			if (!response.ok) throw new Error("Network response was not ok");
+			const navbarHTML = await response.text();
 
-      document.body.insertAdjacentHTML("afterbegin", navbarHTML);
+			document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 
-      renderNavBrContent();
+			renderNavBrContent();
 
-      fetchMyData();
-      renderNotifications();
+			fetchMyData();
+			renderNotifications();
 
-      document.getElementById("notif").addEventListener("click", function () {
-        const panel = document.getElementById("notification-panel");
-        panel.classList.toggle("hidden");
-      });
+			document.getElementById("notif").addEventListener("click", function () {
+				const panel = document.getElementById("notification-panel");
+				panel.classList.toggle("hidden");
+			});
 
-      document.addEventListener("DOMContentLoaded", renderNotifications);
+			document.addEventListener("DOMContentLoaded", renderNotifications);
 
-      document.addEventListener("click", function (event) {
-        const panel = document.getElementById("notification-panel");
-        const notifButton = document.getElementById("notif");
-        if (
-          !panel.contains(event.target) &&
-          !notifButton.contains(event.target)
-        ) {
-          panel.classList.add("hidden");
-        }
-      });
-    } catch (error) {
-      console.error("Error loading navbar:", error);
-    }
-  }
+			document.addEventListener("click", function (event) {
+				const panel = document.getElementById("notification-panel");
+				const notifButton = document.getElementById("notif");
+				if (
+					!panel.contains(event.target) &&
+					!notifButton.contains(event.target)
+				) {
+					panel.classList.add("hidden");
+				}
+			});
+		} catch (error) {
+			console.error("Error loading navbar:", error);
+		}
+	}
 }
 
 function renderNotifications() {
-  const notificationList = document.getElementById("notification-list");
-  notificationList.innerHTML = "";
+	const notificationList = document.getElementById("notification-list");
+	notificationList.innerHTML = "";
 
-  notifications.forEach((notification) => {
-    const notificationItem = document.createElement("li");
-    notificationItem.className = "notification-item";
+	notifications.forEach((notification) => {
+		const notificationItem = document.createElement("li");
+		notificationItem.className = "notification-item";
 
-    notificationItem.innerHTML = /*html*/ `
+		notificationItem.innerHTML = /*html*/ `
             <a href="${notification.link || ""}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${
-                      notification.image
-                    }" alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src="${notification.image
+			}" alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.text}</div>
@@ -120,85 +112,72 @@ function renderNotifications() {
             </div>
         `;
 
-    notificationList.appendChild(notificationItem);
-  });
+		notificationList.appendChild(notificationItem);
+	});
 }
 
 function renderNavBrContent() {
-  console.log("Applying navbar styles...");
-  const navItems = document.querySelectorAll(".nav-item.nav a");
+	console.log("Applying navbar styles...");
+	const navItems = document.querySelectorAll(".nav-item.nav a");
 
-  navItems.forEach((navItem) => {
-    if (window.location.pathname === navItem.getAttribute("href")) {
-      const svg = navItem.querySelector("svg path");
-      const paragraph = navItem.querySelector("p");
+	navItems.forEach((navItem) => {
+		if (window.location.pathname === navItem.getAttribute("href")) {
+			const svg = navItem.querySelector("svg path");
+			const paragraph = navItem.querySelector("p");
 
-      if (svg) svg.setAttribute("fill", "#FD4106");
-      if (paragraph) paragraph.style.color = "#FD4106";
-      const underline = document.createElement("div");
-      underline.style.width = "100%";
-      underline.style.height = "2px";
-      underline.style.backgroundColor = "#FD4106";
-      underline.style.position = "absolute";
-      underline.style.bottom = "0";
-      underline.style.left = "0";
-      navItem.style.position = "relative";
+			if (svg) svg.setAttribute("fill", "#FD4106");
+			if (paragraph) paragraph.style.color = "#FD4106";
+			const underline = document.createElement("div");
+			underline.style.width = "100%";
+			underline.style.height = "2px";
+			underline.style.backgroundColor = "#FD4106";
+			underline.style.position = "absolute";
+			underline.style.bottom = "0";
+			underline.style.left = "0";
+			navItem.style.position = "relative";
 
-      navItem.appendChild(underline);
-    }
-  });
+			navItem.appendChild(underline);
+		}
+	});
 }
 
 async function fetchMyData() {
-  const accessToken = getCookieValue("access");
-  const refreshToken = getCookieValue("refresh"); // Note: This might not be needed for this request
+	const apiUrl = "https://localhost:4433/api/v1/users/me/";
 
-  if (!accessToken || refreshToken) return;
-  const apiUrl = "https://localhost:4433/api/v1/users/me/";
+	try {
+		const data = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
 
-  try {
-    const response = await fetch(apiUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`, // Include the access token in the Authorization header
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const data = await response.json();
-    data.image_url = data.image_url.replace(
-      "https://localhost/",
-      "https://localhost:4433/"
-    );
-    data.rank.icon = data.rank.icon.replace(
-      "https://localhost/",
-      "https://localhost:4433/"
-    );
-    handleUserData(data);
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-  }
+		data.image_url = data.image_url.replace(
+			"https://localhost/",
+			"https://localhost:4433/"
+		);
+		data.rank.icon = data.rank.icon.replace(
+			"https://localhost/",
+			"https://localhost:4433/"
+		);
+		handleUserData(data);
+	} catch (error) {
+		console.error("Error fetching user data:", error);
+	}
 }
 
-function handleUserData(data) {
-  const profileButton = document.querySelector(".profile-button .profile");
-  console.log(data.username);
-  if (!profileButton) return;
 
-  profileButton.innerHTML = `
+function handleUserData(data) {
+	const profileButton = document.querySelector(".profile-button .profile");
+	if (!profileButton) return;
+
+	profileButton.innerHTML = `
 		<div class="profile-content">
 			<div class="profile-image">
-				<img src="${
-          data.image_url || "components/auth/assets/google.svg"
-        }" alt="Profile Image" />
+				<img src="${data.image_url || "components/auth/assets/google.svg"
+		}" alt="Profile Image" />
 			</div>
 			<div class="profile-details">
 				<div class="profile-name">${data.username}</div>
-				<div class="profile-level">Level ${
-          data.current_xp + "/" + data.rank.xp_required
-        }</div>
+				<div class="profile-level">Level ${data.current_xp + "/" + data.rank.xp_required
+		}</div>
 			</div>
 		</div>
 		<div id="profile-icon" class="profile-dropdown-icon">
@@ -211,7 +190,7 @@ function handleUserData(data) {
 
 // Ensure DOM is fully loaded before calling fetchMyData
 document.addEventListener("DOMContentLoaded", function () {
-  fetchMyData();
+	fetchMyData();
 });
 
 loadNavbar();

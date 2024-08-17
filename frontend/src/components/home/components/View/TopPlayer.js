@@ -1,13 +1,15 @@
 export default function () {
 	return /*html*/`
-	<div id="topPlayersContainer" class="top-Player">
-			<div class=""> Top Players</div>
-		<div id="topPlayersContainer">
-			<!-- Players will be dynamically inserted here -->
-		</div>
-		<div id="userContainer">
-			<!-- Users will be dynamically inserted here -->
+	<div class="topPlayer-container">
+		<a href="/home/all-players">
+			<div class="friend-header">
+				<div class="title">Top Players</div>
+			</div>
+		</a>
+		<div>
+			<div id="topPlayer-container"></div>
 		</div>
 	</div>
-	`;
-}
+    `;
+};
+

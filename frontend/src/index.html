@@ -9,17 +9,17 @@
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<link
 		href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
 		rel="stylesheet">
 	<link rel="stylesheet" href="/style.css">
 	<link rel="stylesheet" href="/components/navBar/assets/navBar.css">
-	<script src="/components/navBar/Controller/navBar.js" defer></script>
 	<script type="importmap">
-		
-        {
-            "imports": {
-                "three": "/node_modules/three/build/three.module.js",
+
+		{
+			"imports": {
+				"three": "/node_modules/three/build/three.module.js",
                 "OrbitControls": "/node_modules/three/examples/jsm/controls/OrbitControls.js",
                 "TextGeometry": "/node_modules/three/examples/jsm/geometries/TextGeometry.js",
                 "FontLoader": "/node_modules/three/examples/jsm/loaders/FontLoader.js",
@@ -28,6 +28,7 @@
             }
         }
     </script>
+	<script type="module" src="/components/navBar/Controller/navBar.js" defer></script>
 	<script type="module" src="/main.js"></script>
 </head>
 
