@@ -413,10 +413,6 @@
 
 /* Annoce Tournamnts Sliders */
 
-
-
-
-
 .carousel {
 	position: relative;
 	/* position: absolute; */
@@ -467,7 +463,7 @@
 	animation-direction: reverse;
 }
 
-.container {
+.slider-container {
 	margin: 0 auto;
 }
 
@@ -521,8 +517,8 @@ blockquote {
 
 .carousel-indicators {
 	position: absolute;
-	bottom: 20px;
-	left: 50%;
+	bottom: 10px;
+	left: 64px;
 	padding-left: 0;
 	margin: 0;
 	list-style: none;
@@ -531,18 +527,24 @@ blockquote {
 
 .carousel-indicators li {
 	display: inline-block;
-	width: 10px;
-	height: 10px;
+	width: 17px;
+	height: 3px;
 	cursor: pointer;
-	border: 1px solid #FFFFFF;
-	border-radius: 10px;
+	border: 1px solid #343434;
+	border-radius: 2px;
 }
 
 .carousel-indicators li.active {
-	background-color: #FFFFFF;
+	display: inline-block;
+	width: 17px;
+	height: 3px;
+	cursor: pointer;
+	border: 1px solid #FF3D00;
+	border-radius: 2px;
+	background-color: #FF3D00;
 }
 
-@media (min-width: 992px) {
+/* @media (min-width: 992px) {
 	.container {
 		width: 970px;
 	}
@@ -552,7 +554,7 @@ blockquote {
 	.container {
 		width: 1170px;
 	}
-}
+} */
 
 @keyframes left {
 	from {
@@ -574,12 +576,6 @@ blockquote {
 	}
 }
 
-
-
-
-
-
-
 /* slider item styles */
 
 .t-container {
@@ -589,14 +585,14 @@ blockquote {
 }
 
 .t-container-details {
-	padding: 4rem;
+	padding: 2rem;
 	height: 100%;
 	width: 50%;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: start;
-	gap: 2rem;
+	/* gap: 1rem; */
 
 }
 
@@ -623,53 +619,58 @@ blockquote {
 	height: 23px;
 	font-size: 12px;
 	font-weight: bold;
-	color: var(--primary);
+	color: #FF3D00;
+
 }
 
 .t-title {
 	border-radius: '4px';
 	width: '145px';
-	height: '23px';
+	height: 23px;
 	font-size: '12px';
 	font-weight: 'bold';
 	color: var(--primary);
+	margin-top: 4.5rem;
 }
 
 .t-name {
-	padding-top: 10px;
+	padding-top: 20px;
 	display: flex;
-	flex-direction: column;
-	justify-items: center;
-	align-items: center;
-	min-width: 334px;
-	height: 101px;
-
+	min-width: 50%;
+	overflow: hidden;
+	font-family: 'Inter';
 	font-size: 42px;
-	font-weight: bold;
+	font-weight: 700;
+	line-height: 50.83px;
+	letter-spacing: -0.04em;
+	text-align: left;
+
 }
 
 .t-description {
-	/* padding-top: 2rem; */
-	display: flex;
-	flex-direction: column;
-	justify-items: center;
-	align-items: center;
-	width: 334px;
-	height: 45px;
-
-	font-size: 12px;
-	font-weight: normal;
+	padding-top: 3px;
 	color: #999999;
-	letter-spacing: 0.5px;
+	max-width: 50%;
+	max-height: 100px;
+	overflow: hidden;
+	overflow-wrap: break-word;
+	font-family: 'Inter';
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 14.52px;
+	letter-spacing: -0.04em;
+	text-align: left;
 }
 
 
 
 .t-cta-list {
+	padding-bottom: 4.5rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
+	padding-top: 40px;
 
 }
 

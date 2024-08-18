@@ -111,7 +111,36 @@ async function fetchOnlinePlayer() {
 export default async function renderOnlinePlayers() {
 	const OnlinePlayers = await fetchOnlinePlayer();
 	const OnlinePlayersContainer = document.getElementById('OnlinePlayers-container');
-	console.log("OnlinePlayers", OnlinePlayers, OnlinePlayersContainer);
+	const searchInput = document.getElementById('searchInput');
+    const friendsContainer = document.getElementById('friends-container');
+
+    searchInput.addEventListener('input', debounce(async (e) => {
+        const term = e.target.value;
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (term) {
+            urlParams.set('q', term);
+        } else {
+            urlParams.delete('q');
+        }
+
+        window.history.replaceState(null, '', `${window.location.pathname}?${urlParams}`);
+
+        // Fetch friends based on search query
+        const friends = await fetchMyFriends(term);
+        renderFriendsList(friends);
+    }, 300));
+
+    const friends = await fetchMyFriends(); // Initial render without search term
+    renderFriendsList(friends);
+
+    function debounce(func, delay) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, arguments), delay);
+        };
+    }
 
 	OnlinePlayersContainer.innerHTML = '';
 
@@ -134,26 +163,6 @@ export default async function renderOnlinePlayers() {
 			friendWrapper.appendChild(friendComponent);
 			OnlinePlayersContainer.appendChild(friendWrapper);
 		});
-		if (OnlinePlayers.length >= 4) {
-			const viewAllContainer = document.createElement('div');
-			viewAllContainer.className = 'view-all-container';
-			const gridContainer = document.createElement('div');
-			gridContainer.className = 'view-all-grid';
-			const flexContainer = document.createElement('div');
-			flexContainer.className = 'view-all-flex';
-
-			const viewAllLink = document.createElement('a');
-			viewAllLink.href = '/home/Online-players';
-			viewAllLink.className = 'view-all-link';
-
-			const viewAllText = document.createTextNode('View All');
-			viewAllLink.appendChild(viewAllText);
-
-			flexContainer.appendChild(viewAllLink);
-			gridContainer.appendChild(flexContainer);
-			viewAllContainer.appendChild(gridContainer);
-			OnlinePlayersContainer.appendChild(viewAllContainer);
-		}
 
 	}
 }

@@ -7,7 +7,7 @@ export function FriendContainer({ name, href, number }) {
 	container.className = 'friend-container';
 
 	const link = document.createElement('a');
-	link.href = `/profile/${name}`;
+	link.href = `/profile?username=${name}`;
 	link.className = 'friend-link';
 
 	const image = document.createElement('img');
@@ -49,7 +49,7 @@ export function FriendContainer({ name, href, number }) {
 	svg.appendChild(path);
 
 	const arrowLink = document.createElement('a');
-	arrowLink.href = `/profile/${name}`;
+	arrowLink.href = `/profile?username=${name}`;
 	arrowLink.className = 'friend-arrow-link';
 	arrowLink.appendChild(svg);
 

@@ -3,7 +3,7 @@ export function Empty(text) {
     container.className = 'emptyContainer';
 
     const image = document.createElement('img');
-    image.src = 'lib/empty.svg';
+    image.src = '/lib/empty.svg';
     image.alt = 'empty';
     image.width = 50;
     image.height = 50;
