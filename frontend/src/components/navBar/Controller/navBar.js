@@ -121,7 +121,7 @@ function renderNavBrContent() {
 	const navItems = document.querySelectorAll(".nav-item.nav a");
 
 	navItems.forEach((navItem) => {
-		if (window.location.pathname === navItem.getAttribute("href")) {
+		if (window.location.pathname.startsWith(navItem.getAttribute("href"))) {
 			const svg = navItem.querySelector("svg path");
 			const paragraph = navItem.querySelector("p");
 

@@ -1,11 +1,7 @@
-all: up init
-
+all: up
 
 up:
 	docker-compose -f ./docker-compose.yml up --build 
-
-init:
-	cd ./frontend && sh ./build-tools/init.sh
 
 down:
 	docker-compose -f ./docker-compose.yml down

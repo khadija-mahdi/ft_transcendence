@@ -7,7 +7,7 @@ export function TopPlayerContainer({ name, href, number, index }) {
 	container.className = `${index === 1 ? 'topPlayers-container-highlight' : 'friend-container'}`;
 
 	const link = document.createElement('a');
-	link.href = `/profile/${name}`;
+	link.href = `/profile?username=${name}`;
 	link.className = 'friend-link';
 
 	const image = document.createElement('img');
@@ -45,7 +45,7 @@ export function TopPlayerContainer({ name, href, number, index }) {
 	indexWrapper.appendChild(indexDiv);
 
 	const indexLink = document.createElement('a');
-	indexLink.href = `/profile/${name}`;
+	indexLink.href = `/profile?username=${name}`;
 	indexLink.className = 'friend-arrow-link';
 	indexLink.appendChild(indexWrapper);
 
