@@ -8,6 +8,7 @@ from game.models import Matchup, Tournament
 from game.utils.game_utils import Ball, Paddle
 Debugging = True
 
+
 class Game():
     WIDTH = 800
     HEIGHT = 600
@@ -38,8 +39,10 @@ class Game():
             self.first_player = await database_sync_to_async(lambda: self.matchup.first_player)()
             self.second_player = await database_sync_to_async(lambda: self.matchup.second_player)()
             self.tournament = await database_sync_to_async(lambda: self.matchup.tournament)()
+            print('Game created for :')
+            print(f'\t{self.first_player.username}')
             print(
-                f'Game created for {self.first_player.username} and {self.second_player.username}')
+                f'{self.second_player.username if self.second_player else "<NONE>"}')
         except Matchup.DoesNotExist:
             self.matchup = None
         return self
@@ -153,9 +156,10 @@ class Game():
                 'type': 'game_over',
                 'winner': winner.username
             })
-            if self.tournament is None:
+            if self.tournament is None and winner:
                 await AchievementsManager().handleUserAchievements(user=winner)
-            await AchievementsManager().handleLoserUser(user=Loser)
+            if Loser:
+                await AchievementsManager().handleLoserUser(user=Loser)
             self.is_running = False
 
         await self.emit(dict_data={

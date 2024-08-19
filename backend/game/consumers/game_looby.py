@@ -30,8 +30,7 @@ class GameLobby(AsyncWebsocketConsumer):
             match_user = await self.match_maker.get_match_users(self.user)
         if match_user or self.game_mode == 'singleplayer':
             game_started_obj = await self.create_game(match_user)
-            game_started_obj['message']['player'] = match_user.username
-            print(f'game_started_obj: {game_started_obj}', match_user.username)
+            print(f'game_started_obj: {game_started_obj}', match_user)
             await self.emit(self.user.id, game_started_obj)
             if match_user:
                 game_started_obj['message']['player'] = self.user.username
@@ -61,6 +60,8 @@ class GameLobby(AsyncWebsocketConsumer):
             'message': {
                 'type': 'game_started',
                 'game_uuid': game_uuid,
+                'first_player': self.user.username,
+                'second_player': matched_user.username if matched_user else None
             }
         }
 
