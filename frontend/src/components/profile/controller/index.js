@@ -7,6 +7,7 @@ import {
   TournamentHistory,
 } from "/_api/user.js";
 import { Empty } from "/lib/Empty.js";
+const html = String.raw;
 
 const url = new URL(window.location.href);
 const username = url.searchParams.get("username");
@@ -46,7 +47,38 @@ export default async function Controller() {
 }
 
 function setProfile(data) {
-  
+
+  const UserInfoList = [
+    {
+      src: "/assets/icons/fluent_games.png",
+      value: "Unavailable",
+    },
+    {
+      src: "/assets/icons/email.png",
+      value: data.email,
+    },
+    {
+      src: "/assets/icons/money-recive.svg",
+      value: `${data.coins} Coins`,
+    },
+    {
+      src: "/assets/icons/connected.png",
+      value: data.status,
+    },
+  ];
+  const userInfoList = document.getElementById("user-info-list");
+  UserInfoList.map(item => userInfoList.innerHTML += UserInfo(item))
+
+  const profilePic = document.getElementById("profile-pic");
+  profilePic.src = data.image_url;
+
+  const profileName = document.getElementById("profile-name");
+  profileName.textContent = data.full_name;
+
+  const profileUsername = document.getElementById("profile-username");
+  profileUsername.textContent = `@${data.username}`;
+
+  ManageFriendButton(data);
 }
 
 function PopulateTournamentMatches(data) {
@@ -81,4 +113,18 @@ function PopulateTopAchievements(data) {
   data.forEach((achievement) => {
     lastAchievements.innerHTML += achievementItem(achievement);
   });
+}
+
+
+function ManageFriendButton(data) {
+  const cta = document.getElementById("profile-cta-button");
+}
+
+function UserInfo({ src, value }) {
+  return html`
+    <li class="user-info-item">
+      <img src='${src}' alt="userInfo Icon" />
+      <h6>${value}</h6>
+    </li>
+  `;
 }

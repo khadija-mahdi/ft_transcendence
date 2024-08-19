@@ -34,7 +34,7 @@ nav a {
 	color: var(--accent);
 }
 
-.main {
+#main {
 	margin: 3rem 0;
 	height: 100dvh;
 	width: 100%;
@@ -556,36 +556,36 @@ input:checked+.slider::before {
 
 /* sm screen and above */
 @media (min-width: 640px) {
-	.main {
+	#main {
 		max-width: 640px;
 	}
 }
 
 /* md screen and above */
 @media (min-width: 768px) {
-	.main {
+	#main {
 		max-width: 768px;
 	}
 }
 
 /* lg screen and above */
 @media (min-width: 1024px) {
-	.main {
+	#main {
 		max-width: 1024px;
 	}
 }
 
 /* xl screen and above */
 @media (min-width: 1280px) {
-	.main {
+	#main {
 		max-width: 1280px;
 	}
 }
 
 /* 2xl screen and above */
 @media (min-width: 1536px) {
-	.main {
-		max-width: 1536px;
+	#main {
+		max-width: 1736px;
 	}
 }
 

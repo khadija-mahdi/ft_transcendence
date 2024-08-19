@@ -15,16 +15,19 @@ export default function profileView() {
           <div class="profile-info">
             <div class="profile-pic">
               <img
+              id="profile-pic"
                 src="https://images.unsplash.com/photo-1667053508464-eb11b394df83?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="profile"
               />
             </div>
             <div class="p-profile-details">
               <div class="p-profile-name-container">
-                <h6 class="p-profile-name">FullName</h6>
-                <p class="p-profile-username">@UserName</p>
+                <h6 class="p-profile-name" id='profile-name'
+                >FullName</h6>
+                <p class="p-profile-username" id='profile-username' 
+                >@UserName</p>
               </div>
-              <button class="cta-button">
+              <button class="cta-button" id='profile-cta-button'>
                 <img src="" alt="Call To Action Button Icon" />
                 <p>Add As Friend</p>
               </button>
@@ -71,12 +74,9 @@ export default function profileView() {
             </div>
           </div>
           <div class="user-info-container">
-            <ul class="user-info-list">
+            <ul class="user-info-list" id='user-info-list'>
               <!-- User Info Item -->
-              <li class="user-info-item">
-                <img src="" />
-                <p>+2126-365-987</p>
-              </li>
+            
               <!-- End User Info Item -->
             </ul>
             <div class="user-into-cta">
