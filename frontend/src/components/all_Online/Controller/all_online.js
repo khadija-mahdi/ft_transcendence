@@ -92,8 +92,13 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 
 
 
-async function fetchOnlinePlayer() {
-	const apiUrl = "https://localhost:4433/api/v1/users/online-players";
+async function fetchOnlinePlayer(q) {
+	let apiUrl = "";
+	if (!q || q === '')
+		apiUrl = "https://localhost:4433/api/v1/users/online-players";
+	else
+		apiUrl = "https://localhost:4433/api/v1/users/online-players";
+
 	try {
 		const response = await fetchWithAuth(apiUrl, {
 			method: 'GET',
@@ -109,10 +114,8 @@ async function fetchOnlinePlayer() {
 
 
 export default async function renderOnlinePlayers() {
-	const OnlinePlayers = await fetchOnlinePlayer();
 	const OnlinePlayersContainer = document.getElementById('OnlinePlayers-container');
 	const searchInput = document.getElementById('searchInput');
-    const friendsContainer = document.getElementById('friends-container');
 
     searchInput.addEventListener('input', debounce(async (e) => {
         const term = e.target.value;
@@ -126,13 +129,12 @@ export default async function renderOnlinePlayers() {
 
         window.history.replaceState(null, '', `${window.location.pathname}?${urlParams}`);
 
-        // Fetch friends based on search query
-        const friends = await fetchMyFriends(term);
-        renderFriendsList(friends);
+        const OnlinePlayers = await fetchOnlinePlayer(term);
+        renderOnlinePlayersList(OnlinePlayers);
     }, 300));
 
-    const friends = await fetchMyFriends(); // Initial render without search term
-    renderFriendsList(friends);
+    const OnlinePlayers  = await fetchOnlinePlayer(); 
+    renderOnlinePlayersList(OnlinePlayers );
 
     function debounce(func, delay) {
         let timeout;
@@ -142,27 +144,26 @@ export default async function renderOnlinePlayers() {
         };
     }
 
-	OnlinePlayersContainer.innerHTML = '';
-
-	if (!OnlinePlayers.length) {
-		const emptyComponent = Empty('No OnlinePlayers Found');
-		const emptyContainer = document.createElement('div');
-		emptyContainer.className = 'emptyContainer';
-		emptyContainer.appendChild(emptyComponent);
-		OnlinePlayersContainer.appendChild(emptyContainer);
-	} else {
-		OnlinePlayers.slice(0, 4).forEach((friend, index) => {
-			const friendComponent = OnlinePlayerContainer({
-				name: friend.username,
-				href: friend.image_url,
-				number: friend.level,
-				index: index + 1,
-			});
-			const friendWrapper = document.createElement('div');
-			friendWrapper.className = 'friend-wrapper';
-			friendWrapper.appendChild(friendComponent);
-			OnlinePlayersContainer.appendChild(friendWrapper);
-		});
-
-	}
+    function renderOnlinePlayersList(OnlinePlayers) {
+        OnlinePlayersContainer.innerHTML = '';
+        if (!OnlinePlayers.length) {
+            const emptyComponent = Empty('No OnlinePlayers Found');
+            const emptyContainer = document.createElement('div');
+            emptyContainer.className = 'emptyContainer';
+            emptyContainer.appendChild(emptyComponent);
+            OnlinePlayersContainer.appendChild(emptyContainer);
+        } else {
+            OnlinePlayers.forEach(friend => {
+                const friendComponent = OnlinePlayerContainer({
+                    name: friend.username,
+                    href: friend.image_url,
+                    number: friend.level,
+                });
+                const friendWrapper = document.createElement('div');
+                friendWrapper.className = 'friend-wrapper';
+                friendWrapper.appendChild(friendComponent);
+                OnlinePlayersContainer.appendChild(friendWrapper);
+            });
+        }
+    }
 }

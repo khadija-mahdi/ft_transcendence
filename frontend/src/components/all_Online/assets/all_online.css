@@ -1,8 +1,10 @@
 .OnlinePlayers-container {
 	position: relative;
 	height: 100%;
-	width: 100%;
-	padding: 20px;
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 24px;
 
 }
 
@@ -29,6 +31,9 @@
 	/* Equivalent to `font-medium` */
 }
 
+.invite-text {
+	color: white;
+}
 .invite-icon {
 	padding: 10px;
 	/* Add some space between the icon and text */

@@ -65,26 +65,43 @@ async function fetchAnnouncement() {
 
 export default async function renderCarousel() {
 	const tournaments = await fetchAnnouncement()
-	let carouselItems = tournaments.map((tournament, index) => {
-		return html`
-            <div class="item ${index === 0 ? 'active' : ''}">
-                <div class="slider-container">
-                    ${SliderItem(tournament, index)}
-                </div>
-            </div>
-        `;
-	}).join('');
+    const carousel = document.getElementById('carousel');
+    if (!tournaments.length) {
+        const emptyComponent = Empty('No tournaments Announced Found');
+        // Create a container for the empty component
+        const emptyContainer = document.createElement('div');
+        emptyContainer.className = 'emptyContainer';
+        // Apply styles to make it fill width and height
+        emptyContainer.style.width = '100%';
+        emptyContainer.style.height = '100%';
+        emptyContainer.style.display = 'flex';
+        emptyContainer.style.justifyContent = 'center';
+        emptyContainer.style.alignItems = 'center';
+        emptyContainer.appendChild(emptyComponent);
+        carousel.innerHTML = ''; // Clear existing content
+        carousel.appendChild(emptyContainer); // Append the container
+    } else {
+		let carouselItems = tournaments.map((tournament, index) => {
+			return html`
+				<div class="item ${index === 0 ? 'active' : ''}">
+					<div class="slider-container">
+						${SliderItem(tournament, index)}
+					</div>
+				</div>
+			`;
+		}).join('');
+	
+		let carouselIndicators = tournaments.map((_, index) => {
+			return html`
+				<li class="${index === 0 ? 'active' : ''}" data-target="#carousel-example" data-slide-to="${index}"></li>
+			`;
+		}).join('');
+		document.querySelector('.carousel-inner').innerHTML = carouselItems;
+		document.querySelector('.carousel-indicators').innerHTML = carouselIndicators;
 
-	let carouselIndicators = tournaments.map((_, index) => {
-		return html`
-            <li class="${index === 0 ? 'active' : ''}" data-target="#carousel-example" data-slide-to="${index}"></li>
-        `;
-	}).join('');
+		initializeCarousel();
+	}
 
-	document.querySelector('.carousel-inner').innerHTML = carouselItems;
-	document.querySelector('.carousel-indicators').innerHTML = carouselIndicators;
-
-	initializeCarousel();
 }
 
 export function initializeCarousel() {
@@ -175,4 +192,4 @@ export function initializeCarousel() {
 		window.clearInterval(timeoutID);
 	}
 	startTimer();
-}
+}	

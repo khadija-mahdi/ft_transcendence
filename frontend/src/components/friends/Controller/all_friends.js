@@ -124,7 +124,7 @@ export default async function renderFriends() {
             emptyContainer.appendChild(emptyComponent);
             friendsContainer.appendChild(emptyContainer);
         } else {
-            friends.slice(0, 4).forEach(friend => {
+            friends.forEach(friend => {
                 const friendComponent = FriendContainer({
                     name: friend.username,
                     href: friend.image_url,

@@ -18,7 +18,7 @@ export default function () {
 				</div>
 			</div>
 		</div>
-		<h4 style='color: white;'>All Oline Players: </h4>
+		<h4 style='color: white;'>All Online Players: </h4>
 		<div>
 			<div id="OnlinePlayers-container"></div>
 		</div>

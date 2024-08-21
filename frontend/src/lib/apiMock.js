@@ -32,8 +32,7 @@ export const fetchWithAuth = async (url, options = {}) => {
         if (response.status === 401 || response.status === 403) {
             const originalOptions = { ...options };
 
-            // Attempt to refresh the token
-            const refreshResponse = await fetch('/auth/token/refresh/', {
+            const refreshResponse = await fetch('https://localhost:4433/api/v1/auth/token/refresh/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
