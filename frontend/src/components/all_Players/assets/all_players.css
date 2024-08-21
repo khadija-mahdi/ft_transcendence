@@ -1,7 +1,7 @@
 .OnlinePlayers-container {
 	position: relative;
 	height: 100%;
-	max-width: 70%;
+	max-width: 840px;
 	margin-left: auto;
 	margin-right: auto;
 	/* padding: 24px; */
@@ -34,6 +34,13 @@
 
 .invite-text {
 	color: white;
+	font-family: 'Inter';
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 14.52px;
+	letter-spacing: -0.01em;
+	text-align: left;
+
 }
 .invite-icon {
 	padding: 10px;
@@ -116,7 +123,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	font-weight: bold;
+	font-weight: 700px;
 	font-size: 1rem;
 }
 
@@ -218,10 +225,15 @@
 .friend-name {
 	margin-left: 10px;
 	color: white;
-	font-size: 18px;
-	font-weight: bold;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	font-family: 'Inter';
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 21.78px;
+	letter-spacing: -0.01em;
+	text-align: left;
+
 }
 
 .friend-level {

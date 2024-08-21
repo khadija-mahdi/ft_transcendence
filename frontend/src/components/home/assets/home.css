@@ -2,6 +2,7 @@
 	color: white;
 	margin-left: auto;
 	margin-right: auto;
+	width: 100%;
 }
 
 .home-container {
@@ -61,7 +62,7 @@
 
 .item-a {
 	grid-area: a;
-	min-width: 381px;
+	/* min-width: 381px; */
 }
 
 .item-b {
@@ -71,5 +72,5 @@
 
 .item-c {
 	grid-area: c;
-	min-width: 381px;
+	/* min-width: 381px; */
 }
