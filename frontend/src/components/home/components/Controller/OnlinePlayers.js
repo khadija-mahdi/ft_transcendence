@@ -11,7 +11,7 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 	link.className = 'friend-link';
 
 	const image = document.createElement('img');
-	image.className = 'firend-profile-image';
+	image.className = 'friend-profile-image';
 	image.src = href;
 	image.alt = 'Profile Image';
 	image.width = 53;

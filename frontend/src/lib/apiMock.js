@@ -54,8 +54,9 @@ export const fetchWithAuth = async (url, options = {}) => {
                 throw new Error('Unauthorized');
             }
         }
-
-        return response.json();
+		if (options.method === 'GET' || options.method === 'POST') {
+			return response.json();
+		}
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;

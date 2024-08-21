@@ -212,6 +212,7 @@ class BlockListSerializer(serializers.ModelSerializer):
 
 
 class FriendRequestSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='requester.id', read_only=True)
     image_url = serializers.SerializerMethodField()
     fullname = serializers.SerializerMethodField()
     username = serializers.CharField(source='requester.username')
@@ -220,7 +221,7 @@ class FriendRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'fullname', 'image_url',
+        fields = ['user_id', 'username', 'fullname', 'image_url',
                   'url',  'manage_friend_request']
 
     def get_manage_friend_request(self, obj):

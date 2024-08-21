@@ -24,6 +24,12 @@ const routes = {
 		css: "/components/tournament/assets/Tournament.css",
 		controller: () => import("/components/tournament/Controller/Tournament.js"),
 	},
+	"/tournaments/create_tournament": {
+		title: "Create Tournament",
+		component: () => import("/components/create_tournament/View/create_tournament.js"),
+		css: "/components/create_tournament/assets/create_tournament.css",
+		controller: () => import("/components/create_tournament/Controller/create_tournament.js"),
+	},
 	"/ranking": {
 		title: "Ranking",
 		component: () => import("/components/Ranking/View/Ranking.js"),
@@ -87,19 +93,19 @@ const routes = {
 		controller: () => import("/components/profile/controller/index.js"),
 	},
 	"/home/all-players": {
-		title: "/home_all-players",
+		title: "All players",
 		component: () => import("/components/all_Players/View/all_players.js"),
 		css: "/components/all_Players/assets/all_players.css",
 		controller: () => import("/components/all_Players/Controller/all_players.js"),
 	},
 	"/home/friends": {
-		title: "/home_all_friends",
+		title: "all Friends",
 		component: () => import("/components/friends/View/all_friends.js"),
 		css: "/components/friends/assets/all_friends.css",
 		controller: () => import("/components/friends/Controller/all_friends.js"),
 	},
 	"/home/Online-players": {
-		title: "/home/all_onlinePlayers",
+		title: "All Online Players",
 		component: () => import("/components/all_Online/View/all_online.js"),
 		css: "/components/all_Online/assets/all_online.css",
 		controller: () => import("/components/all_Online/Controller/all_online.js"),

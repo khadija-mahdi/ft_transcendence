@@ -18,13 +18,13 @@ export default function () {
 				</div>
 			</div>
 		</div>
-		<h4 style='color: white;padding: 10px;'>Recommended Users: </h4>
-		<div>
-			<div id="OnlinePlayers-container"></div>
-		</div>
 		<h4 style='color: white;padding: 10px; '>pending invitations </h4>
 		<div>
 			<div id="invitations-container"></div>
+		</div>
+		<h4 style='color: white;padding: 10px;'>Recommended Users: </h4>
+		<div>
+			<div id="OnlinePlayers-container"></div>
 		</div>
 	</div>
     `;

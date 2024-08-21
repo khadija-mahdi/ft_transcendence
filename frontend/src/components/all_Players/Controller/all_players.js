@@ -2,7 +2,7 @@ import { Empty } from "../../../../lib/Empty.js";
 import { fetchWithAuth } from '../../../../lib/apiMock.js'
 
 
-export function AllPlayerContainer({ name, href, number, index }) {
+export function AllPlayerContainer({ name, href, number }) {
 	const container = document.createElement('div');
 	container.className = 'friend-container';
 
@@ -11,7 +11,7 @@ export function AllPlayerContainer({ name, href, number, index }) {
 	link.className = 'friend-link';
 
 	const image = document.createElement('img');
-	image.className = 'firend-profile-image';
+	image.className = 'friend-profile-image';
 	image.src = href;
 	image.alt = 'Profile Image';
 	image.width = 53;
@@ -65,10 +65,6 @@ export function AllPlayerContainer({ name, href, number, index }) {
 	svg.appendChild(g);
 	svg.appendChild(defs);
 
-	const arrowLink = document.createElement('a');
-	arrowLink.href = `/profile?username=${name}}`;
-	arrowLink.className = 'friend-arrow-link';
-
 	const inviteLink = document.createElement('button');
 	inviteLink.className = 'invite-button';
 
@@ -84,8 +80,78 @@ export function AllPlayerContainer({ name, href, number, index }) {
 	inviteLink.appendChild(inviteContent);
 
 	container.appendChild(link);
-	container.appendChild(arrowLink); // Add the arrow link to the container
 	container.appendChild(inviteLink);
+
+	return container;
+}
+
+export function PendingContainer({ name, href, number }) {
+	const container = document.createElement('div');
+	container.className = 'friend-container';
+
+	const link = document.createElement('a');
+	link.href = `/profile?username=${name}`;
+	link.className = 'friend-link';
+
+	const image = document.createElement('img');
+	image.className = 'friend-profile-image';
+	image.src = href;
+	image.alt = 'Profile Image';
+	image.width = 53;
+	image.height = 53;
+	const textContainer = document.createElement('div');
+	textContainer.className = 'friend-text-container';
+
+	const nameDiv = document.createElement('div');
+	nameDiv.className = 'friend-name';
+	nameDiv.textContent = name;
+
+	const levelDiv = document.createElement('div');
+	levelDiv.className = 'friend-level';
+	levelDiv.textContent = `Level ${number}`;
+
+	textContainer.appendChild(nameDiv);
+	textContainer.appendChild(levelDiv);
+
+	link.appendChild(image);
+	link.appendChild(textContainer);
+
+
+	const acceptLink = document.createElement('button');
+	acceptLink.className = 'accept-button';
+
+	const acceptContent = document.createElement('div');
+	acceptContent.className = 'accept-content';
+
+	const acceptText = document.createElement('div');
+	acceptText.className = 'accept-text';
+	acceptText.textContent = 'Accept';
+
+	const DeclineLink = document.createElement('button');
+	DeclineLink.className = 'decline-button';
+
+	const DeclineContent = document.createElement('div');
+	DeclineContent.className = 'decline-content';
+
+	const DeclineText = document.createElement('div');
+	DeclineText.className = 'accept-text';
+	DeclineText.textContent = 'Decline';
+
+	acceptContent.appendChild(acceptText);
+	DeclineContent.appendChild(DeclineText);
+	acceptLink.appendChild(acceptContent);
+	DeclineLink.appendChild(DeclineContent);
+
+
+	const Buttons = document.createElement('div');
+	Buttons.className = 'buttons';
+	Buttons.appendChild(acceptLink);
+	Buttons.appendChild(DeclineLink);
+
+
+
+	container.appendChild(link);
+	container.appendChild(Buttons);
 
 	return container;
 }
@@ -131,7 +197,7 @@ function SendFriendRequest(userId, inviteButton) {
 			const url = `https://localhost:4433/api/v1/users/send-friend-request/${userId}/`;
 			const svgContainer = inviteButton.querySelector('.invite-content svg');
 			const inviteText = inviteButton.querySelector('.invite-text');
-			
+
 			if (svgContainer && inviteText) {
 				svgContainer.innerHTML = `<path d="M10.4993 17.0707C12.2675 17.0707 13.9632 16.3683 15.2134 15.1181C16.4636 13.8678 17.166 12.1721 17.166 10.404C17.166 8.6359 16.4636 6.94021 15.2134 5.68997C13.9632 4.43972 12.2675 3.73735 10.4993 3.73735C8.73124 3.73735 7.03555 4.43972 5.7853 5.68997C4.53506 6.94021 3.83268 8.6359 3.83268 10.404C3.83268 12.1721 4.53506 13.8678 5.7853 15.1181C7.03555 16.3683 8.73124 17.0707 10.4993 17.0707ZM10.4993 2.07068C11.5937 2.07068 12.6773 2.28623 13.6884 2.70502C14.6994 3.12381 15.6181 3.73763 16.3919 4.51146C17.1657 5.28528 17.7796 6.20394 18.1983 7.21498C18.6171 8.22603 18.8327 9.30966 18.8327 10.404C18.8327 12.6141 17.9547 14.7338 16.3919 16.2966C14.8291 17.8594 12.7095 18.7373 10.4993 18.7373C5.89102 18.7373 2.16602 14.9873 2.16602 10.404C2.16602 8.19387 3.04399 6.07426 4.60679 4.51146C6.1696 2.94865 8.28921 2.07068 10.4993 2.07068ZM10.916 6.23735V10.6123L14.666 12.8373L14.041 13.8623L9.66602 11.2373V6.23735H10.916Z" fill="#E2E2E2"/>`;
 				inviteText.textContent = 'Request Sent';
@@ -142,16 +208,61 @@ function SendFriendRequest(userId, inviteButton) {
 					headers: {
 						'Content-Type': 'application/json',
 					},
-				});			
+				});
 				console.log("Friend request response:", response);
 			}
-			
+
 		} catch (error) {
 			console.error("Error sending friend request:", error);
 		}
 	});
 }
 
+
+function handleFriendRequest(userId, acceptButton, declineButton, Buttons) {
+	acceptButton.addEventListener('click', async function () {
+		await processFriendRequest(userId, 'accept',Buttons);
+	});
+
+	declineButton.addEventListener('click', async function () {
+		await processFriendRequest(userId, 'decline',Buttons);
+	});
+}
+
+async function processFriendRequest(userId, action, buttons) {
+	try {
+		const url = `https://localhost:4433/api/v1/users/manage_friend_request/${userId}/`;
+		if (action === 'accept') {
+			await fetchWithAuth(url, {
+				method: 'PUT'
+			});
+		}
+		else {
+			await fetchWithAuth(url, {
+				method: 'DELETE'
+			});
+		}
+
+		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		svg.setAttribute("width", "25");
+		svg.setAttribute("height", "25");
+		svg.setAttribute("fill", "none");
+	
+		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		path.setAttribute("stroke", "#fff");
+		path.setAttribute("stroke-linecap", "round");
+		path.setAttribute("stroke-linejoin", "round");
+		path.setAttribute("stroke-width", "1.5");
+		path.setAttribute("d", "m9 5.5 7 7-7 7");
+	
+		svg.appendChild(path);
+
+		buttons.innerHTML = '';
+		buttons.appendChild(svg);
+	} catch (error) {
+		console.error(`Error processing friend request (${action}):`, error);
+	}
+}
 
 
 export default async function renderAllPlayers() {
@@ -223,15 +334,22 @@ export default async function renderAllPlayers() {
 			pendingContainer.appendChild(emptyContainer);
 		} else {
 			pending.forEach(friend => {
-				const friendComponent = AllPlayerContainer({
+				const friendComponent = PendingContainer({
 					name: friend.username,
 					href: friend.image_url,
 					number: friend.level,
 				});
+	
 				const friendWrapper = document.createElement('div');
 				friendWrapper.className = 'friend-wrapper';
 				friendWrapper.appendChild(friendComponent);
 				pendingContainer.appendChild(friendWrapper);
+	
+				const acceptButton = friendWrapper.querySelector('.accept-button');
+				const declineButton = friendWrapper.querySelector('.decline-button');
+				const Buttons = friendWrapper.querySelector('.buttons');
+				console.log(friend);
+				handleFriendRequest(friend.user_id, acceptButton, declineButton, Buttons);
 			});
 		}
 	}

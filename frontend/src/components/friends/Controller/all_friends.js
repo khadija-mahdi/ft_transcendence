@@ -11,7 +11,7 @@ export function FriendContainer({ name, href, number }) {
 	link.className = 'friend-link';
 
 	const image = document.createElement('img');
-	image.className = 'firend-profile-image';
+	image.className = 'friend-profile-image';
 	image.src = href;
 	image.alt = 'Profile Image';
 	image.width = 53;
@@ -62,13 +62,13 @@ export function FriendContainer({ name, href, number }) {
 
 async function fetchMyFriends(q) {
 	let apiUrl = "";
-	
+
 	if (!q || q === '')
 		apiUrl = "https://localhost:4433/api/v1/users/friend-list";
 	else
 		apiUrl = `https://localhost:4433/api/v1/users/search-user/?none_friend_only=false&search_query=${q}`
 
-	if(apiUrl){
+	if (apiUrl) {
 		try {
 			const response = await fetchWithAuth(apiUrl, {
 				method: 'GET',
@@ -84,58 +84,58 @@ async function fetchMyFriends(q) {
 }
 
 export default async function renderFriends() {
-    const searchInput = document.getElementById('searchInput');
-    const friendsContainer = document.getElementById('friends-container');
+	const searchInput = document.getElementById('searchInput');
+	const friendsContainer = document.getElementById('friends-container');
 
-    searchInput.addEventListener('input', debounce(async (e) => {
-        const term = e.target.value;
-        const urlParams = new URLSearchParams(window.location.search);
+	searchInput.addEventListener('input', debounce(async (e) => {
+		const term = e.target.value;
+		const urlParams = new URLSearchParams(window.location.search);
 
-        if (term) {
-            urlParams.set('q', term);
-        } else {
-            urlParams.delete('q');
-        }
+		if (term) {
+			urlParams.set('q', term);
+		} else {
+			urlParams.delete('q');
+		}
 
-        window.history.replaceState(null, '', `${window.location.pathname}?${urlParams}`);
+		window.history.replaceState(null, '', `${window.location.pathname}?${urlParams}`);
 
-        // Fetch friends based on search query
-        const friends = await fetchMyFriends(term);
-        renderFriendsList(friends);
-    }, 300));
+		// Fetch friends based on search query
+		const friends = await fetchMyFriends(term);
+		renderFriendsList(friends);
+	}, 300));
 
-    const friends = await fetchMyFriends(); // Initial render without search term
-    renderFriendsList(friends);
+	const friends = await fetchMyFriends(); // Initial render without search term
+	renderFriendsList(friends);
 
-    function debounce(func, delay) {
-        let timeout;
-        return function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, arguments), delay);
-        };
-    }
+	function debounce(func, delay) {
+		let timeout;
+		return function () {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => func.apply(this, arguments), delay);
+		};
+	}
 
-    function renderFriendsList(friends) {
-        friendsContainer.innerHTML = '';
-        if (!friends.length) {
-            const emptyComponent = Empty('No Friends Found');
-            const emptyContainer = document.createElement('div');
-            emptyContainer.className = 'emptyContainer';
-            emptyContainer.appendChild(emptyComponent);
-            friendsContainer.appendChild(emptyContainer);
-        } else {
-            friends.forEach(friend => {
-                const friendComponent = FriendContainer({
-                    name: friend.username,
-                    href: friend.image_url,
-                    number: friend.level,
-                });
-                const friendWrapper = document.createElement('div');
-                friendWrapper.className = 'friend-wrapper';
-                friendWrapper.appendChild(friendComponent);
-                friendsContainer.appendChild(friendWrapper);
-            });
-        }
-    }
+	function renderFriendsList(friends) {
+		friendsContainer.innerHTML = '';
+		if (!friends.length) {
+			const emptyComponent = Empty('No Friends Found');
+			const emptyContainer = document.createElement('div');
+			emptyContainer.className = 'emptyContainer';
+			emptyContainer.appendChild(emptyComponent);
+			friendsContainer.appendChild(emptyContainer);
+		} else {
+			friends.forEach(friend => {
+				const friendComponent = FriendContainer({
+					name: friend.username,
+					href: friend.image_url,
+					number: friend.level,
+				});
+				const friendWrapper = document.createElement('div');
+				friendWrapper.className = 'friend-wrapper';
+				friendWrapper.appendChild(friendComponent);
+				friendsContainer.appendChild(friendWrapper);
+			});
+		}
+	}
 }
 

@@ -15,8 +15,73 @@
 	align-items: center;
 	border-radius: 4px;
 	background-color: #FF3D00;
-	width: 180px;
+	width: 150px;
 	height: 35px;
+	
+}
+
+.buttons{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.accept-button {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border-radius: 4px;
+	background-color: #FF3D00;
+	width: 100px;
+	height: 35px;
+}
+.accept-content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-right: auto;
+	margin-left: auto;
+	color: white;
+	font-size: 16px;
+	font-weight: 500;
+	/* Equivalent to `font-medium` */
+}
+
+.accept-text {
+	color: white;
+	font-family: 'Inter';
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 14.52px;
+	letter-spacing: -0.01em;
+	text-align: left;
+
+}
+
+.decline-button {
+	display: flex;
+	flex-direction: row;
+	border-radius: 4px;
+	align-items: center;
+	background-color: #474747;
+	width: 80px;
+	height: 35px;
+}
+
+.decline-content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-right: auto;
+	margin-left: auto;
+	color: white;
+	font-size: 16px;
+	font-weight: 500;
+	/* Equivalent to `font-medium` */
 }
 
 .invite-content {
@@ -207,7 +272,7 @@
 	text-decoration: none;
 }
 
-.firend-profile-image {
+.friend-profile-image {
 	background-color: white;
 	width: 53px;
 	height: 53px;

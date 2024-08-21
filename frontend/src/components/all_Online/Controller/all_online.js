@@ -11,7 +11,7 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 	link.className = 'friend-link';
 
 	const image = document.createElement('img');
-	image.className = 'firend-profile-image';
+	image.className = 'friend-profile-image';
 	image.src = href;
 	image.alt = 'Profile Image';
 	image.width = 53;
@@ -117,53 +117,53 @@ export default async function renderOnlinePlayers() {
 	const OnlinePlayersContainer = document.getElementById('OnlinePlayers-container');
 	const searchInput = document.getElementById('searchInput');
 
-    searchInput.addEventListener('input', debounce(async (e) => {
-        const term = e.target.value;
-        const urlParams = new URLSearchParams(window.location.search);
+	searchInput.addEventListener('input', debounce(async (e) => {
+		const term = e.target.value;
+		const urlParams = new URLSearchParams(window.location.search);
 
-        if (term) {
-            urlParams.set('q', term);
-        } else {
-            urlParams.delete('q');
-        }
+		if (term) {
+			urlParams.set('q', term);
+		} else {
+			urlParams.delete('q');
+		}
 
-        window.history.replaceState(null, '', `${window.location.pathname}?${urlParams}`);
+		window.history.replaceState(null, '', `${window.location.pathname}?${urlParams}`);
 
-        const OnlinePlayers = await fetchOnlinePlayer(term);
-        renderOnlinePlayersList(OnlinePlayers);
-    }, 300));
+		const OnlinePlayers = await fetchOnlinePlayer(term);
+		renderOnlinePlayersList(OnlinePlayers);
+	}, 300));
 
-    const OnlinePlayers  = await fetchOnlinePlayer(); 
-    renderOnlinePlayersList(OnlinePlayers );
+	const OnlinePlayers = await fetchOnlinePlayer();
+	renderOnlinePlayersList(OnlinePlayers);
 
-    function debounce(func, delay) {
-        let timeout;
-        return function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, arguments), delay);
-        };
-    }
+	function debounce(func, delay) {
+		let timeout;
+		return function () {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => func.apply(this, arguments), delay);
+		};
+	}
 
-    function renderOnlinePlayersList(OnlinePlayers) {
-        OnlinePlayersContainer.innerHTML = '';
-        if (!OnlinePlayers.length) {
-            const emptyComponent = Empty('No OnlinePlayers Found');
-            const emptyContainer = document.createElement('div');
-            emptyContainer.className = 'emptyContainer';
-            emptyContainer.appendChild(emptyComponent);
-            OnlinePlayersContainer.appendChild(emptyContainer);
-        } else {
-            OnlinePlayers.forEach(friend => {
-                const friendComponent = OnlinePlayerContainer({
-                    name: friend.username,
-                    href: friend.image_url,
-                    number: friend.level,
-                });
-                const friendWrapper = document.createElement('div');
-                friendWrapper.className = 'friend-wrapper';
-                friendWrapper.appendChild(friendComponent);
-                OnlinePlayersContainer.appendChild(friendWrapper);
-            });
-        }
-    }
+	function renderOnlinePlayersList(OnlinePlayers) {
+		OnlinePlayersContainer.innerHTML = '';
+		if (!OnlinePlayers.length) {
+			const emptyComponent = Empty('No OnlinePlayers Found');
+			const emptyContainer = document.createElement('div');
+			emptyContainer.className = 'emptyContainer';
+			emptyContainer.appendChild(emptyComponent);
+			OnlinePlayersContainer.appendChild(emptyContainer);
+		} else {
+			OnlinePlayers.forEach(friend => {
+				const friendComponent = OnlinePlayerContainer({
+					name: friend.username,
+					href: friend.image_url,
+					number: friend.level,
+				});
+				const friendWrapper = document.createElement('div');
+				friendWrapper.className = 'friend-wrapper';
+				friendWrapper.appendChild(friendComponent);
+				OnlinePlayersContainer.appendChild(friendWrapper);
+			});
+		}
+	}
 }
