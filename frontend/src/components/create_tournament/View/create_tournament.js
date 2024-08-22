@@ -8,8 +8,8 @@ export default function () {
 		</div>
 
 		<form class="create-form-container" id="createTournamentForm">
-			<div class="image-upload-container">
-				<label id="imageLabel" class="image-label">
+			<div id="imageLabel" class="image-upload-container">
+				<label  class="image-label">
 
 					<div class="upload-icon">
 						<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,10 +79,10 @@ export default function () {
 					</label>
 				</div>
 			</div>
-
 			<div class="button-group">
-				<button type="button" class="btn cancel">Cancel</button>
-				<button type="submit" class="btn create play_now_button ">Create</button>
+			<p id="tr-error" class="error-text"></p>
+			<button type="button" class="btn cancel">Cancel</button>
+			<button type="submit" class="btn create play_now_button ">Create</button>
 			</div>
 		</form>
 	</div>
