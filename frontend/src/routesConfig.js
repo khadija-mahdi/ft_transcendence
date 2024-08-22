@@ -5,11 +5,23 @@ const routes = {
 		css: "/components/home/assets/home.css",
 		controller: () => import("/components/home/Controller/home.js"),
 	},
-	"/chat": {
+	"/messenger": {
 		title: "Chat",
 		component: () => import("/components/chat/View/chat.js"),
 		css: "/components/chat/assets/chat.css",
 		controller: () => import("/components/chat/Controller/chat.js"),
+	},
+	"/messenger/group": {
+		title: "Create Group",
+		component: () => import("/components/chat/groups/View/groups.js"),
+		css: "/components/chat/groups/assets/groups.css",
+		controller: () => import("/components/chat/groups/Controller/groups.js"),
+	},
+	"/messages/group/choice-members": {
+		title: "Choose Group Members",
+		component: () => import("/components/chat/choice_members/View/choice_members.js"),
+		css: "/components/chat/choice_members/assets/choice_members.css",
+		controller: () => import("/components/chat/choice_members/Controller/choice_members.js"),
 	},
 	"/tournaments": {
 		title: "Tournaments",

@@ -58,7 +58,7 @@ class RoomsConsumer(AsyncWebsocketConsumer):
             'message': message,
             'chat_room': {
                 'room_name': serializer.data['room_name'],
-                'room_icon':  "https://" + host + serializer.data['room_icon'],
+                'room_icon':  "https://" + host + ":4433" + serializer.data['room_icon'],
                 'last_message': serializer.data['last_message'],
                 'unseen_messages_count': serializer.data['unseen_messages_count'],
                 'all_messages_count': serializer.data['all_messages_count'],

@@ -1,3 +1,209 @@
-body{
-	text-align: center;	
+/* General Styles */
+.chat-container {
+    height: 100%;
+	width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    min-width: 350px; 
+
+}
+
+.main-panel {
+	display: flex; 
+	flex-wrap: wrap; 
+	gap: 1.25rem; 
+	width: 100%; 
+	height: 100%;	
+}
+
+.room-panel {
+	display: flex; 
+	flex-direction: row; 
+	flex-wrap: wrap; 
+	gap: 1.25rem; 
+	height: 100%; 
+	background: #292929;
+	border-radius: 0.75rem; 
+	padding: 1rem;
+
+}
+
+.search-bar-container {
+	width: 100%;
+	max-width: 400px;
+}
+.search-bar {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	position: relative;
+	width: 100%;
+	max-width: 400px;
+	margin-bottom: 1rem;
+}
+.search-input {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0.375rem; /* 6px */
+	background-color: #363636;
+	padding:0.6rem 3.5rem;
+	height: 40px;
+	width: 100%;
+	resize: none;
+	outline: none;
+	color: white;
+}
+.search-icon {
+	position: absolute;
+	padding-left: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.filter-button {
+	padding-left: 12px;
+	color: white;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	justify-content: flex-end;
+	gap: 8px;
+}
+.filter-button.active {
+	background-color: #878787;
+	border-radius: 0.375rem; /* 6px */
+}
+
+.filter-button a svg {
+	color: white;
+}
+.filter{
+	background: none;
+	cursor: pointer;
+}
+
+.chat-panel {
+	background-color: #292929;
+	overflow: hidden; 
+	position: relative; 
+	flex: 1 1 0%; 
+	border-radius: 0.75rem; 
+}
+.chat-header{
+	display: flex; 
+	flex-direction: column; 
+	justify-content: center; 
+	align-items: center; 
+	height: 100%; 
+}
+
+.messenger-title {
+    font-size: 1.875rem;
+	color: white;
+    font-weight: bold;
+}
+
+.messenger-subtitle {
+	color: white;
+    font-size: 1.125rem; /* Equivalent to Tailwind's text-lg */
+    font-weight: 300; /* Equivalent to Tailwind's font-light */
+    margin-top: 0.5rem; /* Equivalent to Tailwind's mt-2 */
+}
+
+.messenger-item {
+    margin-top: 0.5rem;
+    width: 100%;
+    height: 69px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.5rem;
+    margin-bottom: 0.625rem;
+    overflow: hidden;
+    background-color: #292929;
+}
+
+.messenger-item.selected {
+    background-color: #494949;
+	
+}
+
+.messenger-item.highlight {
+	background: linear-gradient(90deg, #1bfd061a 0%, #10970400 100%);
+}
+
+.messenger-item img {
+    width: 53px;
+    height: 53px;
+    border-radius: 50%;
+}
+
+.messenger-item .content {
+    display: flex;
+    align-items: center;
+    max-width: 80px;
+}
+
+.messenger-item .content .avatar {
+	padding-left: 10px;
+	
+}
+
+.messenger-item .content .name {
+    margin-left: 10px;
+    color: white;
+	font-family: Inter;
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 21.78px;
+	letter-spacing: -0.01em;
+	text-align: left;
+	
+}
+
+.messenger-item .content .last-message {
+    color: #878787;
+    margin-left: 10px;
+    font-size: 14px;
+	font-weight: 400;
+    width: 150px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.messenger-item.selected .last-message,
+.messenger-item.highlight .last-message {
+    color: white;
+}
+
+.messenger-item .message-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+	width: 90px;
+}
+
+.messenger-item .message-info .unread-count {
+    background-color: #00d400;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+}
+
+.messenger-item .message-info .timestamp {
+    background-color: #242424;
+    border-radius: 0.25rem;
+    padding: 0.25rem;
+    color: #ffffff;
+    font-size: 13px;
 }
