@@ -14,7 +14,7 @@ export function destroyCookies() {
     document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
-export const fetchWithAuth = async (url, options = {}) => {
+export const fetchWithAuth = async (url, options = { method: "GET" }) => {
     const refresh = getCookieValue('refresh');
     const access = getCookieValue('access');
 
@@ -54,9 +54,10 @@ export const fetchWithAuth = async (url, options = {}) => {
                 throw new Error('Unauthorized');
             }
         }
-		if (options.method === 'GET' || options.method === 'POST') {
-			return response.json();
-		}
+        if (options.method === 'GET' || options.method === 'POST') {
+            return response.json();
+        }
+        return response;
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;

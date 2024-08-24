@@ -1,31 +1,28 @@
 import { Empty } from "../../../../lib/Empty.js";
-import { fetchWithAuth } from '../../../../lib/apiMock.js'
+import { fetchWithAuth } from "/lib/apiMock.js";
+import { tournamentElement, tournamentWrapper } from "../View/Tournaments.js";
 
 async function fetchTournaments() {
 	const apiUrl = "https://localhost:4433/api/v1/game/Tournament/";
 	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
-		});
-		return response.results
-			.slice(0, 3)
-			.map((result) => ({
-				...result,
-				icon: result.icon?.replace("https://localhost/", "https://localhost:4433/")
-			}));
+		const response = await fetchWithAuth(apiUrl);
+		return response.results;
 	} catch (error) {
 		console.error("Error fetching user data:", error);
 	}
 }
 
-const setTournaments = async () => {
-	const tournaments = await fetchTournaments()
-	if (!tournaments.ok)
-		return console.log("Failed to fetch tournaments")
-	const tournamentsJson = await tournaments.json()
-	console.log(tournamentsJson)
+export async function setTournaments(max_items = -1) {
+	const tournament_items = document.getElementById("tournament-items");
+	let tournaments = await fetchTournaments();
+	if (tournaments.length === 0)
+		return tournament_items.appendChild(Empty("No tournaments found"));
+	if (max_items > 0) tournaments = tournaments.slice(0, max_items);
+	tournaments.forEach((tournament) => {
+		tournament_items.innerHTML += tournamentElement(tournament);
+	});
 }
 
 export default async function controller_Tournaments() {
-	// await setTournaments();
+	await setTournaments();
 }

@@ -1,18 +1,15 @@
-import { tournamentWrapper, tournamentElement } from '../../tournaments/View/Tournaments.js';
-import UserSection from '../components/View/UserSection.js';
-import TopPlayers from '../components/View/TopPlayer.js';
-import OnlinePlayers from '../components/View/OnlinePlayers.js';
-import UserFriends	from '../components/View/UserFriends.js';
-import tournemntsSlider from '../components/View/tournemntsSlider.js';
-
-
-const elements = [tournamentElement(1, null, 'Tournament0', 'test-test-test', 12),
-tournamentElement(1, null, 'Tournament1', 'test-test-test', 12),
-tournamentElement(1, null, 'Tournament2', 'test-test-test', 12),
-]
+import {
+	tournamentWrapper,
+	tournamentElement,
+} from "../../tournaments/View/Tournaments.js";
+import UserSection from "../components/View/UserSection.js";
+import TopPlayers from "../components/View/TopPlayer.js";
+import OnlinePlayers from "../components/View/OnlinePlayers.js";
+import UserFriends from "../components/View/UserFriends.js";
+import tournemntsSlider from "../components/View/tournemntsSlider.js";
 
 export default function () {
-	return /*html*/`
+	return /*html*/ `
     <div class="home">
       <div class="home-container">
         <div class="grid-container">
@@ -33,7 +30,7 @@ export default function () {
           </div>
           <div
             class="item-b item-section">
-			${tournamentWrapper(elements)}
+			${tournamentWrapper()}
           </div>
           <div class="item-c item-section">
             ${UserFriends()}
@@ -42,4 +39,4 @@ export default function () {
       </div>
     </div>
     `;
-};
+}

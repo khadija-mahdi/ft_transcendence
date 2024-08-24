@@ -1,202 +1,485 @@
 * {
-    color: white;
-    margin: 0;
-    padding: 0;
+	color: white;
+	margin: 0;
+	padding: 0;
+	font-family: "Roboto", sans-serif;
+	border: none;
+	list-style: none;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+	display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
-    -ms-overflow-style: none;
-    /* IE and Edge */
-    scrollbar-width: none;
-    /* Firefox */
+	-ms-overflow-style: none;
+	/* IE and Edge */
+	scrollbar-width: none;
+	/* Firefox */
 }
 
-a:link {
-    text-decoration: none;
-}
-
-a:visited {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: none;
-}
-
-a:active {
-    text-decoration: none;
-}
-
-/* Container */
 .container {
-    width: 100%;
-    height: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 1440px;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	height: 100%;
+	width: 100%;
 }
 
-/* Tournament List */
-.tournament-list {
-    background-color: #292929;
-    /* Equivalent to bg-secondary-400 */
-    border-radius: 1rem;
-
-    /* Rounded-xl */
-    min-height: 80dvh;
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
-    padding: 1rem 0.5rem;
+.card {
+	border-radius: 0.75rem;
+	background-color: #292929;
+	height: 6rem;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.75rem;
 }
 
-/* Header */
-.tournament-header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.25rem;
+.card-content {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
 }
 
-.header-title {
-    font-weight: bold;
-    font-size: 1.125rem;
-    /* text-lg */
-    letter-spacing: -0.02em;
-    /* tracking-tight */
-    color: #fff;
+.card-image {
+	border-radius: 0.375rem;
+	max-width: 150px;
+	overflow: hidden;
 }
 
-/* Tournament Items */
-.tournament-items {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 0.75rem;
-    /* gap-3 */
-    width: 100%;
-    overflow-y: scroll;
+.card-text {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: center;
 }
 
-.tournament-items::-webkit-scrollbar {
-    display: none;
-    /* hide-scrollbar */
+.card-title {
+	font-weight: bold;
+	font-size: 1.125rem;
+	letter-spacing: -0.01562em;
 }
 
-/* Tournament Item */
-.tournament-item {
-    width: 100%;
+.card-description {
+	color: #878787;
+	font-size: 0.875rem;
+	font-weight: normal;
+	letter-spacing: -0.01562em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-/* Tournament Card */
-.tournament-card {
-    background-color: #373737;
-    height: 97px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-radius: 0.5rem;
-    /* Rounded-lg */
-    overflow: hidden;
-    padding: 0.5rem;
-    /* p-2 */
-    cursor: pointer;
+.card-info {
+	display: flex;
+	flex-direction: row;
+	gap: 0.75rem;
+	align-items: center;
+	justify-content: center;
 }
 
-/* Tournament Info */
-.tournament-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.tournament-icon {
-    width: 73px;
-    height: 73px;
-}
-
-.tournament-details {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.tournament-name {
-    padding-left: 15px;
-    font-weight: bold;
-    font-size: 18px;
-    width: 300px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.tournament-description {
-    padding-left: 15px;
-    color: #878787;
-    width: 300px;
-    font-size: 12px;
-    font-weight: normal;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* Tournament Stats */
-.tournament-stats {
-    display: flex;
-    flex-direction: row;
-    gap: 0;
-}
-
-.max-players {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-right: 0rem;
-    /* pr-12 */
+.player-info {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: center;
 }
 
 .player-count {
-    font-weight: bold;
-    font-size: 18px;
+	font-weight: bold;
+	font-size: 1.125rem;
+	letter-spacing: -0.01562em;
 }
 
 .player-label {
-    color: #878787;
-    font-size: 12px;
-    font-weight: normal;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+	color: #878787;
+	font-size: 0.875rem;
+	font-weight: normal;
+	letter-spacing: -0.01562em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-/* Arrow Icon */
-.arrow-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.tournament-menu {
+	position: relative;
+	width: 1.25rem;
+	height: 1.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.tournament-menu[data-show="false"] {
+  display: none;
 }
 
+.menu-button {
+	background: transparent;
+}
 
+#menu-popover {
+	inset: unset;
+	width: auto;
+	height: auto;
+	padding: 0;
+	background: transparent;
+	border: none;
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	pointer-events: none;
+}
 
-.create_new_trn {
-    border: none;
-    border-radius: 0.375rem;
-    width: 165px;
-    height: 35px;
-    font-weight: 600;
-    font-size: 12px;
-    border-radius: 0.375rem;
-    background: linear-gradient(90deg, #Ff4106 0%, #Ff4106 37%, #FE284F 64%, #FF0099 100%);
+.menu {
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 100%;
+	margin-top: 2px;
+	background: #242424;
+	padding: 0.5rem 1rem;
+	flex-direction: column;
+	gap: 0.25rem;
+	border-radius: 0.25rem;
+}
+
+#menu-popover:popover-open + .menu {
+	display: flex;
+}
+
+.menu li {
+	cursor: pointer;
+  color: #a2a2a2;
+}
+
+.bracket-streaming {
+	width: 100%;
+	height: 456px;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.bracket {
+	position: relative;
+	border-radius: 0.75rem;
+	background-color: #292929;
+	flex: 1;
+	max-height: 100%;
+	overflow: hidden;
+	overflow-x: auto;
+}
+
+.bracket-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.75rem;
+	min-height: 100%;
+	height: fit-content;
+}
+
+.bracket-half {
+	flex: 1;
+	width: 7rem;
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	justify-content: space-around;
+	gap: 1rem;
+}
+
+.reverse {
+	flex-direction: row-reverse;
+}
+
+.bracket-card {
+	width: 100%;
+	min-width: 6rem;
+	display: grid;
+	place-content: center;
+	position: relative;
+}
+
+.bracket-card-content {
+	height: 2.5rem;
+	width: 7rem;
+	background-color: #161616;
+	border-radius: 0 0 0.25rem 0.25rem;
+	padding: 0.5rem;
+	border-radius: 8px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: start;
+	gap: 0.5rem;
+}
+
+.bracket-avatar {
+	width: 1.75rem;
+	height: 1.75rem;
+	border-radius: 50%;
+	border: 1px solid #a2a2a2;
+	overflow: hidden;
+	position: relative;
+}
+
+.avatar-image {
+	object-fit: cover;
+	width: 100%;
+	height: 100%;
+}
+
+.bracket-info {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+}
+
+.bracket-user {
+	font-weight: bold;
+	font-size: 0.875rem;
+	letter-spacing: -0.01562em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 5rem;
+}
+
+.bracket-level {
+	color: #878787;
+	font-size: 0.75rem;
+	font-weight: normal;
+	letter-spacing: -0.01562em;
+}
+
+.vs-text {
+	font-size: 1.25rem;
+	font-weight: bold;
+}
+
+.streaming-card {
+	border-radius: 0.75rem;
+	background-color: #292929;
+	width: 100%;
+	padding: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.streaming-header {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.streaming-title {
+	font-size: 1.125rem;
+	font-weight: bold;
+	color: white;
+}
+
+.streaming-content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1.25rem;
+	flex: 1;
+}
+
+.coming-soon {
+	text-transform: capitalize;
+	font-size: 0.75rem;
+	font-weight: bold;
+	letter-spacing: 0.2em;
+	color: #a2a2a2;
+}
+
+.register-form {
+	align-self: center;
+}
+
+.register-button {
+	height: 2.5rem;
+	cursor: pointer;
+	background-color: #ff3d00;
+	padding: 0.5rem 0.75rem;
+	border-radius: 0.125rem;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.register-button:hover {
+	background-color: rgba(255, 60, 0, 0.8);
+}
+
+.status-table-container {
+	border-radius: 0.75rem;
+	background-color: #292929;
+	flex: 1;
+	min-height: 20rem;
+	max-height: 30rem;
+	display: flex;
+	flex-direction: column;
+	padding: 2.5rem 1.5rem 1rem 1.5rem;
+}
+
+.status-header {
+	width: 100%;
+}
+
+.status-title {
+	font-size: 1.125rem;
+	font-weight: bold;
+}
+
+.status-table-wrapper {
+	width: 100%;
+	overflow-x: scroll;
+}
+
+.status-table {
+	width: 100%;
+}
+
+.status-table th {
+	text-align: left;
+	padding: 0.75rem 0.5rem;
+	color: #a2a2a2;
+	border-bottom: 1px solid #444444;
+}
+
+.status-table td {
+	text-align: left;
+	padding: 0.75rem 0.5rem;
+}
+
+.player-row {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.player-images {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.player-avatar {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	border: 1px solid #ff3d00;
+	overflow: hidden;
+}
+.player-avatar:last-child {
+	margin-left: -10px;
+}
+
+.player-info {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	text-transform: capitalize;
+	max-width: 100%;
+}
+
+.player-name {
+	font-weight: bold;
+	font-size: 1.125rem;
+	letter-spacing: -0.01562em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 6rem;
+}
+
+.player-level {
+	color: #878787;
+	font-size: 0.875rem;
+	font-weight: normal;
+	letter-spacing: -0.01562em;
+}
+
+.winner-row {
+	display: flex;
+	flex-direction: row;
+	gap: 0.5rem;
+	align-items: center;
+}
+
+.winner-avatar {
+	width: 3rem;
+	height: 3rem;
+	border-radius: 50%;
+	border: 1px solid #a2a2a2;
+	overflow: hidden;
+}
+
+.winner-info {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	text-transform: capitalize;
+	max-width: 100%;
+}
+
+.winner-name {
+	font-weight: bold;
+	font-size: 1.125rem;
+	letter-spacing: -0.01562em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 6rem;
+}
+
+.winner-level {
+	color: #878787;
+	font-size: 0.875rem;
+	font-weight: normal;
+	letter-spacing: -0.01562em;
+}
+
+/* Responsive Design */
+
+@media (min-width: 1280px) {
+	.bracket-streaming {
+		flex-direction: row;
+	}
+
+	.bracket {
+		max-height: 28.5rem;
+	}
+
+	.streaming-card {
+		width: 24rem;
+	}
+}
+
+@media (min-width: 640px) {
+	.status-table-container {
+		padding-top: 2.5rem;
+		padding-bottom: 1rem;
+	}
+
+	.status-table-container .status-table-wrapper {
+		overflow-x: hidden;
+	}
+
+	.status-table-wrapper {
+		overflow-x: hidden;
+	}
 }
