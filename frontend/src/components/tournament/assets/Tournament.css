@@ -113,6 +113,7 @@
 	align-items: center;
 	justify-content: center;
 }
+
 .tournament-menu[data-show="false"] {
   display: none;
 }

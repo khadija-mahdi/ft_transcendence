@@ -16,6 +16,11 @@
 	/* color: #a2a2a2; */
 	box-sizing: border-box;
 	border: none;
+	list-style: none;
+}
+
+button {
+	cursor: pointer;
 }
 
 body {
@@ -653,4 +658,74 @@ input[type="number"] {
 	letter-spacing: 0.1em;
 	text-transform: capitalize;
 	color: #a2a2a2;
+}
+
+
+/* Drop Down  */
+.drop-down-menu {
+	position: relative;
+	width: 1.25rem;
+	height: 1.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.drop-down-menu button {
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
+#menu-popover {
+	inset: unset;
+	width: auto;
+	height: auto;
+	padding: 0;
+	background: transparent;
+	border: none;
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	pointer-events: none;
+
+}
+
+
+
+
+.menu {
+	display: none;
+	position: absolute;
+	right: 0;
+	top: 100%;
+	width: 200px;
+	margin-top: 2px;
+	background: #242424;
+	padding: 0.5rem 1rem;
+	flex-direction: column;
+	gap: 0.25rem;
+	border-radius: 0.25rem;
+}
+
+#menu-popover:popover-open+.menu {
+	display: flex;
+	animation: slidein 0.1s;
+	z-index: 1;
+}
+
+
+@keyframes slidein {
+	from {
+		top: 0%;
+		opacity: 0;
+		z-index: -1;
+	}
+
+	to {
+		top: 100%;
+		opacity: 1;
+	}
+
 }
