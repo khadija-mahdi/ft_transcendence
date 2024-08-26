@@ -729,3 +729,16 @@ input[type="number"] {
 	}
 
 }
+
+@keyframes slideout {
+	from {
+		top: 100%;
+		opacity: 1;
+	}
+
+	to {
+		top: 0%;
+		opacity: 0;
+		z-index: -1;
+	}
+}

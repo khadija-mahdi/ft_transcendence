@@ -241,6 +241,10 @@
     padding-left: 1.25rem;
     padding-right: 1.25rem;
 }
+.user-info-item h6{
+        color: #878787;
+
+}
 
 .user-into-cta {
     display: flex;
@@ -252,7 +256,7 @@
     gap: 0.75rem;
 }
 
-.user-into-cta button {
+#invite-btn {
     width: 200px;
     height: 44px;
     background-color: #323232;
@@ -266,6 +270,11 @@
     padding: 0.5rem;
     font-size: 1rem;
     line-height: 1.5rem;
+}
+
+#invite-btn p{
+    color: #a2a2a2;
+
 }
 
 .user-into-cta button img {

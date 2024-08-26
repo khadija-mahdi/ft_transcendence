@@ -25,6 +25,7 @@ const FriendRequestState = {
   SENT: "SENT",
   RECEIVED: "RECEIVED",
 };
+
 const loadUserData = async (username) => {
   let matchHistory;
   let tournamentHistory;
@@ -52,14 +53,24 @@ export default async function Controller() {
   }
   const user = await loadUserData(username);
   data = user.data;
+  if (data.is_blocked) return window.location.replace("/not-found");
   setProfile();
   PopulateTournamentMatches(user.tournamentHistory);
   PopulateMatches(user.matchHistory);
   PopulateTopAchievements(user.data.achievements);
 }
 
+
 function setProfile() {
-  // User Info
+  setUserInfo();
+  setProfileData();
+  setProgress();
+  setTopAchievements();
+  setOptionsMenu();
+  setRankInfo();
+}
+
+function setUserInfo() {
   const UserInfoList = [
     {
       src: "/assets/icons/fluent_games.png",
@@ -80,8 +91,13 @@ function setProfile() {
   ];
   const userInfoList = document.getElementById("user-info-list");
   UserInfoList.map((item) => (userInfoList.innerHTML += UserInfo(item)));
+  const InviteButton = document.getElementById("invite-btn");
+  InviteButton.addEventListener("click", async () => {
+    await InvitePlayer(data.id);
+  });
+}
 
-  // Profile Picture and Data
+function setProfileData() {
   const profilePic = document.getElementById("profile-pic");
   profilePic.src = data.image_url;
 
@@ -92,8 +108,9 @@ function setProfile() {
   profileUsername.textContent = `@${data.username}`;
 
   ManageFriendButton();
+}
 
-  // Progress Bar
+function setProgress() {
   const xp = document.querySelector(".xp");
   xp.textContent = `${data.current_xp}XP`;
   const progressBar = document.querySelector(".progress-bar");
@@ -101,8 +118,9 @@ function setProfile() {
   const percentage = document.querySelector(".progress-percentage");
   percentage.textContent =
     data.rankProgressPercentage > 10 ? `${data.rankProgressPercentage}%` : "";
+}
 
-  // TOP ACHIEVEMENTS
+function setTopAchievements() {
   const topAchievements = document.querySelector(".achievement-list");
   if (data.achievements.length === 0) {
     topAchievements.append(Empty("No Achievements found"));
@@ -110,54 +128,64 @@ function setProfile() {
   data.achievements.forEach((achievement) => {
     topAchievements.innerHTML += topAchievementsItem(achievement);
   });
+}
 
-  // RANK
+function setOptionsMenu() {
+  if (data.is_my_profile || !data.is_friend) return;
+  const { view, Controller } = DropDown([
+    {
+      view: html`
+				<button class="menu-item">
+					<img src="/assets/icons/profile-remove.svg" alt="UnFriend Button" />
+					<p class="menu-item-text">UnFriend</p>
+				</button>
+			`,
+      handler: async () => {
+        await RemoveFriend(data.id);
+        data.is_friend = false;
+        ManageFriendButton();
+      },
+    },
+    {
+      view: html`
+				<button class="menu-item">
+					<img src="/assets/icons/profile-delete.svg" alt="Block Button" />
+					<p class="menu-item-text">Block</p>
+				</button>
+			`,
+      handler: async () => {
+        await BlockUser(data.id);
+        data.is_friend = false;
+        ManageFriendButton();
+      },
+    },
+    {
+      view: html`
+				<button class="menu-item">
+					<img src="/assets/icons/directbox-send.svg" alt="Invite Button" />
+					<p class="menu-item-text">Invite</p>
+				</button>
+			`,
+      handler: async () => {
+        await InvitePlayer(data.id);
+      },
+    },
+  ]);
+  const dropdown = document.getElementById("dropdown-menu-container");
+  dropdown.innerHTML = view;
+  dropdown.dataset.show = true;
+  Controller();
+}
 
-  if (!data.is_my_profile && data.is_friend) {
-    const { view, Controller } = DropDown([
-      {
-        view: html`
-          <button class="menu-item">
-            <img src="/assets/icons/profile-remove.svg" alt="UnFriend Button" />
-            <p class="menu-item-text">UnFriend</p>
-          </button>
-        `,
-        handler: async () => {
-          await RemoveFriend(data.id);
-          data.is_friend = false;
-          ManageFriendButton();
-        },
-      },
-      {
-        view: html`
-          <button class="menu-item">
-            <img src="/assets/icons/profile-delete.svg" alt="Block Button" />
-            <p class="menu-item-text">Block</p>
-          </button>
-        `,
-        handler: async () => {
-          await BlockUser(data.id);
-          data.is_friend = false;
-          ManageFriendButton();
-        },
-      },
-      {
-        view: html`
-          <button class="menu-item">
-            <img src="/assets/icons/directbox-send.svg" alt="Invite Button" />
-            <p class="menu-item-text">Invite</p>
-          </button>
-        `,
-        handler: async () => {
-          await InvitePlayer(data.id);
-        },
-      },
-    ]);
-    const dropdown = document.getElementById("dropdown-menu-container");
-    dropdown.innerHTML = view;
-    dropdown.dataset.show = true;
-    Controller();
-  }
+function setRankInfo() {
+  const UserRankIcon = document.getElementById('rank-icon');
+  const UserRankTitle = document.getElementById('rank-title');
+
+  const UserRank = data.rank || null;
+  UserRankIcon.src = UserRank?.icon || '/assets/icons/unranked.png';
+  UserRankTitle.textContent = UserRank?.name || 'Unranked';
+  UserRankTitle.style.color = UserRank ? '#ff3d00' : '#a2a2a2';
+
 }
 
 function PopulateTournamentMatches(data) {
@@ -198,10 +226,10 @@ function ProfileButtonContent() {
   if (data.is_my_profile) return "";
   if (data.is_friend) {
     return html`
-      <a href="/messenger?chatroom=${data.id}">
-        ${ProfileCTA("/assets/icons/message-filled.svg", "Send Message")}
-      </a>
-    `;
+			<a href="/messenger?chatroom=${data.id}">
+				${ProfileCTA("/assets/icons/message-filled.svg", "Send Message")}
+			</a>
+		`;
   }
   if (data.friend_request_state === FriendRequestState.SENT) {
     return ProfileCTA(
@@ -212,19 +240,19 @@ function ProfileButtonContent() {
   }
   if (data.friend_request_state === FriendRequestState.RECEIVED) {
     return html`
-      <div class="cta-buttons">
-        ${ProfileCTA(
-          "/assets/icons/add-fill.svg",
-          "Accept Request",
-          "AcceptFriendRequest"
-        )}
-        ${ProfileCTA(
-          "/assets/icons/light_close.png",
-          "decline Request",
-          "DeclineFriendRequest"
-        )}
-      </div>
-    `;
+			<div class="cta-buttons">
+				${ProfileCTA(
+      "/assets/icons/add-fill.svg",
+      "Accept Request",
+      "AcceptFriendRequest"
+    )}
+				${ProfileCTA(
+      "/assets/icons/light_close.png",
+      "decline Request",
+      "DeclineFriendRequest"
+    )}
+			</div>
+		`;
   }
   return ProfileCTA(
     "./assets/icons/add-fill.svg",
@@ -235,33 +263,33 @@ function ProfileButtonContent() {
 
 function UserInfo({ src, value }) {
   return html`
-    <li class="user-info-item">
-      <img src="${src}" alt="userInfo Icon" />
-      <h6>${value}</h6>
-    </li>
-  `;
+		<li class="user-info-item">
+			<img src="${src}" alt="userInfo Icon" />
+			<h6>${value}</h6>
+		</li>
+	`;
 }
 
 function ProfileCTA(icon, title, eventHandlerName = "") {
   return html`
-    <button
-      class="cta-button"
-      id="profile-cta-button"
-      data-handler="${eventHandlerName}"
-    >
-      <img src="${icon}" alt="Call To Action Button Icon" />
-      <p>${title}</p>
-    </button>
-  `;
+		<button
+			class="cta-button"
+			id="profile-cta-button"
+			data-handler="${eventHandlerName}"
+		>
+			<img src="${icon}" alt="Call To Action Button Icon" />
+			<p>${title}</p>
+		</button>
+	`;
 }
 
 function topAchievementsItem({ icon, name }) {
   return html`
-    <li class="achievement-item">
-      <img src="${icon}" alt="userInfo Icon" />
-      <h6>${name}</h6>
-    </li>
-  `;
+		<li class="achievement-item">
+			<img src="${icon}" alt="userInfo Icon" />
+			<h6>${name}</h6>
+		</li>
+	`;
 }
 
 function ManageFriendButton() {

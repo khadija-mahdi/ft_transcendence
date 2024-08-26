@@ -19,9 +19,11 @@ const routes = {
 	},
 	"/messages/group/choice-members": {
 		title: "Choose Group Members",
-		component: () => import("/components/chat/choice_members/View/choice_members.js"),
+		component: () =>
+			import("/components/chat/choice_members/View/choice_members.js"),
 		css: "/components/chat/choice_members/assets/choice_members.css",
-		controller: () => import("/components/chat/choice_members/Controller/choice_members.js"),
+		controller: () =>
+			import("/components/chat/choice_members/Controller/choice_members.js"),
 	},
 	"/tournaments": {
 		title: "Tournaments",
@@ -38,9 +40,11 @@ const routes = {
 	},
 	"/tournaments/create_tournament": {
 		title: "Create Tournament",
-		component: () => import("/components/create_tournament/View/create_tournament.js"),
+		component: () =>
+			import("/components/create_tournament/View/create_tournament.js"),
 		css: "/components/create_tournament/assets/create_tournament.css",
-		controller: () => import("/components/create_tournament/Controller/create_tournament.js"),
+		controller: () =>
+			import("/components/create_tournament/Controller/create_tournament.js"),
 	},
 	"/ranking": {
 		title: "Ranking",
@@ -108,7 +112,8 @@ const routes = {
 		title: "All players",
 		component: () => import("/components/all_Players/View/all_players.js"),
 		css: "/components/all_Players/assets/all_players.css",
-		controller: () => import("/components/all_Players/Controller/all_players.js"),
+		controller: () =>
+			import("/components/all_Players/Controller/all_players.js"),
 	},
 	"/home/friends": {
 		title: "all Friends",
@@ -123,6 +128,11 @@ const routes = {
 		controller: () => import("/components/all_Online/Controller/all_online.js"),
 	},
 	"*": {
+		title: "404 Not Found",
+		component: () => import("/lib/NotFound/NotFound.js"),
+		css: "/lib/NotFound/notFound.css",
+	},
+	"not-found": {
 		title: "404 Not Found",
 		component: () => import("/lib/NotFound/NotFound.js"),
 		css: "/lib/NotFound/notFound.css",
