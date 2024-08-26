@@ -8,6 +8,7 @@ import AuthWebSocket from "../../../../lib/AuthWebSocket.js";
 
 export default function () {
 
+// let isBallModelLoaded = false; // Flag to track ball model loading
 let scene, camera, renderer, controls;
 let computer = null;
 let ballModel = null;
@@ -31,12 +32,11 @@ let textMesh_computer = null;
 let textMesh_player = null;
 let textMesh_score_player = null;
 let textMesh_score_computer = null;
+let latestBallData = null;
 
-const currentUrl = window.location.href;
-const params = new URLSearchParams(window.location.search);
-const uuid = params.get('uuid');
 
-console.log(uuid);
+const width = 800;
+const height = 600;
 
 function init() 
 {
@@ -45,11 +45,12 @@ function init()
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87CEEB); // Sky blue color
     
-    // Create a camera, which determines what we'll see when we render the scene
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-
-
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // camera.position.x =  -500;
+    // camera.position.y = 600;
+    camera.position.z =  500;
+    // camera.lookAt(camera.position.x, camera.position.y, camera.position.z);
+         
     // const LoadingManager = new THREE.LoadingManager();
     // LoadingManager.onStart = function(url,item,totale)
     // {
@@ -62,6 +63,7 @@ function init()
     // Create a renderer and add it to the DOM
     renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    console.log(window.innerWidth,window.innerHeight,"   <======    ");
     document.body.appendChild(renderer.domElement);
 
     controls = new OrbitControls(camera, renderer.domElement);
@@ -74,13 +76,47 @@ function init()
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
 
+
+
+    function adjustCameraAndControls(object) {
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+
+        // Calculate the camera distance
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const fov = camera.fov * (Math.PI / 180); // convert FOV to radians
+        const cameraDistance = Math.abs(maxDim / (2 * Math.tan(fov / 2)));
+
+        // Position the camera
+        camera.position.set(center.x, center.y, cameraDistance * 1.5);
+        camera.lookAt(center);
+
+        // Adjust the near and far planes of the camera
+        camera.near = cameraDistance / 100;
+        camera.far = cameraDistance * 100;
+        camera.updateProjectionMatrix();
+
+        // Adjust OrbitControls
+        controls.target.copy(center);
+        controls.maxDistance = cameraDistance * 10;
+        controls.update();
+    }
+
     // Load the secne model
     const loader_scene = new GLTFLoader();
     loader_scene.load("/components/game/in_game/assets/models/scene_bg.glb", (glb) => {
         bg_scene = glb.scene;
         scene.add(bg_scene);
         bg_scene.position.set(0, 0, 0);
-        bg_scene.scale.set(0.4, 0.4, 0.4);
+        bg_scene.scale.set(90, 90, 90);
+
+        const box = new THREE.Box3().setFromObject(bg_scene);
+        console.log("=>>>>  ",box);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+
+        adjustCameraAndControls(bg_scene);
     });
 
 
@@ -89,32 +125,46 @@ function init()
     loader_scene1.load("/components/game/in_game/assets/models/scene_light.glb", (glb) => {
         tableModel = glb.scene;
         scene.add(tableModel);
-        tableModel.position.set(0, 2, 0);
-        tableModel.scale.set(2.8, 2.8, 2.8);
+        tableModel.position.set(0, 500, 0);
+        tableModel.scale.set(850, 850, 850);
 
         const box = new THREE.Box3().setFromObject(tableModel);
         const size = new THREE.Vector3();
         box.getSize(size);
         tableWidth = size.x;
-        console.log("-----",tableWidth)
+        console.log("----->     ",box);
+        adjustCameraAndControls(tableModel);
     });
-
+    
     const loader_cpm = new GLTFLoader();
     loader_cpm.load("/components/game/in_game/assets/models/paddle_hock.glb", (glb) => { // computer player
         computer = glb.scene;
         scene.add(computer);
-        computer.position.set(0, 1.4, 0.2);
-        computer.scale.set(1, 1, 1); // Adjust the scale if necessary
+        computer.position.set(0, 200,250);
+        computer.scale.set(350, 350, 350); // Adjust the scale if necessary
     }, undefined, (error) => {
         console.error('An error occurred while loading the GLTF model:', error);
     });
-    // Load the ball model
+
+
+    // // let ballModelLoaded = new Promise((resolve, reject) => {
+    // //     const loader = new GLTFLoader();
+    // //     loader.load("/components/game/in_game/assets/models/ball_rca.glb", (glb) => {
+    // //         ballModel = glb.scene;
+    // //         scene.add(ballModel);
+    // //         ballModel.position.set(0.5, 0.9, -2.5);
+    // //         ballModel.scale.set(0.9, 1.2, 0.9);
+    // //         resolve();
+    // //     }, undefined, reject);
+    // // });
+    // // // Load the ball model
     const loader = new GLTFLoader();
     loader.load("/components/game/in_game/assets/models/ball_rca.glb", (glb) => {
         ballModel = glb.scene;
         scene.add(ballModel);
-        ballModel.position.set(0.5, 0.9, -2.5);
-        ballModel.scale.set(0.9, 1.2, 0.9);
+        ballModel.position.set(0, -720, -1000);
+        ballModel.scale.set(350, 700, 350);
+        adjustCameraAndControls(ballModel);
     });
 
     // Load the player paddle model
@@ -122,8 +172,8 @@ function init()
     loader2.load("/components/game/in_game/assets/models/paddle_hock.glb", (glb) => {
         player_model = glb.scene;
         scene.add(player_model);
-        player_model.position.set(0, 1.4, 7);
-        player_model.scale.set(1, 1, 1);
+        player_model.position.set(0, 200,2260);
+        player_model.scale.set(350, 350, 350);
     });
 
 
@@ -132,22 +182,23 @@ function init()
     loader_board.load("/components/game/in_game/assets/models/score.glb", (glb) => {
         score_board = glb.scene;
         scene.add(score_board);
-        score_board.position.set(0, 5, -1);
-        score_board.scale.set(0.5, 0.3, 0.3);
+        score_board.position.set(0, 1400, 200);
+        score_board.scale.set(150,150, 150);
         // score_board.rotation.y =Math.PI / 4; // 30 degrees in radians
         score_board.rotation.y = Math.PI; // 30 degrees in radians
+        adjustCameraAndControls(score_board);
         // score_board.rotation.x = Math.PI / 4; // 30 degrees in radians
     });
     
 
-    // computer score
-    // player score
+    // // computer score
+    // // player score
     const text_loader_computer = new FontLoader();
     text_loader_computer.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
-        const textGeometry = new TextGeometry('Computer ', {
+        const textGeometry = new TextGeometry('PLAYER 2', {
             font: font,
-            size: 0.2,
-            depth: 0.2,
+            size: 70,
+            depth: 50,
             curveSegments: 12,
             bevelEnabled: true,
             bevelThickness: 0.03,
@@ -156,7 +207,7 @@ function init()
         });
         const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
         textMesh_score_computer = new THREE.Mesh(textGeometry, textMaterial);
-        textMesh_score_computer.position.set(0.4, 6.3, -4.5);
+        textMesh_score_computer.position.set(50, 2100, -1500);
         scene.add(textMesh_score_computer);
     });
 
@@ -164,8 +215,8 @@ function init()
     loader1.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
         const textGeometry = new TextGeometry(computer_score.toString(), {
             font: font,
-            size: 0.6,
-            depth: 0.2,
+            size: 290,
+            depth: 50,
             curveSegments: 12,
             bevelEnabled: true,
             bevelThickness: 0.03,
@@ -178,20 +229,20 @@ function init()
         textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
         // Position the text
-        textMesh.position.set(0.7, 5.6, -4.5);
+        textMesh.position.set(120, 1750, -1500);
 
         // Add the text to the scene
         scene.add(textMesh);
     });
 
 
-    // player score
+    // // player score
     const text_loader_player = new FontLoader();
     text_loader_player.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
-        const textGeometry = new TextGeometry('PLAYER ', {
+        const textGeometry = new TextGeometry('PLAYER 1', {
             font: font,
-            size: 0.2,
-            depth: 0.2,
+            size: 70,
+            depth: 50,
             curveSegments: 12,
             bevelEnabled: true,
             bevelThickness: 0.03,
@@ -200,7 +251,7 @@ function init()
         });
         const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
         textMesh_score_player = new THREE.Mesh(textGeometry, textMaterial);
-        textMesh_score_player.position.set(-1.2, 6.3, -4.5);
+        textMesh_score_player.position.set(-490, 2100, -1500);
         scene.add(textMesh_score_player);
     });
 
@@ -208,78 +259,118 @@ function init()
     text_load.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function (font) {
         const textGeometry = new TextGeometry(player_score.toString(), {
             font: font,
-            size: 0.6,
-            depth: 0.2,
+            size: 290,
+            depth: 50,
             curveSegments: 12,
             bevelEnabled: true,
             bevelThickness: 0.03,
             bevelSize: 0.02,
             bevelSegments: 5
         });
-
         // Create a material and a mesh
         const textMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
         textMesh_player = new THREE.Mesh(textGeometry, textMaterial);
 
         // Position the text
-        textMesh_player.position.set(-1, 5.6, -4.5);
+        textMesh_player.position.set(-390, 1750, -1500);
 
         // Add the text to the scene
         scene.add(textMesh_player);
     });
 
+
+
+    // function handleWebSocketMessages(message)
+    // {
+    //     if (!message.data) return;
+    //     const data = JSON.parse(message.data);
+    
+    //     ballModelLoaded.then(() => {
+    //         if (data.type === 'update' && data.ball && ballModel) {
+    //             ballModel.position.x = data.ball.x;
+    //             ballModel.position.z = data.ball.y;
+    //         }
+    //     }).catch(error => {
+    //         console.error("Error loading the ball model:", error);
+    //     });
+    // }
+    let lastUpdateTime = 0;
+    const updateInterval = 500; // milliseconds
+
+
     function handleWebSocketMessages (message)
     {
         if (!message.data) return;
         const data = JSON.parse(message.data);
-        switch (data.type) {
-          case 'update':
-            // Game state update
-            if (data.ball) 
-            {
-              if (ballModel && ballModel.position)
-              {
-                data.ball.x = ballModel.position.x
-                data.ball.y = ballModel.position.z;
-              }
-              else
-              {
-                console.error('ballModel is not initialized', ballModel);
-              }
-            }
-            if (data.leftPaddle)     
-            {
-                if (player_model && player_model.position)
-                {
-                    data.leftPaddle.x = player_model.position.x;
-                    
-                }
-            }
-            if (data.rightPaddle)
-            {
-                if (computer && computer.position)
-                {
-                    data.leftPaddle.x = computer.position.x;
-                }
-            }
-            break;
-          case 'goal':
-            // Update scores
-            player_score = data.first_player_score;
-            computer_score = data.second_player_score;
-            update_text();
-            update_text_player();
-            resetBallPosition();
-            resetBallPosition_player();
-            break;
-          case 'game_over':
-            // Handle game over scenario
-            alert("Game Over!");
-            break;
-          default:
-            console.log(data);
-            break;
+        // console.log("Received data:", data);
+        console.log("this data      =======> ",ballModel);
+
+        if (data.type === 'update' && data.ball) 
+        {
+            latestBallData = data.ball;
         }
+        // if (!message.data) return;
+        // const data = JSON.parse(message.data);
+        // console.log(" i am in hadnle web socket message ==<");        
+        // switch (data.type) {
+        //   case 'update':
+        //     console.log(" update ===>",data);
+        //     latestBallData = data.ball;
+          // Game state update
+        // ballModelLoaded.then(() => 
+        // {
+        //     const currentTime = Date.now();
+        //     if (currentTime - lastUpdateTime >= updateInterval) {
+        //         lastUpdateTime = currentTime;
+        
+        //     if (data.type === 'update' && data.ball && ballModel) 
+        //     {
+        //         console.log("update ball model posiotion      ====>");
+        //         // for ball aon 3d (z and x)
+        //         ballModel.position.x = 1;
+        //         // data.ball.x = ballModel.position.x;
+        //         // data.ball.y = ballModel.position.z;
+        //         ballModel.position.z = 2;
+        //     }
+        //     }
+        // }).catch(error => {
+        //     console.error("Error loading the ball model:", error);
+        // });
+        // //for paddles game
+        //     if (data.leftPaddle)     
+        //     {
+        //         if (player_model && player_model.position)
+        //         {
+        //             data.leftPaddle.x = player_model.position.x;
+                    
+        //         }
+        //     }
+        //     if (data.rightPaddle)
+        //     {
+        //         if (computer && computer.position)
+        //         {
+        //             data.leftPaddle.x = computer.position.x;
+        //         }
+        //     }
+            // break;
+        //   case 'goal':
+        //     // Update scores
+        //     console.log("gooaaaaallllllll");
+        //     player_score = data.first_player_score;
+        //     computer_score = data.second_player_score;
+        //     // update_text();
+        //     // update_text_player();
+        //     // resetBallPosition();
+        //     // resetBallPosition_player();
+        //     break;
+        //   case 'game_over':
+        //     // Handle game over scenario
+        //     alert("Game Over!");
+        //     break;
+        //   default:
+        //     console.log(data);
+        //     break;
+        // }
       }
 
 
@@ -302,10 +393,8 @@ function init()
         //     {
         //       console.log("yaaaaaaaaaaaa hooo");
         //   };
-        console.log("i am here -------------->");
           lobbySocket.addEventListener('message', (message) => 
           {
-            console.log("=------------------=-=--==-=i have a message");
             handleWebSocketMessages(message);
           });
   
@@ -458,41 +547,52 @@ function init()
         update_text_player();
     }
 
-function animate(currentTime) {
+function animate()
+{
 
     requestAnimationFrame(animate);
+    if (latestBallData && ballModel)
+    {
+        console.log("Updating ball model position ====>");
+        let x_c = 10000;
+        ballModel.translateX(latestBallData.x / x_c);
+        ballModel.translateZ(latestBallData.y / x_c);
+        console.log(ballModel.position.x,"=========",latestBallData.x);
+        console.log(ballModel.position.z);
+        // ballModel.translateX(latestBallData.x);
+        // ballModel.translateZ(latestBallData.y);
+    }
+    // if (ballModel && tableModel) {
+    //     ballModel.translateX(x_velocity);
+    //     ballModel.translateZ(z_velocity);
 
-    if (ballModel && tableModel) {
-        ballModel.translateX(x_velocity);
-        ballModel.translateZ(z_velocity);
+    //     // Constrain the ball's x position to the table width
+    //     if (tableWidth > 0) {
+    //         if (ballModel.position.x > tableWidth / 2) {
+    //             ballModel.position.x = tableWidth / 2;
+    //             x_velocity = -Math.abs(x_velocity);
+    //         } else if (ballModel.position.x < -tableWidth / 2) {
+    //             ballModel.position.x = -tableWidth / 2;
+    //             x_velocity = Math.abs(x_velocity);
+    //         }
+    //     }
+    //     checkCollision();
+    // }
 
-        // Constrain the ball's x position to the table width
-        if (tableWidth > 0) {
-            if (ballModel.position.x > tableWidth / 2) {
-                ballModel.position.x = tableWidth / 2;
-                x_velocity = -Math.abs(x_velocity);
-            } else if (ballModel.position.x < -tableWidth / 2) {
-                ballModel.position.x = -tableWidth / 2;
-                x_velocity = Math.abs(x_velocity);
-            }
-        }
-        checkCollision();
-    }
+    // if (moveLeftPlayer && player_model.position.x > -tableWidth / 2) {
+    //     player_model.position.x -= 0.05;
+    // }
+    // if (moveRightPlayer && player_model.position.x < tableWidth / 2) {
+    //     player_model.position.x += 0.05;
+    // }
 
-    if (moveLeftPlayer && player_model.position.x > -tableWidth / 2) {
-        player_model.position.x -= 0.05;
-    }
-    if (moveRightPlayer && player_model.position.x < tableWidth / 2) {
-        player_model.position.x += 0.05;
-    }
-
-    // Update computer paddle position with boundary check
-    if (moveLeftComputer && computer.position.x > -tableWidth / 2) {
-        computer.position.x -= 0.05;
-    }
-    if (moveRightComputer && computer.position.x < tableWidth / 2) {
-        computer.position.x += 0.05;
-    }
+    // // Update computer paddle position with boundary check
+    // if (moveLeftComputer && computer.position.x > -tableWidth / 2) {
+    //     computer.position.x -= 0.05;
+    // }
+    // if (moveRightComputer && computer.position.x < tableWidth / 2) {
+    //     computer.position.x += 0.05;
+    // }
 
     controls.update();
     renderer.render(scene, camera);
@@ -500,9 +600,8 @@ function animate(currentTime) {
 
     
     // Run the animation function for the first time to kick things off
-    setupWebSocket();
     animate();
-
+    setupWebSocket();
     // Handle window resize
     window.addEventListener('resize', () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
