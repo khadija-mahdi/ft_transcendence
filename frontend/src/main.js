@@ -88,6 +88,7 @@ async function navigate(path) {
 		}
 		app.style.visibility = 'visible';
 	} catch (error) {
+		console.error('Failed to load route:', path);
 		console.error(error);
 		app.innerHTML = (await (await routes['*'].component()).default)();
 	}

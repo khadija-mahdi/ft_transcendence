@@ -1,4 +1,10 @@
-body{
-	margin: 0;
+body {
 	padding: 0;
+	margin: 0;
+}
+
+#main {
+	max-width: 100vw !important;
+	width: 100vw !important;
+	margin: 0 !important;
 }

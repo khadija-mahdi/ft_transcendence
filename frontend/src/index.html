@@ -1,52 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FT_Transcendence</title>
 
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>FT_Transcendence</title>
-
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<link
-		href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-		rel="stylesheet">
-	<link rel="stylesheet" href="/style.css">
-	<link rel="stylesheet" href="/components/navBar/assets/navBar.css">
-	<script type="importmap">
-		{
-			"imports": {
-				"three": "/node_modules/three/build/three.module.js",
-                "OrbitControls": "/node_modules/three/examples/jsm/controls/OrbitControls.js",
-                "TextGeometry": "/node_modules/three/examples/jsm/geometries/TextGeometry.js",
-                "FontLoader": "/node_modules/three/examples/jsm/loaders/FontLoader.js",
-                "OBJLoader": "/node_modules/three/examples/jsm/loaders/OBJLoader.js",
-                "GLTFLoader": "/node_modules/three/examples/jsm/loaders/GLTFLoader.js"
-            }
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/components/navBar/assets/navBar.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/node_modules/three/build/three.module.js",
+          "OrbitControls": "/node_modules/three/examples/jsm/controls/OrbitControls.js",
+          "TextGeometry": "/node_modules/three/examples/jsm/geometries/TextGeometry.js",
+          "FontLoader": "/node_modules/three/examples/jsm/loaders/FontLoader.js",
+          "OBJLoader": "/node_modules/three/examples/jsm/loaders/OBJLoader.js",
+          "GLTFLoader": "/node_modules/three/examples/jsm/loaders/GLTFLoader.js"
         }
+      }
     </script>
-	<script type="module" src="/components/navBar/Controller/navBar.js" defer></script>
-	<script type="module" src="/main.js"></script>
-</head>
+    <script
+      type="module"
+      src="/components/navBar/Controller/navBar.js"
+      defer
+    ></script>
+    <script type="module" src="/main.js"></script>
+  </head>
 
-<body>
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/loaders/GLTFLoader.js"></script> -->
-
-	<!-- Main application container -->
-	<main id="main"></main>
-
-	<!-- External JavaScript -->
-
-	<!-- Inline JavaScript for conditional content -->
-	<script>
-		const path = window.location.pathname;
-		if (path.startsWith('/sign')) {
-
-			const headerHTML = `
+  <body>
+    <main id="main"></main>
+    <script>
+      const path = window.location.pathname;
+      if (path.startsWith("/sign")) {
+        const headerHTML = `
 				<div class="header">
 					<div class="logo">
 						<img id="logo-42" src="components/auth/assets/42_logo.svg" alt="intra logo">
@@ -55,11 +49,15 @@
 					<div class="authBar">
 						<div class="radio-group">
 							<div class="radio-container">
-								<input type="radio" name="auth" id="sign-in" value="sign-in" ${path.includes('/sign_in') ? 'checked' : ''}>
+								<input type="radio" name="auth" id="sign-in" value="sign-in" ${
+                  path.includes("/sign_in") ? "checked" : ""
+                }>
 								<label for="sign-in" class="radio-label">Sign in</label>
 							</div>
 							<div class="radio-container">
-								<input type="radio" name="auth" id="sign-up" value="sign-up" ${path.includes('/sign_up') ? 'checked' : ''}>
+								<input type="radio" name="auth" id="sign-up" value="sign-up" ${
+                  path.includes("/sign_up") ? "checked" : ""
+                }>
 								<label for="sign-up" class="radio-label">Sign Up</label>
 							</div>
 						</div>
@@ -67,27 +65,22 @@
 				</div>
 			`;
 
-			document.body.insertAdjacentHTML('afterbegin', headerHTML);
+        document.body.insertAdjacentHTML("afterbegin", headerHTML);
 
-			document.querySelectorAll('input[name="auth"]').forEach((radio) => {
-				radio.addEventListener('change', function () {
-					if (this.checked) {
-						if (this.value === 'sign-in') {
-							history.pushState(null, null, '/sign_in');
-							window.location.reload();
-						} else if (this.value === 'sign-up') {
-							history.pushState(null, null, '/sign_up');
-							window.location.reload();
-						}
-					}
-				});
-			});
-
-		}
-
-	</script>
-	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script> -->
-
-</body>
-
+        document.querySelectorAll('input[name="auth"]').forEach((radio) => {
+          radio.addEventListener("change", function () {
+            if (this.checked) {
+              if (this.value === "sign-in") {
+                history.pushState(null, null, "/sign_in");
+                window.location.reload();
+              } else if (this.value === "sign-up") {
+                history.pushState(null, null, "/sign_up");
+                window.location.reload();
+              }
+            }
+          });
+        });
+      }
+    </script>
+  </body>
 </html>
