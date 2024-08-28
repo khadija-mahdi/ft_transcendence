@@ -212,9 +212,10 @@
 /* Messages */
 
 .panel-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     width: 100%;
-	height: 100%;
-	/* display: flex; */
 }
 
 .panel-button {
@@ -368,7 +369,7 @@
 /*  */
 
 .messages-content {
-    height: 85%;
+	flex: 1 1 auto;
     overflow-y: scroll;
     padding: 1rem;
 }
@@ -417,4 +418,62 @@
     font-size: 0.6rem;
 	margin-left: auto;
 	align-items: end;
+}
+
+
+/* Send Message Section */
+.send-message-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #303030;
+    height: 70px;
+}
+
+.send-message-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.invite-icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2px;
+}
+
+.invite-text {
+    font-size: 10px;
+    color: #878787;
+}
+
+.send-image-container {
+    margin: 0 10px;
+	border: none;
+}
+
+.message-textarea {
+    flex-grow: 1;
+    background-color: #464646;
+    color: #F8F8F8;
+    padding: 1rem;
+    border-radius: 10px;
+    border: none;
+    resize: none;
+    outline: none;
+    max-height: 50px;
+}
+
+.send-button {
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.no-friend-message {
+    color: #878787;
+    text-align: center;
 }
