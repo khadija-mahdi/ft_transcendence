@@ -13,7 +13,7 @@
 	flex-wrap: wrap; 
 	gap: 1.25rem; 
 	width: 100%; 
-	height: 100%;	
+	height: 85vh;	
 }
 
 .room-panel {
@@ -138,6 +138,7 @@
     width: 53px;
     height: 53px;
     border-radius: 50%;
+	background: white;
 }
 
 .messenger-item .content {
@@ -206,4 +207,214 @@
     padding: 0.25rem;
     color: #ffffff;
     font-size: 13px;
+}
+
+/* Messages */
+
+.panel-container {
+    width: 100%;
+	height: 100%;
+	/* display: flex; */
+}
+
+.panel-button {
+    width: 100%;
+    height: 80px;
+    background-color: #363636;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.panel-inner-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+}
+
+.panel-image {
+    background-color: white;
+    width: 53px;
+    height: 53px;
+    border-radius: 50%;
+}
+
+.panel-link {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 80px;
+}
+
+.panel-room-name {
+    margin-left: 10px;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    font-weight: bold;
+    max-width: 100px;
+}
+
+.panel-room-status {
+    margin-left: 10px;
+    color: #878787;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: normal;
+}
+
+.panel-three-points-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.panel-three-points {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+	align-items: flex-end;
+    padding: 1.75rem;
+}
+
+.panel-dropdown-private {
+    z-index: 50;
+    position: absolute;
+    right: 1.75rem;
+    top: 4rem;
+    background-color: #161616;
+    height: 160px;
+    width: 140px;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.panel-dropdown-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    font-weight: 300;
+    font-size: 12px;
+    color: #878787;
+}
+
+.panel-dropdown-button {
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s;
+}
+
+.panel-dropdown-button:hover {
+    background-color: #262626;
+}
+
+.panel-dropdown-group {
+    z-index: 50;
+    position: absolute;
+    right: 1.75rem;
+    top: 4rem;
+    background-color: #161616;
+    width: 140px;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.panel-dropdown-group-admin {
+    height: 120px;
+}
+
+.panel-dropdown-group-non-admin {
+    height: 100px;
+}
+
+.options-panel {
+    position: absolute;
+    right: 40px;
+    top: 60px;
+    background-color: #161616;
+    padding: 2px;
+    border-radius: 4px;
+    z-index: 50;
+}
+
+.options-panel.hidden {
+    display: none;
+}
+
+.panel-option-button {
+    display: block;
+    padding: 8px 16px;
+    color: #878787;
+    background-color: #161616;
+    border: none;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.panel-option-button:hover {
+    background-color: #333333;
+}
+
+/*  */
+
+.messages-content {
+    height: 85%;
+    overflow-y: scroll;
+    padding: 1rem;
+}
+
+.message {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+	display: flex;
+	flex-direction: column;
+}
+
+.message.sent {
+    background-color: #FD4106;
+    color: white;
+    text-align: left;
+	width: 50%;
+	margin-left: auto;
+}
+
+.message.received {
+    background-color: #363636;
+    color: white;
+    text-align: left;
+	max-width: 50%;
+	width: fit-content;
+}
+
+.message-content {
+    max-width: 100%;
+    display: inline-block;
+    word-break: break-word;
+	width: fit-content;
+
+}
+
+.message-time.sent {
+    font-size: 0.6rem;
+	color: #EAE7E7;
+	margin-left: auto;
+	align-items: end;
+
+}
+.message-time {
+	color: #878787;
+    font-size: 0.6rem;
+	margin-left: auto;
+	align-items: end;
 }

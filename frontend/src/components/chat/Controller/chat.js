@@ -1,5 +1,6 @@
 import { fetchWithAuth } from '../../../../lib/apiMock.js';
 import AuthWebSocket from '../../../lib/authwebsocket.js';
+import { renderMessagesItems } from './headerChat.js';
 
 let clickedIndex = 0;
 let isFilter = false;
@@ -22,6 +23,7 @@ async function fetchRooms(q = "", filter = false) {
 }
 
 function getLastMessage({ lastMessage, type }) {
+
 	const username = 'YourUsername';
 	if (lastMessage === null) return "";
 
@@ -38,6 +40,8 @@ function getLastMessage({ lastMessage, type }) {
 }
 
 function formatTime(timestamp) {
+	if (timestamp === undefined)
+		return ''
 	const messageDate = new Date(timestamp);
 	const currentDate = new Date();
 
@@ -53,7 +57,8 @@ function formatTime(timestamp) {
 
 function renderMessengerItem(item) {
 	const messengerContainer = document.getElementById("messenger-container");
-	const lastMessage = getLastMessage({ lastMessage: item.last_message, type: item.type });
+	const lastMessageContent = getLastMessage({ lastMessage: item.last_message, type: item.type });
+	const lastMessageTime = formatTime(item.last_message?.created_at)
 
 	const messengerItem = document.createElement("div");
 	messengerItem.className = `messenger-item ${clickedIndex === item.id ? 'selected' : item.unseen_messages_count ? 'highlight' : ''}`;
@@ -61,18 +66,21 @@ function renderMessengerItem(item) {
 	messengerItem.innerHTML = `
         <div class="content">
             <div class="avatar">
-                <img  src="${item.room_icon}" alt="${item.room_name}">
+                <img  src="${item.room_icon || "/public/assets/images/defualtgroupProfile.png"}" alt="${item.room_name}">
             </div>
             <div class="info">
                 <div class="name">${item.room_name}</div>
-                <div class="last-message">${lastMessage}</div>
+                <div class="last-message">${lastMessageContent || ''}</div>
             </div>
         </div>
         <div class="message-info">
             ${item.unseen_messages_count !== 0 && clickedIndex !== item.id && item.last_message && item.last_message.id !== null
 			? `<div class="unread-count">${item.unseen_messages_count}</div>`
-			: `<div class="unread-placeholder"></div>`}
-            <div class="timestamp">${formatTime(item.last_message?.created_at)}</div>
+			: `<div class=""></div>`}
+			${lastMessageTime ?
+			`<div class="timestamp">${lastMessageTime}</div>`
+			: `<div></div>`
+		}
         </div>
     `;
 
@@ -98,31 +106,7 @@ async function handleIconClick(item) {
 		console.error("Error fetching room detail:", error);
 	}
 
-	// Render updated room list
 	renderRoomsList(rooms);
-}
-
-async function renderMessagesItems(selectedChat) {
-	const chatPanel = document.getElementById("chat-panel");
-	chatPanel.innerHTML = ''; // Clear previous chat
-
-	const chatHeader = `
-		<div id="chat-header" class="chat-header">
-			<div class="messenger-title">${selectedChat.room_name}</div>
-			<div class="messenger-subtitle">Chat with ${selectedChat.members.join(', ')}</div>
-		</div>
-	`;
-
-	const messagesContainer = document.createElement("div");
-	messagesContainer.className = "messages-container";
-	let headersElement = document.createElement("div")
-	headersElement.className = "header-elements"
-	headersElement.innerHTML = `
-		<div>User data it wiil display here :)</div>	
-	`
-	messagesContainer.appendChild(headersElement);
-	chatPanel.innerHTML = chatHeader;
-	chatPanel.appendChild(messagesContainer);
 }
 
 function updateRooms(newRoom) {
@@ -130,7 +114,6 @@ function updateRooms(newRoom) {
 	const roomIndex = rooms.findIndex(room => room.id.toString() === roomId);
 
 	if (roomIndex !== -1) {
-		// Update existing room
 		rooms[roomIndex] = {
 			...rooms[roomIndex],
 			...newRoom,
@@ -147,7 +130,7 @@ function renderRoomsList(rooms) {
 	rooms.forEach(item => renderMessengerItem(item));
 }
 
-export default async function () {
+async function ChatRoomsPanel() {
 	const filterButton = document.getElementById("filter");
 	const searchInput = document.getElementById('searchInput');
 
@@ -202,4 +185,8 @@ export default async function () {
 	return () => {
 		socket.close();
 	};
+}
+
+export default async function () {
+	ChatRoomsPanel();
 }
