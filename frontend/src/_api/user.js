@@ -1,32 +1,54 @@
 import { fetchWithAuth } from "/lib/apiMock.js";
 
+export const fetchMyData = async () => {
+	const apiUrl = "https://localhost:4433/api/v1/users/me/";
+
+	try {
+		const data = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
+
+		data.image_url = data.image_url.replace(
+			"https://localhost/",
+			"https://localhost:4433/"
+		);
+		data.rank.icon = data.rank.icon.replace(
+			"https://localhost/",
+			"https://localhost:4433/"
+		);
+		return data;
+	} catch (error) {
+		console.error("Error fetching user data:", error);
+	}
+}
+
 export const UserDetailByUsername = async (username) => {
-  const res = await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/${username}/`
-  );
-  return res;
+	const res = await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/${username}/`
+	);
+	return res;
 };
 
 export const MatchHistory = async (id) => {
-  try {
-    const res = await fetchWithAuth(
-      `https://localhost:4433/api/v1/game/match-history/${id}/`
-    );
-    return res;
-  } catch (error) {
-    return {};
-  }
+	try {
+		const res = await fetchWithAuth(
+			`https://localhost:4433/api/v1/game/match-history/${id}/`
+		);
+		return res;
+	} catch (error) {
+		return {};
+	}
 };
 
 export const TournamentHistory = async (id) => {
-  try {
-    const res = await fetchWithAuth(
-      `https://localhost:4433/api/v1/game/tournament-history/${id}/`
-    );
-    return res;
-  } catch (error) {
-    return {};
-  }
+	try {
+		const res = await fetchWithAuth(
+			`https://localhost:4433/api/v1/game/tournament-history/${id}/`
+		);
+		return res;
+	} catch (error) {
+		return {};
+	}
 };
 
 export const InvitePlayer = async (id) => {

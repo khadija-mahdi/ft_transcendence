@@ -7,7 +7,7 @@ export default function () {
 				Create a chart group and have fun talking with your friends.
 			</div>
 
-			<form class="create-form-container" id="createTournamentForm">
+			<form class="create-form-container" id="create-group-form">
 				<div id="imageLabel" class="image-upload-container">
 					<label class="image-label">
 
@@ -31,7 +31,7 @@ export default function () {
 					<div style="padding: 10px 0">
 						<label for="name">Name *</label>
 					</div>
-					<input type="text" id="name" class="form-input" placeholder="New Group Name" required />
+					<input type="text" id="group-name" class="form-input" placeholder="New Group Name" required />
 				</div>
 				<a class="toggle-group" href="/messages/group/choice-members">
 					<div>

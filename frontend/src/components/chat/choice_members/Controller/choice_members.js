@@ -2,7 +2,6 @@ import { Empty } from "../../../../lib/Empty.js";
 import { fetchWithAuth } from '../../../../lib/apiMock.js';
 import { userContext } from "../../userContext.js";
 
-
 export function MembersContainer({ name, href, number, user }) {
 	const container = document.createElement('div');
 	container.className = 'friend-container';
@@ -80,7 +79,7 @@ function toggleSvgIcon(svg, user) {
 		svg.innerHTML = `
             <path d="M11.5 13.4043H5.5V11.4043H11.5V5.4043H13.5V11.4043H19.5V13.4043H13.5V19.4043H11.5V13.4043Z" fill="#F8F8F8" />
         `;
-		userContext.removeUser(user.id);// Remove user from userContext
+		userContext.removeUser(user.id);
 	}
 
 	svg.setAttribute('data-original', !isOriginal);

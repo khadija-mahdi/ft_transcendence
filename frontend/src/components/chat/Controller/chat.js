@@ -6,19 +6,18 @@ let isFilter = false;
 let rooms = [];
 
 async function fetchRooms(q = "", filter = false) {
-	let apiUrl = filter ? 
-		"https://localhost:4433/api/v1/chat/filter-rooms/" : 
+	let apiUrl = filter ?
+		"https://localhost:4433/api/v1/chat/filter-rooms/" :
 		`https://localhost:4433/api/v1/chat/rooms/?q=${q}`;
 
-	if (apiUrl) {
-		try {
-			const response = await fetchWithAuth(apiUrl, {
-				method: 'GET',
-			});
-			return response.results;
-		} catch (error) {
-			console.error("Error fetching user data:", error);
-		}
+	try {
+		const response = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
+		return response.results;
+	} catch (error) {
+		console.error("Error fetching user data:", error);
+		return []; // Handle error gracefully
 	}
 }
 
@@ -52,7 +51,7 @@ function formatTime(timestamp) {
 	}
 }
 
-function renderMessengerItem(item, rooms) {
+function renderMessengerItem(item) {
 	const messengerContainer = document.getElementById("messenger-container");
 	const lastMessage = getLastMessage({ lastMessage: item.last_message, type: item.type });
 
@@ -60,31 +59,70 @@ function renderMessengerItem(item, rooms) {
 	messengerItem.className = `messenger-item ${clickedIndex === item.id ? 'selected' : item.unseen_messages_count ? 'highlight' : ''}`;
 
 	messengerItem.innerHTML = `
-			<div class="content">
-				<div class="avatar">
-					<img  src="${item.room_icon}" alt="${item.room_name}">
-				</div>
-				<div class="info">
-					<div class="name">${item.room_name}</div>
-					<div class="last-message">${lastMessage}</div>
-				</div>
-			</div>
-			<div class="message-info">
-				${item.unseen_messages_count !== 0 && clickedIndex !== item.id && item.last_message && item.last_message.id !== null
+        <div class="content">
+            <div class="avatar">
+                <img  src="${item.room_icon}" alt="${item.room_name}">
+            </div>
+            <div class="info">
+                <div class="name">${item.room_name}</div>
+                <div class="last-message">${lastMessage}</div>
+            </div>
+        </div>
+        <div class="message-info">
+            ${item.unseen_messages_count !== 0 && clickedIndex !== item.id && item.last_message && item.last_message.id !== null
 			? `<div class="unread-count">${item.unseen_messages_count}</div>`
 			: `<div class="unread-placeholder"></div>`}
-				<div class="timestamp">${formatTime(item.last_message?.created_at)}</div>
-			</div>
-		`;
+            <div class="timestamp">${formatTime(item.last_message?.created_at)}</div>
+        </div>
+    `;
 
-	messengerItem.addEventListener("click", () => handleIconClick(item.id, rooms));
+	messengerItem.addEventListener("click", () => handleIconClick(item));
 	messengerContainer.appendChild(messengerItem);
 }
 
-function handleIconClick(id, rooms) {
-	clickedIndex = id;
+async function handleIconClick(item) {
+	clickedIndex = item.id;
 	document.getElementById("messenger-container").innerHTML = '';
-	rooms.forEach(item => renderMessengerItem(item, rooms));
+
+	const roomId = item.id;
+	const roomDetailUrl = `https://localhost:4433/api/v1/chat/rooms/${roomId}/`;
+
+	try {
+		const response = await fetchWithAuth(roomDetailUrl, {
+			method: 'GET',
+		});
+
+		console.log("Room Detail:", response);
+		renderMessagesItems(response);
+	} catch (error) {
+		console.error("Error fetching room detail:", error);
+	}
+
+	// Render updated room list
+	renderRoomsList(rooms);
+}
+
+async function renderMessagesItems(selectedChat) {
+	const chatPanel = document.getElementById("chat-panel");
+	chatPanel.innerHTML = ''; // Clear previous chat
+
+	const chatHeader = `
+		<div id="chat-header" class="chat-header">
+			<div class="messenger-title">${selectedChat.room_name}</div>
+			<div class="messenger-subtitle">Chat with ${selectedChat.members.join(', ')}</div>
+		</div>
+	`;
+
+	const messagesContainer = document.createElement("div");
+	messagesContainer.className = "messages-container";
+	let headersElement = document.createElement("div")
+	headersElement.className = "header-elements"
+	headersElement.innerHTML = `
+		<div>User data it wiil display here :)</div>	
+	`
+	messagesContainer.appendChild(headersElement);
+	chatPanel.innerHTML = chatHeader;
+	chatPanel.appendChild(messagesContainer);
 }
 
 function updateRooms(newRoom) {
@@ -103,10 +141,10 @@ function updateRooms(newRoom) {
 	renderRoomsList(rooms);
 }
 
-
 function renderRoomsList(rooms) {
-	document.getElementById("messenger-container").innerHTML = '';
-	rooms.forEach(item => renderMessengerItem(item, rooms));
+	const messengerContainer = document.getElementById("messenger-container");
+	messengerContainer.innerHTML = '';
+	rooms.forEach(item => renderMessengerItem(item));
 }
 
 export default async function () {
@@ -124,7 +162,7 @@ export default async function () {
 
 	searchInput.addEventListener('input', async (e) => {
 		const term = e.target.value;
-		rooms = await fetchRooms(term, false);  // Search should ignore the filter
+		rooms = await fetchRooms(term, false);
 		renderRoomsList(rooms);
 	});
 

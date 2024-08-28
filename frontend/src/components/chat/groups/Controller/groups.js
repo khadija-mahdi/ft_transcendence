@@ -1,58 +1,67 @@
 import { fetchWithAuth } from '../../../../lib/apiMock.js'
 import { userContext } from '../../userContext.js';
 import { MembersContainer } from '../../../chat/choice_members/Controller/choice_members.js';
-
+import { fetchMyData } from '/_api/user.js'
 export default function () {
-	const form = document.getElementById('createTournamentForm');
+	const form = document.getElementById('create-group-form');
 	let imageInput = document.getElementById('imageInput');
 	const imageLabel = document.getElementById('imageLabel');
 	const errorElement = document.getElementById('error');
 	const group_members = document.getElementById('added-group-members');
 
-
-	let selectedImage = null;
+	let selectedImage = userContext.getGroupImage();
 
 	const initialImageLabelContent = imageLabel.innerHTML;
 
-	function handleImageInputChange(e) {
+	function displayImage(image) {
 		imageLabel.innerHTML = '';
+
+		const imageContainer = document.createElement('div');
+		imageContainer.className = 'image-preview-container';
+
+		const imgElement = document.createElement('img');
+		imgElement.src = image;
+		imgElement.alt = 'Selected';
+		imgElement.className = 'image-preview';
+
+		const closeButton = document.createElement('div');
+		closeButton.className = 'close-button';
+		closeButton.innerHTML = '<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
+
+		closeButton.addEventListener('click', () => {
+			selectedImage = null;
+			userContext.RemoveGroupImage();
+			imageLabel.innerHTML = initialImageLabelContent;
+			reattachImageInputChange();
+
+		});
+
+		imageContainer.appendChild(imgElement);
+		imageContainer.appendChild(closeButton);
+		imageLabel.appendChild(imageContainer);
+		imageLabel.style.color = 'transparent';
+	}
+
+	function handleImageInputChange(e) {
 		const file = e.target.files[0];
 		if (!file) return;
 
-		selectedImage = file;
-		console.log('Selected image: ', selectedImage);
-
+		userContext.setGroupImage(file);
 		const reader = new FileReader();
 		reader.onload = (event) => {
-			const imageContainer = document.createElement('div');
-			imageContainer.className = 'image-preview-container';
-
-			const imgElement = document.createElement('img');
-			imgElement.src = event.target.result;
-			imgElement.alt = 'Selected';
-			imgElement.className = 'image-preview';
-
-			const closeButton = document.createElement('div');
-			closeButton.className = 'close-button';
-			closeButton.innerHTML = '<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
-
-			closeButton.addEventListener('click', () => {
-				selectedImage = null;
-				imageLabel.innerHTML = initialImageLabelContent;
-				reattachImageInputChange();
-			});
-
-			imageContainer.appendChild(imgElement);
-			imageContainer.appendChild(closeButton);
-			imageLabel.appendChild(imageContainer);
-			imageLabel.style.color = 'transparent';
+			displayImage(event.target.result);
 		};
 		reader.readAsDataURL(file);
 	}
 
 	function reattachImageInputChange() {
-		imageInput = document.getElementById('imageInput');
-		imageInput.addEventListener('change', handleImageInputChange);
+		if (selectedImage) {
+			displayImage(selectedImage);
+		} else {
+
+			imageInput = document.getElementById('imageInput');
+			imageInput.addEventListener('change', handleImageInputChange);
+		}
 	}
 
 	reattachImageInputChange();
@@ -81,57 +90,50 @@ export default function () {
 		});
 
 	}
+
+	form.addEventListener('submit', async (e) => {
+		e.preventDefault(); // Prevent form submission and page reload
+	
+		let groupName = document.getElementById('group-name').value;
+		
+		const user = await fetchMyData('me');
+		const users = userContext.getUsers();
+		if (!users.some(u => u.id === user.id)) {
+			userContext.addUser(user);
+		}
+	
+		// Build the JSON object
+		const data = {
+			name: groupName,
+			type: "group",
+			icon: selectedImage,
+			input_members: users.map(user => user.id.toString())
+		};
+	
+		console.log(JSON.stringify(data));
+	
+		try {
+			const res = await fetchWithAuth('https://localhost:4433/api/v1/chat/rooms/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data), 
+			});
+	
+			if (!res.ok) {
+				throw new Error('Failed to create the Group Chat');
+			}
+	
+			console.log(res);
+			window.location.href = '/messages/';
+		} catch (error) {
+			console.error(error);
+			errorElement.textContent = 'An error occurred while creating the Group Chat.';
+			errorElement.style.color = 'red';
+		}
+	});
+	
+	
+
 }
-
-
-
-// form.addEventListener('submit', async (e) => {
-// 	e.preventDefault();
-// 	const name = document.getElementById('name').value;
-// 	const description = document.getElementById('description').value;
-// 	const maxPlayers = document.getElementById('maxPlayers').value;
-// 	const startDate = document.getElementById('startDate').value;
-// 	const isPublic = document.getElementById('isPublic').checked;
-// 	const isMonetized = document.getElementById('isMonetized').checked;
-// 	const inputTime = new Date(startDate);
-// 	const currentTime = new Date();
-
-// 	if (inputTime <= currentTime) {
-// 		errorElement.textContent = 'Please select a time in the future.';
-// 		errorElement.style.color = 'red';
-// 		return;
-// 	} else {
-// 		errorElement.textContent = '';
-// 	}
-
-// 	const formData = new FormData();
-// 	formData.append('name', name);
-// 	formData.append('description', description);
-// 	formData.append('start_date', startDate);
-// 	formData.append('max_players', maxPlayers);
-// 	formData.append('is_public', isPublic);
-// 	formData.append('is_monetized', isMonetized);
-
-// 	if (selectedImage) {
-// 		formData.append('icon_file', selectedImage);
-// 	}
-
-// 	try {
-// 		const res = await fetchWithAuth('https://localhost:4433/api/v1/game/Tournament/', {
-// 			method: 'POST',
-// 			headers: {
-// 				'Content-Type': 'multipart/form-data'
-// 			},
-// 			body: formData,
-// 		});
-// 		console.log(res);
-// 		if (!res.ok) {
-// 			throw new Error('Failed to create the tournament');
-// 		}
-// 		window.location.href = '/home';
-// 	} catch (error) {
-// 		console.error(error);
-// 		errorElement.textContent = 'An error occurred while creating the tournament.';
-// 		errorElement.style.color = 'red';
-// 	}
-// });
