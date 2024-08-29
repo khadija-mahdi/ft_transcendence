@@ -1,6 +1,6 @@
 /* General Styles */
 .chat-container {
-    height: 100%;
+	height: 85vh;	
 	width: 100%;
     overflow: hidden;
     border-radius: 12px;
@@ -14,6 +14,7 @@
 	gap: 1.25rem; 
 	width: 100%; 
 	height: 85vh;	
+
 }
 
 .room-panel {
@@ -372,6 +373,8 @@
 	flex: 1 1 auto;
     overflow-y: scroll;
     padding: 1rem;
+	max-height: calc(85vh - 140px); /* Adjust this value based on your layout */
+    /* min-height: 500px;  */
 }
 
 .message {
@@ -386,7 +389,8 @@
     background-color: #FD4106;
     color: white;
     text-align: left;
-	width: 50%;
+	max-width: 50%;
+	width: fit-content;
 	margin-left: auto;
 }
 
@@ -427,7 +431,7 @@
     flex-direction: column;
     padding: 10px;
     background-color: #303030;
-    height: 70px;
+    height: 60px;
 }
 
 .send-message-content {
@@ -450,20 +454,25 @@
 }
 
 .send-image-container {
-    margin: 0 10px;
+    margin: 0 6px;
 	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .message-textarea {
     flex-grow: 1;
     background-color: #464646;
     color: #F8F8F8;
-    padding: 1rem;
+    padding: 0.75rem;
     border-radius: 10px;
     border: none;
     resize: none;
     outline: none;
-    max-height: 50px;
+    max-height: 40px;
+	justify-self: center;
+	align-self: center;
 }
 
 .send-button {
