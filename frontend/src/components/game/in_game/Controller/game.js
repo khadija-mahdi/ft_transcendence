@@ -5,6 +5,19 @@ import { TextGeometry } from "TextGeometry";
 import { FontLoader } from "FontLoader";
 import AuthWebSocket from "/lib/authwebsocket.js";
 
+
+const loadingManager = new THREE.LoadingManager();
+
+loadingManager.onProgress = (item, loaded, total) => {
+  const progress = (loaded / total) * 100;
+  document.getElementById('progress-bar').style.width = progress + '%';
+};
+
+loadingManager.onLoad = () => {
+  document.getElementById('loading-screen').style.display = 'none';
+};
+
+
 function loadModels(scene, adjustCameraAndControls, callback)
 {
   let tableModel = null;
@@ -15,7 +28,7 @@ function loadModels(scene, adjustCameraAndControls, callback)
   let score_board = null;
   let bg_scene = null;
 
-  const loader_scene = new GLTFLoader();
+  const loader_scene = new GLTFLoader(loadingManager);
   loader_scene.load(
     "/components/game/in_game/assets/models/scene_bg.glb",
     (glb) => {
@@ -27,7 +40,7 @@ function loadModels(scene, adjustCameraAndControls, callback)
     }
   );
 
-  const loader_scene1 = new GLTFLoader();
+  const loader_scene1 = new GLTFLoader(loadingManager);
   loader_scene1.load(
     "/components/game/in_game/assets/models/scene_light.glb",
     (glb) => {
@@ -43,7 +56,7 @@ function loadModels(scene, adjustCameraAndControls, callback)
     }
   );
 
-  const loader_cpm = new GLTFLoader();
+  const loader_cpm = new GLTFLoader(loadingManager);
   loader_cpm.load(
     "/components/game/in_game/assets/models/paddle_hock.glb",
     (glb) => {
@@ -54,7 +67,7 @@ function loadModels(scene, adjustCameraAndControls, callback)
     }
   );
 
-  const loader = new GLTFLoader();
+  const loader = new GLTFLoader(loadingManager);
   loader.load(
     "/components/game/in_game/assets/models/ball_rca.glb",
     (glb) => {
@@ -66,7 +79,7 @@ function loadModels(scene, adjustCameraAndControls, callback)
     }
   );
 
-  const loader2 = new GLTFLoader();
+  const loader2 = new GLTFLoader(loadingManager);
   loader2.load(
     "/components/game/in_game/assets/models/paddle_hock.glb",
     (glb) => {
@@ -77,7 +90,7 @@ function loadModels(scene, adjustCameraAndControls, callback)
     }
   );
 
-  const loader_board = new GLTFLoader();
+  const loader_board = new GLTFLoader(loadingManager);
   loader_board.load(
     "/components/game/in_game/assets/models/score.glb",
     (glb) => {
@@ -113,7 +126,7 @@ function addTextToScene(scene)
   let computer_score = 0;
   let player_score = 0;
 
-  const text_loader_computer = new FontLoader();
+  const text_loader_computer = new FontLoader(loadingManager);
   text_loader_computer.load(
     "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json",
     function (font) {
@@ -134,7 +147,7 @@ function addTextToScene(scene)
     }
   );
 
-  const loader1 = new FontLoader();
+  const loader1 = new FontLoader(loadingManager);
   loader1.load(
     "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json",
     function (font) {
