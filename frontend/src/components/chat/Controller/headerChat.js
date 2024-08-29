@@ -34,54 +34,54 @@ async function fetchMessages(id) {
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	return /*html*/ `
-        <div class="panel-container">
-            <!-- Header content -->
-            <button class="panel-button">
-                <div class="panel-inner-container">
-                    <div id="left-arrow-container"></div>
-                    <img
-                        class="panel-image"
-                        src="${selectedChat.room_icon || "/public/assets/images/defaultGroupProfile.png"}"
-                        alt="Profile Image"
+	<div class="panel-container">
+		<!-- Header content -->
+		<button class="panel-button">
+			<div class="panel-inner-container">
+				<div id="left-arrow-container"></div>
+				<img
+					class="panel-image"
+					src="${selectedChat.room_icon || " /public/assets/images/defaultGroupProfile.png"}"
+				alt="Profile Image"
                     />
-                    <a href='/profile?username=${selectedChat.room_name}'class="panel-link">
-                        <div class="panel-room-name">${selectedChat.room_name}</div>
-                        <div class="panel-room-status">
-                            ${selectedChat.type === 'private' ? selectedChat.receiverUser && selectedChat.receiverUser[0].status : 'No members'}
-                        </div>
-                    </a>
-                </div>
-                <div class="panel-three-points-container">
-                    <div class="panel-three-points" id="three-dots">
-                        <!-- SVG for three dots -->
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width='20'
-                            height='21'
-                            fill="none"
-                        >
-                            <path
-                                stroke="#F8F8F8"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M12 6.42a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Z"
-                            />
-                        </svg>
-                    </div>
-                </div>
-            </button>
+				<a href='/profile?username=${selectedChat.room_name}' class="panel-link">
+					<div class="panel-room-name">${selectedChat.room_name}</div>
+					<div class="panel-room-status">
+						${selectedChat.type === 'private' ? selectedChat.receiverUser && selectedChat.receiverUser[0].status : 'No members'}
+					</div>
+				</a>
+			</div>
+			<div class="panel-three-points-container">
+				<div class="panel-three-points" id="three-dots">
+					<!-- SVG for three dots -->
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width='20'
+						height='21'
+						fill="none"
+					>
+						<path
+							stroke="#F8F8F8"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={1.5}
+							d="M12 6.42a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Z"
+						/>
+					</svg>
+				</div>
+			</div>
+		</button>
 
-            <!-- Options Panel -->
-            <div id="options-panel" class="options-panel hidden">
-                <!-- Options content will be inserted here by JavaScript -->
-            </div>
+		<!-- Options Panel -->
+		<div id="options-panel" class="options-panel hidden">
+			<!-- Options content will be inserted here by JavaScript -->
+		</div>
 
-            <!-- Messages and Send Message Content -->
-            <div id="messages-content" class="messages-content"></div>
-            <div id="send-message" class="send-message">
-                <div class="send-message-container">
-                    ${isFriend || selectedChat.type !== 'private' ? `
+		<!-- Messages and Send Message Content -->
+		<div id="messages-content" class="messages-content"></div>
+		<div id="send-message" class="send-message">
+			<div class="send-message-container">
+				${isFriend || selectedChat.type !== 'private' ? `
                         <div class="send-message-content">
                             ${selectedChat.type === 'private' ? `
                                 <div class="invite-icon-container">
@@ -101,9 +101,9 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                                     <div class="invite-text">Invite</div>
                                 </div>
                             ` : ''}
-                            <div class="send-image-container">
-                                <!-- Your SendImage component logic goes here -->
-                            </div>
+							<div class="send-image-container" id="send-image-container">
+								<!-- Image upload UI will be rendered here -->
+							</div>
                             <textarea
                                 class="message-textarea"
                                 placeholder="Type a message"
@@ -130,10 +130,10 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                             </div>
                         ` : ''}
                     `}
-                </div>
-            </div>
-        </div>
-    `;
+			</div>
+		</div>
+	</div>
+	`;
 }
 
 
@@ -267,6 +267,88 @@ function handleSendMessage(event, selectedChat) {
 	}
 } []
 
+function initializeSendImage() {
+	const sendImageContainer = document.getElementById('send-image-container');
+
+	let selectedImage = null;
+	let file = null;
+	let error = false;
+
+	const renderUploadUI = () => {
+		sendImageContainer.innerHTML = selectedImage
+			? `
+                <label class="upload-label">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width='24'
+					height='24'
+					fill="none"
+				>
+					<path
+						fill='#3342ff'
+						fillRule="evenodd"
+						d="M12 1.25a.75.75 0 0 1 .57.262l3 3.5a.75.75 0 0 1-1.14.976l-1.68-1.96V15a.75.75 0 1 1-1.5 0V4.027L9.57 5.988a.75.75 0 0 1-1.14-.976l3-3.5A.75.75 0 0 1 12 1.25ZM6.996 8.252a.75.75 0 0 1 .008 1.5c-1.093.006-1.868.034-2.457.142-.566.105-.895.272-1.138.515-.277.277-.457.666-.556 1.4-.101.755-.103 1.756-.103 3.191v1c0 1.436.002 2.437.103 3.192.099.734.28 1.122.556 1.4.277.276.665.456 1.4.555.754.102 1.756.103 3.191.103h8c1.435 0 2.436-.001 3.192-.103.734-.099 1.122-.279 1.399-.556.277-.277.457-.665.556-1.399.101-.755.103-1.756.103-3.192v-1c0-1.435-.002-2.436-.103-3.192-.099-.733-.28-1.122-.556-1.399-.244-.243-.572-.41-1.138-.515-.589-.108-1.364-.136-2.457-.142a.75.75 0 0 1 .008-1.5c1.082.006 1.983.032 2.72.167.758.14 1.403.405 1.928.93.602.601.86 1.36.982 2.26.116.866.116 1.969.116 3.336v1.11c0 1.368 0 2.47-.116 3.337-.122.9-.38 1.658-.982 2.26-.602.602-1.36.86-2.26.982-.867.116-1.97.116-3.337.116h-8.11c-1.367 0-2.47 0-3.337-.116-.9-.121-1.658-.38-2.26-.982-.602-.602-.86-1.36-.981-2.26-.117-.867-.117-1.97-.117-3.337v-1.11c0-1.367 0-2.47.117-3.337.12-.9.38-1.658.981-2.26.525-.524 1.17-.79 1.928-.929.737-.135 1.638-.161 2.72-.167Z"
+						clipRule="evenodd"
+					/>
+				</svg> 
+                <div class="invite-text" style="color: #3342ff">Uploaded</div>
+            `
+			: `
+                <label class="upload-label">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width='24'
+					height='24'
+					fill="none"
+				>
+					<path
+						fill='#878787'
+						fillRule="evenodd"
+						d="M12 1.25a.75.75 0 0 1 .57.262l3 3.5a.75.75 0 0 1-1.14.976l-1.68-1.96V15a.75.75 0 1 1-1.5 0V4.027L9.57 5.988a.75.75 0 0 1-1.14-.976l3-3.5A.75.75 0 0 1 12 1.25ZM6.996 8.252a.75.75 0 0 1 .008 1.5c-1.093.006-1.868.034-2.457.142-.566.105-.895.272-1.138.515-.277.277-.457.666-.556 1.4-.101.755-.103 1.756-.103 3.191v1c0 1.436.002 2.437.103 3.192.099.734.28 1.122.556 1.4.277.276.665.456 1.4.555.754.102 1.756.103 3.191.103h8c1.435 0 2.436-.001 3.192-.103.734-.099 1.122-.279 1.399-.556.277-.277.457-.665.556-1.399.101-.755.103-1.756.103-3.192v-1c0-1.435-.002-2.436-.103-3.192-.099-.733-.28-1.122-.556-1.399-.244-.243-.572-.41-1.138-.515-.589-.108-1.364-.136-2.457-.142a.75.75 0 0 1 .008-1.5c1.082.006 1.983.032 2.72.167.758.14 1.403.405 1.928.93.602.601.86 1.36.982 2.26.116.866.116 1.969.116 3.336v1.11c0 1.368 0 2.47-.116 3.337-.122.9-.38 1.658-.982 2.26-.602.602-1.36.86-2.26.982-.867.116-1.97.116-3.337.116h-8.11c-1.367 0-2.47 0-3.337-.116-.9-.121-1.658-.38-2.26-.982-.602-.602-.86-1.36-.981-2.26-.117-.867-.117-1.97-.117-3.337v-1.11c0-1.367 0-2.47.117-3.337.12-.9.38-1.658.981-2.26.525-.524 1.17-.79 1.928-.929.737-.135 1.638-.161 2.72-.167Z"
+						clipRule="evenodd"
+					/>
+				</svg> 
+                <div class="invite-text">Upload</div>
+				<input class="hidden" type="file" id="image-upload" accept="image/png, image/jpeg" />
+                </label>
+            `;
+
+		document.getElementById('image-upload')?.addEventListener('change', handleImageUpload);
+		document.getElementById('remove-image')?.addEventListener('click', removeImage);
+		document.getElementById('confirm-image')?.addEventListener('click', confirmImage);
+	};
+
+	const handleImageUpload = (e) => {
+		file = e.target.files[0];
+		if (file) {
+			if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+				error = true;
+			} else {
+				error = false;
+				selectedImage = URL.createObjectURL(file);
+			}
+			renderUploadUI();
+		}
+	};
+
+	const removeImage = () => {
+		selectedImage = null;
+		file = null;
+		renderUploadUI();
+	};
+
+	const confirmImage = () => {
+		if (file && !error) {
+			// Handle image confirmation logic here
+			console.log('Image confirmed:', file);
+		}
+		removeImage();
+	};
+
+	renderUploadUI();
+}
+
+
 // Function to render messages and initialize WebSocket
 export async function renderMessagesItems(selectedChat) {
 	console.log("Selected chat:", selectedChat);
@@ -301,7 +383,7 @@ export async function renderMessagesItems(selectedChat) {
 
 	// Initialize WebSocket
 	handleWebSocket(selectedChat);
-
+	initializeSendImage();
 	// Bind send button click event
 	const sendButton = document.querySelector('.send-button');
 	if (sendButton) {

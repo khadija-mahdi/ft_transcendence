@@ -1,4 +1,6 @@
 import { showPopup } from  '/lib/Confirm.js';
+import { fetchWithAuth } from '../../../../lib/apiMock.js';
+
 
 
 export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
@@ -33,11 +35,10 @@ function attachButtonListeners(selectedChat) {
 	const clearChatBtn = document.getElementById("clear-chat");
 	if (clearChatBtn) {
 		clearChatBtn.addEventListener('click', () => {
-			clearChat();
+			clearChat(selectedChat.id);
 		});
 	}
 
-	// Close Chat button
 	const closeChatBtn = document.getElementById("close-chat");
 	if (closeChatBtn) {
 		closeChatBtn.addEventListener('click', () => {
@@ -45,7 +46,6 @@ function attachButtonListeners(selectedChat) {
 		});
 	}
 
-	// Delete Chat button
 	const deleteChatBtn = document.getElementById("delete-chat");
 	if (deleteChatBtn) {
 		deleteChatBtn.addEventListener('click', () => {
@@ -53,7 +53,6 @@ function attachButtonListeners(selectedChat) {
 		});
 	}
 
-	// Block User button
 	const blockUserBtn = document.getElementById("block-user");
 	if (blockUserBtn) {
 		blockUserBtn.addEventListener('click', () => {
@@ -83,9 +82,30 @@ function attachButtonListeners(selectedChat) {
 	}
 }
 
-function clearChat() {
-	console.log("Clear Chat action");
-	// Logic to clear chat
+function clearChat(id) {
+	showPopup({
+		title: 'Are you sure you want to Clear this Chat?',
+		subtitle: 'The room will remain, but all messages will be deleted',
+		onConfirm: async () => {
+			try {
+				if (id) {
+					let url = `https://localhost:4433/api/v1/chat/clear-chat/${id}/`
+					await fetchWithAuth(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					});
+					window.location.href = '/messenger';
+				}
+			} catch (error) {
+				console.error('Error blocking user:', error);
+			}
+		},
+		onCancel: () => {
+			console.log('Block action canceled');
+		}
+	});
 }
 
 function closeChat() {
@@ -105,8 +125,29 @@ function closeChat() {
 }
 
 function deleteChat(selectedChat) {
-	console.log("Delete Chat action for chat:", selectedChat);
-	// Logic to delete chat
+	showPopup({
+		title: 'Are you sure you want to delete this Chat?',
+		subtitle: 'This action will permanently remove the chat room and all messages.',
+		onConfirm: async () => {
+			try {
+				if (selectedChat.id) {
+					let url = `https://localhost:4433/api/v1/chat/Delete-chat/${selectedChat.id}/`
+					await fetchWithAuth(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					});
+					window.location.href = '/messenger';
+				}
+			} catch (error) {
+				console.error('Error blocking user:', error);
+			}
+		},
+		onCancel: () => {
+			console.log('Block action canceled');
+		}
+	});
 }
 
 function blockUser(selectedChat) {
@@ -115,9 +156,14 @@ function blockUser(selectedChat) {
 		subtitle: 'You will no longer be friends or able to send messages.',
 		onConfirm: async () => {
 			try {
-				if (selectedChat && selectedChat.receiverUser && selectedChat.receiverUser[0]) {
-					// await BlockUser(parseInt(selectedChat.receiverUser[0].id));
-					// Redirect to messenger or update UI as needed
+				if (selectedChat.id) {
+					let url = `https://localhost:4433/api/v1/users/block-user/${selectedChat.id}/`
+					await fetchWithAuth(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					});
 					window.location.href = '/messenger';
 				}
 			} catch (error) {
@@ -137,11 +183,55 @@ function showGroupInfo(selectedChat) {
 }
 
 function exitGroup(selectedChat) {
-	console.log("Exit Group action for group:", selectedChat);
-	// Logic to exit group
+	showPopup({
+		title: 'Are you sure you want to leave this Group?',
+		subtitle: 'You will no longer be part of the conversation',
+		onConfirm: async () => {
+			try {
+				if (selectedChat.id) {
+					// const formData = new FormData();
+					// formData.append('user_id', id.toString());
+					// let url = `https://localhost:4433/api/v1/users/block-user/${selectedChat.receiverUser[0].id}/`
+					// await fetchWithAuth(url, {
+					// 	method: 'POST',
+					// 	headers: {
+					// 		'Content-Type': 'application/json',
+					// 	},
+					// });
+					window.location.href = '/messenger';
+				}
+			} catch (error) {
+				console.error('Error blocking user:', error);
+			}
+		},
+		onCancel: () => {
+			console.log('Block action canceled');
+		}
+	});
 }
 
 function deleteGroup(selectedChat) {
-	console.log("Delete Group action for group:", selectedChat);
-	// Logic to delete group
+	showPopup({
+		title: 'Are you sure you want to Delete this Group !',
+		subtitle: 'all conversations and data associated with it will be permanently lost !!',
+		onConfirm: async () => {
+			try {
+				// if (selectedChat.id) {
+				// 	let url = `https://localhost:4433/api/v1/users/`
+				// 	await fetchWithAuth(url, {
+				// 		method: 'POST',
+				// 		headers: {
+				// 			'Content-Type': 'application/json',
+				// 		},
+				// 	});
+				// 	window.location.href = '/messenger';
+				// }
+			} catch (error) {
+				console.error('Error blocking user:', error);
+			}
+		},
+		onCancel: () => {
+			console.log('Block action canceled');
+		}
+	});
 }
