@@ -1,23 +1,36 @@
 import { fetchWithAuth } from '../../../../lib/apiMock.js';
 import AuthWebSocket from '../../../lib/authwebsocket.js';
 import { fetchMyData } from '/_api/user.js'
-
+import { handleThreeDotPanel } from './threeDot.js';
 const myData = await fetchMyData();
 
 
 async function fetchMessages(id) {
-	let apiUrl = `https://localhost:4433/api/v1/chat/room/${id}`;
+	if (id) {
+		let apiUrl = `https://localhost:4433/api/v1/chat/room/${id}`;
+		let allMessages = [];
 
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
-		});
-		return response.results;
-	} catch (error) {
-		console.error("Error fetching user data:", error);
-		return [];
+		try {
+			while (apiUrl) {
+				const response = await fetchWithAuth(apiUrl, {
+					method: 'GET',
+				});
+
+				// Add the current page of messages to the allMessages array
+				allMessages = allMessages.concat(response.results);
+
+				// Update the apiUrl to the next page's URL
+				apiUrl = response.next;
+			}
+
+			return allMessages;
+		} catch (error) {
+			console.error("Error fetching messages:", error);
+			return [];
+		}
 	}
 }
+
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	return /*html*/ `
@@ -31,7 +44,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                         src="${selectedChat.room_icon || "/public/assets/images/defaultGroupProfile.png"}"
                         alt="Profile Image"
                     />
-                    <a href="/profile" class="panel-link">
+                    <a href='/profile?username=${selectedChat.room_name}'class="panel-link">
                         <div class="panel-room-name">${selectedChat.room_name}</div>
                         <div class="panel-room-status">
                             ${selectedChat.type === 'private' ? selectedChat.receiverUser && selectedChat.receiverUser[0].status : 'No members'}
@@ -65,7 +78,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
             </div>
 
             <!-- Messages and Send Message Content -->
-            <div id="messages-content" class="messages-content">Messages here >></div>
+            <div id="messages-content" class="messages-content"></div>
             <div id="send-message" class="send-message">
                 <div class="send-message-container">
                     ${isFriend || selectedChat.type !== 'private' ? `
@@ -124,75 +137,6 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 }
 
 
-function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
-	const isAdmin = true;
-	if (threeDots && optionsPanel) {
-		threeDots.addEventListener('click', () => {
-			optionsPanel.classList.toggle('hidden');
-			if (!optionsPanel.classList.contains('hidden')) {
-				optionsPanel.innerHTML = `
-                    <div class="panel-options-content">
-                        ${selectedChat.type === "private" ? `
-                            <button class="panel-option-button">Clear Chat</button>
-                            <button class="panel-option-button" >Close Chat</button>
-                            <button class="panel-option-button">Delete Chat</button>
-                            <button class="panel-option-button">Block</button>
-                        ` : `
-                            <button class="panel-option-button">Group info</button>
-                            <button class="panel-option-button">Exit Group</button>
-                            ${isAdmin ? `<button class="panel-option-button">Delete Group</button>` : ''}
-                        `}
-                    </div>
-                `;
-			}
-		});
-	}
-}
-
-// Function to render messages and initialize WebSocket
-export async function renderMessagesItems(selectedChat) {
-	const chatPanel = document.getElementById("chat-panel");
-	chatPanel.innerHTML = '';
-
-	const isFriend = true;
-	let messages = await fetchMessages(selectedChat.id);
-
-	const chatHeader = ChatRoomHeaderUi(selectedChat, isFriend);
-	chatPanel.innerHTML = chatHeader;
-
-	const threeDots = document.getElementById("three-dots");
-	const optionsPanel = document.getElementById("options-panel");
-	handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
-
-	const messagesContent = document.getElementById("messages-content");
-	if (messagesContent) {
-		messagesContent.innerHTML = messages.map((message) => `
-            <div class="message ${message.sender_username === myData.username ? 'sent' : 'received'}">
-                <div class="message-content">${message.message}</div>
-                <div class="message-time ${message.sender_username === 'me' ? 'sent' : ''}">
-                    ${new Date(message.created_at).toLocaleTimeString()}
-                </div>
-            </div>
-        `).join('');
-		
-		}
-	messagesContent.scrollTop = messagesContent.scrollHeight;
-
-	// Initialize WebSocket
-	handleWebSocket(selectedChat);
-
-	// Bind send button click event
-	const sendButton = document.querySelector('.send-button');
-	if (sendButton) {
-		sendButton.addEventListener('click', (event) => handleSendMessage(event, selectedChat));
-	}
-
-	// Bind textarea enter keypress event
-	const textarea = document.querySelector('.message-textarea');
-	if (textarea) {
-		textarea.addEventListener('keypress', (event) => handleTextareaKeyPress(event, selectedChat));
-	}
-}
 
 // WebSocket handling
 let socket = null;
@@ -211,7 +155,7 @@ function handleWebSocket(selectedChat) {
 		socket.onmessage = (event) => {
 			const receivedMessage = JSON.parse(event.data);
 			console.log('New message:', receivedMessage);
-		
+
 			const newMessage = {
 				message: receivedMessage.message.message,
 				image_file: receivedMessage.message.image,
@@ -221,33 +165,32 @@ function handleWebSocket(selectedChat) {
 				sender_username: receivedMessage.message.sender_username,
 				type: receivedMessage.message.message ? 'text' : 'image'
 			};
-		
+
 			appendMessageToUI(newMessage);
 		};
-		
+
 	}
 }
 
 function appendMessageToUI(message) {
-    const messagesContent = document.getElementById("messages-content");
+	const messagesContent = document.getElementById("messages-content");
 
-    if (messagesContent) {
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message');
-        messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
+	if (messagesContent) {
+		const messageElement = document.createElement('div');
+		messageElement.classList.add('message');
+		messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
 
-        messageElement.innerHTML = `
+		messageElement.innerHTML = `
             <div class="message-content">${message.message}</div>
             <div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
                 ${new Date(message.created_at).toLocaleTimeString()}
             </div>
         `;
 
-        messagesContent.appendChild(messageElement);
+		messagesContent.appendChild(messageElement);
 
-        // Scroll to the bottom to see the new message
-        messagesContent.scrollTop = messagesContent.scrollHeight;
-    }
+		messagesContent.scrollTop = messagesContent.scrollHeight;
+	}
 }
 
 
@@ -323,3 +266,51 @@ function handleSendMessage(event, selectedChat) {
 		textarea.value = '';
 	}
 } []
+
+// Function to render messages and initialize WebSocket
+export async function renderMessagesItems(selectedChat) {
+	console.log("Selected chat:", selectedChat);
+	const chatPanel = document.getElementById("chat-panel");
+	chatPanel.innerHTML = '';
+
+	const isFriend = true;
+	let messages = await fetchMessages(selectedChat.id);
+
+	const chatHeader = ChatRoomHeaderUi(selectedChat, isFriend);
+	chatPanel.innerHTML = chatHeader;
+
+	const threeDots = document.getElementById("three-dots");
+	const optionsPanel = document.getElementById("options-panel");
+	handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
+
+
+	const messagesContent = document.getElementById("messages-content");
+	if (messagesContent && messages) {
+		messagesContent.innerHTML = messages.map((message) => `
+            <div class="message ${message.sender_username === myData.username ? 'sent' : 'received'}">
+                <div class="message-content">${message.message}</div>
+                <div class="message-time ${message.sender_username === 'me' ? 'sent' : ''}">
+                    ${new Date(message.created_at).toLocaleTimeString()}
+                </div>
+            </div>
+        `).join('');
+
+	}
+	console.log('messages:', messages)
+	messagesContent.scrollTop = messagesContent.scrollHeight;
+
+	// Initialize WebSocket
+	handleWebSocket(selectedChat);
+
+	// Bind send button click event
+	const sendButton = document.querySelector('.send-button');
+	if (sendButton) {
+		sendButton.addEventListener('click', (event) => handleSendMessage(event, selectedChat));
+	}
+
+	// Bind textarea enter keypress event
+	const textarea = document.querySelector('.message-textarea');
+	if (textarea) {
+		textarea.addEventListener('keypress', (event) => handleTextareaKeyPress(event, selectedChat));
+	}
+}

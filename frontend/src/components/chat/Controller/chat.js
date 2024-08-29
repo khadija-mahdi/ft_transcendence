@@ -91,7 +91,6 @@ function renderMessengerItem(item) {
 async function handleIconClick(item) {
 	clickedIndex = item.id;
 	document.getElementById("messenger-container").innerHTML = '';
-
 	const roomId = item.id;
 	const roomDetailUrl = `https://localhost:4433/api/v1/chat/rooms/${roomId}/`;
 
@@ -113,16 +112,14 @@ function updateRooms(newRoom) {
 	const roomId = newRoom.id.toString();
 	const roomIndex = rooms.findIndex(room => room.id.toString() === roomId);
 
-	if (roomIndex !== -1) {
-		rooms[roomIndex] = {
-			...rooms[roomIndex],
-			...newRoom,
-		};
-	} else {
-		rooms.push(newRoom);
-	}
+	if (roomIndex !== -1) 		
+		rooms.splice(roomIndex, 1);
+	
+	rooms.unshift(newRoom);
+
 	renderRoomsList(rooms);
 }
+
 
 function renderRoomsList(rooms) {
 	const messengerContainer = document.getElementById("messenger-container");
@@ -189,4 +186,22 @@ async function ChatRoomsPanel() {
 
 export default async function () {
 	ChatRoomsPanel();
+	const urlParams = new URLSearchParams(window.location.search);
+	const chatRoom = urlParams.get('chatroom');
+	console.log(chatRoom, clickedIndex);
+	if (chatRoom) {
+		const url = `https://localhost:4433/api/v1/chat/get-chat-room/${chatRoom}/`;
+		try {
+			const response = await fetchWithAuth(url, {
+				method: 'GET',
+			});
+
+			console.log("Get Room Detail:", response);
+			renderMessagesItems(response.results[0]);
+		} catch (error) {
+			console.error("Error fetching room detail:", error);
+		}
+
+		console.log("Chatroom query:", chatRoom);
+	}
 }
