@@ -165,7 +165,7 @@ function handleWebSocket(selectedChat) {
 				sender_username: receivedMessage.message.sender_username,
 				type: receivedMessage.message.message ? 'text' : 'image'
 			};
-
+socket.send(JSON.stringify(payload));
 			appendMessageToUI(newMessage);
 		};
 
