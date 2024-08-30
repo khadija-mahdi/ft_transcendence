@@ -145,13 +145,15 @@
 									<div class="notification-menu-container">
 										<div class="notification-menu">
 											<div id="three-points-trigger" class="three-points-trigger">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g
-													fill="none"><path
-														d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-													<path fill="currentColor"
-														d="M12 16.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3" />
-												</g>
-												</svg> 
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+													viewBox="0 0 24 24">
+													<g fill="none">
+														<path
+															d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+														<path fill="currentColor"
+															d="M12 16.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3" />
+													</g>
+												</svg>
 											</div>
 											<div id="notification-menu" class="notification-menu-content hidden">
 												<button class="notification-menu-button">
@@ -166,25 +168,65 @@
 				</ul>
 			</div>
 			<!-- Profile Button -->
-			<div class="profile-button">
-				<button class="profile">
-					<div class="profile-content">
-						<div class="navbar-profile-image">
-							<img src="https://cdn.intra.42.fr/users/7e42d280d5d245fbd6afcee00e6d5478/kmahdi.JPG"
-								alt="Profile Image" />
-						</div>
-						<div class="profile-details">
-							<div class="profile-name"></div>
-							<div class="profile-level"></div>
-						</div>
+			<div class="profile-icon-container">
+				<button id="profile-icon" class="profile-button" aria-label="Navigate to game">
+					<div class="profile-image-container">
+						<img id="profile-image" class="profile-image" src="" alt="Profile Image" />
 					</div>
-					<div id="profile-icon" class="profile-dropdown-icon">
+					<div class="profile-info">
+						<div id="profile-username" class="profile-main-username"></div>
+						<div id="profile-level" class="profile-level"></div>
+					</div>
+					<div id="profile-icon-toggle" class="profile-icon-toggle" id="profile-">
 						<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
 							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
 								stroke-width="1.52" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
 						</svg>
 					</div>
 				</button>
+				<div id="profile-panel" class="profile-panel">
+					<div class="profile-panel-header">
+						<div class="profile-image-container">
+							<img id="panel-profile-image" class="profile-image" src="" alt="Profile Image" />
+						</div>
+						<div class="profile-panel-info">
+							<div id="panel-fullname" class="profile-fullname"></div>
+							<div id="panel-username" class="profile-username"></div>
+							<a id="view-profile-link" href="/profile" class="profile-view-link">View Your Profile</a>
+						</div>
+					</div>
+					<div id="icons-panel-links">
+					</div>
+					<div class="profile-panel-links">
+						<a href="/settings" class="profile-panel-link">
+							<span class="settings-icon">
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+									<g stroke="#A2A2A2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+										clip-path="url(#a)">
+										<path
+											d="m11.87 5.205-.213-.119a1.167 1.167 0 0 1-.457-.422l-.038-.066a1.168 1.168 0 0 1-.175-.674l.004-.248c.007-.397.01-.597-.046-.775a1.165 1.165 0 0 0-.243-.43c-.125-.14-.298-.24-.645-.44l-.288-.165c-.346-.2-.519-.3-.703-.337a1.166 1.166 0 0 0-.492.004c-.182.04-.353.144-.694.348h-.002l-.207.124a1.159 1.159 0 0 1-.595.184l-.075.001h-.076a1.165 1.165 0 0 1-.531-.147l-.065-.039-.208-.124c-.344-.207-.516-.31-.7-.351a1.166 1.166 0 0 0-.493-.004c-.184.039-.357.14-.703.34h-.002l-.284.166-.003.002c-.343.198-.515.299-.639.438-.11.124-.193.27-.242.428-.055.18-.053.379-.046.778l.005.247V4a1.168 1.168 0 0 1-.175.599l-.038.064a1.167 1.167 0 0 1-.394.387l-.065.037-.21.117c-.352.194-.527.291-.654.43a1.167 1.167 0 0 0-.251.426c-.059.18-.059.38-.058.78l.001.329c0 .398.002.597.06.775.053.158.138.302.25.424.127.137.301.234.65.428l.208.116.07.04c.183.11.333.267.432.455l.04.07c.098.186.144.396.134.606l-.005.237c-.007.4-.01.601.047.78.05.159.132.305.243.43.125.14.298.24.645.44l.288.165c.346.2.519.3.702.337.163.034.33.032.492-.004.183-.04.354-.144.697-.349l.206-.123c.178-.115.384-.179.595-.185h.152c.185.005.367.056.53.147l.054.032.22.131c.344.207.515.31.7.35.161.037.33.039.493.005.183-.038.357-.14.703-.34l.289-.167c.343-.2.515-.3.639-.439.11-.124.192-.27.242-.428.055-.178.052-.376.045-.769l-.005-.257c-.011-.237.05-.472.175-.673l.039-.065c.098-.158.233-.291.393-.387l.064-.035.002-.001.21-.117c.351-.195.527-.291.655-.43.113-.123.198-.269.25-.426.058-.178.058-.377.057-.774l-.001-.335c0-.398-.001-.598-.06-.776a1.167 1.167 0 0 0-.25-.423c-.127-.137-.3-.234-.648-.427h-.001Z" />
+										<path d="M4.667 7a2.333 2.333 0 1 0 4.666 0 2.333 2.333 0 0 0-4.666 0Z" />
+									</g>
+								</svg>
+
+							</span>
+							<span>Settings</span>
+						</a>
+						<button id="signout-link" class="profile-panel-link">
+							<span class="logout-icon">
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+									viewBox="0 0 14 14">
+									<path stroke="#A2A2A2" stroke-linecap="round" stroke-linejoin="round"
+										stroke-width="1.5"
+										d="M7 7h4.083m0 0-1.75 1.75M11.083 7l-1.75-1.75m1.75-1.75v-.583A1.167 1.167 0 0 0 9.917 1.75H4.083a1.167 1.167 0 0 0-1.166 1.167v8.166a1.167 1.167 0 0 0 1.166 1.167h5.834a1.167 1.167 0 0 0 1.166-1.167V10.5" />
+								</svg>
+							</span>
+							<span>Sign out</span>
+						</button>
+					</div>
+					<div id="social-panel-links">
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

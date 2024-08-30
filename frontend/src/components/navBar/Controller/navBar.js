@@ -1,4 +1,4 @@
-import {fetchWithAuth} from '../../../lib/apiMock.js'
+import { fetchWithAuth } from '../../../lib/apiMock.js'
 
 const notifications = [
 	{
@@ -141,6 +141,8 @@ function renderNavBrContent() {
 	});
 }
 
+
+
 async function fetchMyData() {
 	const apiUrl = "https://localhost:4433/api/v1/users/me/";
 
@@ -157,41 +159,227 @@ async function fetchMyData() {
 			"https://localhost/",
 			"https://localhost:4433/"
 		);
-		handleUserData(data);
+		ProfilePanel(data);
 	} catch (error) {
 		console.error("Error fetching user data:", error);
 	}
 }
 
 
-function handleUserData(data) {
-	const profileButton = document.querySelector(".profile-button .profile");
-	if (!profileButton) return;
-
-	profileButton.innerHTML = `
-		<div class="profile-content">
-			<div class="profile-image">
-				<img src="${data.image_url || "components/auth/assets/google.svg"
-		}" alt="Profile Image" />
-			</div>
-			<div class="profile-details">
-				<div class="profile-name">${data.username}</div>
-				<div class="profile-level">Level ${data.current_xp + "/" + data.rank.xp_required
-		}</div>
-			</div>
-		</div>
-		<div id="profile-icon" class="profile-dropdown-icon">
-			<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
-				<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.52" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
-			</svg>
-		</div>
-	`;
-}
 
 // Ensure DOM is fully loaded before calling fetchMyData
 document.addEventListener("DOMContentLoaded", function () {
 	fetchMyData();
 });
+
+function ProfilePanel(user) {
+	console.log("user : ", user)
+	const profileIcon = document.getElementById("profile-icon");
+	const profilePanel = document.getElementById("profile-panel");
+
+	let isClicked = false;
+
+	const toggleProfilePanel = () => {
+		isClicked = !isClicked;
+		profilePanel.style.display = isClicked ? "block" : "none";
+		if (isClicked) {
+			document.getElementById("profile-icon-toggle").innerHTML = `<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+								stroke-width="1.52" d="M1 1l5.326 5.7a.91.91 0 0 0 1.348 0L13 1" />
+						</svg>`
+		}
+		else {
+			document.getElementById("profile-icon-toggle").innerHTML = `						<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+								stroke-width="1.52" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
+						</svg>`
+		}
+	};
+
+	profileIcon.addEventListener("click", toggleProfilePanel);
+
+	document.addEventListener("mousedown", (event) => {
+		const target = event.target;
+		if (
+			profilePanel &&
+			!profilePanel.contains(target) &&
+			!profileIcon.contains(target)
+		) {
+			isClicked = false;
+			profilePanel.style.display = "none";
+		}
+	});
+
+
+	document.getElementById("profile-image").src = user.image_url;
+	document.getElementById("panel-profile-image").src = user.image_url;
+	document.getElementById("profile-username").textContent = user.username;
+	document.getElementById("profile-level").textContent = "Level" + user.current_xp + "/" + user.rank.xp_required;
+	document.getElementById("panel-fullname").textContent = user.fullname;
+	document.getElementById("panel-username").textContent = "@" + user.username;
+	// Function to check window size and apply iconsSmallWindow if needed
+	function checkWindowSize() {
+		if (window.innerWidth < 1200) {
+			iconsSmallWindow();
+		} else {
+			let icons = document.getElementById("icons-panel-links")
+			let social = document.getElementById("social-panel-links")
+			social.innerHTML = ``;
+			icons.innerHTML = ``;
+		}
+	}
+
+	// Call checkWindowSize on initial load
+	checkWindowSize();
+
+	// Add event listener for window resize
+	window.addEventListener('resize', checkWindowSize);
+	document.getElementById("view-profile-link").addEventListener("click", () => {
+		toggleProfilePanel();
+	});
+
+	document.getElementById("signout-link").addEventListener("click", () => {
+		// Clear all cookies
+		document.cookie.split(";").forEach((c) => {
+			document.cookie = c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+		});
+
+		// Change the path to /sign_in
+		window.location.pathname = '/sign_in';
+	});
+
+}
+
+function iconsSmallWindow() {
+	let icons = document.getElementById("icons-panel-links")
+	icons.innerHTML = `
+	<div class="icons-panel-links">
+		<div class="navbar-container">
+			<div class="nav-links">
+				<div class="desktop-nav" style="display: block; margin-bottom: 15px;">
+					<ul class="nav-list">
+						<!-- nav Link -->
+						<li class="nav-item nav">
+							<a href="/home" class="no-underline group">
+								<div class="nav-icons">
+									<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31">
+										<path fill-opacity="0.8"
+											d="M12.5 25.452v-7.5h5v7.5h6.25v-10h3.75L15 4.202 2.5 15.452h3.75v10h6.25Z" />
+									</svg>
+									<p>Home</p>
+								</div>
+							</a>
+						</li>
+						<!-- nav Link -->
+						<li class="nav-item nav">
+							<a href="/tournaments" class="no-underline group">
+								<div class="nav-icons">
+									<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31">
+										<path fill-opacity="0.8"
+											d="M5 4.202h20a1.25 1.25 0 0 1 1.25 1.25v8.75H3.75v-8.75A1.25 1.25 0 0 1 5 4.202Zm-1.25 12.5h22.5v8.75a1.25 1.25 0 0 1-1.25 1.25H5a1.25 1.25 0 0 1-1.25-1.25v-8.75Zm5 3.75v2.5h3.75v-2.5H8.75Zm0-12.5v2.5h3.75v-2.5H8.75Z" />
+									</svg>
+									<p>Tournaments</p>
+								</div>
+							</a>
+						</li>
+						<!-- nav Link -->
+						<li class="nav-item nav">
+							<a href="/ranking" class="no-underline group">
+								<div class="nav-icons">
+									<svg width="30" height="31" viewBox="0 0 30 31" xmlns="http://www.w3.org/2000/svg">
+										<path fill-rule="evenodd" clip-rule="evenodd"
+											d="M4.33 4.78206C2.5 6.61456 2.5 9.55956 2.5 15.4521C2.5 21.3446 2.5 24.2908 4.33 26.1208C6.1625 27.9521 9.1075 27.9521 15 27.9521C20.8925 27.9521 23.8387 27.9521 25.6688 26.1208C27.5 24.2921 27.5 21.3446 27.5 15.4521C27.5 9.55956 27.5 6.61331 25.6688 4.78206C23.84 2.95206 20.8925 2.95206 15 2.95206C9.1075 2.95206 6.16125 2.95206 4.33 4.78206ZM21.97 13.5521C22.1221 13.3603 22.1932 13.1167 22.1682 12.8733C22.1431 12.6298 22.0238 12.4058 21.8358 12.2491C21.6478 12.0925 21.4059 12.0155 21.1619 12.0347C20.9179 12.054 20.6911 12.1679 20.53 12.3521L18.2837 15.0471C17.8212 15.6033 17.535 15.9421 17.3012 16.1533C17.2404 16.213 17.1719 16.2643 17.0975 16.3058L17.0837 16.3121L17.0738 16.3071L17.07 16.3058C16.9952 16.2643 16.9262 16.2131 16.865 16.1533C16.6312 15.9408 16.3463 15.6033 15.8825 15.0471L15.5175 14.6096C15.1075 14.1158 14.7362 13.6721 14.3912 13.3596C14.015 13.0196 13.5413 12.7171 12.9163 12.7171C12.2913 12.7171 11.8187 13.0196 11.4412 13.3596C11.0962 13.6721 10.7263 14.1158 10.3163 14.6096L8.02875 17.3521C7.94996 17.4467 7.89057 17.5559 7.85399 17.6735C7.81741 17.7911 7.80435 17.9147 7.81555 18.0374C7.83817 18.285 7.95825 18.5136 8.14937 18.6727C8.3405 18.8318 8.587 18.9085 8.83467 18.8859C9.08233 18.8633 9.31087 18.7432 9.47 18.5521L11.7163 15.8571C12.1788 15.3008 12.465 14.9621 12.6988 14.7508C12.7596 14.6911 12.8281 14.6398 12.9025 14.5983L12.9113 14.5946L12.9163 14.5921L12.93 14.5983C13.0048 14.6398 13.0738 14.6911 13.135 14.7508C13.3688 14.9633 13.6537 15.3008 14.1175 15.8571L14.4825 16.2946C14.8938 16.7883 15.2638 17.2321 15.6088 17.5446C15.985 17.8846 16.4587 18.1871 17.0837 18.1871C17.7087 18.1871 18.1813 17.8846 18.5588 17.5446C18.9037 17.2321 19.2738 16.7883 19.6838 16.2946L21.97 13.5521Z" />
+									</svg>
+									<p>Ranking</p>
+								</div>
+							</a>
+						</li>
+						<!--  -->
+					</ul>
+				</div>
+			</div>
+	</div>
+	`
+	renderNavBrContent()
+
+	let social = document.getElementById("social-panel-links")
+	social.innerHTML = `
+	<div class="icons-panel-links">
+			<div class="desktop-nav" style="display: block;">
+				<ul class="social-list">
+					<!-- Social Button -->
+					<div class="social-icon">
+						<div id="notification-icon" class="icon-container">
+							<a href="https://profile.intra.42.fr/" passHref class="icon-link">
+								<div class="icon-content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" fill="#545454">
+										<g fill="#545454" clip-path="url(#a)">
+											<path
+												d="M0 12.745h7.37v4.207h3.676V9.35H3.692L11.046.952H7.37L0 9.35v3.395ZM12.63 5.16 16.309.951h-3.677v4.207Z" />
+											<path
+												d="m16.308 5.16-3.677 4.19v4.19h3.677V9.35L20 5.16V.951h-3.692v4.207Z" />
+											<path d="m20 9.35-3.692 4.19H20V9.35Z" />
+										</g>
+										<defs>
+											<clipPath id="a">
+												<path fill="#545454" d="M0 .952h20v16H0z" />
+											</clipPath>
+										</defs>
+									</svg>
+								</div>
+							</a>
+						</div>
+					</div>
+					<!-- Social Button -->
+					<div class="social-icon">
+						<div id="notification-icon" class="icon-container">
+							<a href="https://www.twitch.tv/" passHref class="icon-link">
+								<div class="icon-content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
+										<g clip-path="url(#a)">
+											<path fill="#545454"
+												d="M15.28 4.994h-1.509v4.285h1.51V4.994Zm-4.147-.019h-1.51v4.288h1.51V4.975ZM4.72.952.95 4.523v12.858h4.524v3.571l3.771-3.571h3.018l6.787-6.429v-10H4.72Zm12.822 9.287-3.017 2.856h-3.017l-2.64 2.5v-2.5H5.474V2.381h12.068v7.858Z" />
+										</g>
+										<defs>
+											<clipPath id="a">
+												<path fill="#545454" d="M0 .952h20v20H0z" />
+											</clipPath>
+										</defs>
+									</svg>
+								</div>
+							</a>
+						</div>
+					</div>
+					<!-- Social Button -->
+					<div class="social-icon">
+						<div id="notification-icon" class="icon-container">
+							<a href="https://discord.com/" passHref class="icon-link">
+								<div class="icon-content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
+										<path fill="#545454"
+											d="M15.45.952c1.118 0 2.031.901 2.05 2.025v17.975l-2.15-1.9-1.21-1.12-1.28-1.19.53 1.85H2.05A2.055 2.055 0 0 1 0 16.567V3.012C0 1.884.901.971 2.015.952H15.45Zm-8.13 4.78-.1-.12h-.057c-.273.009-1.486.1-2.753 1.05l-.048.092c-.251.49-1.392 2.872-1.392 5.738l.02.033c.142.217 1.019 1.423 3.03 1.487l.295-.361.375-.469c-1.166-.349-1.666-1.051-1.74-1.164l-.01-.016.041.027c.045.03.127.08.239.143.01.01.02.02.04.03.03.02.06.03.09.05.25.14.5.25.73.34.41.16.9.32 1.47.43.729.136 1.58.187 2.508.025l.082-.015c.47-.08.95-.22 1.45-.43.35-.13.74-.32 1.15-.59l-.016.025c-.096.14-.62.833-1.794 1.165l.165.207c.253.314.495.603.495.603 2.21-.07 3.06-1.52 3.06-1.52 0-3.22-1.44-5.83-1.44-5.83-1.238-.929-2.425-1.037-2.733-1.049l-.077-.001-.14.16c1.508.461 2.3 1.103 2.46 1.243l.03.027a8.152 8.152 0 0 0-5.03-.94c-.06 0-.11.01-.17.02l-.056.005c-.38.039-1.197.179-2.214.625l-.145.068c-.182.086-.314.153-.385.19l-.06.032s.813-.774 2.576-1.294l.054-.016Zm-.38 3.61c.57 0 1.03.5 1.02 1.11 0 .61-.45 1.11-1.02 1.11-.56 0-1.02-.5-1.02-1.11 0-.61.45-1.11 1.02-1.11Zm3.65 0c.57 0 1.02.5 1.02 1.11 0 .61-.45 1.11-1.02 1.11-.56 0-1.02-.5-1.02-1.11 0-.61.45-1.11 1.02-1.11Z" />
+									</svg>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="social-icon">
+						<div id="notification-icon" class="icon-container">
+							<a href="/notification"passHref class="icon-link" id="notif">
+								<div class="icon-content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
+										<path fill="#545454"
+											d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
+									</svg>
+								</div>
+							</a>
+						</div>
+					</div>
+				</ul>
+			</div>
+	</div>
+	`
+}
 
 loadNavbar();
 

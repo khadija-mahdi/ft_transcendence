@@ -53,6 +53,29 @@ export default function () {
 				</div>
 			</div>
 		</div>
+		<div id="popup-sendImage-container" class="popup-sendImage-overlay hidden">
+			<div class="popup-sendImage-content">
+				<div class="popup-sendImage-header">
+					<h3 id="popup-sendImage-title">Send Image</h3>
+					<button id="popup-sendImage-close" class="close-button">&times;</button>
+				</div>
+				<div class="popup-sendImage-body">
+					<img id="popup-sendImage-preview" src="" alt="Preview" style="width: 100%; border-radius: 8px;">
+					<p id="popup-sendImage-error" class="hidden" style="color: red; text-align: center; margin-top: 10px;">
+						The File or Image you are trying to upload is not acceptable. Please use PNG or JPEG formats only.
+					</p>
+				</div>
+				<div class="popup-sendImage-footer">
+					<button id="popup-sendImage-cancel" class="popup-sendImage-button cancel-button">Cancel</button>
+					<button id="popup-sendImage-confirm" class="popup-sendImage-button confirm-button">Send</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
 	</div>
 	`;
 };
+
+
+
