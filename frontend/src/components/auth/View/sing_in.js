@@ -5,7 +5,7 @@ export default () => {
 				<h1 id=tr >Join Transcendent</h1>
 				<form id="authForm" class="auth-form">
 					<div class="social-auth">
-						<div class="social-auth-option intra">
+						<div class="social-auth-option intra" id="intraAuth">
 							<img src="/components/auth/assets/42_logo.svg" alt="intra logo">
 							<p class= sing>Continue with Intra</p>
 						</div>

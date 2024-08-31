@@ -14,7 +14,7 @@ export const oauth2Providers = [
 		AuthUrl: "https://api.intra.42.fr/oauth/authorize",
 		scope: "public",
 		client_id:
-			"u-s4t2ud-c06179a32fed22ed0c6c8cbebc12db1e4e59d0015b162c5bb93f2f53f21d2770",
+			"u-s4t2ud-6e6c75bfe05b1647e429446aa73743e845e04725e89a050e508d86cf3b08a3f9",
 	},
 ];
 
@@ -33,15 +33,32 @@ function handleGoogleLogin() {
 	window.location.href = url;
 }
 
-export async function GoogleSignIn() {
-	const googleAuthButton = document.getElementById('googleAuth');
+function handleIntraLogin() {
+	const params = new URLSearchParams({
+		response_type: "code",
+		client_id: oauth2Providers[1].client_id,
+		redirect_uri: `https://localhost:4433/auth/`,
+		prompt: 'select_account',
+		access_type: 'offline',
+		state: oauth2Providers[1].provider,
+		scope: oauth2Providers[1].scope,
+	});
+	const url = `${oauth2Providers[1].AuthUrl}?${params}`;
+	window.location.href = url;
+}
 
+export async function OAuthSingIn() {
+	const googleAuthButton = document.getElementById('googleAuth');
+	const intraAuthButton = document.getElementById('intraAuth');
 	if (googleAuthButton) {
 		googleAuthButton.addEventListener('click', function () {
 			handleGoogleLogin();
 		});
-	} else {
-		console.log("googleAuthButton not found");
+	}
+	if (intraAuthButton) {
+		intraAuthButton.addEventListener('click', function () {
+			handleIntraLogin();
+		});
 	}
 }
 
@@ -54,9 +71,7 @@ async function handleOAuthLogin() {
 
 	if (code && provider) {
 		try {
-			const response = await fetch(`https://localhost:4433/api/v1/auth/${provider}/?code=${code}`, {
-				method: 'GET',
-			});
+			const response = await fetch(`https://localhost:4433/api/v1/auth/${provider}/?code=${code}`);
 			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
 
@@ -124,7 +139,7 @@ export default async function init() {
 		await SingIn();
 	});
 
-	await GoogleSignIn();
+	await OAuthSingIn();
 	if (window.location.search.includes('code')) {
 		await handleOAuthLogin();
 	}

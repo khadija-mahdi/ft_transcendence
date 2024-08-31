@@ -26,3 +26,6 @@ menting an API.
 - Link Tournament View Page With Backend
 - add option for tournament players to add aliase 
 - add loses and wins in profile page
+
+## ERROR HANDLING :
+	- catch Error on login with intra if user is ready exist !!
