@@ -6,7 +6,7 @@ export default function init() {
 	
 	console.log(`Name: ${email} Url: ${url}`);
 	if (email === null){
-		history.pushState(null, null, `/sign_up`); 
+		history.pushState(null, null, `/auth/register/`); 
 		window.location.reload();
 	}
 	
@@ -35,7 +35,7 @@ export default function init() {
 				if (response.ok) {
 					console.log('Success:', response);
 					sessionStorage.setItem('signUpStep', 'emailVerified');
-					history.pushState(null, null, `/sign_up_info?email=${email}`); 
+					history.pushState(null, null, `/auth/user-info/?email=${email}`); 
 					window.location.reload();
 				} else {
 					return response.json().then(data => {

@@ -50,7 +50,6 @@ export const fetchWithAuth = async (url, options = { method: "GET" }) => {
                 response = await fetch(url, originalOptions);
             } else {
                 destroyCookies();
-                // window.location.href = '/sign_in';
                 throw new Error('Unauthorized');
             }
         }

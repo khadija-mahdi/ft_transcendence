@@ -52,31 +52,31 @@ const routes = {
 		css: "/components/Ranking/assets/Ranking.css",
 		controller: () => import("/components/Ranking/Controller/Ranking.js"),
 	},
-	"/sign_in": {
+	"/auth/": {
 		title: "Sign In",
 		component: () => import("/components/auth/View/sing_in.js"),
 		css: "/components/auth/assets/auth.css",
 		controller: () => import("/components/auth/Controller/sing_in.js"),
 	},
-	"/sign_in_2fa": {
+	"/auth/2fa/": {
 		title: "Two-Factor Authentication",
 		component: () => import("/components/auth/View/totp.js"),
 		css: "/components/auth/assets/auth.css",
 		controller: () => import("/components/auth/Controller/totp.js"),
 	},
-	"/sign_up": {
+	"/auth/register/": {
 		title: "Sign Up",
 		component: () => import("/components/auth/View/sign_up.js"),
 		css: "/components/auth/assets/auth.css",
 		controller: () => import("/components/auth/Controller/sign_up.js"),
 	},
-	"/sign_up_email": {
+	"/auth/verify/": {
 		title: "Email Verification",
 		component: () => import("/components/auth/View/email_ver.js"),
 		css: "/components/auth/assets/auth.css",
 		controller: () => import("/components/auth/Controller/email_ver.js"),
 	},
-	"/sign_up_info": {
+	"/auth/user-info/": {
 		title: "Your Information",
 		component: () => import("/components/auth/View/use_info.js"),
 		css: "/components/auth/assets/auth.css",

@@ -34,7 +34,7 @@ export default function init() {
 			.then(response => {
 				if (response.ok) {
 					sessionStorage.setItem('signUpStep', 'infoEntered');
-					history.pushState(null, null, `/sign_in`); 
+					history.pushState(null, null, `/auth/`); 
 					window.location.reload();
 				} else {
 					return response.json().then(data => {

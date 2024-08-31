@@ -38,11 +38,11 @@ function checkSignUpStep(requiredStep) {
 }
 
 function routeGuard(path) {
-	if (path.startsWith('/sign_up_email') && !checkSignUpStep('emailEntered')) {
-		return '/sign_up';
+	if (path.startsWith('/auth/verify/') && !checkSignUpStep('emailEntered')) {
+		return '/auth/register/';
 	}
-	if (path.startsWith('/sign_up_info') && !checkSignUpStep('emailVerified')) {
-		return '/sign_up';
+	if (path.startsWith('/auth/user-info/') && !checkSignUpStep('emailVerified')) {
+		return '/auth/register/';
 	}
 	return path;
 }
@@ -55,11 +55,11 @@ async function navigate(path) {
 		window.location.href = '/home';
 	}
 
-	if ((!accessToken || !refreshToken) && !path.startsWith('/sign')) {
-		window.location.href = '/sign_in';
+	if ((!accessToken || !refreshToken) && !path.startsWith('/auth/')) {
+		window.location.href = '/auth/';
 		return;
 	}
-	if ((accessToken || refreshToken) && path.startsWith("/sign")) {
+	if ((accessToken && refreshToken) && path.startsWith("/auth/")) {
 		window.location.href = '/';
 		return;
 	}

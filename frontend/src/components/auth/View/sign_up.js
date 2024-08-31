@@ -7,7 +7,7 @@ export default () => {
 			<form id="authForm" class="auth-form">
 				<div class="social-auth">
 					<div class="social-auth-option intra">
-						<img src="components/auth/assets/42_logo.svg" alt="intra logo">
+						<img src="/components/auth/assets/42_logo.svg" alt="intra logo">
 						<p class= sing>Continue with Intra</p>
 					</div>
 					<div class="social-auth-option google">

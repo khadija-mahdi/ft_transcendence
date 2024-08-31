@@ -16,6 +16,7 @@ export const fetchMyData = async () => {
 			"https://localhost/",
 			"https://localhost:4433/"
 		);
+		console.log("data ,:",  data)
 		return data;
 	} catch (error) {
 		console.error("Error fetching user data:", error);

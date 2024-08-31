@@ -47,7 +47,7 @@ class OAuth2Authentication:
     access_token_url = None
     client_id = None
     client_secret = None
-    redirect_uri = f'{settings.BASE_FRONTEND_URL}/auth'
+    redirect_uri = f'{settings.BASE_FRONTEND_URL}/auth/'
     user_info_url = None
     serializer_class = None
 

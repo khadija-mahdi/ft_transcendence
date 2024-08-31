@@ -19,7 +19,7 @@ const notifications = await fetchNotifications();
 async function loadNavbar() {
 	const path = window.location.pathname;
 
-	if (!path.startsWith("/game") && !path.startsWith("/sign")) {
+	if (!path.startsWith("/game") && !path.startsWith("/auth/")) {
 		try {
 			const response = await fetch("/components/navBar/View/navBar.html");
 			if (!response.ok) throw new Error("Network response was not ok");
@@ -249,7 +249,7 @@ function ProfilePanel(user) {
 		document.cookie.split(";").forEach((c) => {
 			document.cookie = c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 		});
-		window.location.pathname = '/sign_in';
+		window.location.pathname = '/auth/';
 	});
 
 }
