@@ -1,0 +1,21 @@
+## NOTE:
+- The user should encounter no unhandled errors and no warnings when browsing the
+website.
+- You can’t use so called “bind-mount volumes” between the host
+and the container if non-root UIDs are used in the container.
+
+## USER MANAGEMENT
+- Users can select a unique display name to play the tournaments
+- User profiles display stats, such as wins and losses.
+
+## CYBER SECURITY
+- GDPR Compliance Options with User Anonymization
+- Implement WAF/ModSecurity with Hardened Configuration and
+HashiCorp Vault for Secrets Management
+- For obvious security reasons, any credentials, API keys, env
+variables etc... must be saved locally in a .env file and ignored by
+git. 
+
+## NOT SURE !!!
+- Major module: Replacing Basic Pong with Server-Side Pong and Imple-
+menting an API.
