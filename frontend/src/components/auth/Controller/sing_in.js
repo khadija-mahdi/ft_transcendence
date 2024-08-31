@@ -15,7 +15,7 @@ const SingIn = async () => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({ email: email_input.value, password: password_input.value }),
+			body: JSON.stringify({ email: email_input.value, password: '' }),
 		});
 
 		if (!response.ok)
@@ -43,12 +43,13 @@ const SingIn = async () => {
 
 export default async function init() {
 	const continueButton = document.getElementById('conIn');
-	if (continueButton) {
 		continueButton.addEventListener('click', async function (event) {
 			event.preventDefault();
 			await SingIn();
 		});
-	} else {
-		console.log("continueButton not found");
+
+	await GoogleSignIn();
+	if (window.location.search.includes('code')) {
+		await handleOAuthLogin();
 	}
 }
