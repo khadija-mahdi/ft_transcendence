@@ -21,7 +21,7 @@ export default function init() {
 				if (response.ok) {
 					sessionStorage.setItem('signUpStep', 'emailEntered');
 					console.log('Success:', response);
-					history.pushState(null, null, `/sign_up_email?email=${email_input.value}`);
+					history.pushState(null, null, `/auth/verify/?email=${email_input.value}`);
 					window.location.reload();
 				} else {
 					return response.json().then(data => {

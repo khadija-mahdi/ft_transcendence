@@ -7,15 +7,6 @@ export const fetchMyData = async () => {
 		const data = await fetchWithAuth(apiUrl, {
 			method: 'GET',
 		});
-
-		data.image_url = data.image_url.replace(
-			"https://localhost/",
-			"https://localhost:4433/"
-		);
-		data.rank.icon = data.rank.icon.replace(
-			"https://localhost/",
-			"https://localhost:4433/"
-		);
 		console.log("data ,:",  data)
 		return data;
 	} catch (error) {

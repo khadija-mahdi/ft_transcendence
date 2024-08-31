@@ -16,7 +16,6 @@ export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
 	const popupCancel = document.getElementById('popup-sendImage-cancel');
 	const popupClose = document.getElementById('popup-sendImage-close');
 
-	// Set up the popup based on the provided imageSrc and error flag
 	if (error) {
 		popupPreview.classList.add('hidden');
 		popupError.classList.remove('hidden');
@@ -80,10 +79,7 @@ async function fetchMessages(id, cursor = null) {
 					method: 'GET',
 				});
 
-				// Add the current page of messages to the allMessages array
 				allMessages = allMessages.concat(response.results);
-
-				// Update the apiUrl to the next page's URL
 				apiUrl = response.next;
 			}
 
@@ -353,7 +349,7 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 			if (payload.image_file) {
 				messageElement.innerHTML = `
                     <div class="image_file ${payload.sender_username === myData.username ? 'sent' : 'received'}">
-                        <img class="image_file-content" src="${payload.image_file}" alt="image message" />
+                        <img class="image_file-content" src="${payload.image_file || "/public/assets/images/defualtgroupProfile.png"}" alt="image message" />
                     </div>
                 `;
 			} else {

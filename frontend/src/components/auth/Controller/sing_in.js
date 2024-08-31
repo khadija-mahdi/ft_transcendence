@@ -64,6 +64,8 @@ async function handleOAuthLogin() {
 				document.cookie = `access=${data.access};path=/;`;
 				document.cookie = `refresh=${data.refresh};path=/;`;
 				history.pushState(null, null, '/');
+				window.location.reload();
+
 			} else {
 				console.error('Authentication failed');
 			}

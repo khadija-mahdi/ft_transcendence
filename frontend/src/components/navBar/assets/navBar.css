@@ -288,8 +288,12 @@ body.bg-dark {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	margin-left: 5px;
-	width: 60px;
+	max-width: 60px;
 	color: 15px;
+	max-width: 70px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 
 }
 
@@ -597,6 +601,10 @@ body.bg-dark {
 	letter-spacing: -0.01em;
 	text-align: left;
 	color: #A2A2A2;
+	max-width: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 
 }
 
@@ -647,6 +655,10 @@ body.bg-dark {
 	line-height: 16.94px;
 	letter-spacing: -0.01em;
 	text-align: left;
+	max-width: 100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 
 }
 
@@ -657,6 +669,10 @@ body.bg-dark {
 	line-height: 16.94px;
 	letter-spacing: -0.01em;
 	text-align: left;
+	max-width: 70px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 
 
 }

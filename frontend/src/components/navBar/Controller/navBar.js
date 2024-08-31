@@ -87,7 +87,7 @@ function renderNotifications() {
 		notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${notification.sender.image_url}" alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src="${notification.sender.image_url || "/public/assets/images/defaultImageProfile.jpg"}" alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
@@ -160,15 +160,6 @@ async function fetchMyData() {
 		const data = await fetchWithAuth(apiUrl, {
 			method: 'GET',
 		});
-
-		data.image_url = data.image_url.replace(
-			"https://localhost/",
-			"https://localhost:4433/"
-		);
-		data.rank.icon = data.rank.icon.replace(
-			"https://localhost/",
-			"https://localhost:4433/"
-		);
 		ProfilePanel(data);
 	} catch (error) {
 		console.error("Error fetching user data:", error);
@@ -183,6 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function ProfilePanel(user) {
+	if (!user) return;
 	console.log("user : ", user)
 	const profileIcon = document.getElementById("profile-icon");
 	const profilePanel = document.getElementById("profile-panel");
@@ -221,11 +213,11 @@ function ProfilePanel(user) {
 	});
 
 
-	document.getElementById("profile-image").src = user.image_url;
-	document.getElementById("panel-profile-image").src = user.image_url;
+	document.getElementById("profile-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+	document.getElementById("panel-profile-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
 	document.getElementById("profile-username").textContent = user.username;
-	document.getElementById("profile-level").textContent = "Level" + user.current_xp + "/" + user.rank.xp_required;
-	document.getElementById("panel-fullname").textContent = user.fullname;
+	document.getElementById("profile-level").textContent = user.xp_required && user.current_xp ? `Level${user.current_xp} "/" ${user.rank.xp_required}` : "Level 0/0";
+	document.getElementById("panel-fullname").textContent = user.fullname ? user.fullname : "";
 	document.getElementById("panel-username").textContent = "@" + user.username;
 	function checkWindowSize() {
 		if (window.innerWidth < 1200) {

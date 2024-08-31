@@ -22,15 +22,6 @@ async function fetchMyData() {
 		const data = await fetchWithAuth(apiUrl, {
 			method: 'GET',
 		});
-
-		data.image_url = data.image_url.replace(
-			"https://localhost/",
-			"https://localhost:4433/"
-		);
-		data.rank.icon = data.rank.icon.replace(
-			"https://localhost/",
-			"https://localhost:4433/"
-		);
 		return data;
 	} catch (error) {
 		console.error("Error fetching user data:", error);
@@ -115,11 +106,11 @@ export default async function () {
 	const user = await fetchMyData();
 	console.log('user', user);
 
-	document.getElementById("user-image").src = user.image_url;
-	document.getElementById("fullname").innerText = user.fullname;
-	document.getElementById("rank-name").innerText = user.rank.name;
-	document.getElementById("current-xp").innerText = `${user.current_xp}/${user.rank.xp_required}`;
-	document.getElementById("rank-order").innerText = user.rank.hierarchy_order;
+	document.getElementById("user-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+	document.getElementById("fullname").innerText = user.fullname ? user?.fullname : "";
+	document.getElementById("rank-name").innerText = user.rank?.name || "";
+	document.getElementById("current-xp").innerText = user.rank && `${user?.current_xp}/${user?.rank.xp_required}`;
+	document.getElementById("rank-order").innerText = user.rank && user.rank.hierarchy_order;
 	document.getElementById("coins").innerText = user.coins;
 	document.getElementById("messages-count").innerText = -1;
 
