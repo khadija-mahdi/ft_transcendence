@@ -96,15 +96,18 @@ class Game():
                 'type': 'update',
                 'ball': {
                     'x': self.ball.x,
-                    'y': self.ball.y
+                    'y': self.ball.y,
+                    'z': -1
                 },
                 'leftPaddle': {
                     'x': self.player_1_paddle.x,
-                    'y': self.player_1_paddle.y
+                    'y': self.player_1_paddle.y,
+                    'z': -1
                 },
                 'rightPaddle': {
                     'x': self.player_2_paddle.x,
-                    'y': self.player_2_paddle.y
+                    'y': self.player_2_paddle.y,
+                    'z': -1
                 }
 
             })
@@ -136,10 +139,14 @@ class Game():
 
     async def new_point(self, is_left_goal):
         self.pause = True
+        
+        # TODO: Implement this for 3D Pong Game
+        # RESET PADDLES POSITION TO CENTER
         self.player_1_paddle.updatePosition(
             (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
         self.player_2_paddle.updatePosition(
             (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
+        
         if not is_left_goal:
             self.matchup.first_player_score += 1
         else:

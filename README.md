@@ -19,3 +19,10 @@ git.
 ## NOT SURE !!!
 - Major module: Replacing Basic Pong with Server-Side Pong and Imple-
 menting an API.
+
+
+## TODOS:
+- Link Settings with backend and add validation
+- Link Tournament View Page With Backend
+- add option for tournament players to add aliase 
+- add loses and wins in profile page

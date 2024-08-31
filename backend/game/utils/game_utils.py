@@ -44,7 +44,8 @@ class Ball():
 
         # Ball out of bounds (left or right)
         if self.x - self.radius < 0 or self.x + self.radius > self.width:
-            await callback(self.x - self.radius < 0)
+            is_left_goal = self.x - self.radius < 0
+            await callback(is_left_goal)
             self.reset()
 
     def setPaddles(self, leftPaddle, rightPaddle):
