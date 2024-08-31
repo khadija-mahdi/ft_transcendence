@@ -18,7 +18,7 @@ export const oauth2Providers = [
 	},
 ];
 
-function handleGoogleLogin() {
+export function handleGoogleLogin() {
 	const params = new URLSearchParams({
 		response_type: "code",
 		client_id: oauth2Providers[0].client_id,
@@ -64,7 +64,7 @@ export async function OAuthSingIn() {
 
 
 
-async function handleOAuthLogin() {
+export async function handleOAuthLogin() {
 	const params = new URLSearchParams(window.location.search);
 	const code = params.get("code");
 	const provider = params.get("state");
