@@ -112,9 +112,9 @@ function updateRooms(newRoom) {
 	const roomId = newRoom.id.toString();
 	const roomIndex = rooms.findIndex(room => room.id.toString() === roomId);
 
-	if (roomIndex !== -1) 		
+	if (roomIndex !== -1)
 		rooms.splice(roomIndex, 1);
-	
+
 	rooms.unshift(newRoom);
 
 	renderRoomsList(rooms);
@@ -123,11 +123,13 @@ function updateRooms(newRoom) {
 
 function renderRoomsList(rooms) {
 	const messengerContainer = document.getElementById("messenger-container");
-	messengerContainer.innerHTML = '';
-	rooms.forEach(item => renderMessengerItem(item));
+	if (messengerContainer) {
+		messengerContainer.innerHTML = '';
+		rooms.forEach(item => renderMessengerItem(item));
+	}
 }
 
-async function ChatRoomsPanel() {
+export async function ChatRoomsPanel() {
 	const filterButton = document.getElementById("filter");
 	const searchInput = document.getElementById('searchInput');
 
@@ -184,24 +186,25 @@ async function ChatRoomsPanel() {
 	};
 }
 
+function ChatSmallWindow() {
+
+}
+
 export default async function () {
+
 	ChatRoomsPanel();
 	const urlParams = new URLSearchParams(window.location.search);
 	const chatRoom = urlParams.get('chatroom');
-	console.log(chatRoom, clickedIndex);
 	if (chatRoom) {
 		const url = `https://localhost:4433/api/v1/chat/get-chat-room/${chatRoom}/`;
 		try {
 			const response = await fetchWithAuth(url, {
 				method: 'GET',
 			});
-
 			console.log("Get Room Detail:", response);
 			renderMessagesItems(response.results[0]);
 		} catch (error) {
 			console.error("Error fetching room detail:", error);
 		}
-
-		console.log("Chatroom query:", chatRoom);
 	}
 }

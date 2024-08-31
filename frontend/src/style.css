@@ -16,6 +16,7 @@
 	box-sizing: border-box;
 	border: none;
 	list-style: none;
+	color: white;
 }
 
 button {
@@ -24,8 +25,11 @@ button {
 
 body {
 	color: var(--neutral);
-	padding: 40px;
+	margin-top: 40px;
 	background-color: var(--backgournd-color);
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
 
 }
 
@@ -558,34 +562,6 @@ input:checked+.slider::before {
 	animation: secondary 5s linear infinite;
 }
 
-/* sm screen and above */
-@media (min-width: 640px) {
-	#main {
-		max-width: 640px;
-	}
-}
-
-/* md screen and above */
-@media (min-width: 768px) {
-	#main {
-		max-width: 768px;
-	}
-}
-
-/* lg screen and above */
-@media (min-width: 1024px) {
-	#main {
-		max-width: 1024px;
-	}
-}
-
-/* xl screen and above */
-@media (min-width: 1280px) {
-	#main {
-		max-width: 1280px;
-	}
-}
-
 /* 2xl screen and above */
 @media (min-width: 1536px) {
 	#main {
@@ -765,6 +741,7 @@ input[type="number"] {
 	line-height: 48.41px;
 	letter-spacing: -0.04em;
 	text-align: center;
+	color: #6b7280;
 
 }
 
@@ -772,6 +749,8 @@ input[type="number"] {
 	font-size: 14px;
 	gap: 10px;
 	opacity: 0px;
+	color: #6b7280;
+
 
 }
 

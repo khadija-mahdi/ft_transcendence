@@ -13,6 +13,7 @@ body.bg-dark {
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
+	min-width: 381px;
 }
 
 .nav-links {
@@ -197,6 +198,7 @@ body.bg-dark {
 }
 
 .icon-container {
+	position: relative;
 	aspect-ratio: 1 / 1;
 	border-radius: 9999px;
 	height: 30px;
@@ -212,7 +214,22 @@ body.bg-dark {
 
 }
 
-
+.notification-badge {
+	height: fit-content;
+	min-height: 17px;
+	min-width: 17px;
+	border-radius: 50%;
+	width: fit-content;
+	position: absolute;
+	top: -12px;
+	right: -12px;
+	background-color: #FD4106;
+	color: white;
+	padding: 3px 4px;
+	font-size: 10px;
+	font-weight: bold;
+	justify-items: center;
+}
 
 /* Profile button converted */
 .navbar-profile-button {
@@ -343,8 +360,8 @@ body.bg-dark {
 	z-index: 50;
 	margin-top: 3px;
 	position: absolute;
-	top: 120px;
-	right: 260px;
+	top: 11;
+	right: 440px;
 	height: 400px;
 	background-color: #242424;
 	width: 276px;
@@ -352,6 +369,8 @@ body.bg-dark {
 	border-radius: 4px;
 	display: flex;
 	flex-direction: column;
+
+
 }
 
 .notification-title {
@@ -522,35 +541,7 @@ body.bg-dark {
 
 
 
-/* sm screen and above */
-@media (min-width: 640px) {
-	.navbar-container {
-		max-width: 640px;
-	}
-}
 
-/* md screen and above */
-@media (min-width: 768px) {
-	.navbar-container {
-		max-width: 768px;
-	}
-}
-
-/* lg screen and above */
-@media (min-width: 1024px) {
-	.navbar-container {
-		max-width: 1024px;
-	}
-}
-
-/* xl screen and above */
-@media (min-width: 1280px) {
-	.navbar-container {
-		max-width: 1280px;
-		margin-bottom: 40px;
-
-	}
-}
 
 /* 2xl screen and above */
 @media (min-width: 1536px) {

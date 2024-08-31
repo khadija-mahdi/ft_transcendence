@@ -47,7 +47,7 @@
 	}
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1200px) {
 	.grid-container {
 		width: 100%;
 		flex-grow: 1;
@@ -62,7 +62,7 @@
 
 .item-a {
 	grid-area: a;
-	/* min-width: 381px; */
+	min-width: 381px;
 }
 
 .item-b {
@@ -72,5 +72,5 @@
 
 .item-c {
 	grid-area: c;
-	/* min-width: 381px; */
+	min-width: 381px;
 }

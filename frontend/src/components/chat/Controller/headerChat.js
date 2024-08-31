@@ -2,7 +2,10 @@ import { fetchWithAuth } from '../../../../lib/apiMock.js';
 import AuthWebSocket from '../../../lib/authwebsocket.js';
 import { fetchMyData } from '/_api/user.js'
 import { handleThreeDotPanel } from './threeDot.js';
+import { ChatRoomsPanel } from './chat.js';
+
 const myData = await fetchMyData();
+
 let selectedImage = null;
 
 export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
@@ -146,7 +149,11 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 		<!-- Header content -->
 		<button class="panel-button">
 			<div class="panel-inner-container">
-				<div id="left-arrow-container"></div>
+				<div id="left-arrow-container" class="hidden">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24"height="24"fill="none">
+						<path stroke="white" strokeLinecap="round"strokeLinejoin="round" strokeWidth="1.5" d="M15 18.595l-7-7 7-7"/>
+					</svg>
+				</div>
 				<img
 					class="panel-image"
 					src="${selectedChat.room_icon || " /public/assets/images/defaultGroupProfile.png"}"
@@ -339,7 +346,6 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 
 		const messagesContent = document.getElementById("messages-content");
 		if (messagesContent) {
-			// Create a new message element
 			const messageElement = document.createElement('div');
 			payload.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file-content');
 			messageElement.classList.add(payload.sender_username === myData.username ? 'sent' : 'received');
@@ -498,30 +504,23 @@ function initializeSendImage(selectedChat) {
 	renderUploadUI();
 }
 
-
-export async function renderMessagesItems(selectedChat) {
-	console.log("Selected chat:", selectedChat);
-	const chatPanel = document.getElementById("chat-panel");
-	chatPanel.innerHTML = '';
-
-	const isFriend = true;
-
-	const chatHeader = ChatRoomHeaderUi(selectedChat, isFriend);
-	chatPanel.innerHTML = chatHeader;
+async function handleChatContent(selectedChat) {
 
 	const threeDots = document.getElementById("three-dots");
 	const optionsPanel = document.getElementById("options-panel");
 	handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
+
 	const messagesContent = document.getElementById("messages-content");
 	const messageElement = document.createElement('div');
 	messageElement.innerHTML = `
-	<div id="loader-container" class="loader-container">
-    	<div class="loading-text">Loading<span class="dots"></span></div>
-	</div>`
-	messagesContent.appendChild(messageElement)
+        <div id="loader-container" class="loader-container">
+            <div class="loading-text">Loading<span class="dots"></span></div>
+        </div>`;
+	messagesContent.appendChild(messageElement);
+
 	let messages = await fetchMessages(selectedChat.id, null);
-	const loading = document.getElementById("loader-container")
-	loading.innerHTML = ''
+	const loading = document.getElementById("loader-container");
+	loading.innerHTML = '';
 
 	if (messagesContent && messages) {
 		messages.forEach(message => {
@@ -531,17 +530,17 @@ export async function renderMessagesItems(selectedChat) {
 
 			if (message.image_file) {
 				messageElement.innerHTML = `
-					<div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
-						<img class="image_file-content" src="${message.image_file}" alt="image message" />
-					</div>
-				`;
+                    <div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
+                        <img class="image_file-content" src="${message.image_file}" alt="image message" />
+                    </div>
+                `;
 			} else {
 				messageElement.innerHTML = `
-					<div class="message-content">${message.message}</div>
-					<div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
-						${new Date(message.created_at).toLocaleTimeString()}
-					</div>
-				`;
+                    <div class="message-content">${message.message}</div>
+                    <div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
+                        ${new Date(message.created_at).toLocaleTimeString()}
+                    </div>
+                `;
 			}
 			messagesContent.appendChild(messageElement);
 		});
@@ -552,10 +551,8 @@ export async function renderMessagesItems(selectedChat) {
 		behavior: 'smooth'
 	});
 
-
-	console.log('messages:', messages)
+	console.log('messages:', messages);
 	handleWebSocket(selectedChat);
-
 	initializeSendImage(selectedChat);
 
 	// Bind send button click event
@@ -570,3 +567,50 @@ export async function renderMessagesItems(selectedChat) {
 		textarea.addEventListener('keypress', (event) => handleTextareaKeyPress(event, selectedChat));
 	}
 }
+export async function renderMessagesItems(selectedChat) {
+	let previousSmallWindow = null;
+	let chatPanel = '';
+	let rooms = document.getElementById("rooms");
+	const originRooms = rooms.innerHTML;
+	const isFriend = true;
+
+	function checkWindowSize() {
+		const isSmallWindow = window.innerWidth <= 836;
+
+		if (isSmallWindow !== previousSmallWindow) {
+			previousSmallWindow = isSmallWindow;
+
+			if (isSmallWindow) {
+				rooms.innerHTML = '';
+				rooms.style.padding = '0';
+				chatPanel = rooms;
+				chatPanel.innerHTML = '';
+				chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);
+				let returnArrow = document.getElementById("left-arrow-container");
+				if (returnArrow) {
+					returnArrow.style.display = "block";
+					returnArrow.addEventListener("click", () => {
+						rooms.innerHTML = originRooms;
+						rooms.style.padding = "1rem";
+						ChatRoomsPanel();
+					});
+				}
+				handleChatContent(selectedChat);
+			} else {
+				rooms.innerHTML = originRooms;
+				rooms.style.padding = "1rem";
+				ChatRoomsPanel();
+				chatPanel = document.getElementById("chat-panel");
+				chatPanel.innerHTML = '';
+				chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);;
+				handleChatContent(selectedChat);
+			}
+		}
+	}
+
+	checkWindowSize();
+	window.addEventListener('resize', () => {
+		setTimeout(checkWindowSize, 100);
+	});
+}
+
