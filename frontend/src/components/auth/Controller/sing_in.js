@@ -76,8 +76,8 @@ export async function handleOAuthLogin() {
 			const data = await response.json();
 
 			if (data.access && data.refresh) {
-				document.cookie = `access=${data.access};path=/home;`;
-				document.cookie = `refresh=${data.refresh};path=/home;`;
+				document.cookie = `access=${data.access};path=/;`;
+				document.cookie = `refresh=${data.refresh};path=/;`;
 				history.pushState(null, null, '/');
 				window.location.reload();
 
@@ -120,8 +120,8 @@ export async function SingIn() {
 			return;
 		}
 
-		document.cookie = `access=${data.access};path=/home;`;
-		document.cookie = `refresh=${data.refresh};path=/home;`;
+		document.cookie = `access=${data.access};path=/;`;
+		document.cookie = `refresh=${data.refresh};path=/;`;
 		history.pushState(null, null, '/');
 		window.location.reload();
 
