@@ -9,7 +9,6 @@ export default function () {
 
 	let selectedImage = null;
 
-	// Store the initial content of the image label
 	const initialImageLabelContent = imageLabel.innerHTML;
 
 	function handleImageInputChange(e) {
@@ -18,7 +17,6 @@ export default function () {
 		if (!file) return;
 
 		selectedImage = file;
-		console.log('Selected image: ', selectedImage);
 
 		const reader = new FileReader();
 		reader.onload = (event) => {
@@ -94,13 +92,11 @@ export default function () {
 				},
 				body: formData,
 			});
-			console.log(res);
 			if (!res.ok) {
 				throw new Error('Failed to create the tournament');
 			}
 			window.location.href = '/home';
 		} catch (error) {
-			console.error(error);
 			errorElement.textContent = 'An error occurred while creating the tournament.';
 			errorElement.style.color = 'red';
 		}

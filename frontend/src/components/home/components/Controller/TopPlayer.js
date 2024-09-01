@@ -69,7 +69,7 @@ async function fetchTopPlayer() {
 				"https://localhost:4433/")
 		}));
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return [];
 	}
 }
 
@@ -77,7 +77,6 @@ async function fetchTopPlayer() {
 export default async function rendertopPlayers() {
 	const topPlayers = await fetchTopPlayer();
 	const topPlayersContainer = document.getElementById('topPlayer-container');
-	console.log("topPlayers", topPlayers, topPlayersContainer);
 
 	topPlayersContainer.innerHTML = '';
 

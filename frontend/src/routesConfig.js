@@ -11,20 +11,6 @@ const routes = {
 		css: "/components/chat/assets/chat.css",
 		controller: () => import("/components/chat/Controller/chat.js"),
 	},
-	"/messenger/group": {
-		title: "Create Group",
-		component: () => import("/components/chat/groups/View/groups.js"),
-		css: "/components/chat/groups/assets/groups.css",
-		controller: () => import("/components/chat/groups/Controller/groups.js"),
-	},
-	"/messages/group/choice-members": {
-		title: "Choose Group Members",
-		component: () =>
-			import("/components/chat/choice_members/View/choice_members.js"),
-		css: "/components/chat/choice_members/assets/choice_members.css",
-		controller: () =>
-			import("/components/chat/choice_members/Controller/choice_members.js"),
-	},
 	"/tournaments": {
 		title: "Tournaments",
 		component: () => import("/components/tournaments/View/Tournaments.js"),
@@ -108,6 +94,12 @@ const routes = {
 		css: "/components/profile/assets/style.css",
 		controller: () => import("/components/profile/controller/index.js"),
 	},
+	"/notification": {
+		title: "notification",
+		component: () => import("/components/notification/View/notification.js"),
+		css: "/components/notification/assets/style.css",
+		controller: () => import("/components/notification/Controller/notification.js"),
+	},
 	"/home/all-players": {
 		title: "All players",
 		component: () => import("/components/all_Players/View/all_players.js"),
@@ -128,11 +120,6 @@ const routes = {
 		controller: () => import("/components/all_Online/Controller/all_online.js"),
 	},
 	"*": {
-		title: "404 Not Found",
-		component: () => import("/lib/NotFound/NotFound.js"),
-		css: "/lib/NotFound/notFound.css",
-	},
-	"not-found": {
 		title: "404 Not Found",
 		component: () => import("/lib/NotFound/NotFound.js"),
 		css: "/lib/NotFound/notFound.css",

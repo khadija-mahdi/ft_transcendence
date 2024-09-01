@@ -4,7 +4,6 @@ export default function init() {
 	const params = new URLSearchParams(url.search);
 	const email = params.get('email'); // 'John'
 	
-	console.log(`Name: ${email} Url: ${url}`);
 	if (email === null){
 		history.pushState(null, null, `/auth/register/`); 
 		window.location.reload();
@@ -33,7 +32,6 @@ export default function init() {
 			})
 			.then(response => {
 				if (response.ok) {
-					console.log('Success:', response);
 					sessionStorage.setItem('signUpStep', 'emailVerified');
 					history.pushState(null, null, `/auth/user-info/?email=${email}`); 
 					window.location.reload();
@@ -45,7 +43,7 @@ export default function init() {
 			})
 			.catch(error => {
 				errorMessage.textContent = `code not correct`;
-				console.error('Error:', error);
+				return;
 			}).finally(()=>{
 				continueButton.disabled = false;
 				continueButton.textContent = 'Continue'

@@ -3,7 +3,7 @@ import { OAuthSingIn, handleOAuthLogin } from "/components/auth/Controller/sing_
 export async function SingUP() {
 	const email_input = document.getElementById('email');
 	const errorMessage = document.querySelector('.error-message'); // Select the error message span
-	// Clear any previous error messages
+	let continueButton = document.getElementById('cont');
 	errorMessage.textContent = '';
 	continueButton.disabled = true;
 	continueButton.textContent = 'Loading ...'
@@ -17,7 +17,6 @@ export async function SingUP() {
 		.then(response => {
 			if (response.ok) {
 				sessionStorage.setItem('signUpStep', 'emailEntered');
-				console.log('Success:', response);
 				history.pushState(null, null, `/auth/verify/?email=${email_input.value}`);
 				window.location.reload();
 			} else {
@@ -28,7 +27,6 @@ export async function SingUP() {
 		})
 		.catch(error => {
 			errorMessage.textContent = `Pleas correct you email form`;
-			console.error('Error:', error);
 		}).finally(() => {
 			continueButton.disabled = false;
 			continueButton.textContent = 'Continue'

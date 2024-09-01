@@ -103,7 +103,7 @@ async function fetchOnlinePlayer() {
 				"https://localhost:4433/")
 		}));
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return [];
 	}
 }
 
@@ -111,7 +111,6 @@ async function fetchOnlinePlayer() {
 export default async function renderOnlinePlayers() {
 	const OnlinePlayers = await fetchOnlinePlayer();
 	const OnlinePlayersContainer = document.getElementById('OnlinePlayers-container');
-	console.log("OnlinePlayers", OnlinePlayers, OnlinePlayersContainer);
 
 	OnlinePlayersContainer.innerHTML = '';
 

@@ -5,7 +5,6 @@ import TopPlayers from "../components/Controller/TopPlayer.js";
 import OnlinePlayers from "../components/Controller/OnlinePlayers.js";
 import tournemntsSlider from "../components/Controller/tournemntsSlider.js";
 export default function () {
-	console.log("Home JS is working!");
 	const head = document.head;
 
 	const cssFiles = [
@@ -24,8 +23,6 @@ export default function () {
 	cssFiles.forEach((cssFile) => {
 		loadCSS(
 			cssFile,
-			() => console.log(`${cssFile} loaded`),
-			() => console.error(`Failed to load ${cssFile}`)
 		);
 	});
 
