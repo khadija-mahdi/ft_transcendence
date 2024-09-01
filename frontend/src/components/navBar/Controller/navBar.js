@@ -1,17 +1,6 @@
 import { fetchWithAuth } from '../../../lib/apiMock.js'
-
-async function fetchNotifications() {
-	let apiUrl = `https://localhost:4433/api/v1/notifications/`;
-	try {
-		const allNotification = await fetchWithAuth(apiUrl, {
-			method: 'GET',
-		});
-		return allNotification.results;
-	} catch (error) {
-		return [];
-	}
-
-}
+import { fetchNotifications } from '/_api/user.js'
+import { Empty } from '/lib/Empty.js'
 
 const notifications = await fetchNotifications();
 
@@ -56,7 +45,8 @@ async function loadNavbar() {
 		}
 	}
 }
-function renderNotifications() {
+export function renderNotifications() {
+	console.log(notifications);
 	function formatDate(dateString) {
 		const options = {
 			year: 'numeric',
@@ -71,18 +61,26 @@ function renderNotifications() {
 	const notificationList = document.getElementById("notification-list");
 	notificationList.innerHTML = "";
 
-	notifications.forEach((notification, index) => { // Pass the index as well
-		if (notification.type === 'friend-request')
-			href = `/profile?username=${notification.sender.username}`;
-		else if (notification.type === 'messenger')
-			href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-		else if (notification.type === 'invite')
-			href = `/match-making?player=${notification.sender.username}`;
+	if ("is randring : ", !notifications.length) {
+		const emptyComponent = Empty('No Notification Found');
+		const emptyContainer = document.createElement('div');
+		emptyContainer.className = 'emptyContainer';
+		emptyContainer.appendChild(emptyComponent);
+		notificationList.appendChild(emptyContainer);
+	} else {
 
-		const notificationItem = document.createElement("li");
-		notificationItem.className = "notification-item";
+		notifications.forEach((notification, index) => {
+			if (notification.type === 'friend-request')
+				href = `/profile?username=${notification.sender.username}`;
+			else if (notification.type === 'messenger')
+				href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
+			else if (notification.type === 'invite')
+				href = `/match-making?player=${notification.sender.username}`;
 
-		notificationItem.innerHTML = /*html*/ `
+			const notificationItem = document.createElement("li");
+			notificationItem.className = "notification-item";
+
+			notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
                     <img class="notification-image" src="${notification.sender.image_url || "/public/assets/images/defaultImageProfile.jpg"}" alt="Profile Image" width="35" height="35" />
@@ -100,26 +98,28 @@ function renderNotifications() {
 				</svg>
             </div>
         `;
-		notificationList.appendChild(notificationItem);
+			notificationList.appendChild(notificationItem);
 
-		const removeNot = notificationItem.querySelector(".remove-not");
-		if (removeNot) {
-			removeNot.addEventListener("click", async function () {
-				let apiUrl = `https://localhost:4433/api/v1/notifications/${notification.id}/`;
-				try {
-					await fetchWithAuth(apiUrl, {
-						method: 'DELETE',
-					});
+			const removeNot = notificationItem.querySelector(".remove-not");
+			if (removeNot) {
+				removeNot.addEventListener("click", async function () {
+					let apiUrl = `https://localhost:4433/api/v1/notifications/${notification.id}/`;
+					try {
+						await fetchWithAuth(apiUrl, {
+							method: 'DELETE',
+						});
 
-					notifications.splice(index, 1);
+						notifications.splice(index, 1);
 
-					renderNotifications();
-				} catch (error) {
-					return;
-				}
-			});
-		}
-	});
+						renderNotifications();
+					} catch (error) {
+						return;
+					}
+				});
+			}
+
+		});
+	}
 }
 
 

@@ -94,6 +94,12 @@ const routes = {
 		css: "/components/profile/assets/style.css",
 		controller: () => import("/components/profile/controller/index.js"),
 	},
+	"/notification": {
+		title: "notification",
+		component: () => import("/components/notification/View/notification.js"),
+		css: "/components/notification/assets/style.css",
+		controller: () => import("/components/notification/Controller/notification.js"),
+	},
 	"/home/all-players": {
 		title: "All players",
 		component: () => import("/components/all_Players/View/all_players.js"),

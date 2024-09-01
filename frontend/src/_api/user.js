@@ -13,6 +13,19 @@ export const fetchMyData = async () => {
 	}
 }
 
+export async function fetchNotifications() {
+	let apiUrl = `https://localhost:4433/api/v1/notifications/`;
+	try {
+		const allNotification = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
+		return allNotification.results;
+	} catch (error) {
+		return [];
+	}
+
+}
+
 export const UserDetailByUsername = async (username) => {
 	const res = await fetchWithAuth(
 		`https://localhost:4433/api/v1/users/${username}/`
