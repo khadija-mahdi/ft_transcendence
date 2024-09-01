@@ -1,8 +1,7 @@
 import { fetchWithAuth } from "/lib/apiMock.js";
+import { handleSubmit, Validator } from "/lib/Validator.js";
 
-let selectedImage = null;
-
-function ImageButton(setSelectedImage = () => {}) {
+function ImageButton(setSelectedImage = () => { }) {
   let imageInput = document.getElementById("imageInput");
   const imageLabel = document.getElementById("imageLabel");
   const initialImageLabelContent = imageLabel.innerHTML;
@@ -22,7 +21,6 @@ function ImageButton(setSelectedImage = () => {}) {
       '<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
 
     closeButton.addEventListener("click", () => {
-      selectedImage = null;
       imageLabel.innerHTML = initialImageLabelContent;
       attachImageInputChange();
     });
@@ -56,29 +54,27 @@ function ImageButton(setSelectedImage = () => {}) {
   attachImageInputChange();
 }
 
-function ValidateValue(value, regex, matchValue = null) {
-  const test = regex.test(value);
-  if (matchValue === null) return test;
-  return test && value === matchValue;
-}
+
 
 function PersonalInfoForm() {
   const form = document.getElementById("personal-info-form");
+
+  const schema = {
+    firstname: new Validator().required().string().min(5).max(50),
+    lastname: new Validator().required().string().min(5).max(50),
+    username: new Validator().required().string().min(5).max(50),
+    imageInput: new Validator().required().costume((value) =>
+      value.size <= 1000000 ? null : "Image must be less than 1MB")
+  }
+
   ImageButton((selectedImage) => {
     console.log("Selected image: ", selectedImage);
   });
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const firstname = formData.get("firstname");
-    const lastname = formData.get("lastname");
-    const username = formData.get("username");
 
-    if (!ValidateValue(firstname, /^[a-zA-Z]+$/, null)) {
-      
-      return;
-    }
-  });
+  form.addEventListener("submit", (event) => handleSubmit(event, schema, OnSubmit));
+  function OnSubmit(formData) {
+    console.log("Form data: ", formData);
+  }
 }
 
 export default function () {

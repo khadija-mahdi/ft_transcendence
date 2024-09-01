@@ -39,7 +39,7 @@ class BaseNotification():
         notification.save()
         send_notification(notification)
 
-    def _create_chat_notification(self, recipient, title, description,type, action, sender):
+    def _create_chat_notification(self, recipient, title, description, type, action, sender):
         notification = Notification(
             recipient=recipient,
             title=title,
@@ -218,6 +218,8 @@ class OnlineFriendsList(generics.ListAPIView):
     class QuerySerializer(serializers.Serializer):
         filterbyName = serializers.BooleanField(required=False)
         filterByLevel = serializers.BooleanField(required=False)
+        search = serializers.CharField(required=False)
+
     serializer_class = OnlineUserSerializer
     permission_classes = [IsAuthenticated]
 
@@ -228,10 +230,13 @@ class OnlineFriendsList(generics.ListAPIView):
             filterbyName = query_serializer.validated_data.get('filterbyName')
             filterByLevel = query_serializer.validated_data.get(
                 'filterByLevel')
+            search = query_serializer.validated_data.get('search')
             if filterbyName:
                 return friends_query.order_by('username')
             if filterByLevel:
                 return friends_query.order_by('rank__hierarchy_order').order_by('current_xp').reverse()
+            if search:
+                return friends_query.filter(Q(username__icontains=search) | Q(email__icontains=search))
         return friends_query
 
 
