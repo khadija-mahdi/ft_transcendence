@@ -1,12 +1,11 @@
 import { Empty } from "../../../../lib/Empty.js";
-import { fetchWithAuth } from '../../../../lib/apiMock.js'
-
+import { fetchWithAuth } from "../../../../lib/apiMock.js";
 
 async function fetchLogData() {
-	const apiUrl = "https://localhost:4433/api/v1/users/rank-logs/";
+	const apiUrl = "/api/v1/users/rank-logs/";
 	try {
 		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		return response;
 	} catch (error) {
@@ -15,11 +14,11 @@ async function fetchLogData() {
 }
 
 async function fetchMyData() {
-	const apiUrl = "https://localhost:4433/api/v1/users/me/";
+	const apiUrl = "/api/v1/users/me/";
 
 	try {
 		const data = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		return data;
 	} catch (error) {
@@ -28,18 +27,24 @@ async function fetchMyData() {
 }
 
 function PrepareUserChart(inputData) {
-	const chart = document.getElementById('user-chart');
-	const ctx = chart.getContext('2d');
+	const chart = document.getElementById("user-chart");
+	const ctx = chart.getContext("2d");
 
 	var gradient = ctx?.createLinearGradient(0, 0, 0, 400);
-	gradient?.addColorStop(0, 'rgba(253, 65, 6, 0.28)');
-	gradient?.addColorStop(1, 'rgba(253, 65, 6, 0)');
+	gradient?.addColorStop(0, "rgba(253, 65, 6, 0.28)");
+	gradient?.addColorStop(1, "rgba(253, 65, 6, 0)");
 
 	const generateLabels = () => {
-		return inputData.map(entry => new Date(entry.achieved_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+		return inputData.map((entry) =>
+			new Date(entry.achieved_at).toLocaleTimeString("en-US", {
+				hour: "2-digit",
+				minute: "2-digit",
+				second: "2-digit",
+			})
+		);
 	};
 	const generateData = () => {
-		return inputData.map(entry => entry.point);
+		return inputData.map((entry) => entry.point);
 	};
 
 	const data = {
@@ -47,15 +52,15 @@ function PrepareUserChart(inputData) {
 		datasets: [
 			{
 				data: generateData(),
-				borderColor: '#FF3D00',
-				fill: 'start',
+				borderColor: "#FF3D00",
+				fill: "start",
 				backgroundColor: gradient,
 			},
 		],
 	};
 
 	new Chart(ctx, {
-		type: 'line',
+		type: "line",
 		data: data,
 		options: {
 			scales: {
@@ -95,33 +100,36 @@ function PrepareUserChart(inputData) {
 					top: 0,
 				},
 			},
-		}
+		},
 	});
-
 }
 
 export default async function () {
 	const user = await fetchMyData();
 
-	document.getElementById("user-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
-	document.getElementById("fullname").innerText = user.fullname ? user?.fullname : "";
+	document.getElementById("user-image").src =
+		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+	document.getElementById("fullname").innerText = user.fullname
+		? user?.fullname
+		: "";
 	document.getElementById("rank-name").innerText = user.rank?.name || "";
-	document.getElementById("current-xp").innerText = user.rank && `${user?.current_xp}/${user?.rank.xp_required}`;
-	document.getElementById("rank-order").innerText = user.rank && user.rank.hierarchy_order;
+	document.getElementById("current-xp").innerText =
+		user.rank && `${user?.current_xp}/${user?.rank.xp_required}`;
+	document.getElementById("rank-order").innerText =
+		user.rank && user.rank.hierarchy_order;
 	document.getElementById("coins").innerText = user.coins;
 	document.getElementById("messages-count").innerText = -1;
 
 	const inputData = await fetchLogData();
-	const chart = document.getElementById('chart-container');
+	const chart = document.getElementById("chart-container");
 	if (inputData.length === 0 && chart) {
-		chart.innerHTML = '';
+		chart.innerHTML = "";
 		const emptyComponent = Empty("You don't have progress data yet");
-		const emptyContainer = document.createElement('div');
-		emptyContainer.className = 'emptyContainer';
+		const emptyContainer = document.createElement("div");
+		emptyContainer.className = "emptyContainer";
 		emptyContainer.appendChild(emptyComponent);
 		chart.appendChild(emptyContainer);
 	} else {
 		PrepareUserChart(inputData);
 	}
-
 }

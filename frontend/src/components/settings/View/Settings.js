@@ -72,28 +72,28 @@ export default function () {
 							<div class="form-row">
 								<!-- Input -->
 								<div class="form-field">
-									<label for="firstname" class="input-label">First Name</label>
+									<label for="first_name" class="input-label">First Name</label>
 									<input
 										class="input-field"
 										placeholder="first_name"
 										type="text"
-										name="firstname"
-										id="firstname"
+										name="first_name"
+										id="first_name"
 									/>
-									<p id="firstname-error-text" class="error-text"></p>
+									<p id="first_name-error-text" class="error-text"></p>
 								</div>
 
 								<!-- Input  -->
 								<div class="form-field">
-									<label for="lastname" class="input-label">Last Name</label>
+									<label for="last_name" class="input-label">Last Name</label>
 									<input
 										class="input-field"
 										placeholder="last_name"
 										type="text"
-										name="lastname"
-										id="lastname"
+										name="last_name"
+										id="last_name"
 									/>
-									<p id="lastname-error-text" class="error-text"></p>
+									<p id="last_name-error-text" class="error-text"></p>
 								</div>
 							</div>
 
@@ -132,18 +132,20 @@ export default function () {
 					</div>
 					<div class="form-container">
 						<div class="form">
-							<form class="form-row">
+							<p id="security-error-message" class="error-text"></p>
+							<form id="account-security-form" class="form-row">
 								<!-- Input -->
+
 								<div class="form-field">
 									<label for="email" class="input-label">Email</label>
 									<input
 										class="input-field"
-										placeholder="@email"
+										placeholder="jhon@email.com"
 										type="text"
 										name="email"
 										id="email"
 									/>
-									<p class="error-text"></p>
+									<p id="email-error-text" class="error-text"></p>
 								</div>
 
 								<div class="change-email-container">
@@ -165,7 +167,7 @@ export default function () {
 									</p>
 								</div>
 								<label class="switch">
-									<input type="checkbox" />
+									<input type="checkbox" id="enable-2fa" />
 									<span class="slider"></span>
 								</label>
 							</div>
@@ -228,8 +230,10 @@ export default function () {
 						</p>
 					</div>
 					<div class="form-container">
-						<form class="form" onSubmit="{handleSubmit(OnSubmit)}">
+						<form class="form" id="change-password-form">
 							<!-- Input -->
+							<p id="error-message" class="error-text"></p>
+
 							<div class="form-field">
 								<label for="old_password" class="input-label"
 									>Current password</label
@@ -241,7 +245,7 @@ export default function () {
 									name="old_password"
 									id="old_password"
 								/>
-								<p class="error-text"></p>
+								<p class="error-text" id="old_password-error-text"></p>
 							</div>
 
 							<div class="form-group">
@@ -257,7 +261,7 @@ export default function () {
 										name="new_password"
 										id="new_password"
 									/>
-									<p class="error-text"></p>
+									<p class="error-text" id="new_password-error-text"></p>
 								</div>
 							</div>
 
@@ -273,7 +277,7 @@ export default function () {
 									name="confirmPassword"
 									id="confirmPassword"
 								/>
-								<p class="error-text"></p>
+								<p class="error-text" id="confirmPassword-error-text"></p>
 							</div>
 
 							<div class="form-actions">

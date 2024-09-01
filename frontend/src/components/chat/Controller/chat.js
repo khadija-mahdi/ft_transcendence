@@ -1,19 +1,19 @@
-import { fetchWithAuth } from '../../../../lib/apiMock.js';
-import AuthWebSocket from '../../../lib/authwebsocket.js';
-import { renderMessagesItems } from './headerChat.js';
+import { fetchWithAuth } from "../../../../lib/apiMock.js";
+import AuthWebSocket from "../../../lib/authwebsocket.js";
+import { renderMessagesItems } from "./headerChat.js";
 
 let clickedIndex = 0;
 let isFilter = false;
 let rooms = [];
 
 async function fetchRooms(q = "", filter = false) {
-	let apiUrl = filter ?
-		"https://localhost:4433/api/v1/chat/filter-rooms/" :
-		`https://localhost:4433/api/v1/chat/rooms/?q=${q}`;
+	let apiUrl = filter
+		? "/api/v1/chat/filter-rooms/"
+		: `/api/v1/chat/rooms/?q=${q}`;
 
 	try {
 		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		return response.results;
 	} catch (error) {
@@ -22,64 +22,98 @@ async function fetchRooms(q = "", filter = false) {
 }
 
 function getLastMessage({ lastMessage, type }) {
-
-	const username = 'YourUsername';
+	const username = "YourUsername";
 	if (lastMessage === null) return "";
 
 	let sender = lastMessage.sender_username;
-	if (username === sender) sender = 'You';
+	if (username === sender) sender = "You";
 
 	if (!lastMessage.message) {
-		if (lastMessage.type === 'image' && type === 'group') return `${sender}: Sent a Photo`;
+		if (lastMessage.type === "image" && type === "group")
+			return `${sender}: Sent a Photo`;
 		return "Photo";
 	} else {
-		if (lastMessage.type === 'text' && type === 'group') return `${sender}: ${lastMessage.message}`;
+		if (lastMessage.type === "text" && type === "group")
+			return `${sender}: ${lastMessage.message}`;
 		return lastMessage.message;
 	}
 }
 
 function formatTime(timestamp) {
-	if (timestamp === undefined)
-		return ''
+	if (timestamp === undefined) return "";
 	const messageDate = new Date(timestamp);
 	const currentDate = new Date();
 
 	if (messageDate.toDateString() === currentDate.toDateString()) {
-		return `${messageDate.getHours().toString().padStart(2, '0')}:${messageDate.getMinutes().toString().padStart(2, '0')}`;
+		return `${messageDate.getHours().toString().padStart(2, "0")}:${messageDate
+			.getMinutes()
+			.toString()
+			.padStart(2, "0")}`;
 	} else {
-		const daysAgo = Math.floor((currentDate - messageDate) / (1000 * 60 * 60 * 24));
-		if (daysAgo === 1) return 'Yesterday';
-		if (daysAgo < 7) return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][messageDate.getDay()];
-		return `${messageDate.getFullYear()}/${(messageDate.getMonth() + 1).toString().padStart(2, '0')}/${messageDate.getDate().toString().padStart(2, '0')}`;
+		const daysAgo = Math.floor(
+			(currentDate - messageDate) / (1000 * 60 * 60 * 24)
+		);
+		if (daysAgo === 1) return "Yesterday";
+		if (daysAgo < 7)
+			return [
+				"Sunday",
+				"Monday",
+				"Tuesday",
+				"Wednesday",
+				"Thursday",
+				"Friday",
+				"Saturday",
+			][messageDate.getDay()];
+		return `${messageDate.getFullYear()}/${(messageDate.getMonth() + 1)
+			.toString()
+			.padStart(2, "0")}/${messageDate.getDate().toString().padStart(2, "0")}`;
 	}
 }
 
 function renderMessengerItem(item) {
 	const messengerContainer = document.getElementById("messenger-container");
-	const lastMessageContent = getLastMessage({ lastMessage: item.last_message, type: item.type });
-	const lastMessageTime = formatTime(item.last_message?.created_at)
+	const lastMessageContent = getLastMessage({
+		lastMessage: item.last_message,
+		type: item.type,
+	});
+	const lastMessageTime = formatTime(item.last_message?.created_at);
 
 	const messengerItem = document.createElement("div");
-	messengerItem.className = `messenger-item ${clickedIndex === item.id ? 'selected' : item.unseen_messages_count ? 'highlight' : ''}`;
+	messengerItem.className = `messenger-item ${
+		clickedIndex === item.id
+			? "selected"
+			: item.unseen_messages_count
+			? "highlight"
+			: ""
+	}`;
 
 	messengerItem.innerHTML = `
         <div class="content">
             <div class="avatar">
-                <img  src="${item.room_icon || "/public/assets/images/defualtgroupProfile.png"}" alt="${item.room_name}">
+                <img  src="${
+									item.room_icon ||
+									"/public/assets/images/defualtgroupProfile.png"
+								}" alt="${item.room_name}">
             </div>
             <div class="info">
                 <div class="name">${item.room_name}</div>
-                <div class="last-message">${lastMessageContent || ''}</div>
+                <div class="last-message">${lastMessageContent || ""}</div>
             </div>
         </div>
         <div class="message-info">
-            ${item.unseen_messages_count !== 0 && clickedIndex !== item.id && item.last_message && item.last_message.id !== null
-			? `<div class="unread-count">${item.unseen_messages_count}</div>`
-			: `<div class=""></div>`}
-			${lastMessageTime ?
-			`<div class="timestamp">${lastMessageTime}</div>`
-			: `<div></div>`
-		}
+            ${
+							item.unseen_messages_count !== 0 &&
+							clickedIndex !== item.id &&
+							item.last_message &&
+							item.last_message.id !== null
+								? `<div class="unread-count">${item.unseen_messages_count}</div>`
+								: `<div class=""></div>`
+						}
+			${
+				lastMessageTime
+					? `<div class="timestamp">${lastMessageTime}</div>`
+					: `<div></div>`
+			}
         </div>
     `;
 
@@ -89,13 +123,13 @@ function renderMessengerItem(item) {
 
 async function handleIconClick(item) {
 	clickedIndex = item.id;
-	document.getElementById("messenger-container").innerHTML = '';
+	document.getElementById("messenger-container").innerHTML = "";
 	const roomId = item.id;
-	const roomDetailUrl = `https://localhost:4433/api/v1/chat/rooms/${roomId}/`;
+	const roomDetailUrl = `/api/v1/chat/rooms/${roomId}/`;
 
 	try {
 		const response = await fetchWithAuth(roomDetailUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 
 		renderMessagesItems(response);
@@ -108,30 +142,28 @@ async function handleIconClick(item) {
 
 function updateRooms(newRoom) {
 	const roomId = newRoom.id.toString();
-	const roomIndex = rooms.findIndex(room => room.id.toString() === roomId);
+	const roomIndex = rooms.findIndex((room) => room.id.toString() === roomId);
 
-	if (roomIndex !== -1)
-		rooms.splice(roomIndex, 1);
+	if (roomIndex !== -1) rooms.splice(roomIndex, 1);
 
 	rooms.unshift(newRoom);
 
 	renderRoomsList(rooms);
 }
 
-
 function renderRoomsList(rooms) {
 	const messengerContainer = document.getElementById("messenger-container");
 	if (messengerContainer) {
-		messengerContainer.innerHTML = '';
-		rooms.forEach(item => renderMessengerItem(item));
+		messengerContainer.innerHTML = "";
+		rooms.forEach((item) => renderMessengerItem(item));
 	}
 }
 
 export async function ChatRoomsPanel() {
 	const filterButton = document.getElementById("filter");
-	const searchInput = document.getElementById('searchInput');
+	const searchInput = document.getElementById("searchInput");
 
-	filterButton.addEventListener('click', async () => {
+	filterButton.addEventListener("click", async () => {
 		isFilter = !isFilter;
 		filterButton.style.backgroundColor = isFilter ? "#878787" : "";
 		filterButton.style.borderRadius = isFilter ? "5px" : "";
@@ -140,7 +172,7 @@ export async function ChatRoomsPanel() {
 		renderRoomsList(rooms);
 	});
 
-	searchInput.addEventListener('input', async (e) => {
+	searchInput.addEventListener("input", async (e) => {
 		const term = e.target.value;
 		rooms = await fetchRooms(term, false);
 		renderRoomsList(rooms);
@@ -149,7 +181,7 @@ export async function ChatRoomsPanel() {
 	rooms = await fetchRooms("", isFilter);
 	renderRoomsList(rooms);
 
-	const socket = new AuthWebSocket('wss://localhost:4433/ws/rooms/');
+	const socket = new AuthWebSocket("wss://localhost:4433/ws/rooms/");
 
 	socket.onmessage = (event) => {
 		const data = JSON.parse(event.data);
@@ -175,20 +207,17 @@ export async function ChatRoomsPanel() {
 	};
 }
 
-function ChatSmallWindow() {
-
-}
+function ChatSmallWindow() {}
 
 export default async function () {
-
 	ChatRoomsPanel();
 	const urlParams = new URLSearchParams(window.location.search);
-	const chatRoom = urlParams.get('chatroom');
+	const chatRoom = urlParams.get("chatroom");
 	if (chatRoom) {
-		const url = `https://localhost:4433/api/v1/chat/get-chat-room/${chatRoom}/`;
+		const url = `/api/v1/chat/get-chat-room/${chatRoom}/`;
 		try {
 			const response = await fetchWithAuth(url, {
-				method: 'GET',
+				method: "GET",
 			});
 			renderMessagesItems(response.results[0]);
 		} catch (error) {

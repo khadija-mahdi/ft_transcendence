@@ -22,9 +22,9 @@ export function handleGoogleLogin() {
 	const params = new URLSearchParams({
 		response_type: "code",
 		client_id: oauth2Providers[0].client_id,
-		redirect_uri: `https://localhost:4433/auth/`,
-		prompt: 'select_account',
-		access_type: 'offline',
+		redirect_uri: `/auth/`,
+		prompt: "select_account",
+		access_type: "offline",
 		state: oauth2Providers[0].provider,
 		scope: oauth2Providers[0].scope,
 	});
@@ -36,9 +36,9 @@ function handleIntraLogin() {
 	const params = new URLSearchParams({
 		response_type: "code",
 		client_id: oauth2Providers[1].client_id,
-		redirect_uri: `https://localhost:4433/auth/`,
-		prompt: 'select_account',
-		access_type: 'offline',
+		redirect_uri: `/auth/`,
+		prompt: "select_account",
+		access_type: "offline",
 		state: oauth2Providers[1].provider,
 		scope: oauth2Providers[1].scope,
 	});
@@ -47,21 +47,19 @@ function handleIntraLogin() {
 }
 
 export async function OAuthSingIn() {
-	const googleAuthButton = document.getElementById('googleAuth');
-	const intraAuthButton = document.getElementById('intraAuth');
+	const googleAuthButton = document.getElementById("googleAuth");
+	const intraAuthButton = document.getElementById("intraAuth");
 	if (googleAuthButton) {
-		googleAuthButton.addEventListener('click', function () {
+		googleAuthButton.addEventListener("click", function () {
 			handleGoogleLogin();
 		});
 	}
 	if (intraAuthButton) {
-		intraAuthButton.addEventListener('click', function () {
+		intraAuthButton.addEventListener("click", function () {
 			handleIntraLogin();
 		});
 	}
 }
-
-
 
 export async function handleOAuthLogin() {
 	const params = new URLSearchParams(window.location.search);
@@ -70,16 +68,16 @@ export async function handleOAuthLogin() {
 
 	if (code && provider) {
 		try {
-			const response = await fetch(`https://localhost:4433/api/v1/auth/${provider}/?code=${code}`);
-			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+			const response = await fetch(`/api/v1/auth/${provider}/?code=${code}`);
+			if (!response.ok)
+				throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
 
 			if (data.access && data.refresh) {
 				document.cookie = `access=${data.access};path=/;`;
 				document.cookie = `refresh=${data.refresh};path=/;`;
-				history.pushState(null, null, '/');
+				history.pushState(null, null, "/");
 				window.location.reload();
-
 			}
 		} catch (error) {
 			return;
@@ -88,54 +86,56 @@ export async function handleOAuthLogin() {
 }
 
 export async function SingIn() {
-	const continueButton = document.getElementById('conIn');
-	const email_input = document.getElementById('email');
-	const password_input = document.getElementById('password')
-	const errorMessage = document.querySelector('.error-message');
+	const continueButton = document.getElementById("conIn");
+	const email_input = document.getElementById("email");
+	const password_input = document.getElementById("password");
+	const errorMessage = document.querySelector(".error-message");
 
-	errorMessage.textContent = '';
+	errorMessage.textContent = "";
 	continueButton.disabled = true;
-	continueButton.textContent = 'Loading ...';
+	continueButton.textContent = "Loading ...";
 
 	try {
-		const response = await fetch('https://localhost:4433/api/v1/auth/token/', {
-			method: 'POST',
+		const response = await fetch("/api/v1/auth/token/", {
+			method: "POST",
 			headers: {
-				'Content-Type': 'application/json',
+				"Content-Type": "application/json",
 			},
-			body: JSON.stringify({ email: email_input.value, password: password_input.value }),
+			body: JSON.stringify({
+				email: email_input.value,
+				password: password_input.value,
+			}),
 		});
 
 		if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
 		const data = await response.json();
 		if (!data.access || !data.refresh) {
-			history.pushState(null, null, '/sign_in_2fa');
+			history.pushState(null, null, "/sign_in_2fa");
 			window.location.reload();
 			return;
 		}
 
 		document.cookie = `access=${data.access};path=/;`;
 		document.cookie = `refresh=${data.refresh};path=/;`;
-		history.pushState(null, null, '/');
+		history.pushState(null, null, "/");
 		window.location.reload();
-
 	} catch (error) {
 		errorMessage.textContent = `The username or password you entered is incorrect`;
 	}
 	continueButton.disabled = false;
-	continueButton.textContent = 'Continue';
+	continueButton.textContent = "Continue";
 }
 
 export default async function init() {
-	const continueButton = document.getElementById('conIn');
-	continueButton.addEventListener('click', async function (event) {
+	const continueButton = document.getElementById("conIn");
+	continueButton.addEventListener("click", async function (event) {
 		event.preventDefault();
 		await SingIn();
 	});
 
 	await OAuthSingIn();
-	if (window.location.search.includes('code')) {
+	if (window.location.search.includes("code")) {
 		await handleOAuthLogin();
 	}
 }

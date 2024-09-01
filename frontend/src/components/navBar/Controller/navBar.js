@@ -1,6 +1,6 @@
-import { fetchWithAuth } from '../../../lib/apiMock.js'
-import { fetchNotifications } from '/_api/user.js'
-import { Empty } from '/lib/Empty.js'
+import { fetchWithAuth } from "../../../lib/apiMock.js";
+import { fetchNotifications } from "/_api/user.js";
+import { Empty } from "/lib/Empty.js";
 
 const notifications = await fetchNotifications();
 
@@ -18,8 +18,8 @@ async function loadNavbar() {
 			renderNavBrContent();
 
 			fetchMyData();
-			let badge = document.getElementById("notification-badge")
-			badge.innerHTML = notifications.length
+			let badge = document.getElementById("notification-badge");
+			badge.innerHTML = notifications.length;
 			renderNotifications();
 
 			document.getElementById("notif").addEventListener("click", function () {
@@ -39,7 +39,6 @@ async function loadNavbar() {
 					panel.classList.add("hidden");
 				}
 			});
-
 		} catch (error) {
 			return;
 		}
@@ -49,32 +48,31 @@ export function renderNotifications() {
 	console.log(notifications);
 	function formatDate(dateString) {
 		const options = {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
+			year: "numeric",
+			month: "short",
+			day: "numeric",
+			hour: "2-digit",
+			minute: "2-digit",
 		};
 		return new Date(dateString).toLocaleString(undefined, options);
 	}
-	let href = '';
+	let href = "";
 	const notificationList = document.getElementById("notification-list");
 	notificationList.innerHTML = "";
 
-	if ("is randring : ", !notifications.length) {
-		const emptyComponent = Empty('No Notification Found');
-		const emptyContainer = document.createElement('div');
-		emptyContainer.className = 'emptyContainer';
+	if (("is randring : ", !notifications.length)) {
+		const emptyComponent = Empty("No Notification Found");
+		const emptyContainer = document.createElement("div");
+		emptyContainer.className = "emptyContainer";
 		emptyContainer.appendChild(emptyComponent);
 		notificationList.appendChild(emptyContainer);
 	} else {
-
 		notifications.forEach((notification, index) => {
-			if (notification.type === 'friend-request')
+			if (notification.type === "friend-request")
 				href = `/profile?username=${notification.sender.username}`;
-			else if (notification.type === 'messenger')
+			else if (notification.type === "messenger")
 				href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-			else if (notification.type === 'invite')
+			else if (notification.type === "invite")
 				href = `/match-making?player=${notification.sender.username}`;
 
 			const notificationItem = document.createElement("li");
@@ -83,11 +81,16 @@ export function renderNotifications() {
 			notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${notification.sender.image_url || "/public/assets/images/defaultImageProfile.jpg"}" alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src="${
+											notification.sender.image_url ||
+											"/public/assets/images/defaultImageProfile.jpg"
+										}" alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
-                    <div class="notification-time">${formatDate(notification.created_at)}</div>
+                    <div class="notification-time">${formatDate(
+											notification.created_at
+										)}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">
@@ -103,10 +106,10 @@ export function renderNotifications() {
 			const removeNot = notificationItem.querySelector(".remove-not");
 			if (removeNot) {
 				removeNot.addEventListener("click", async function () {
-					let apiUrl = `https://localhost:4433/api/v1/notifications/${notification.id}/`;
+					let apiUrl = `/api/v1/notifications/${notification.id}/`;
 					try {
 						await fetchWithAuth(apiUrl, {
-							method: 'DELETE',
+							method: "DELETE",
 						});
 
 						notifications.splice(index, 1);
@@ -117,11 +120,9 @@ export function renderNotifications() {
 					}
 				});
 			}
-
 		});
 	}
 }
-
 
 function renderNavBrContent() {
 	const navItems = document.querySelectorAll(".nav-item.nav a");
@@ -147,22 +148,18 @@ function renderNavBrContent() {
 	});
 }
 
-
-
 async function fetchMyData() {
-	const apiUrl = "https://localhost:4433/api/v1/users/me/";
+	const apiUrl = "/api/v1/users/me/";
 
 	try {
 		const data = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		ProfilePanel(data);
 	} catch (error) {
 		return;
 	}
 }
-
-
 
 // Ensure DOM is fully loaded before calling fetchMyData
 document.addEventListener("DOMContentLoaded", function () {
@@ -180,16 +177,19 @@ function ProfilePanel(user) {
 		isClicked = !isClicked;
 		profilePanel.style.display = isClicked ? "block" : "none";
 		if (isClicked) {
-			document.getElementById("profile-icon-toggle").innerHTML = `<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+			document.getElementById(
+				"profile-icon-toggle"
+			).innerHTML = `<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
 							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
 								stroke-width="1.52" d="M1 1l5.326 5.7a.91.91 0 0 0 1.348 0L13 1" />
-						</svg>`
-		}
-		else {
-			document.getElementById("profile-icon-toggle").innerHTML = `						<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+						</svg>`;
+		} else {
+			document.getElementById(
+				"profile-icon-toggle"
+			).innerHTML = `						<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
 							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
 								stroke-width="1.52" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
-						</svg>`
+						</svg>`;
 		}
 	};
 
@@ -207,19 +207,25 @@ function ProfilePanel(user) {
 		}
 	});
 
-
-	document.getElementById("profile-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
-	document.getElementById("panel-profile-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+	document.getElementById("profile-image").src =
+		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+	document.getElementById("panel-profile-image").src =
+		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
 	document.getElementById("profile-username").textContent = user.username;
-	document.getElementById("profile-level").textContent = user.xp_required && user.current_xp ? `Level${user.current_xp} "/" ${user.rank.xp_required}` : "Level 0/0";
-	document.getElementById("panel-fullname").textContent = user.fullname ? user.fullname : "";
+	document.getElementById("profile-level").textContent =
+		user.xp_required && user.current_xp
+			? `Level${user.current_xp} "/" ${user.rank.xp_required}`
+			: "Level 0/0";
+	document.getElementById("panel-fullname").textContent = user.fullname
+		? user.fullname
+		: "";
 	document.getElementById("panel-username").textContent = "@" + user.username;
 	function checkWindowSize() {
 		if (window.innerWidth < 1200) {
 			iconsSmallWindow();
 		} else {
-			let icons = document.getElementById("icons-panel-links")
-			let social = document.getElementById("social-panel-links")
+			let icons = document.getElementById("icons-panel-links");
+			let social = document.getElementById("social-panel-links");
 			social.innerHTML = ``;
 			icons.innerHTML = ``;
 		}
@@ -227,22 +233,23 @@ function ProfilePanel(user) {
 
 	checkWindowSize();
 
-	window.addEventListener('resize', checkWindowSize);
+	window.addEventListener("resize", checkWindowSize);
 	document.getElementById("view-profile-link").addEventListener("click", () => {
 		toggleProfilePanel();
 	});
 
 	document.getElementById("signout-link").addEventListener("click", () => {
 		document.cookie.split(";").forEach((c) => {
-			document.cookie = c.trim().split("=")[0] + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+			document.cookie =
+				c.trim().split("=")[0] +
+				"=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 		});
-		window.location.pathname = '/auth/';
+		window.location.pathname = "/auth/";
 	});
-
 }
 
 function iconsSmallWindow() {
-	let icons = document.getElementById("icons-panel-links")
+	let icons = document.getElementById("icons-panel-links");
 	icons.innerHTML = `
 	<div class="icons-panel-links">
 		<div class="navbar-container">
@@ -290,10 +297,10 @@ function iconsSmallWindow() {
 				</div>
 			</div>
 	</div>
-	`
-	renderNavBrContent()
+	`;
+	renderNavBrContent();
 
-	let social = document.getElementById("social-panel-links")
+	let social = document.getElementById("social-panel-links");
 	social.innerHTML = `
 	<div class="icons-panel-links">
 			<div class="desktop-nav" style="display: block;">
@@ -370,8 +377,7 @@ function iconsSmallWindow() {
 				</ul>
 			</div>
 	</div>
-	`
-
+	`;
 }
 
 loadNavbar();

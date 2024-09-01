@@ -3,7 +3,7 @@ import { fetchWithAuth } from "/lib/apiMock.js";
 import { tournamentElement, tournamentWrapper } from "../View/Tournaments.js";
 
 async function fetchTournaments() {
-	const apiUrl = "https://localhost:4433/api/v1/game/Tournament/";
+	const apiUrl = "/api/v1/game/Tournament/";
 	try {
 		const response = await fetchWithAuth(apiUrl);
 		return response.results;

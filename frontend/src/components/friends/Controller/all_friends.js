@@ -1,31 +1,30 @@
 import { Empty } from "../../../lib/Empty.js";
-import { fetchWithAuth } from '../../../../lib/apiMock.js'
-
+import { fetchWithAuth } from "../../../../lib/apiMock.js";
 
 export function FriendContainer({ name, href, number }) {
-	const container = document.createElement('div');
-	container.className = 'friend-container';
+	const container = document.createElement("div");
+	container.className = "friend-container";
 
-	const link = document.createElement('a');
+	const link = document.createElement("a");
 	link.href = `/profile?username=${name}`;
-	link.className = 'friend-link';
+	link.className = "friend-link";
 
-	const image = document.createElement('img');
-	image.className = 'friend-profile-image';
+	const image = document.createElement("img");
+	image.className = "friend-profile-image";
 	image.src = href;
-	image.alt = 'Profile Image';
+	image.alt = "Profile Image";
 	image.width = 53;
 	image.height = 53;
 
-	const textContainer = document.createElement('div');
-	textContainer.className = 'friend-text-container';
+	const textContainer = document.createElement("div");
+	textContainer.className = "friend-text-container";
 
-	const nameDiv = document.createElement('div');
-	nameDiv.className = 'friend-name';
+	const nameDiv = document.createElement("div");
+	nameDiv.className = "friend-name";
 	nameDiv.textContent = name;
 
-	const levelDiv = document.createElement('div');
-	levelDiv.className = 'friend-level';
+	const levelDiv = document.createElement("div");
+	levelDiv.className = "friend-level";
 	levelDiv.textContent = `Level ${number}`;
 
 	textContainer.appendChild(nameDiv);
@@ -48,9 +47,9 @@ export function FriendContainer({ name, href, number }) {
 
 	svg.appendChild(path);
 
-	const arrowLink = document.createElement('a');
+	const arrowLink = document.createElement("a");
 	arrowLink.href = `/profile?username=${name}`;
-	arrowLink.className = 'friend-arrow-link';
+	arrowLink.className = "friend-arrow-link";
 	arrowLink.appendChild(svg);
 
 	container.appendChild(link);
@@ -59,23 +58,21 @@ export function FriendContainer({ name, href, number }) {
 	return container;
 }
 
-
 async function fetchMyFriends(q) {
 	let apiUrl = "";
 
-	if (!q || q === '')
-		apiUrl = "https://localhost:4433/api/v1/users/friend-list";
+	if (!q || q === "") apiUrl = "/api/v1/users/friend-list";
 	else
-		apiUrl = `https://localhost:4433/api/v1/users/search-user/?none_friend_only=false&search_query=${q}`
+		apiUrl = `/api/v1/users/search-user/?none_friend_only=false&search_query=${q}`;
 
 	if (apiUrl) {
 		try {
 			const response = await fetchWithAuth(apiUrl, {
-				method: 'GET',
+				method: "GET",
 			});
 			return response.results.map((result) => ({
-				...result, image_url: result.image_url?.replace("https://localhost/",
-					"https://localhost:4433/")
+				...result,
+				image_url: result.image_url?.replace("https://localhost/", "/"),
 			}));
 		} catch (error) {
 			return [];
@@ -84,25 +81,32 @@ async function fetchMyFriends(q) {
 }
 
 export default async function renderFriends() {
-	const searchInput = document.getElementById('searchInput');
-	const friendsContainer = document.getElementById('friends-container');
+	const searchInput = document.getElementById("searchInput");
+	const friendsContainer = document.getElementById("friends-container");
 
-	searchInput.addEventListener('input', debounce(async (e) => {
-		const term = e.target.value;
-		const urlParams = new URLSearchParams(window.location.search);
+	searchInput.addEventListener(
+		"input",
+		debounce(async (e) => {
+			const term = e.target.value;
+			const urlParams = new URLSearchParams(window.location.search);
 
-		if (term) {
-			urlParams.set('q', term);
-		} else {
-			urlParams.delete('q');
-		}
+			if (term) {
+				urlParams.set("q", term);
+			} else {
+				urlParams.delete("q");
+			}
 
-		window.history.replaceState(null, '', `${window.location.pathname}?${urlParams}`);
+			window.history.replaceState(
+				null,
+				"",
+				`${window.location.pathname}?${urlParams}`
+			);
 
-		// Fetch friends based on search query
-		const friends = await fetchMyFriends(term);
-		renderFriendsList(friends);
-	}, 300));
+			// Fetch friends based on search query
+			const friends = await fetchMyFriends(term);
+			renderFriendsList(friends);
+		}, 300)
+	);
 
 	const friends = await fetchMyFriends(); // Initial render without search term
 	renderFriendsList(friends);
@@ -116,26 +120,25 @@ export default async function renderFriends() {
 	}
 
 	function renderFriendsList(friends) {
-		friendsContainer.innerHTML = '';
+		friendsContainer.innerHTML = "";
 		if (!friends.length) {
-			const emptyComponent = Empty('No Friends Found');
-			const emptyContainer = document.createElement('div');
-			emptyContainer.className = 'emptyContainer';
+			const emptyComponent = Empty("No Friends Found");
+			const emptyContainer = document.createElement("div");
+			emptyContainer.className = "emptyContainer";
 			emptyContainer.appendChild(emptyComponent);
 			friendsContainer.appendChild(emptyContainer);
 		} else {
-			friends.forEach(friend => {
+			friends.forEach((friend) => {
 				const friendComponent = FriendContainer({
 					name: friend.username,
 					href: friend.image_url,
 					number: friend.level,
 				});
-				const friendWrapper = document.createElement('div');
-				friendWrapper.className = 'friend-wrapper';
+				const friendWrapper = document.createElement("div");
+				friendWrapper.className = "friend-wrapper";
 				friendWrapper.appendChild(friendComponent);
 				friendsContainer.appendChild(friendWrapper);
 			});
 		}
 	}
 }
-

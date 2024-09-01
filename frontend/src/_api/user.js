@@ -1,43 +1,58 @@
 import { fetchWithAuth } from "/lib/apiMock.js";
 
 export const fetchMyData = async () => {
-	const apiUrl = "https://localhost:4433/api/v1/users/me/";
+	const apiUrl = "/api/v1/users/me/";
 
 	try {
 		const data = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		return data;
 	} catch (error) {
 		return {};
 	}
-}
+};
+
+export const updateProfile = async (data) => {
+	const formData = new FormData();
+	if (data.image_file) {
+		formData.append("image_file", data.image_file);
+	}
+
+	for (const key in data) {
+		const value = Object(data)[key];
+		if (value) formData.append(key, value);
+	}
+	const Response = await fetchWithAuth("/api/v1/users/me/", {
+		method: "PUT",
+		Headers: {
+			"Content-Type": "multipart/form-data",
+		},
+		body: formData,
+	});
+	return Response;
+};
 
 export async function fetchNotifications() {
-	let apiUrl = `https://localhost:4433/api/v1/notifications/`;
+	let apiUrl = `/api/v1/notifications/`;
 	try {
 		const allNotification = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		return allNotification.results;
 	} catch (error) {
 		return [];
 	}
-
 }
 
 export const UserDetailByUsername = async (username) => {
-	const res = await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/${username}/`
-	);
+	const res = await fetchWithAuth(`/api/v1/users/${username}/`);
 	return res;
 };
 
 export const MatchHistory = async (id) => {
 	try {
-		const res = await fetchWithAuth(
-			`https://localhost:4433/api/v1/game/match-history/${id}/`
-		);
+		const res = await fetchWithAuth(`/api/v1/game/match-history/${id}/`);
 		return res;
 	} catch (error) {
 		return {};
@@ -46,9 +61,7 @@ export const MatchHistory = async (id) => {
 
 export const TournamentHistory = async (id) => {
 	try {
-		const res = await fetchWithAuth(
-			`https://localhost:4433/api/v1/game/tournament-history/${id}/`
-		);
+		const res = await fetchWithAuth(`/api/v1/game/tournament-history/${id}/`);
 		return res;
 	} catch (error) {
 		return {};
@@ -56,67 +69,47 @@ export const TournamentHistory = async (id) => {
 };
 
 export const InvitePlayer = async (id) => {
-	return await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/invite-player/${id}`
-	);
+	return await fetchWithAuth(`/api/v1/users/invite-player/${id}`);
 };
 
 export const SendFriendRequest = async (id) => {
-	await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/send-friend-request/${id}/`,
-		{
-			method: "POST",
-		}
-	);
+	await fetchWithAuth(`/api/v1/users/send-friend-request/${id}/`, {
+		method: "POST",
+	});
 };
 
 export const RemoveFriendRequest = async (id) => {
-	await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
-		{
-			method: "DELETE",
-		}
-	);
+	await fetchWithAuth(`/api/v1/users/manage_friend_request/${id}/`, {
+		method: "DELETE",
+	});
 };
 
 export const AcceptFriendRequest = async (id) => {
-	await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
-		{
-			method: "PUT",
-		}
-	);
+	await fetchWithAuth(`/api/v1/users/manage_friend_request/${id}/`, {
+		method: "PUT",
+	});
 };
 
 export const DeclineFriendRequest = async (id) => {
-	await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
-		{
-			method: "PUT",
-		}
-	);
+	await fetchWithAuth(`/api/v1/users/manage_friend_request/${id}/`, {
+		method: "PUT",
+	});
 };
 
 export const BlockUser = async (id) => {
-	await fetchWithAuth(`https://localhost:4433/api/v1/users/block-user/${id}/`, {
+	await fetchWithAuth(`/api/v1/users/block-user/${id}/`, {
 		method: "POST",
 	});
 };
 
 export const UnblockUser = async (id) => {
-	await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/unblock-user/${id}/`,
-		{
-			method: "DELETE",
-		}
-	);
+	await fetchWithAuth(`/api/v1/users/unblock-user/${id}/`, {
+		method: "DELETE",
+	});
 };
 
 export const RemoveFriend = async (id) => {
-	await fetchWithAuth(
-		`https://localhost:4433/api/v1/users/remove-friend/${id}/`,
-		{
-			method: "DELETE",
-		}
-	);
+	await fetchWithAuth(`/api/v1/users/remove-friend/${id}/`, {
+		method: "DELETE",
+	});
 };

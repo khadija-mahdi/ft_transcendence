@@ -1,7 +1,6 @@
 import { fetchWithAuth } from "/lib/apiMock.js";
-import { fetchNotifications } from '/_api/user.js'
-import { Empty } from '/lib/Empty.js'
-
+import { fetchNotifications } from "/_api/user.js";
+import { Empty } from "/lib/Empty.js";
 
 const notifications = await fetchNotifications();
 
@@ -9,32 +8,31 @@ export function renderNotifications() {
 	console.log(notifications);
 	function formatDate(dateString) {
 		const options = {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
+			year: "numeric",
+			month: "short",
+			day: "numeric",
+			hour: "2-digit",
+			minute: "2-digit",
 		};
 		return new Date(dateString).toLocaleString(undefined, options);
 	}
-	let href = '';
+	let href = "";
 	const notificationList = document.getElementById("notifications-list");
 	notificationList.innerHTML = "";
 
-	if ("is randring : ", !notifications.length) {
-		const emptyComponent = Empty('No Notification Found');
-		const emptyContainer = document.createElement('div');
-		emptyContainer.className = 'emptyContainer';
+	if (("is randring : ", !notifications.length)) {
+		const emptyComponent = Empty("No Notification Found");
+		const emptyContainer = document.createElement("div");
+		emptyContainer.className = "emptyContainer";
 		emptyContainer.appendChild(emptyComponent);
 		notificationList.appendChild(emptyContainer);
 	} else {
-
 		notifications.forEach((notification, index) => {
-			if (notification.type === 'friend-request')
+			if (notification.type === "friend-request")
 				href = `/profile?username=${notification.sender.username}`;
-			else if (notification.type === 'messenger')
+			else if (notification.type === "messenger")
 				href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-			else if (notification.type === 'invite')
+			else if (notification.type === "invite")
 				href = `/match-making?player=${notification.sender.username}`;
 
 			const notificationItem = document.createElement("li");
@@ -43,11 +41,16 @@ export function renderNotifications() {
 			notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${notification.sender.image_url || "/public/assets/images/defaultImageProfile.jpg"}" alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src="${
+											notification.sender.image_url ||
+											"/public/assets/images/defaultImageProfile.jpg"
+										}" alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
-                    <div class="notification-time">${formatDate(notification.created_at)}</div>
+                    <div class="notification-time">${formatDate(
+											notification.created_at
+										)}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">
@@ -63,10 +66,10 @@ export function renderNotifications() {
 			const removeNot = notificationItem.querySelector(".remove-not");
 			if (removeNot) {
 				removeNot.addEventListener("click", async function () {
-					let apiUrl = `https://localhost:4433/api/v1/notifications/${notification.id}/`;
+					let apiUrl = `/api/v1/notifications/${notification.id}/`;
 					try {
 						await fetchWithAuth(apiUrl, {
-							method: 'DELETE',
+							method: "DELETE",
 						});
 
 						notifications.splice(index, 1);
@@ -77,14 +80,11 @@ export function renderNotifications() {
 					}
 				});
 			}
-
 		});
 	}
 }
 
-
 export default function () {
 	console.log(notifications);
 	renderNotifications();
-
 }

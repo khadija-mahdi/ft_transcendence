@@ -1,82 +1,182 @@
 import { fetchWithAuth } from "/lib/apiMock.js";
-import { handleSubmit, Validator } from "/lib/Validator.js";
+import { handleSubmit, Validator, reset } from "/lib/Validator.js";
+import { updateProfile, UserDetailByUsername } from "/_api/user.js";
 
-function ImageButton(setSelectedImage = () => { }) {
-  let imageInput = document.getElementById("imageInput");
-  const imageLabel = document.getElementById("imageLabel");
-  const initialImageLabelContent = imageLabel.innerHTML;
+let data = {};
 
-  function CreateImagePreview(event) {
-    const imageContainer = document.createElement("div");
-    imageContainer.className = "image-preview-container";
-
-    const imgElement = document.createElement("img");
-    imgElement.src = event.target.result;
-    imgElement.alt = "Selected";
-    imgElement.className = "image-preview";
-
-    const closeButton = document.createElement("div");
-    closeButton.className = "close-button";
-    closeButton.innerHTML =
-      '<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
-
-    closeButton.addEventListener("click", () => {
-      imageLabel.innerHTML = initialImageLabelContent;
-      attachImageInputChange();
-    });
-
-    imageContainer.appendChild(imgElement);
-    imageContainer.appendChild(closeButton);
-    return imageContainer;
-  }
-
-  function handleImageInputChange(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    imageLabel.innerHTML = "";
-    const reader = new FileReader();
-
-    setSelectedImage(file);
-
-    reader.onload = (event) => {
-      imageLabel.appendChild(CreateImagePreview(event));
-      imageLabel.style.color = "transparent";
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function attachImageInputChange() {
-    imageInput = document.getElementById("imageInput");
-    imageInput.addEventListener("change", handleImageInputChange);
-  }
-
-  attachImageInputChange();
+async function UpdateData(UpdateData, schema) {
+	try {
+		await updateProfile(UpdateData);
+	} catch (error) {
+		document.getElementById("security-error-message").innerHTML = error.message;
+	} finally {
+		reset(schema);
+		for (let key in UpdateData) data[key] = UpdateData[key] || data[key];
+		SetPersonalInfo();
+	}
 }
 
+function ImageButton(setSelectedImage = () => {}) {
+	let imageInput = document.getElementById("imageInput");
+	const imageLabel = document.getElementById("imageLabel");
+	const initialImageLabelContent = imageLabel.innerHTML;
 
+	function CreateImagePreview(event) {
+		const imageContainer = document.createElement("div");
+		imageContainer.className = "image-preview-container";
+
+		const imgElement = document.createElement("img");
+		imgElement.src = event.target.result;
+		imgElement.alt = "Selected";
+		imgElement.className = "image-preview";
+
+		const closeButton = document.createElement("div");
+		closeButton.className = "close-button";
+		closeButton.innerHTML =
+			'<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
+
+		closeButton.addEventListener("click", () => {
+			imageLabel.innerHTML = initialImageLabelContent;
+			attachImageInputChange();
+		});
+
+		imageContainer.appendChild(imgElement);
+		imageContainer.appendChild(closeButton);
+		return imageContainer;
+	}
+
+	function handleImageInputChange(e) {
+		const file = e.target.files[0];
+		if (!file) return;
+
+		imageLabel.innerHTML = "";
+		const reader = new FileReader();
+
+		setSelectedImage(file);
+
+		reader.onload = (event) => {
+			imageLabel.appendChild(CreateImagePreview(event));
+			imageLabel.style.color = "transparent";
+		};
+		reader.readAsDataURL(file);
+	}
+
+	function attachImageInputChange() {
+		imageInput = document.getElementById("imageInput");
+		imageInput.addEventListener("change", handleImageInputChange);
+	}
+
+	attachImageInputChange();
+}
+
+function SetPersonalInfo() {
+	console.log(data);
+	const { first_name, last_name, username, enabled_2fa, email } = data;
+	document.getElementById("first_name").placeholder =
+		first_name || "First Name";
+	document.getElementById("last_name").placeholder = last_name || "Last Name";
+	document.getElementById("username").placeholder = `@${username}`;
+	document.getElementById("email").placeholder = email;
+	document.getElementById("enable-2fa").checked = enabled_2fa;
+}
 
 function PersonalInfoForm() {
-  const form = document.getElementById("personal-info-form");
+	const form = document.getElementById("personal-info-form");
+	const schema = {
+		first_name: new Validator().string().max(50),
+		last_name: new Validator().string().max(50),
+		username: new Validator().string().max(50),
+		imageInput: new Validator().costume((value) =>
+			value
+				? value.size <= 1000000
+					? null
+					: "Image must be less than 1MB"
+				: null
+		),
+	};
 
-  const schema = {
-    firstname: new Validator().required().string().min(5).max(50),
-    lastname: new Validator().required().string().min(5).max(50),
-    username: new Validator().required().string().min(5).max(50),
-    imageInput: new Validator().required().costume((value) =>
-      value.size <= 1000000 ? null : "Image must be less than 1MB")
-  }
+	ImageButton((selectedImage) => {
+		console.log("Selected image: ", selectedImage);
+	});
 
-  ImageButton((selectedImage) => {
-    console.log("Selected image: ", selectedImage);
-  });
-
-  form.addEventListener("submit", (event) => handleSubmit(event, schema, OnSubmit));
-  function OnSubmit(formData) {
-    console.log("Form data: ", formData);
-  }
+	form.addEventListener("submit", (event) =>
+		handleSubmit(event, schema, UpdateData)
+	);
 }
 
-export default function () {
-  PersonalInfoForm();
+function AccountSecurityForm() {
+	const form = document.getElementById("account-security-form");
+
+	const schema = {
+		email: new Validator()
+			.required()
+			.string()
+			.min(5)
+			.max(50)
+			.costume((value) => {
+				return value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
+					? null
+					: "this field must be an email";
+			}),
+	};
+
+	form.addEventListener("submit", (event) =>
+		handleSubmit(event, schema, UpdateData)
+	);
+
+	document
+		.getElementById("enable-2fa")
+		.addEventListener("change", (event) =>
+			UpdateData({ enabled_2fa: event.target.checked })
+		);
+}
+
+function ChangePasswordForm() {
+	const form = document.getElementById("change-password-form");
+
+	const schema = {
+		old_password: new Validator().string().required("password is required"),
+		new_password: new Validator()
+			.required()
+			.string()
+			.min(8)
+			.matches(/[a-z]/, "password must have at least one lowercase letter")
+			.matches(/[A-Z]/, "password must have at least one uppercase letter")
+			.matches(/\d/, "password must have at least one digit")
+			.matches(
+				/[!@#$%^&*]/,
+				"password must have at least one special character"
+			),
+		confirmPassword: new Validator()
+			.required()
+			.string()
+			.min(8)
+			.oneOf("new_password", "password does not match"),
+	};
+
+	form.addEventListener("submit", (event) =>
+		handleSubmit(event, schema, UpdatePassword)
+	);
+
+	async function UpdatePassword(data) {
+		try {
+			console.log('fetchWithAuth("api/v1/users/change-password/", data);');
+			await fetchWithAuth("/api/v1/users/change-password/", {
+				method: "PUT",
+				body: JSON.stringify(data),
+			});
+		} catch (error) {
+			document.getElementById("error-message").innerHTML = error.message;
+		} finally {
+			reset(schema);
+		}
+	}
+}
+
+export default async function () {
+	data = await UserDetailByUsername("me");
+	SetPersonalInfo();
+	PersonalInfoForm();
+	AccountSecurityForm();
+	ChangePasswordForm();
 }

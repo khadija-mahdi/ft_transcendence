@@ -1,32 +1,27 @@
 const html = String.raw;
-import { Empty } from "../../../../lib/Empty.js";
-import { fetchWithAuth } from '../../../../lib/apiMock.js'
+import { Empty } from "/lib/Empty.js";
+import { fetchWithAuth } from "/lib/apiMock.js";
 
 export function SliderItem(tournament, index) {
-	let href = 'components/home/components/assets/valorant1.jpg'
-	if (index === 1)
-		href = 'components/home/components/assets/valorant_img.jpg'
+	let href = "components/home/components/assets/valorant1.jpg";
+	if (index === 1) href = "components/home/components/assets/valorant_img.jpg";
 	else if (index === 2)
-		href = 'components/home/components/assets/valorant_img0.jpg'
-	return html`
-	<div class='t-container'>
-		<div class='t-container-details'>
+		href = "components/home/components/assets/valorant_img0.jpg";
+	return html` <div class="t-container">
+		<div class="t-container-details">
 			<div class="t-title-container">
-				<button class='highlighted t-title'> REGISTRATION OPENS </button>
+				<button class="highlighted t-title">REGISTRATION OPENS</button>
 			</div>
-			<div class="t-name">
-				${tournament.name}
-			</div>
-			<div class="t-description">
-				${tournament.description}
-			</div>
+			<div class="t-name">${tournament.name}</div>
+			<div class="t-description">${tournament.description}</div>
 
-			<div class='t-cta-container'>
+			<div class="t-cta-container">
 				<div class="t-cta-list" aria-label="Navigate to profile">
-					<a href='/tournaments' style='z-index: 99'>
-						<button class=' t-cta'>Register now</button>
+					<a href="/tournaments" style="z-index: 99">
+						<button class=" t-cta">Register now</button>
 					</a>
-					<a href='/tournaments' class="t-learn-container"><button class='t-learn'>Learn more</button>
+					<a href="/tournaments" class="t-learn-container"
+						><button class="t-learn">Learn more</button>
 					</a>
 				</div>
 			</div>
@@ -42,71 +37,74 @@ export function SliderItem(tournament, index) {
 				<img src=${href} alt="anouncement primary Image" />
 			</div>
 		</div>
-	</div>`
+	</div>`;
 }
 
 async function fetchAnnouncement() {
-	const apiUrl = "https://localhost:4433/api/v1/game/Tournament-announcements/";
+	const apiUrl = "/api/v1/game/Tournament-announcements/";
 	try {
 		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
-		return response.results
-			.slice(0, 3)
-			.map((result) => ({
-				...result,
-				icon: result.icon?.replace("https://localhost/", "https://localhost:4433/")
-			}));
+		return response.results.slice(0, 3).map((result) => ({
+			...result,
+			icon: result.icon?.replace("https://localhost/", "/"),
+		}));
 	} catch (error) {
 		return [];
 	}
 }
 
 export default async function renderCarousel() {
-	const tournaments = await fetchAnnouncement()
-    const carousel = document.getElementById('carousel');
-    if (!tournaments.length) {
-        const emptyComponent = Empty('No tournaments Announced Found');
-        // Create a container for the empty component
-        const emptyContainer = document.createElement('div');
-        emptyContainer.className = 'emptyContainer';
-        // Apply styles to make it fill width and height
-        emptyContainer.style.width = '100%';
-        emptyContainer.style.height = '100%';
-        emptyContainer.style.display = 'flex';
-        emptyContainer.style.justifyContent = 'center';
-        emptyContainer.style.alignItems = 'center';
-        emptyContainer.appendChild(emptyComponent);
-        carousel.innerHTML = ''; // Clear existing content
-        carousel.appendChild(emptyContainer); // Append the container
-    } else {
-		let carouselItems = tournaments.map((tournament, index) => {
-			return html`
-				<div class="item ${index === 0 ? 'active' : ''}">
-					<div class="slider-container">
-						${SliderItem(tournament, index)}
+	const tournaments = await fetchAnnouncement();
+	const carousel = document.getElementById("carousel");
+	if (!tournaments.length) {
+		const emptyComponent = Empty("No tournaments Announced Found");
+		// Create a container for the empty component
+		const emptyContainer = document.createElement("div");
+		emptyContainer.className = "emptyContainer";
+		// Apply styles to make it fill width and height
+		emptyContainer.style.width = "100%";
+		emptyContainer.style.height = "100%";
+		emptyContainer.style.display = "flex";
+		emptyContainer.style.justifyContent = "center";
+		emptyContainer.style.alignItems = "center";
+		emptyContainer.appendChild(emptyComponent);
+		carousel.innerHTML = ""; // Clear existing content
+		carousel.appendChild(emptyContainer); // Append the container
+	} else {
+		let carouselItems = tournaments
+			.map((tournament, index) => {
+				return html`
+					<div class="item ${index === 0 ? "active" : ""}">
+						<div class="slider-container">${SliderItem(tournament, index)}</div>
 					</div>
-				</div>
-			`;
-		}).join('');
-	
-		let carouselIndicators = tournaments.map((_, index) => {
-			return html`
-				<li class="${index === 0 ? 'active' : ''}" data-target="#carousel-example" data-slide-to="${index}"></li>
-			`;
-		}).join('');
-		document.querySelector('.carousel-inner').innerHTML = carouselItems;
-		document.querySelector('.carousel-indicators').innerHTML = carouselIndicators;
+				`;
+			})
+			.join("");
+
+		let carouselIndicators = tournaments
+			.map((_, index) => {
+				return html`
+					<li
+						class="${index === 0 ? "active" : ""}"
+						data-target="#carousel-example"
+						data-slide-to="${index}"
+					></li>
+				`;
+			})
+			.join("");
+		document.querySelector(".carousel-inner").innerHTML = carouselItems;
+		document.querySelector(".carousel-indicators").innerHTML =
+			carouselIndicators;
 
 		initializeCarousel();
 	}
-
 }
 
 export function initializeCarousel() {
-
-	let items = document.querySelectorAll('.carousel .item');
-	let dots = document.querySelectorAll('.carousel-indicators li');
+	let items = document.querySelectorAll(".carousel .item");
+	let dots = document.querySelectorAll(".carousel-indicators li");
 	let currentItem = 0;
 	let isEnabled = true;
 	let timeoutID = null;
@@ -116,70 +114,78 @@ export function initializeCarousel() {
 	}
 
 	function nextItem(n) {
-		hideItem('to-left');
+		hideItem("to-left");
 		changeCurrentItem(n + 1);
-		showItem('from-right');
+		showItem("from-right");
 	}
 
 	function previousItem(n) {
-		hideItem('to-right');
+		hideItem("to-right");
 		changeCurrentItem(n - 1);
-		showItem('from-left');
+		showItem("from-left");
 	}
 
 	function goToItem(n) {
 		if (n < currentItem) {
-			hideItem('to-right');
+			hideItem("to-right");
 			currentItem = n;
-			showItem('from-left');
+			showItem("from-left");
 		} else {
-			hideItem('to-left');
+			hideItem("to-left");
 			currentItem = n;
-			showItem('from-right');
+			showItem("from-right");
 		}
 	}
 
 	function hideItem(direction) {
 		isEnabled = false;
 		items[currentItem].classList.add(direction);
-		dots[currentItem].classList.remove('active');
-		items[currentItem].addEventListener('animationend', function () {
-			this.classList.remove('active', direction);
+		dots[currentItem].classList.remove("active");
+		items[currentItem].addEventListener("animationend", function () {
+			this.classList.remove("active", direction);
 		});
 	}
 
 	function showItem(direction) {
-		items[currentItem].classList.add('next', direction);
-		dots[currentItem].classList.add('active');
-		items[currentItem].addEventListener('animationend', function () {
-			this.classList.remove('next', direction);
-			this.classList.add('active');
+		items[currentItem].classList.add("next", direction);
+		dots[currentItem].classList.add("active");
+		items[currentItem].addEventListener("animationend", function () {
+			this.classList.remove("next", direction);
+			this.classList.add("active");
 			isEnabled = true;
 		});
 	}
 
-	document.querySelector('.carousel-control.left').addEventListener('click', function (e) {
-		e.preventDefault();
-		if (isEnabled) {
-			resetTimer();
-			previousItem(currentItem);
-		}
-	});
+	document
+		.querySelector(".carousel-control.left")
+		.addEventListener("click", function (e) {
+			e.preventDefault();
+			if (isEnabled) {
+				resetTimer();
+				previousItem(currentItem);
+			}
+		});
 
-	document.querySelector('.carousel-control.right').addEventListener('click', function (e) {
-		e.preventDefault();
-		if (isEnabled) {
-			resetTimer();
-			nextItem(currentItem);
-		}
-	});
+	document
+		.querySelector(".carousel-control.right")
+		.addEventListener("click", function (e) {
+			e.preventDefault();
+			if (isEnabled) {
+				resetTimer();
+				nextItem(currentItem);
+			}
+		});
 
-	document.querySelector('.carousel-indicators').addEventListener('click', function (e) {
-		var target = [].slice.call(e.target.parentNode.children).indexOf(e.target);
-		if (target !== currentItem && target < dots.length) {
-			goToItem(target);
-		}
-	});
+	document
+		.querySelector(".carousel-indicators")
+		.addEventListener("click", function (e) {
+			var target = [].slice
+				.call(e.target.parentNode.children)
+				.indexOf(e.target);
+			if (target !== currentItem && target < dots.length) {
+				goToItem(target);
+			}
+		});
 
 	function startTimer() {
 		// wait 2 seconds before calling goInactive
@@ -190,4 +196,4 @@ export function initializeCarousel() {
 		window.clearInterval(timeoutID);
 	}
 	startTimer();
-}	
+}

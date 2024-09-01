@@ -85,7 +85,7 @@
     gap: 1.25rem;
 }
 
-.profile-info {
+.profile-page-info {
     display: flex;
     height: 100%;
     flex-direction: column;

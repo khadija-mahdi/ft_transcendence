@@ -1,31 +1,32 @@
 import { Empty } from "../../../../lib/Empty.js";
-import { fetchWithAuth } from '../../../../lib/apiMock.js'
-
+import { fetchWithAuth } from "../../../../lib/apiMock.js";
 
 export function TopPlayerContainer({ name, href, number, index }) {
-	const container = document.createElement('div');
-	container.className = `${index === 1 ? 'topPlayers-container-highlight' : 'friend-container'}`;
+	const container = document.createElement("div");
+	container.className = `${
+		index === 1 ? "topPlayers-container-highlight" : "friend-container"
+	}`;
 
-	const link = document.createElement('a');
+	const link = document.createElement("a");
 	link.href = `/profile?username=${name}`;
-	link.className = 'friend-link';
+	link.className = "friend-link";
 
-	const image = document.createElement('img');
-	image.className = 'friend-profile-image';
+	const image = document.createElement("img");
+	image.className = "friend-profile-image";
 	image.src = href;
-	image.alt = 'Profile Image';
+	image.alt = "Profile Image";
 	image.width = 53;
 	image.height = 53;
 
-	const textContainer = document.createElement('div');
-	textContainer.className = 'friend-text-container';
+	const textContainer = document.createElement("div");
+	textContainer.className = "friend-text-container";
 
-	const nameDiv = document.createElement('div');
-	nameDiv.className = 'friend-name';
+	const nameDiv = document.createElement("div");
+	nameDiv.className = "friend-name";
 	nameDiv.textContent = name;
 
-	const levelDiv = document.createElement('div');
-	levelDiv.className = 'friend-level';
+	const levelDiv = document.createElement("div");
+	levelDiv.className = "friend-level";
 	levelDiv.textContent = `Level ${number}`;
 
 	textContainer.appendChild(nameDiv);
@@ -35,18 +36,20 @@ export function TopPlayerContainer({ name, href, number, index }) {
 	link.appendChild(textContainer);
 
 	// New index display component
-	const indexWrapper = document.createElement('div');
-	indexWrapper.className = 'topPlayers-arrow-container';
+	const indexWrapper = document.createElement("div");
+	indexWrapper.className = "topPlayers-arrow-container";
 
-	const indexDiv = document.createElement('div');
-	indexDiv.className = `topPlayers-arrow ${index === 1 ? 'topPlayers-highlight' : ''}`;
+	const indexDiv = document.createElement("div");
+	indexDiv.className = `topPlayers-arrow ${
+		index === 1 ? "topPlayers-highlight" : ""
+	}`;
 	indexDiv.textContent = index; // Display the index
 
 	indexWrapper.appendChild(indexDiv);
 
-	const indexLink = document.createElement('a');
+	const indexLink = document.createElement("a");
 	indexLink.href = `/profile?username=${name}`;
-	indexLink.className = 'friend-arrow-link';
+	indexLink.className = "friend-arrow-link";
 	indexLink.appendChild(indexWrapper);
 
 	container.appendChild(link);
@@ -55,35 +58,31 @@ export function TopPlayerContainer({ name, href, number, index }) {
 	return container;
 }
 
-
-
-
 async function fetchTopPlayer() {
-	const apiUrl = "https://localhost:4433/api/v1/users/top-players/";
+	const apiUrl = "/api/v1/users/top-players/";
 	try {
 		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		return response.results.map((result) => ({
-			...result, image_url: result.image_url?.replace("https://localhost/",
-				"https://localhost:4433/")
+			...result,
+			image_url: result.image_url?.replace("https://localhost/", "/"),
 		}));
 	} catch (error) {
 		return [];
 	}
 }
 
-
 export default async function rendertopPlayers() {
 	const topPlayers = await fetchTopPlayer();
-	const topPlayersContainer = document.getElementById('topPlayer-container');
+	const topPlayersContainer = document.getElementById("topPlayer-container");
 
-	topPlayersContainer.innerHTML = '';
+	topPlayersContainer.innerHTML = "";
 
 	if (!topPlayers.length) {
-		const emptyComponent = Empty('No topPlayers Found');
-		const emptyContainer = document.createElement('div');
-		emptyContainer.className = 'emptyContainer';
+		const emptyComponent = Empty("No topPlayers Found");
+		const emptyContainer = document.createElement("div");
+		emptyContainer.className = "emptyContainer";
 		emptyContainer.appendChild(emptyComponent);
 		topPlayersContainer.appendChild(emptyContainer);
 	} else {
@@ -94,11 +93,10 @@ export default async function rendertopPlayers() {
 				number: friend.level,
 				index: index + 1, // Assuming index starts from 1
 			});
-			const friendWrapper = document.createElement('div');
-			friendWrapper.className = 'friend-wrapper';
+			const friendWrapper = document.createElement("div");
+			friendWrapper.className = "friend-wrapper";
 			friendWrapper.appendChild(friendComponent);
 			topPlayersContainer.appendChild(friendWrapper);
 		});
-
 	}
 }

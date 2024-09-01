@@ -1,31 +1,31 @@
-import { fetchWithAuth } from '../../../../lib/apiMock.js';
-import AuthWebSocket from '../../../lib/authwebsocket.js';
-import { fetchMyData } from '/_api/user.js'
-import { handleThreeDotPanel } from './threeDot.js';
-import { ChatRoomsPanel } from './chat.js';
+import { fetchWithAuth } from "../../../../lib/apiMock.js";
+import AuthWebSocket from "../../../lib/authwebsocket.js";
+import { fetchMyData } from "/_api/user.js";
+import { handleThreeDotPanel } from "./threeDot.js";
+import { ChatRoomsPanel } from "./chat.js";
 
 const myData = await fetchMyData();
 
 let selectedImage = null;
 
 export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
-	const popupContainer = document.getElementById('popup-sendImage-container');
-	const popupPreview = document.getElementById('popup-sendImage-preview');
-	const popupError = document.getElementById('popup-sendImage-error');
-	const popupConfirm = document.getElementById('popup-sendImage-confirm');
-	const popupCancel = document.getElementById('popup-sendImage-cancel');
-	const popupClose = document.getElementById('popup-sendImage-close');
+	const popupContainer = document.getElementById("popup-sendImage-container");
+	const popupPreview = document.getElementById("popup-sendImage-preview");
+	const popupError = document.getElementById("popup-sendImage-error");
+	const popupConfirm = document.getElementById("popup-sendImage-confirm");
+	const popupCancel = document.getElementById("popup-sendImage-cancel");
+	const popupClose = document.getElementById("popup-sendImage-close");
 
 	if (error) {
-		popupPreview.classList.add('hidden');
-		popupError.classList.remove('hidden');
+		popupPreview.classList.add("hidden");
+		popupError.classList.remove("hidden");
 	} else {
 		popupPreview.src = imageSrc;
-		popupPreview.classList.remove('hidden');
-		popupError.classList.add('hidden');
+		popupPreview.classList.remove("hidden");
+		popupError.classList.add("hidden");
 	}
 
-	popupContainer.classList.remove('hidden');
+	popupContainer.classList.remove("hidden");
 
 	popupConfirm.onclick = () => {
 		if (onConfirm) onConfirm();
@@ -44,20 +44,19 @@ export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
 }
 
 export function hideSendImagePopup() {
-	const popupContainer = document.getElementById('popup-sendImage-container');
-	popupContainer.classList.add('hidden');
+	const popupContainer = document.getElementById("popup-sendImage-container");
+	popupContainer.classList.add("hidden");
 }
-
 
 async function fetchMessages(id, cursor = null) {
 	if (id) {
-		let apiUrl = `https://localhost:4433/api/v1/chat/room/${id}`;
+		let apiUrl = `/api/v1/chat/room/${id}`;
 		let allMessages = [];
 
 		try {
 			while (apiUrl) {
 				const response = await fetchWithAuth(apiUrl, {
-					method: 'GET',
+					method: "GET",
 				});
 
 				allMessages = allMessages.concat(response.results);
@@ -92,21 +91,33 @@ function prependMessagesToUI(messages) {
 	const messagesContent = document.getElementById("messages-content");
 
 	if (messagesContent) {
-		messages.forEach(message => {
-			const messageElement = document.createElement('div');
-			message.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file');
-			messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
+		messages.forEach((message) => {
+			const messageElement = document.createElement("div");
+			message.message
+				? messageElement.classList.add("message")
+				: messageElement.classList.add("image-file");
+			messageElement.classList.add(
+				message.sender_username === myData.username ? "sent" : "received"
+			);
 
 			if (message.image_file) {
 				messageElement.innerHTML = `
-                    <div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
-                        <img class="image_file-content" src="${message.image_file}" alt="image message" />
+                    <div class="image_file ${
+											message.sender_username === myData.username
+												? "sent"
+												: "received"
+										}">
+                        <img class="image_file-content" src="${
+													message.image_file
+												}" alt="image message" />
                     </div>
                 `;
 			} else {
 				messageElement.innerHTML = `
                     <div class="message-content">${message.message}</div>
-                    <div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
+                    <div class="message-time ${
+											message.sender_username === myData.username ? "sent" : ""
+										}">
                         ${new Date(message.created_at).toLocaleTimeString()}
                     </div>
                 `;
@@ -116,8 +127,6 @@ function prependMessagesToUI(messages) {
 		});
 	}
 }
-
-
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	return /*html*/ `
@@ -132,13 +141,21 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 				</div>
 				<img
 					class="panel-image"
-					src="${selectedChat.room_icon || " /public/assets/images/defaultGroupProfile.png"}"
+					src="${
+						selectedChat.room_icon ||
+						" /public/assets/images/defaultGroupProfile.png"
+					}"
 				alt="Profile Image"
                     />
 				<a href='/profile?username=${selectedChat.room_name}' class="panel-link">
 					<div class="panel-room-name">${selectedChat.room_name}</div>
 					<div class="panel-room-status">
-						${selectedChat.type === 'private' ? selectedChat.receiverUser && selectedChat.receiverUser[0].status : 'No members'}
+						${
+							selectedChat.type === "private"
+								? selectedChat.receiverUser &&
+								  selectedChat.receiverUser[0].status
+								: "No members"
+						}
 					</div>
 				</a>
 			</div>
@@ -172,11 +189,20 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 		<div id="messages-content" class="messages-content"></div>
 		<div id="send-message" class="send-message">
 			<div class="send-message-container">
-				${isFriend || selectedChat.type !== 'private' ? `
+				${
+					isFriend || selectedChat.type !== "private"
+						? `
                         <div class="send-message-content">
-                            ${selectedChat.type === 'private' ? `
+                            ${
+															selectedChat.type === "private"
+																? `
                                 <div class="invite-icon-container">
-                                    <a href="/match-making?player=${selectedChat.receiverUser && selectedChat.receiverUser[0].username || 0}">
+                                    <a href="/match-making?player=${
+																			(selectedChat.receiverUser &&
+																				selectedChat.receiverUser[0]
+																					.username) ||
+																			0
+																		}">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width='24'
@@ -191,7 +217,9 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                                     </a>
                                     <div class="invite-text">Invite</div>
                                 </div>
-                            ` : ''}
+                            `
+																: ""
+														}
 							<div class="send-image-container" id="send-image-container">
 								<!-- Image upload UI will be rendered here -->
 							</div>
@@ -214,27 +242,33 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                                 </svg>
                             </button>
                         </div>
-                    ` : `
-                        ${selectedChat.type === 'private' ? `
+                    `
+						: `
+                        ${
+													selectedChat.type === "private"
+														? `
                             <div class="no-friend-message">
                                 You can't send a message to a user that you are not friends with
                             </div>
-                        ` : ''}
-                    `}
+                        `
+														: ""
+												}
+                    `
+				}
 			</div>
 		</div>
 	</div>
 	`;
 }
 
-
-
 // WebSocket handling
 let socket = null;
 
 function handleWebSocket(selectedChat) {
 	if (selectedChat.id) {
-		socket = new AuthWebSocket(`wss://localhost:4433/ws/chat/${selectedChat.id}/`);
+		socket = new AuthWebSocket(
+			`wss://localhost:4433/ws/chat/${selectedChat.id}/`
+		);
 
 		socket.onmessage = (event) => {
 			const receivedMessage = JSON.parse(event.data);
@@ -242,14 +276,15 @@ function handleWebSocket(selectedChat) {
 				message: receivedMessage.message.message,
 				image_file: receivedMessage.message.image,
 				seen: false,
-				created_at: new Date(receivedMessage.message.created_at).toLocaleTimeString(),
+				created_at: new Date(
+					receivedMessage.message.created_at
+				).toLocaleTimeString(),
 				id: receivedMessage.message.id || 0,
 				sender_username: receivedMessage.message.sender_username,
-				type: receivedMessage.message.message ? 'text' : 'image'
+				type: receivedMessage.message.message ? "text" : "image",
 			};
 			appendMessageToUI(newMessage);
 		};
-
 	}
 }
 
@@ -257,26 +292,34 @@ function appendMessageToUI(message) {
 	const messagesContent = document.getElementById("messages-content");
 
 	if (messagesContent) {
-		const messageElement = document.createElement('div');
-		message.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file');
-		messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
+		const messageElement = document.createElement("div");
+		message.message
+			? messageElement.classList.add("message")
+			: messageElement.classList.add("image-file");
+		messageElement.classList.add(
+			message.sender_username === myData.username ? "sent" : "received"
+		);
 
 		if (image_file) {
 			messageElement.innerHTML = `
-				<div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
-					<img class="image_file-content" src=${message.image_file} alt="image message" ></img>
+				<div class="image_file ${
+					message.sender_username === myData.username ? "sent" : "received"
+				}">
+					<img class="image_file-content" src=${
+						message.image_file
+					} alt="image message" ></img>
 				</div>
 			`;
-		}
-		else {
+		} else {
 			messageElement.innerHTML = `
 				<div class="message-content">${message.message}</div>
-				<div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
+				<div class="message-time ${
+					message.sender_username === myData.username ? "sent" : ""
+				}">
 					${new Date(message.created_at).toLocaleTimeString()}
 				</div>
 			`;
 		}
-
 
 		messagesContent.appendChild(messageElement);
 
@@ -284,16 +327,16 @@ function appendMessageToUI(message) {
 	}
 }
 
-
 async function sendMessage(content, selectedChat, imageFile = null) {
-
 	let imageBase64 = null;
 	if (imageFile) {
 		imageBase64 = await new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.onloadend = () => {
-				const base64data = reader.result?.split(',')[1];
-				base64data ? resolve(base64data) : reject(new Error('Failed to read image file.'));
+				const base64data = reader.result?.split(",")[1];
+				base64data
+					? resolve(base64data)
+					: reject(new Error("Failed to read image file."));
 			};
 			reader.onerror = reject;
 			reader.readAsDataURL(imageFile);
@@ -304,30 +347,45 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 		const payload = {
 			id: selectedChat.id,
 			message: content,
-			image_file: imageBase64 ? `data:${imageFile?.type};base64,${imageBase64}` : null,
+			image_file: imageBase64
+				? `data:${imageFile?.type};base64,${imageBase64}`
+				: null,
 			seen: false,
 			sender_username: myData.username,
-			type: imageFile ? 'image' : 'text',
+			type: imageFile ? "image" : "text",
 			room_id: selectedChat.id,
-			created_at: new Date().toISOString()
+			created_at: new Date().toISOString(),
 		};
 
 		const messagesContent = document.getElementById("messages-content");
 		if (messagesContent) {
-			const messageElement = document.createElement('div');
-			payload.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file-content');
-			messageElement.classList.add(payload.sender_username === myData.username ? 'sent' : 'received');
+			const messageElement = document.createElement("div");
+			payload.message
+				? messageElement.classList.add("message")
+				: messageElement.classList.add("image-file-content");
+			messageElement.classList.add(
+				payload.sender_username === myData.username ? "sent" : "received"
+			);
 
 			if (payload.image_file) {
 				messageElement.innerHTML = `
-                    <div class="image_file ${payload.sender_username === myData.username ? 'sent' : 'received'}">
-                        <img class="image_file-content" src="${payload.image_file || "/public/assets/images/defualtgroupProfile.png"}" alt="image message" />
+                    <div class="image_file ${
+											payload.sender_username === myData.username
+												? "sent"
+												: "received"
+										}">
+                        <img class="image_file-content" src="${
+													payload.image_file ||
+													"/public/assets/images/defualtgroupProfile.png"
+												}" alt="image message" />
                     </div>
                 `;
 			} else {
 				messageElement.innerHTML = `
                     <div class="message-content">${payload.message}</div>
-                    <div class="message-time ${payload.sender_username === myData.username ? 'sent' : ''}">
+                    <div class="message-time ${
+											payload.sender_username === myData.username ? "sent" : ""
+										}">
                         ${new Date(payload.created_at).toLocaleTimeString()}
                     </div>
                 `;
@@ -335,11 +393,10 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 			socket.send(JSON.stringify(payload));
 			messagesContent.appendChild(messageElement);
 
-
 			messagesContent.scrollTop = messagesContent.scrollHeight;
 			messagesContent.scrollTo({
 				top: messagesContent.scrollHeight,
-				behavior: 'smooth'
+				behavior: "smooth",
 			});
 		}
 	} catch (error) {
@@ -349,32 +406,33 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 
 function handleImageConfirm(file, selectedChat) {
 	selectedImage = file;
-	sendMessage('', selectedChat, selectedImage);
+	sendMessage("", selectedChat, selectedImage);
 }
 
 function handleTextareaKeyPress(event, selectedChat) {
-	if (event.key === 'Enter' && !event.shiftKey) {
+	if (event.key === "Enter" && !event.shiftKey) {
 		event.preventDefault();
 		const message = event.target.value.trim();
 		if (message) {
 			sendMessage(message, selectedChat);
-			event.target.value = '';
+			event.target.value = "";
 		}
 	}
 }
 
 function handleSendMessage(event, selectedChat) {
 	event.preventDefault();
-	const textarea = document.querySelector('.message-textarea');
+	const textarea = document.querySelector(".message-textarea");
 	const message = textarea.value.trim();
 	if (message) {
 		sendMessage(message, selectedChat);
-		textarea.value = '';
+		textarea.value = "";
 	}
-} []
+}
+[];
 
 function initializeSendImage(selectedChat) {
-	const sendImageContainer = document.getElementById('send-image-container');
+	const sendImageContainer = document.getElementById("send-image-container");
 
 	let file = null;
 	let TypeError = false;
@@ -418,15 +476,21 @@ function initializeSendImage(selectedChat) {
                 </label>
             `;
 
-		document.getElementById('image-upload')?.addEventListener('change', handleImageUpload);
-		document.getElementById('remove-image')?.addEventListener('click', removeImage);
-		document.getElementById('confirm-image')?.addEventListener('click', confirmImage);
+		document
+			.getElementById("image-upload")
+			?.addEventListener("change", handleImageUpload);
+		document
+			.getElementById("remove-image")
+			?.addEventListener("click", removeImage);
+		document
+			.getElementById("confirm-image")
+			?.addEventListener("click", confirmImage);
 	};
 
 	const handleImageUpload = (e) => {
 		file = e.target.files[0];
 		if (file) {
-			if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+			if (file.type !== "image/png" && file.type !== "image/jpeg") {
 				TypeError = true;
 			} else {
 				TypeError = false;
@@ -437,10 +501,8 @@ function initializeSendImage(selectedChat) {
 				imageSrc: selectedImage,
 				onConfirm: async () => {
 					try {
-						handleImageConfirm(file, selectedChat)
+						handleImageConfirm(file, selectedChat);
 						removeImage();
-
-
 					} catch (error) {
 						removeImage();
 						return;
@@ -462,7 +524,7 @@ function initializeSendImage(selectedChat) {
 
 	const confirmImage = () => {
 		if (file && !error) {
-			handleImageConfirm(file)
+			handleImageConfirm(file);
 		}
 		removeImage();
 	};
@@ -471,13 +533,12 @@ function initializeSendImage(selectedChat) {
 }
 
 async function handleChatContent(selectedChat) {
-
 	const threeDots = document.getElementById("three-dots");
 	const optionsPanel = document.getElementById("options-panel");
 	handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
 
 	const messagesContent = document.getElementById("messages-content");
-	const messageElement = document.createElement('div');
+	const messageElement = document.createElement("div");
 	messageElement.innerHTML = `
         <div id="loader-container" class="loader-container">
             <div class="loading-text">Loading<span class="dots"></span></div>
@@ -486,24 +547,36 @@ async function handleChatContent(selectedChat) {
 
 	let messages = await fetchMessages(selectedChat.id, null);
 	const loading = document.getElementById("loader-container");
-	loading.innerHTML = '';
+	loading.innerHTML = "";
 
 	if (messagesContent && messages) {
-		messages.forEach(message => {
-			const messageElement = document.createElement('div');
-			message.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file');
-			messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
+		messages.forEach((message) => {
+			const messageElement = document.createElement("div");
+			message.message
+				? messageElement.classList.add("message")
+				: messageElement.classList.add("image-file");
+			messageElement.classList.add(
+				message.sender_username === myData.username ? "sent" : "received"
+			);
 
 			if (message.image_file) {
 				messageElement.innerHTML = `
-                    <div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
-                        <img class="image_file-content" src="${message.image_file}" alt="image message" />
+                    <div class="image_file ${
+											message.sender_username === myData.username
+												? "sent"
+												: "received"
+										}">
+                        <img class="image_file-content" src="${
+													message.image_file
+												}" alt="image message" />
                     </div>
                 `;
 			} else {
 				messageElement.innerHTML = `
                     <div class="message-content">${message.message}</div>
-                    <div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
+                    <div class="message-time ${
+											message.sender_username === myData.username ? "sent" : ""
+										}">
                         ${new Date(message.created_at).toLocaleTimeString()}
                     </div>
                 `;
@@ -514,27 +587,31 @@ async function handleChatContent(selectedChat) {
 	messagesContent.scrollTop = messagesContent.scrollHeight;
 	messagesContent.scrollTo({
 		top: messagesContent.scrollHeight,
-		behavior: 'smooth'
+		behavior: "smooth",
 	});
 
 	handleWebSocket(selectedChat);
 	initializeSendImage(selectedChat);
 
 	// Bind send button click event
-	const sendButton = document.querySelector('.send-button');
+	const sendButton = document.querySelector(".send-button");
 	if (sendButton) {
-		sendButton.addEventListener('click', (event) => handleSendMessage(event, selectedChat));
+		sendButton.addEventListener("click", (event) =>
+			handleSendMessage(event, selectedChat)
+		);
 	}
 
 	// Bind textarea enter keypress event
-	const textarea = document.querySelector('.message-textarea');
+	const textarea = document.querySelector(".message-textarea");
 	if (textarea) {
-		textarea.addEventListener('keypress', (event) => handleTextareaKeyPress(event, selectedChat));
+		textarea.addEventListener("keypress", (event) =>
+			handleTextareaKeyPress(event, selectedChat)
+		);
 	}
 }
 export async function renderMessagesItems(selectedChat) {
 	let previousSmallWindow = null;
-	let chatPanel = '';
+	let chatPanel = "";
 	let rooms = document.getElementById("rooms");
 	const originRooms = rooms.innerHTML;
 	const isFriend = true;
@@ -546,10 +623,10 @@ export async function renderMessagesItems(selectedChat) {
 			previousSmallWindow = isSmallWindow;
 
 			if (isSmallWindow) {
-				rooms.innerHTML = '';
-				rooms.style.padding = '0';
+				rooms.innerHTML = "";
+				rooms.style.padding = "0";
 				chatPanel = rooms;
-				chatPanel.innerHTML = '';
+				chatPanel.innerHTML = "";
 				chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);
 				let returnArrow = document.getElementById("left-arrow-container");
 				if (returnArrow) {
@@ -566,16 +643,15 @@ export async function renderMessagesItems(selectedChat) {
 				rooms.style.padding = "1rem";
 				ChatRoomsPanel();
 				chatPanel = document.getElementById("chat-panel");
-				chatPanel.innerHTML = '';
-				chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);;
+				chatPanel.innerHTML = "";
+				chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);
 				handleChatContent(selectedChat);
 			}
 		}
 	}
 
 	checkWindowSize();
-	window.addEventListener('resize', () => {
+	window.addEventListener("resize", () => {
 		setTimeout(checkWindowSize, 100);
 	});
 }
-

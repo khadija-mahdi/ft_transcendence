@@ -33,21 +33,26 @@ export default function tournaments() {
 				<div class="card-content">
 					<img
 						class="card-image"
+						id="tournament-image"
 						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgKjTMSLXUNCq2j0fYA9KgZKnfuudUX5Q6Pg&s"
 					/>
 					<div class="card-text">
-						<div class="card-title">{result.name}</div>
-						<div class="card-description">{result.description}</div>
+						<div class="card-title" id="tournament-title"></div>
+						<div class="card-description" id="tournament-description"></div>
 					</div>
 				</div>
 
 				<div class="card-info">
 					<div class="player-info">
-						<div class="player-count">{result.max_players}</div>
+						<div class="player-count" id="player-count"></div>
 						<div class="player-label">Max Players</div>
 					</div>
 					<div data-show="true" class="tournament-menu">
-						<button class="menu-button" popovertarget="menu-popover">
+						<button
+							class="menu-button"
+							popovertarget="menu-popover"
+							style="display: none;"
+						>
 							<svg
 								width="24"
 								height="25"
@@ -66,7 +71,7 @@ export default function tournaments() {
 						</button>
 						<div id="menu-popover" popover></div>
 						<div class="menu">
-							<li>Remove</li>
+							<li id="remove-tournament">Remove</li>
 						</div>
 					</div>
 				</div>
@@ -93,7 +98,17 @@ export default function tournaments() {
 						<img src="/lib/empty.svg" alt="empty" width="{50}" height="{50}" />
 						<p class="coming-soon">Coming Soon!</p>
 					</div>
-					<form class="register-form">
+					<form class="register-form" id="register-form">
+						<div class="form-field">
+							<input
+								class="input-field"
+								placeholder="Your alias"
+								type="text"
+								name="alias"
+								id="alias"
+							/>
+							<p id="alias-error-text" class="error-text"></p>
+						</div>
 						<button type="submit" class="register-button">Register Now</button>
 					</form>
 				</div>
@@ -114,60 +129,72 @@ export default function tournaments() {
 								<th>Winner</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
-								<td>
-									<div class="player-row">
-										<div class="player-images">
-											<div class="player-avatar">
-												<img
-													src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1723248000&semt=ais_hybrid"
-													alt="profile"
-													class="avatar-image"
-												/>
-											</div>
-											<div class="player-avatar">
-												<img
-													src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1723248000&semt=ais_hybrid"
-													alt="profile"
-													class="avatar-image"
-												/>
-											</div>
-										</div>
-										<div class="player-info">
-											<div class="player-name">Aaitouna</div>
-											<div class="player-level">Level <span>100</span></div>
-										</div>
-										<p class="vs-text">VS</p>
-										<div class="player-info">
-											<div class="player-name">Aaitouna</div>
-											<div class="player-level">Level <span>100</span></div>
-										</div>
-									</div>
-								</td>
-								<td>0 VS 0</td>
-								<td>10/02/2024</td>
-								<td>10/02/2024</td>
-								<td>
-									<div class="winner-row">
-										<div class="winner-avatar">
-											<img
-												src="https://img.freepik.com/free-psd/3d-illustration-human-avatar-profile_23-2150671122.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1723248000&semt=ais_hybrid"
-												alt="profile"
-												class="avatar-image"
-											/>
-										</div>
-										<div class="winner-info">
-											<div class="winner-name">Aaitouna</div>
-											<div class="winner-level">Level <span>100</span></div>
-										</div>
-									</div>
-								</td>
-							</tr>
-						</tbody>
+						<tbody id="status-table-body"></tbody>
 					</table>
 				</div>
 			</div>
 		</div>
+	`;
+}
+
+export function StatusTableRow(match = {}) {
+	return html`
+		<tr>
+			<td>
+				<div class="player-row">
+					<div class="player-images">
+						<div class="player-avatar">
+							<img
+								src="${match.first_player.image_url ||
+								"/assets/images/profile.jpg"}"
+								alt="profile"
+								class="avatar-image"
+							/>
+						</div>
+						<div class="player-avatar">
+							<img
+								src="${match.second_player.image_url ||
+								"/assets/images/profile.jpg"}"
+								alt="profile"
+								class="avatar-image"
+							/>
+						</div>
+					</div>
+					<div class="player-info">
+						<div class="player-name">${match.first_player.username}</div>
+						<div class="player-level">
+							Level <span>${match.first_player.current_xp}</span>
+						</div>
+					</div>
+					<p class="vs-text">VS</p>
+					<div class="player-info">
+						<div class="player-name">${match.first_player.current_xp}</div>
+						<div class="player-level">
+							Level <span>${match.first_player.current_xp}</span>
+						</div>
+					</div>
+				</div>
+			</td>
+			<td>${match.first_player_score} VS ${match.first_player_score}</td>
+			<td>${new Date().toLocaleString()}</td>
+			<td>${new Date().toLocaleString()}</td>
+			<td>
+				<div class="winner-row">
+					<div class="winner-avatar">
+						<img
+							src="${match.Winner?.image_url || "/assets/images/profile.jpg"}"
+							alt="profile"
+							class="avatar-image"
+						/>
+					</div>
+					<div class="winner-info">
+						<div class="winner-name">${match.Winner?.username}</div>
+						<div class="winner-level">
+							Level <span>${match.Winner?.current_xp}</span>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
 	`;
 }

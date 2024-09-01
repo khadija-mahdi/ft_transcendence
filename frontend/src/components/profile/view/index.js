@@ -12,7 +12,7 @@ export default function profileView() {
 				<div class="overlay"></div>
 
 				<div class="header-content">
-					<div class="profile-info">
+					<div class="profile-page-info">
 						<div class="profile-pic">
 							<img
 								id="profile-pic"
@@ -39,11 +39,11 @@ export default function profileView() {
 								<h6>RANK</h6>
 								<div class="rank-details">
 									<img
-										id='rank-icon'
+										id="rank-icon"
 										src="https://listium-res.cloudinary.com/image/upload/w_800,h_800,c_limit,q_auto,f_auto/uxakd266pstgitxtxlwk.png"
 										alt="profile"
 									/>
-									<p id='rank-title' >Unranked</p>
+									<p id="rank-title">Unranked</p>
 								</div>
 							</div>
 							<div class="top-achievements">
@@ -68,7 +68,7 @@ export default function profileView() {
 						</ul>
 						<div class="user-into-cta">
 							<!-- CTA -->
-							<button id='invite-btn'>
+							<button id="invite-btn">
 								<img
 									src="/assets/icons/directbox-send.svg"
 									alt="Call To Action Button Icon"
