@@ -103,7 +103,7 @@ async function fetchMyFriends(q) {
 				...result, image_url: result.image_url?.replace("https://localhost/", "https://localhost:4433/")
 			}));
 		} catch (error) {
-			console.error("Error fetching user data:", error);
+			return [];
 		}
 	}
 }
@@ -114,11 +114,11 @@ export default async function renderFriends() {
 	const selectBtn = document.getElementById('selectBtn');
 	const cancelBtn = document.getElementById('cancelBtn');
 	const users = userContext.getUsers();
-	
+
 	cancelBtn.addEventListener('click', () => {
 		users.forEach(user => {
 			userContext.removeUser(user.id);
-			
+
 		});
 		window.location.href = '/messenger/group';
 	});

@@ -8,7 +8,7 @@ async function fetchTournaments() {
 		const response = await fetchWithAuth(apiUrl);
 		return response.results;
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return [];
 	}
 }
 

@@ -28,7 +28,6 @@ export function handleGoogleLogin() {
 		state: oauth2Providers[0].provider,
 		scope: oauth2Providers[0].scope,
 	});
-	console.log("prams: ", params)
 	const url = `${oauth2Providers[0].AuthUrl}?${params}`;
 	window.location.href = url;
 }
@@ -81,14 +80,10 @@ export async function handleOAuthLogin() {
 				history.pushState(null, null, '/');
 				window.location.reload();
 
-			} else {
-				console.error('Authentication failed');
 			}
 		} catch (error) {
-			console.error('Error during authentication:', error);
+			return;
 		}
-	} else {
-		console.error('Code or provider is missing in the callback URL');
 	}
 }
 

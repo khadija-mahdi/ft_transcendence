@@ -3,9 +3,7 @@ export default function init() {
 	const url = new URL(window.location.href);
 	const params = new URLSearchParams(url.search);
 	const email = params.get('email'); // 'John'
-	
-	console.log(`Name: ${email} Url: ${url}`);
-	
+		
 
 	if (continueButton) {
 		continueButton.addEventListener('click', function(event) {
@@ -29,7 +27,6 @@ export default function init() {
 			})
 			.then(response => {
 				if (response.ok) {
-					console.log('Success:', response);
 					sessionStorage.setItem('signUpStep', 'emailVerified');
 					history.pushState(null, null, `/sign_up_info?email=${email}`); 
 					window.location.reload();
@@ -41,7 +38,6 @@ export default function init() {
 			})
 			.catch(error => {
 				errorMessage.textContent = `code not correct`;
-				console.error('Error:', error);
 			}).finally(()=>{
 				continueButton.disabled = false;
 				continueButton.textContent = 'Continue'

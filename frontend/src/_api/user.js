@@ -7,10 +7,9 @@ export const fetchMyData = async () => {
 		const data = await fetchWithAuth(apiUrl, {
 			method: 'GET',
 		});
-		console.log("data ,:",  data)
 		return data;
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return {};
 	}
 }
 
@@ -44,67 +43,67 @@ export const TournamentHistory = async (id) => {
 };
 
 export const InvitePlayer = async (id) => {
-  return await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/invite-player/${id}`
-  );
+	return await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/invite-player/${id}`
+	);
 };
 
 export const SendFriendRequest = async (id) => {
-  await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/send-friend-request/${id}/`,
-    {
-      method: "POST",
-    }
-  );
+	await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/send-friend-request/${id}/`,
+		{
+			method: "POST",
+		}
+	);
 };
 
 export const RemoveFriendRequest = async (id) => {
-  await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
-    {
-      method: "DELETE",
-    }
-  );
+	await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
+		{
+			method: "DELETE",
+		}
+	);
 };
 
 export const AcceptFriendRequest = async (id) => {
-  await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
-    {
-      method: "PUT",
-    }
-  );
+	await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
+		{
+			method: "PUT",
+		}
+	);
 };
 
 export const DeclineFriendRequest = async (id) => {
-  await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
-    {
-      method: "PUT",
-    }
-  );
+	await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/manage_friend_request/${id}/`,
+		{
+			method: "PUT",
+		}
+	);
 };
 
 export const BlockUser = async (id) => {
-  await fetchWithAuth(`https://localhost:4433/api/v1/users/block-user/${id}/`, {
-    method: "POST",
-  });
+	await fetchWithAuth(`https://localhost:4433/api/v1/users/block-user/${id}/`, {
+		method: "POST",
+	});
 };
 
 export const UnblockUser = async (id) => {
-  await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/unblock-user/${id}/`,
-    {
-      method: "DELETE",
-    }
-  );
+	await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/unblock-user/${id}/`,
+		{
+			method: "DELETE",
+		}
+	);
 };
 
 export const RemoveFriend = async (id) => {
-  await fetchWithAuth(
-    `https://localhost:4433/api/v1/users/remove-friend/${id}/`,
-    {
-      method: "DELETE",
-    }
-  );
+	await fetchWithAuth(
+		`https://localhost:4433/api/v1/users/remove-friend/${id}/`,
+		{
+			method: "DELETE",
+		}
+	);
 };

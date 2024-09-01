@@ -17,8 +17,7 @@ async function fetchRooms(q = "", filter = false) {
 		});
 		return response.results;
 	} catch (error) {
-		console.error("Error fetching user data:", error);
-		return []; // Handle error gracefully
+		return [];
 	}
 }
 
@@ -99,10 +98,9 @@ async function handleIconClick(item) {
 			method: 'GET',
 		});
 
-		console.log("Room Detail:", response);
 		renderMessagesItems(response);
 	} catch (error) {
-		console.error("Error fetching room detail:", error);
+		return [];
 	}
 
 	renderRoomsList(rooms);
@@ -172,15 +170,6 @@ export async function ChatRoomsPanel() {
 
 		updateRooms(updatedRoom);
 	};
-
-	socket.onopen = () => {
-		console.log('Rooms Socket is opened');
-	};
-
-	socket.onerror = (error) => {
-		console.error('WebSocket error', error);
-	};
-
 	return () => {
 		socket.close();
 	};
@@ -201,10 +190,9 @@ export default async function () {
 			const response = await fetchWithAuth(url, {
 				method: 'GET',
 			});
-			console.log("Get Room Detail:", response);
 			renderMessagesItems(response.results[0]);
 		} catch (error) {
-			console.error("Error fetching room detail:", error);
+			return [];
 		}
 	}
 }

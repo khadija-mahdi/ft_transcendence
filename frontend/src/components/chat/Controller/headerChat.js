@@ -49,25 +49,6 @@ export function hideSendImagePopup() {
 }
 
 
-
-async function fetchMessages1(id, cursor = null) {
-	if (id) {
-		let apiUrl = cursor ? `https://localhost:4433/api/v1/chat/room/${id}?cursor=${cursor}` : `https://localhost:4433/api/v1/chat/room/${id}`;
-		let allMessages = [];
-
-		try {
-			const response = await fetchWithAuth(apiUrl, { method: 'GET' });
-			allMessages = response.results;
-			cursor = response.next;
-
-			return { messages: allMessages, cursor };
-		} catch (error) {
-			console.error("Error fetching messages:", error);
-			return { messages: [], cursor: null };
-		}
-	}
-}
-
 async function fetchMessages(id, cursor = null) {
 	if (id) {
 		let apiUrl = `https://localhost:4433/api/v1/chat/room/${id}`;
@@ -85,7 +66,6 @@ async function fetchMessages(id, cursor = null) {
 
 			return allMessages;
 		} catch (error) {
-			console.error("Error fetching messages:", error);
 			return [];
 		}
 	}
@@ -254,17 +234,10 @@ let socket = null;
 
 function handleWebSocket(selectedChat) {
 	if (selectedChat.id) {
-		console.log("Creating new WebSocket connection", selectedChat.id);
 		socket = new AuthWebSocket(`wss://localhost:4433/ws/chat/${selectedChat.id}/`);
-
-		socket.onerror = (err) => {
-			console.error("WebSocket error:", err);
-		};
 
 		socket.onmessage = (event) => {
 			const receivedMessage = JSON.parse(event.data);
-			console.log('New message:', receivedMessage);
-
 			const newMessage = {
 				message: receivedMessage.message.message,
 				image_file: receivedMessage.message.image,
@@ -313,7 +286,6 @@ function appendMessageToUI(message) {
 
 
 async function sendMessage(content, selectedChat, imageFile = null) {
-	console.log("Sending message:", content, imageFile);
 
 	let imageBase64 = null;
 	if (imageFile) {
@@ -371,7 +343,7 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 			});
 		}
 	} catch (error) {
-		console.error("Error sending message:", error);
+		return;
 	}
 }
 
@@ -384,7 +356,6 @@ function handleTextareaKeyPress(event, selectedChat) {
 	if (event.key === 'Enter' && !event.shiftKey) {
 		event.preventDefault();
 		const message = event.target.value.trim();
-		console.log("message: ", message)
 		if (message) {
 			sendMessage(message, selectedChat);
 			event.target.value = '';
@@ -472,12 +443,11 @@ function initializeSendImage(selectedChat) {
 
 					} catch (error) {
 						removeImage();
-						console.error('Error sending message:', error);
+						return;
 					}
 				},
 				onCancel: () => {
-					console.log('Block action canceled');
-
+					removeImage();
 				},
 				error: TypeError,
 			});
@@ -547,7 +517,6 @@ async function handleChatContent(selectedChat) {
 		behavior: 'smooth'
 	});
 
-	console.log('messages:', messages);
 	handleWebSocket(selectedChat);
 	initializeSendImage(selectedChat);
 

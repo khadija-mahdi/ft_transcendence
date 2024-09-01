@@ -77,7 +77,6 @@ async function navigate(path) {
 		if (typeof component === 'function') {
 			app.innerHTML = component();
 		} else {
-			console.error('Component is not a function');
 			app.innerHTML = (await (await routes['*'].component()).default)();
 		}
 		if (route.controller) {
@@ -88,8 +87,6 @@ async function navigate(path) {
 		}
 		app.style.visibility = 'visible';
 	} catch (error) {
-		console.error('Failed to load route:', path);
-		console.error(error);
 		app.innerHTML = (await (await routes['*'].component()).default)();
 	}
 }

@@ -71,7 +71,7 @@ async function fetchMyFriends() {
 				"https://localhost:4433/")
 		}));
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return [];
 	}
 }
 

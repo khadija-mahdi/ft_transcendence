@@ -93,15 +93,15 @@ export default function () {
 
 	form.addEventListener('submit', async (e) => {
 		e.preventDefault(); // Prevent form submission and page reload
-	
+
 		let groupName = document.getElementById('group-name').value;
-		
+
 		const user = await fetchMyData('me');
 		const users = userContext.getUsers();
 		if (!users.some(u => u.id === user.id)) {
 			userContext.addUser(user);
 		}
-	
+
 		// Build the JSON object
 		const data = {
 			name: groupName,
@@ -109,31 +109,27 @@ export default function () {
 			icon: selectedImage,
 			input_members: users.map(user => user.id.toString())
 		};
-	
-		console.log(JSON.stringify(data));
-	
+
 		try {
 			const res = await fetchWithAuth('https://localhost:4433/api/v1/chat/rooms/', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(data), 
+				body: JSON.stringify(data),
 			});
-	
+
 			if (!res.ok) {
 				throw new Error('Failed to create the Group Chat');
 			}
-	
-			console.log(res);
+
 			window.location.href = '/messages/';
 		} catch (error) {
-			console.error(error);
 			errorElement.textContent = 'An error occurred while creating the Group Chat.';
 			errorElement.style.color = 'red';
 		}
 	});
-	
-	
+
+
 
 }

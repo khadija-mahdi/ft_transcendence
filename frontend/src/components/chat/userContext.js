@@ -40,7 +40,6 @@ export const userContext = (() => {
         reader.onload = () => {
             group_image = reader.result; 
             localStorage.setItem('group_image', group_image);
-			console.log('Selected image update: ', group_image);
             notifySubscribers();
         };
         reader.readAsDataURL(image);

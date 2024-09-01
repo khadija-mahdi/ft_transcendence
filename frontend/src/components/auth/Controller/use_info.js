@@ -44,7 +44,6 @@ export default function init() {
 			})
 			.catch(error => {
 				errorMessage.textContent = `Error: ${error.message}`; // Display fetch error
-				console.error('Error:', error);
 			})
 			.finally(() => {
 				continueButton.disabled = false;
@@ -52,7 +51,7 @@ export default function init() {
 			});
 		});
 	} else {
-		console.log("continueButton not found");
+		return;
 	}
 }
 

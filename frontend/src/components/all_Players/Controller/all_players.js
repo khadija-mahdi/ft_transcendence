@@ -186,7 +186,6 @@ async function fetchAllPlayer(q) {
 		}));
 		return { Recommended: recommendedRes, pending: pendingRes };
 	} catch (error) {
-		console.error("Error fetching user data:", error);
 		return { Recommended: [], pending: [] };
 	}
 }
@@ -203,17 +202,16 @@ function SendFriendRequest(userId, inviteButton) {
 				inviteText.textContent = 'Request Sent';
 				inviteButton.style.backgroundColor = '#474747';
 				inviteButton.disabled = true;
-				let response = await fetchWithAuth(url, {
+				await fetchWithAuth(url, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 					},
 				});
-				console.log("Friend request response:", response);
 			}
 
 		} catch (error) {
-			console.error("Error sending friend request:", error);
+			return;
 		}
 	});
 }
@@ -221,11 +219,11 @@ function SendFriendRequest(userId, inviteButton) {
 
 function handleFriendRequest(userId, acceptButton, declineButton, Buttons) {
 	acceptButton.addEventListener('click', async function () {
-		await processFriendRequest(userId, 'accept',Buttons);
+		await processFriendRequest(userId, 'accept', Buttons);
 	});
 
 	declineButton.addEventListener('click', async function () {
-		await processFriendRequest(userId, 'decline',Buttons);
+		await processFriendRequest(userId, 'decline', Buttons);
 	});
 }
 
@@ -247,20 +245,20 @@ async function processFriendRequest(userId, action, buttons) {
 		svg.setAttribute("width", "25");
 		svg.setAttribute("height", "25");
 		svg.setAttribute("fill", "none");
-	
+
 		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		path.setAttribute("stroke", "#fff");
 		path.setAttribute("stroke-linecap", "round");
 		path.setAttribute("stroke-linejoin", "round");
 		path.setAttribute("stroke-width", "1.5");
 		path.setAttribute("d", "m9 5.5 7 7-7 7");
-	
+
 		svg.appendChild(path);
 
 		buttons.innerHTML = '';
 		buttons.appendChild(svg);
 	} catch (error) {
-		console.error(`Error processing friend request (${action}):`, error);
+		return;
 	}
 }
 
@@ -339,16 +337,15 @@ export default async function renderAllPlayers() {
 					href: friend.image_url,
 					number: friend.level,
 				});
-	
+
 				const friendWrapper = document.createElement('div');
 				friendWrapper.className = 'friend-wrapper';
 				friendWrapper.appendChild(friendComponent);
 				pendingContainer.appendChild(friendWrapper);
-	
+
 				const acceptButton = friendWrapper.querySelector('.accept-button');
 				const declineButton = friendWrapper.querySelector('.decline-button');
 				const Buttons = friendWrapper.querySelector('.buttons');
-				console.log(friend);
 				handleFriendRequest(friend.user_id, acceptButton, declineButton, Buttons);
 			});
 		}

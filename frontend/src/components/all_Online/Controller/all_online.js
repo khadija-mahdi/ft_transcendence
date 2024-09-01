@@ -108,7 +108,7 @@ async function fetchOnlinePlayer(q) {
 				"https://localhost:4433/")
 		}));
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return [];
 	}
 }
 

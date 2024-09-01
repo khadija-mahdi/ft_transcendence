@@ -8,7 +8,6 @@ export function SliderItem(tournament, index) {
 		href = 'components/home/components/assets/valorant_img.jpg'
 	else if (index === 2)
 		href = 'components/home/components/assets/valorant_img0.jpg'
-	console.log("start rander the consol html ", index)
 	return html`
 	<div class='t-container'>
 		<div class='t-container-details'>
@@ -59,7 +58,7 @@ async function fetchAnnouncement() {
 				icon: result.icon?.replace("https://localhost/", "https://localhost:4433/")
 			}));
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return [];
 	}
 }
 
@@ -105,7 +104,6 @@ export default async function renderCarousel() {
 }
 
 export function initializeCarousel() {
-	console.log('renderCarousel');
 
 	let items = document.querySelectorAll('.carousel .item');
 	let dots = document.querySelectorAll('.carousel-indicators li');

@@ -8,7 +8,6 @@ async function fetchNotifications() {
 		});
 		return allNotification.results;
 	} catch (error) {
-		console.error("Error fetching Notification:", error);
 		return [];
 	}
 
@@ -53,7 +52,7 @@ async function loadNavbar() {
 			});
 
 		} catch (error) {
-			console.error("Error loading navbar:", error);
+			return;
 		}
 	}
 }
@@ -79,7 +78,6 @@ function renderNotifications() {
 			href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
 		else if (notification.type === 'invite')
 			href = `/match-making?player=${notification.sender.username}`;
-		console.log("href:", href);
 
 		const notificationItem = document.createElement("li");
 		notificationItem.className = "notification-item";
@@ -117,7 +115,6 @@ function renderNotifications() {
 
 					renderNotifications();
 				} catch (error) {
-					console.error('Failed to delete notification:', error);
 					return;
 				}
 			});
@@ -127,7 +124,6 @@ function renderNotifications() {
 
 
 function renderNavBrContent() {
-	console.log("Applying navbar styles...");
 	const navItems = document.querySelectorAll(".nav-item.nav a");
 
 	navItems.forEach((navItem) => {
@@ -162,7 +158,7 @@ async function fetchMyData() {
 		});
 		ProfilePanel(data);
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return;
 	}
 }
 
@@ -175,7 +171,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function ProfilePanel(user) {
 	if (!user) return;
-	console.log("user : ", user)
 	const profileIcon = document.getElementById("profile-icon");
 	const profilePanel = document.getElementById("profile-panel");
 

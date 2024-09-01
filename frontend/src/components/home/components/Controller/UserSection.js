@@ -8,10 +8,9 @@ async function fetchLogData() {
 		const response = await fetchWithAuth(apiUrl, {
 			method: 'GET',
 		});
-		console.log("response", response);
 		return response;
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return [];
 	}
 }
 
@@ -24,7 +23,7 @@ async function fetchMyData() {
 		});
 		return data;
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		return {};
 	}
 }
 
@@ -102,9 +101,7 @@ function PrepareUserChart(inputData) {
 }
 
 export default async function () {
-	console.log('UserSection Controller')
 	const user = await fetchMyData();
-	console.log('user', user);
 
 	document.getElementById("user-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
 	document.getElementById("fullname").innerText = user.fullname ? user?.fullname : "";
@@ -115,7 +112,6 @@ export default async function () {
 	document.getElementById("messages-count").innerText = -1;
 
 	const inputData = await fetchLogData();
-	console.log("data", inputData);
 	const chart = document.getElementById('chart-container');
 	if (inputData.length === 0 && chart) {
 		chart.innerHTML = '';
