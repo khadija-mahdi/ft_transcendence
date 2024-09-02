@@ -1,5 +1,5 @@
 import { showPopup } from "/lib/Confirm.js";
-import { fetchWithAuth } from "../../../../lib/apiMock.js";
+import { fetchWithAuth } from "/lib/apiMock.js";
 
 export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
 	const isAdmin = true;

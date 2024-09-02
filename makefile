@@ -8,6 +8,7 @@ down:
 
 db:
 	docker exec backend python3 manage.py loaddata user/seed/seed.json
+	docker exec backend python3 manage.py loaddata game/seed/seed.json
 
 fclean: down
 	docker rmi $$(docker images -a -q) &2>/dev/null

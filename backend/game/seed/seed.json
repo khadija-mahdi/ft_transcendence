@@ -8,5 +8,148 @@
             "created_at": "2024-04-24T13:28:55.976Z",
             "updated_at": "2024-04-24T13:28:55.976Z"
         }
+    },
+    {
+        "model": "game.tournament",
+        "pk": 1,
+        "fields": {
+            "name": "Ping Pong Tournament",
+            "description": "Join the Ping Pong Tournament and compete with players around the world.",
+            "max_players": 8,
+            "start_date": "2024-04-24T13:28:55.976Z",
+            "registered_users": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+            ],
+            "streams": [],
+            "owner": 1,
+            "is_public": true,
+            "is_monetized": false,
+            "uuid": "d1b1b1b1-1b1b-1b1b-1b1b-1b1b1b1b1b1b",
+            "finished": false,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.tournament",
+        "pk": 3,
+        "fields": {
+            "name": "Ping Pong Tournament",
+            "description": "Join the Ping Pong Tournament and compete with players around the world.",
+            "max_players": 8,
+            "start_date": "2024-04-24T13:28:55.976Z",
+            "registered_users": [
+                7,
+                1,
+                13,
+                9,
+                6,
+                12,
+                11
+            ],
+            "streams": [],
+            "owner": 1,
+            "is_public": true,
+            "is_monetized": false,
+            "uuid": "d3b3b3b3-3b3b-3b3b-3b3b-1b1b1b1b1b1b",
+            "finished": false,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 1,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 1,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 2,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 2,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 3,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 3,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 4,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 4,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 5,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 5,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 6,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 6,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 7,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 7,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
+    },
+    {
+        "model": "game.brackets",
+        "pk": 8,
+        "fields": {
+            "tournament": 1,
+            "round_number": 1,
+            "player": 8,
+            "created_at": "2024-04-24T13:28:55.976Z",
+            "updated_at": "2024-04-24T13:28:55.976Z"
+        }
     }
 ]

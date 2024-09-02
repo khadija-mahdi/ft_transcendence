@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 from user.models import User
 import uuid
@@ -58,10 +59,14 @@ class TournamentsRegisteredPlayers(models.Model):
         Tournament, on_delete=models.CASCADE, related_name='tournament')
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='tournament_player')
-
+    alias = models.CharField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        if not self.alias:
+            self.alias = self.user.username 
+        return super().save( *args, **kwargs)
 
 class Matchup(models.Model):
     first_player = models.ForeignKey(User, on_delete=models.CASCADE,

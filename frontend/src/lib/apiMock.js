@@ -17,12 +17,13 @@ export function destroyCookies() {
 export const fetchWithAuth = async (
 	url,
 	options = {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		},
+		method: "GET"
 	}
 ) => {
+	if(options.headers === undefined)
+		options.headers = {}
+	if(options.headers['Content-Type'] === undefined)
+		options.headers['Content-Type'] = "application/json"
 	const refresh = getCookieValue("refresh");
 	const access = getCookieValue("access");
 	const BaseUrl = "https://localhost:4433";
