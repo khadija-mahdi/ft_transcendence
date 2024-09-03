@@ -34,12 +34,18 @@ export const updateProfile = async (data) => {
 };
 
 export async function fetchNotifications() {
-	let apiUrl = `/api/v1/notifications/`;
+	let apiUrl = `https://localhost:4433/api/v1/notifications/`;
+	let Notification = [];
 	try {
-		const allNotification = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		return allNotification.results;
+		// while (apiUrl) {
+			const response = await fetchWithAuth(apiUrl, {
+				method: 'GET',
+			});
+
+			Notification = Notification.concat(response.results);
+			apiUrl = response.next;
+		// }
+		return Notification;
 	} catch (error) {
 		return [];
 	}

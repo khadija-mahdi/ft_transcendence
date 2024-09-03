@@ -91,33 +91,21 @@ function prependMessagesToUI(messages) {
 	const messagesContent = document.getElementById("messages-content");
 
 	if (messagesContent) {
-		messages.forEach((message) => {
-			const messageElement = document.createElement("div");
-			message.message
-				? messageElement.classList.add("message")
-				: messageElement.classList.add("image-file");
-			messageElement.classList.add(
-				message.sender_username === myData.username ? "sent" : "received"
-			);
+		messages.forEach(message => {
+			const messageElement = document.createElement('div');
+			message.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file');
+			messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
 
 			if (message.image_file) {
 				messageElement.innerHTML = `
-                    <div class="image_file ${
-											message.sender_username === myData.username
-												? "sent"
-												: "received"
-										}">
-                        <img class="image_file-content" src="${
-													message.image_file
-												}" alt="image message" />
+                    <div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
+                        <img class="image_file-content" src="${message.image_file}" alt="image message" />
                     </div>
                 `;
 			} else {
 				messageElement.innerHTML = `
                     <div class="message-content">${message.message}</div>
-                    <div class="message-time ${
-											message.sender_username === myData.username ? "sent" : ""
-										}">
+                    <div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
                         ${new Date(message.created_at).toLocaleTimeString()}
                     </div>
                 `;
@@ -127,6 +115,8 @@ function prependMessagesToUI(messages) {
 		});
 	}
 }
+
+
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	return /*html*/ `
