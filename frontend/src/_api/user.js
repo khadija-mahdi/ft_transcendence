@@ -25,7 +25,7 @@ export const updateProfile = async (data) => {
 	}
 	const Response = await fetchWithAuth("/api/v1/users/me/", {
 		method: "PUT",
-		Headers: {
+		headers: {
 			"Content-Type": "multipart/form-data",
 		},
 		body: formData,
@@ -38,12 +38,12 @@ export async function fetchNotifications() {
 	let Notification = [];
 	try {
 		// while (apiUrl) {
-			const response = await fetchWithAuth(apiUrl, {
-				method: 'GET',
-			});
+		const response = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
 
-			Notification = Notification.concat(response.results);
-			apiUrl = response.next;
+		Notification = Notification.concat(response.results);
+		apiUrl = response.next;
 		// }
 		return Notification;
 	} catch (error) {

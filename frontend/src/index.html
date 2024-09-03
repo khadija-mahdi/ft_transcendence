@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FT_Transcendence</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/components/navBar/assets/navBar.css" />
-    <script type="importmap">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>FT_Transcendence</title>
+
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+		rel="stylesheet" />
+	<link rel="stylesheet" href="/style.css" />
+	<link rel="stylesheet" href="/components/navBar/assets/navBar.css" />
+	<script type="importmap">
       {
         "imports": {
           "three": "/node_modules/three/build/three.module.js",
@@ -27,26 +27,22 @@
         }
       }
     </script>
-    <!-- <div id="loading-screen">
+	<!-- <div id="loading-screen">
       <div id="loading-text">Loading...</div>
       <div id="progress-bar-container">
         <div id="progress-bar"></div>
       </div>
     </div> -->
-    <script type="module" src="/main.js"></script>
-  </head>
+	<script type="module" src="/main.js"></script>
+</head>
 
-  <body>
-    <script
-      type="module"
-      src="/components/navBar/Controller/navBar.js"
-      defer
-    ></script>
-    <main id="main"></main>
-    <script>
-      const path = window.location.pathname;
-      if (path.startsWith("/auth/")) {
-        const headerHTML = `
+<body>
+	<script type="module" src="/components/navBar/Controller/navBar.js" defer></script>
+	<main id="main"></main>
+	<script>
+		const path = window.location.pathname;
+		if (path.startsWith("/auth/")) {
+			const headerHTML = `
 				<div class="header">
 					<div class="logo">
 						<img id="logo-42" src="/components/auth/assets/42_logo.svg" alt="intra logo">
@@ -55,15 +51,13 @@
 					<div class="authBar">
 						<div class="radio-group">
 							<div class="radio-container">
-								<input type="radio" name="auth" id="sign-in" value="sign-in" ${
-                  path.includes("/auth/") ? "checked" : ""
-                }>
+								<input type="radio" name="auth" id="sign-in" value="sign-in" ${path.includes("/auth/") ? "checked" : ""
+				}>
 								<label for="sign-in" class="radio-label">Sign in</label>
 							</div>
 							<div class="radio-container">
-								<input type="radio" name="auth" id="sign-up" value="sign-up" ${
-                  path.includes("/auth/register/") ? "checked" : ""
-                }>
+								<input type="radio" name="auth" id="sign-up" value="sign-up" ${path.includes("/auth/register/") ? "checked" : ""
+				}>
 								<label for="sign-up" class="radio-label">Sign Up</label>
 							</div>
 						</div>
@@ -71,44 +65,41 @@
 				</div>
 			`;
 
-        document.body.insertAdjacentHTML("afterbegin", headerHTML);
+			document.body.insertAdjacentHTML("afterbegin", headerHTML);
 
-        document.querySelectorAll('input[name="auth"]').forEach((radio) => {
-          radio.addEventListener("change", function () {
-            if (this.checked) {
-              if (this.value === "sign-in") {
-                history.pushState(null, null, "/auth/");
-                window.location.reload();
-              } else if (this.value === "sign-up") {
-                history.pushState(null, null, "/auth/register/");
-                window.location.reload();
-              }
-            }
-          });
-        });
-      }
-    </script>
-    <div id="popup-container" class="popup-overlay hidden">
-      <div class="popup-content">
-        <div class="popup-header">
-          <button id="popup-close" class="close-button">&times;</button>
-          <h3 id="popup-title"></h3>
-        </div>
-        <div class="popup-body">
-          <p id="popup-subtitle"></p>
-        </div>
-        <form id="input-form">
-			<div class="" id="input-form-body"></div>
-          <div class="popup-footer">
-            <button id="popup-cancel" class="popup-button cancel-button">
-              Cancel
-            </button>
-            <button id="popup-confirm" class="popup-button confirm-button">
-              Confirm
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </body>
+			document.querySelectorAll('input[name="auth"]').forEach((radio) => {
+				radio.addEventListener("change", function () {
+					if (this.checked) {
+						if (this.value === "sign-in") {
+							history.pushState(null, null, "/auth/");
+							window.location.reload();
+						} else if (this.value === "sign-up") {
+							history.pushState(null, null, "/auth/register/");
+							window.location.reload();
+						}
+					}
+				});
+			});
+		}
+	</script>
+	<div id="popup-container" class="popup-overlay hidden">
+		<div class="popup-content">
+			<div class="popup-header">
+				<button id="popup-close" class="close-button">&times;</button>
+				<h3 id="popup-title"></h3>
+			</div>
+			<div class="popup-body">
+				<p id="popup-subtitle"></p>
+			</div>
+			<form id="input-form">
+				<div class="" id="input-form-body"></div>
+				<div class="popup-footer">
+					<input type="button" value="Cancel" id="popup-cancel" class="popup-button cancel-button" />
+					<input type="submit" value="Confirm" id="popup-confirm" class="popup-button confirm-button" />
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+
 </html>
