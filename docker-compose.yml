@@ -21,23 +21,24 @@ services:
     networks:
       - mynetwork
     volumes:
-      - frontend_volume:/var/www/html
+      - ./frontend:/var/www/html
+    env_file:
+      - .env
     depends_on:
       - backend
-
 
   backend:
     restart: always
     container_name: backend
     build:
       context: ./backend/build-tools
-    command: ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+    command: [ "python3", "manage.py", "runserver", "0.0.0.0:8000" ]
     networks:
       - mynetwork
-    environment:
-      - PYTHONUNBUFFERED=1
     volumes:
-      - backend_volume:/var/app
+      - ./backend:/var/app
+    env_file:
+      - .env
     depends_on:
       - db
       - redis
@@ -49,6 +50,8 @@ services:
       context: ./redis
     networks:
       - mynetwork
+    env_file:
+      - .env
 
   db:
     image: postgres
@@ -58,9 +61,8 @@ services:
       - mynetwork
     volumes:
       - db_volume:/var/lib/postgresql/data
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123456
+    env_file:
+      - .env
 
   adminer:
     image: adminer
@@ -71,20 +73,8 @@ services:
       - db
 
 volumes:
-  backend_volume:
-    driver: local
-    driver_opts:
-      type: "none"
-      o: "bind"
-      device: "${PWD}/backend/"
-
-  frontend_volume:
-    driver: local
-    driver_opts:
-      type: "none"
-      o: "bind"
-      device: "${PWD}/frontend/"
   db_volume:
+
 
 networks:
   mynetwork:

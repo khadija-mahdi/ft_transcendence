@@ -1,124 +1,136 @@
 import * as THREE from "three";
 import { OrbitControls } from "OrbitControls";
-import { GLTFLoader } from "GLTFLoader";
 import { TextGeometry } from "TextGeometry";
 import { FontLoader } from "FontLoader";
+import { RGBELoader } from "RGBELoader";
 import AuthWebSocket from "/lib/authwebsocket.js";
 
+const config = {
+  tableWidth: 200,
+  tableHeight: 10,
+  tableDepth: 100,
+  ballRadius: 5,
+};
 
 const loadingManager = new THREE.LoadingManager();
 
 loadingManager.onProgress = (item, loaded, total) => {
   const progress = (loaded / total) * 100;
-  document.getElementById('progress-bar').style.width = progress + '%';
+  document.getElementById("progress-bar").style.width = progress + "%";
 };
 
 loadingManager.onLoad = () => {
-  document.getElementById('loading-screen').style.display = 'none';
+  console.log("HERE");
+  document.getElementById("loading-screen").style.display = "none";
 };
 
+function loadPaddles(scene) {
+  // Paddle dimensions
+  const paddleWidth = 3; // Width of the paddle
+  const paddleHeight = 0.5; // Thickness of the paddle
+  const paddleDepth = 20; // Height of the paddle from the table
 
-function loadModels(scene, adjustCameraAndControls, callback)
-{
-  let tableModel = null;
-  let tableWidth = 0;
-  let computer = null;
-  let ballModel = null;
-  let player_model = null;
-  let score_board = null;
-  let bg_scene = null;
-
-  const loader_scene = new GLTFLoader(loadingManager);
-  loader_scene.load(
-    "/components/game/in_game/assets/models/scene_bg.glb",
-    (glb) => {
-      bg_scene = glb.scene;
-      scene.add(bg_scene);
-      bg_scene.position.set(0, 0, 0);
-      bg_scene.scale.set(90, 90, 90);
-      adjustCameraAndControls(bg_scene);
-    }
+  // Create paddle geometry
+  const paddleGeometry = new THREE.BoxGeometry(
+    paddleWidth,
+    paddleHeight,
+    paddleDepth
   );
 
-  const loader_scene1 = new GLTFLoader(loadingManager);
-  loader_scene1.load(
-    "/components/game/in_game/assets/models/scene_light.glb",
-    (glb) => {
-      tableModel = glb.scene;
-      scene.add(tableModel);
-      tableModel.scale.set(850, 850, 850);
-      tableModel.position.set(200, 500, 0);
-      const box = new THREE.Box3().setFromObject(tableModel);
-      const size = new THREE.Vector3();
-      box.getSize(size);
-      tableWidth = size.x;
-      adjustCameraAndControls(tableModel);
-    }
-  );
+  // Create paddle material
+  const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue color for the paddles
 
-  const loader_cpm = new GLTFLoader(loadingManager);
-  loader_cpm.load(
-    "/components/game/in_game/assets/models/paddle_hock.glb",
-    (glb) => {
-      computer = glb.scene;
-      scene.add(computer);
-      computer.position.set(0, 200, 250);
-      computer.scale.set(350, 350, 350);
-    }
-  );
+  // Create the left paddle mesh
+  const leftPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
+  leftPaddle.position.set(-10, config.tableHeight + paddleHeight / 2, 0); // Position on the left side of the table
 
-  const loader = new GLTFLoader(loadingManager);
-  loader.load(
-    "/components/game/in_game/assets/models/ball_rca.glb",
-    (glb) => {
-      ballModel = glb.scene;
-      scene.add(ballModel);
-      ballModel.position.set(220, -720, -1000);
-      ballModel.scale.set(350, 700, 350);
-      adjustCameraAndControls(ballModel);
-    }
-  );
+  // Create the right paddle mesh
+  const rightPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
+  rightPaddle.position.set(10, config.tableHeight + paddleHeight / 2, 0); // Position on the right side of the table
 
-  const loader2 = new GLTFLoader(loadingManager);
-  loader2.load(
-    "/components/game/in_game/assets/models/paddle_hock.glb",
-    (glb) => {
-      player_model = glb.scene;
-      scene.add(player_model);
-      player_model.position.set(0, 200, 2260);
-      player_model.scale.set(350, 350, 350);
-    }
-  );
+  // Add the paddles to the scene
+  scene.add(leftPaddle);
+  scene.add(rightPaddle);
 
-  const loader_board = new GLTFLoader(loadingManager);
-  loader_board.load(
-    "/components/game/in_game/assets/models/score.glb",
-    (glb) => {
-      score_board = glb.scene;
-      scene.add(score_board);
-      score_board.position.set(0, 1400, 200);
-      score_board.scale.set(150, 150, 150);
-      score_board.rotation.y = Math.PI;
-      adjustCameraAndControls(score_board);
-    }
-  );
-
-  callback({
-    tableModel,
-    tableWidth,
-    computer,
-    ballModel,
-    player_model,
-    score_board,
-    bg_scene,
-  });
+  return { lp: leftPaddle, rp: rightPaddle };
 }
 
+async function loadTable(scene) {
+  const tableGeometry = new THREE.BoxGeometry(
+    config.tableWidth,
+    config.tableHeight,
+    config.tableDepth
+  );
+  const textureLoader = new THREE.TextureLoader(loadingManager);
+  function loadTexture(url, onLoad, onError) {
+    return textureLoader.load(url, onLoad, undefined, onError);
+  }
+  // Load textures
+  const diffuseTexture = loadTexture(
+    "/components/game/in_game/assets/table_textures/wood_table_001_diff_1k.jpg",
+    () => console.log("Diffuse texture loaded"),
+    (err) => console.error("Failed to load diffuse texture", err)
+  );
+  const roughnessTexture = loadTexture(
+    "/components/game/in_game/assets/table_textures/wood_table_001_rough_1k.jpg",
+    () => console.log("Roughness texture loaded"),
+    (err) => console.error("Failed to load roughness texture", err)
+  );
+  const normalTexture = loadTexture(
+    "/components/game/in_game/assets/table_textures/wood_table_001_nor_gl_1k.jpg",
+    () => console.log("Normal texture loaded"),
+    (err) => console.error("Failed to load normal texture", err)
+  );
+  const displacementTexture = loadTexture(
+    "/components/game/in_game/assets/table_textures/wood_table_001_disp_1k.png",
+    () => console.log("Displacement texture loaded"),
+    (err) => console.error("Failed to load displacement texture", err)
+  );
 
+  const tableMaterial = new THREE.MeshStandardMaterial({
+    map: diffuseTexture, // Diffuse (Albedo) map
+    roughnessMap: roughnessTexture, // Roughness map
+    normalMap: normalTexture, // Normal map
+    displacementMap: displacementTexture, // Displacement map
+    displacementScale: 0, // Adjust as needed
+    metalness: 0.1, // Adjust for shininess, 0.5 is a good starting point
+    roughness: 0.1, // Lower roughness for more reflection
+  });
 
-function addTextToScene(scene)
-{
+  const tableModel = new THREE.Mesh(tableGeometry, tableMaterial);
+  scene.add(tableModel);
+  tableModel.position.set(0, config.tableHeight / 2, 0);
+  tableModel.scale.set(1, 1, 1);
+  return tableModel;
+}
 
+async function loadModels(scene) {
+  let tableModel = null;
+  let ballModel = null;
+
+  tableModel = await loadTable(scene);
+
+  const diskHeight = 1;
+  const ballGeometry = new THREE.CylinderGeometry(
+    config.ballRadius,
+    config.ballRadius,
+    1
+  );
+
+  const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+  ballModel = new THREE.Mesh(ballGeometry, ballMaterial);
+
+  ballModel.position.set(0, config.tableHeight + diskHeight, 0);
+  scene.add(ballModel);
+
+  return {
+    tableModel,
+    ballModel,
+    ...loadPaddles(scene),
+  };
+}
+
+function addTextToScene(scene) {
   let textMesh = null;
   let textMesh_player = null;
   let textMesh_score_player = null;
@@ -213,79 +225,85 @@ function addTextToScene(scene)
   );
 }
 
+function Camera() {
+  const fov = 45;
+  const aspect = window.innerWidth / window.innerHeight;
+  const near = 0.1;
+  const far = 1000;
 
-export default function () {
+  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera.position.set(-269.13, 96, 3.1);
+  camera.rotation.set(
+    -1.537864937968381,
+    -1.225414904638361,
+    -1.5357998077952344
+  );
+  camera.rotation.order = "XYZ";
+  camera.lookAt(new THREE.Vector3(0, config.tableHeight / 2, 0));
+  return camera;
+}
+
+function Lights(scene) {
+  const ambientLight = new THREE.AmbientLight(0x404040);
+  scene.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(10, 100, 10);
+  scene.add(directionalLight);
+
+  const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+  pointLight.position.set(-269.13, 96, 3.1);
+  scene.add(pointLight);
+}
+
+function Renderer(scene) {
+  const main = document.getElementById("main");
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  main.appendChild(renderer.domElement);
+
+  const loader = new RGBELoader(loadingManager);
+  loader.load(
+    "/components/game/in_game/assets/netball_court_2k.hdr",
+    function (texture) {
+      texture.mapping = THREE.EquirectangularReflectionMapping; // Use it as an environment map
+      scene.background = texture; // Or set as background
+      scene.environment = texture; // Use for reflections if needed
+    }
+  );
+
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; // Optional for tone mapping
+  renderer.toneMappingExposure = 1.0; // Adjust exposure
+  renderer.outputEncoding = THREE.sRGBEncoding; // Ensures proper color encoding
+  return renderer;
+}
+
+export default async function () {
   const uuid = new URLSearchParams(window.location.search).get("uuid");
-  let scene, camera, renderer, controls;
-  let tableModel = null;
-  let tableWidth = 0;
-  let computer = null;
-  let ballModel = null;
-  let player_model = null;
-  let score_board = null;
-  let bg_scene = null;
-  let latestBallData = null;
+  let scene, renderer, controls;
+  let latestData = null;
 
-  function init() {
-    // Create a scene
+  async function init() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
 
-    camera = new THREE.PerspectiveCamera(
-      50,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    camera.position.set(0, 1600, 2200);
+    const camera = Camera();
+    renderer = Renderer(scene);
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    Lights(scene);
 
-    const main = document.getElementById("main");
-    main.appendChild(renderer.domElement);
-
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5, 10, 7.5);
-    scene.add(directionalLight);
-
-    function adjustCameraAndControls(object) {
-      const box = new THREE.Box3().setFromObject(object);
-      const size = box.getSize(new THREE.Vector3());
-      const center = box.getCenter(new THREE.Vector3());
-
-      const maxDim = Math.max(size.x, size.y, size.z);
-      const fov = camera.fov * (Math.PI / 180);
-      const cameraDistance = Math.abs(maxDim / (2 * Math.tan(fov / 2)));
-
-      camera.position.set(0, 1888, 3000);
-      camera.lookAt(center);
-
-      camera.near = cameraDistance / 100;
-      camera.far = cameraDistance * 100;
-      camera.updateProjectionMatrix();
-    }
-
-    loadModels(scene, adjustCameraAndControls, (models) => {
-      tableModel = models.tableModel;
-      tableWidth = models.tableWidth;
-      computer = models.computer;
-      ballModel = models.ballModel;
-      player_model = models.player_model;
-      score_board = models.score_board;
-      bg_scene = models.bg_scene;
-      addTextToScene(scene);
-    });
+    const { ballModel, rp, lp } = await loadModels(scene);
+    addTextToScene(scene);
 
     function handleWebSocketMessages(message) {
       if (!message.data) return;
       const data = JSON.parse(message.data);
-      if (data.type === "update" && data.ball) {
-        latestBallData = data.ball;
+      if (data.type === "update") {
+        latestData = data;
       }
     }
 
@@ -314,10 +332,15 @@ export default function () {
 
     function animate() {
       requestAnimationFrame(animate);
-      if (latestBallData && ballModel) {
-        let x_c = 10000;
-        ballModel.translateX(latestBallData.x / x_c);
-        ballModel.translateZ(latestBallData.y / x_c);
+      if (latestData) {
+        ballModel.position.x = latestData.ball.x - config.tableWidth / 2;
+        ballModel.position.z = latestData.ball.y - config.tableDepth / 2;
+
+        lp.position.x = latestData.leftPaddle.x - config.tableWidth / 2;
+        lp.position.z = latestData.leftPaddle.y - config.tableDepth / 2;
+
+        rp.position.x = latestData.rightPaddle.x - config.tableWidth / 2;
+        rp.position.z = latestData.rightPaddle.y - config.tableDepth / 2;
       }
       renderer.render(scene, camera);
     }
@@ -332,5 +355,5 @@ export default function () {
     });
   }
 
-  init();
+  await init();
 }

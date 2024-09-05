@@ -3,7 +3,7 @@ import math
 
 class Ball():
     RADIUS = 5
-    SPEED = 5
+    SPEED = 2
 
     def __init__(self, width, height):
         self.width = width
@@ -54,8 +54,8 @@ class Ball():
 
 
 class Paddle():
-    HEIGHT = 60
-    WIDTH = 10
+    HEIGHT = 20
+    WIDTH = 3
     PADDLE_SPEED = 2
     AI_MODE = False
 

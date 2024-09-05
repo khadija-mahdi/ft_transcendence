@@ -10,8 +10,10 @@ Debugging = True
 
 
 class Game():
-    WIDTH = 800
-    HEIGHT = 600
+
+    WIDTH = 200
+    HEIGHT = 100
+
     first_player = None
     second_player = None
     tournament = None
@@ -22,9 +24,9 @@ class Game():
         self.players = []
         self.ball = Ball(Game.WIDTH, Game.HEIGHT)
         self.player_1_paddle = Paddle(
-            10,  (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
+            5,  (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
         self.player_2_paddle = Paddle(
-            Game.WIDTH - 20, (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
+            Game.WIDTH - 10, (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
         self.ball.setPaddles(self.player_1_paddle, self.player_2_paddle)
         self.channel_layer = get_channel_layer()
         self.pause = False
