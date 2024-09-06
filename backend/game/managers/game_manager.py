@@ -5,15 +5,11 @@ from channels.db import database_sync_to_async
 from game.managers.achievements_manager import AchievementsManager
 from user.models import User
 from game.models import Matchup, Tournament
-from game.utils.game_utils import Ball, Paddle
-Debugging = True
+from game.utils.game_utils import Ball, Paddle, Config
+Debugging = False
 
 
 class Game():
-
-    WIDTH = 200
-    HEIGHT = 100
-
     first_player = None
     second_player = None
     tournament = None
@@ -22,11 +18,14 @@ class Game():
         self.room_id = room_id
         self.is_running = True
         self.players = []
-        self.ball = Ball(Game.WIDTH, Game.HEIGHT)
-        self.player_1_paddle = Paddle(
-            5,  (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
+        self.ball = Ball()
+        halfHeight = (Config.tableDepth / 2)
+        halfPaddle = Config.paddleDepth / 2
+
+        self.player_1_paddle = Paddle(5,  halfHeight - halfPaddle)
         self.player_2_paddle = Paddle(
-            Game.WIDTH - 10, (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
+            Config.tableWidth - 10, halfHeight - halfPaddle)
+
         self.ball.setPaddles(self.player_1_paddle, self.player_2_paddle)
         self.channel_layer = get_channel_layer()
         self.pause = False
@@ -41,10 +40,11 @@ class Game():
             self.first_player = await database_sync_to_async(lambda: self.matchup.first_player)()
             self.second_player = await database_sync_to_async(lambda: self.matchup.second_player)()
             self.tournament = await database_sync_to_async(lambda: self.matchup.tournament)()
-            print('Game created for :')
-            print(f'\t{self.first_player.username}')
-            print(
-                f'{self.second_player.username if self.second_player else "<NONE>"}')
+
+            isFinished = await database_sync_to_async(lambda: self.matchup.game_over)()
+            if isFinished:
+                return self.cleanup()
+
         except Matchup.DoesNotExist:
             self.matchup = None
         return self
@@ -57,10 +57,10 @@ class Game():
                 self.players.append(player)
             return True
 
-    async def move_paddle(self, player, y):
+    async def move_paddle(self, player, action):
         async with self.lock:
             paddle = self.player_1_paddle if player == self.first_player else self.player_2_paddle
-            paddle.updatePosition(y=y)
+            paddle.movePaddle(action)
 
     async def remove_player(self, player):
         async with self.lock:
@@ -86,14 +86,16 @@ class Game():
                     return await self.emit(type='game_over', message='player did not not register')
                 continue
             if self.pause:
-                self.waiting_in_ms += 16
-                if self.waiting_in_ms >= 1 * 1000:
+                self.waiting_in_ms += 16.6
+                if self.waiting_in_ms >= 3 * 1000:
                     self.pause = False
+                    self.reset_paddles()
                 continue
             self.waiting_in_ms = 0
             await self.ball.update(lambda is_left_goal: self.new_point(is_left_goal))
             if self.second_player is None:
                 self.player_2_paddle.ai_update(self.ball)
+
             await self.emit(dict_data={
                 'type': 'update',
                 'ball': {
@@ -102,13 +104,13 @@ class Game():
                     'z': -1
                 },
                 'leftPaddle': {
-                    'x': self.player_1_paddle.x,
-                    'y': self.player_1_paddle.y,
+                    'x': self.player_1_paddle.getX(),
+                    'y': self.player_1_paddle.getY(),
                     'z': -1
                 },
                 'rightPaddle': {
-                    'x': self.player_2_paddle.x,
-                    'y': self.player_2_paddle.y,
+                    'x': self.player_2_paddle.getX(),
+                    'y': self.player_2_paddle.getY(),
                     'z': -1
                 }
 
@@ -139,20 +141,21 @@ class Game():
             }
         )
 
+    def reset_paddles(self):
+        self.player_1_paddle.updatePosition(
+            (Config.tableDepth / 2) - Config.paddleDepth / 2)
+        self.player_2_paddle.updatePosition(
+            (Config.tableDepth / 2) - Config.paddleDepth / 2)
+
     async def new_point(self, is_left_goal):
         self.pause = True
-        
-        # TODO: Implement this for 3D Pong Game
-        # RESET PADDLES POSITION TO CENTER
-        self.player_1_paddle.updatePosition(
-            (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
-        self.player_2_paddle.updatePosition(
-            (Game.HEIGHT / 2) - Paddle.HEIGHT / 2)
-        
+        self.reset_paddles()
+
         if not is_left_goal:
             self.matchup.first_player_score += 1
         else:
             self.matchup.second_player_score += 1
+
         await database_sync_to_async(self.matchup.save)()
         winner, Loser = self.determine_winner_and_loser()
 
@@ -192,6 +195,8 @@ class Game():
 
     async def cleanup(self):
         self.is_running = False
+        await self.channel_layer.group_send(
+            f"game_{self.room_id}", {'type': 'websocket.close'})
 
 
 class GameManager():
@@ -204,7 +209,7 @@ class GameManager():
             self.lock = asyncio.Lock()
         return self.lock
 
-    async def get_or_create_game(self, room_id):
+    async def get_or_create_game(self, room_id) -> Game:
         self.lock = await self.get_lock()
         async with self.lock:
             if room_id not in self.games:

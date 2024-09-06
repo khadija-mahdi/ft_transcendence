@@ -117,6 +117,26 @@ class MatchUpSerializer(serializers.ModelSerializer):
                   'game_over', 'created_at', 'updated_at']
 
 
+class MatchInfoSerializer(serializers.ModelSerializer):
+    first_player = UserSerializer()
+    second_player = UserSerializer()
+
+    class Meta:
+        model = Matchup
+        fields = ['id', 'first_player', 'second_player', 'Winner',
+                  'first_player_score', 'second_player_score',
+                  'game_over', 'created_at', 'updated_at']
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if not representation["second_player"]:
+            representation["second_player"] = {
+                'image_url': 'https://imgcdn.stablediffusionweb.com/2024/3/16/56c125c5-daa3-45aa-8c74-bc8e2bc26128.jpg',
+                'username': 'robot',
+            }
+        return representation
+
+
 class TournamentsRegisteredPlayersSerializer(serializers.ModelSerializer):
     tournament = TournamentSerializer()
 

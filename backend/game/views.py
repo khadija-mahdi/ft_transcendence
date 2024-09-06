@@ -1,6 +1,6 @@
 
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveDestroyAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveAPIView, CreateAPIView
 
 from .tasks import start_scheduler
 from .serializers import (
@@ -8,7 +8,8 @@ from .serializers import (
     MatchUpSerializer,
     TournamentSerializer,
     TournamentDetailsSerializer,
-    TournamentsRegisteredPlayersSerializer)
+    TournamentsRegisteredPlayersSerializer,
+    MatchInfoSerializer)
 from rest_framework import serializers
 from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, Matchup
 from user.models import User
@@ -109,6 +110,12 @@ class MatchHistory(ListAPIView):
         except User.DoesNotExist:
             return []
 
+
+class MatchInfo(RetrieveAPIView):
+    serializer_class = MatchInfoSerializer
+    queryset = Matchup.objects.all()
+    lookup_field = 'game_uuid'
+    permission_classes = [IsAuthenticated]
 
 class TournamentHistory(ListAPIView):
     serializer_class = TournamentsRegisteredPlayersSerializer

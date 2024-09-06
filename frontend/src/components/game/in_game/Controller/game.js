@@ -3,13 +3,27 @@ import { OrbitControls } from "OrbitControls";
 import { TextGeometry } from "TextGeometry";
 import { FontLoader } from "FontLoader";
 import { RGBELoader } from "RGBELoader";
+import { getMatchInfo } from "/_api/game.js";
+import { fetchMyData } from "/_api/user.js";
 import AuthWebSocket from "/lib/authwebsocket.js";
+import {
+  ShowModal,
+  WinModal,
+  LoseModal,
+  ErrorModal,
+  CountDownModal,
+} from "../View/game.js";
+
+const uuid = new URLSearchParams(window.location.search).get("uuid");
 
 const config = {
   tableWidth: 200,
   tableHeight: 10,
   tableDepth: 100,
-  ballRadius: 5,
+  ballRadius: 3,
+  paddleWidth: 3,
+  paddleHeight: 0.5,
+  paddleDepth: 15,
 };
 
 const loadingManager = new THREE.LoadingManager();
@@ -22,36 +36,32 @@ loadingManager.onProgress = (item, loaded, total) => {
 loadingManager.onLoad = () => {
   console.log("HERE");
   document.getElementById("loading-screen").style.display = "none";
+  document.querySelector(".score-count-container").style.visibility = "visible";
 };
 
 function loadPaddles(scene) {
-  // Paddle dimensions
-  const paddleWidth = 3; // Width of the paddle
-  const paddleHeight = 0.5; // Thickness of the paddle
-  const paddleDepth = 20; // Height of the paddle from the table
-
-  // Create paddle geometry
   const paddleGeometry = new THREE.BoxGeometry(
-    paddleWidth,
-    paddleHeight,
-    paddleDepth
+    config.paddleWidth,
+    config.paddleHeight,
+    config.paddleDepth
   );
 
-  // Create paddle material
   const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff }); // Blue color for the paddles
-
-  // Create the left paddle mesh
   const leftPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
-  leftPaddle.position.set(-10, config.tableHeight + paddleHeight / 2, 0); // Position on the left side of the table
-
-  // Create the right paddle mesh
+  leftPaddle.position.set(
+    -(config.tableWidth / 2) + 10,
+    config.tableHeight + config.paddleHeight / 2,
+    0
+  );
   const rightPaddle = new THREE.Mesh(paddleGeometry, paddleMaterial);
-  rightPaddle.position.set(10, config.tableHeight + paddleHeight / 2, 0); // Position on the right side of the table
+  rightPaddle.position.set(
+    config.tableWidth / 2 - 10,
+    config.tableHeight + config.paddleHeight / 2,
+    0
+  );
 
-  // Add the paddles to the scene
   scene.add(leftPaddle);
   scene.add(rightPaddle);
-
   return { lp: leftPaddle, rp: rightPaddle };
 }
 
@@ -281,9 +291,11 @@ function Renderer(scene) {
 }
 
 export default async function () {
-  const uuid = new URLSearchParams(window.location.search).get("uuid");
   let scene, renderer, controls;
   let latestData = null;
+  const keysPressed = {};
+  let intervalId = null;
+  const me = await fetchMyData();
 
   async function init() {
     scene = new THREE.Scene();
@@ -304,30 +316,47 @@ export default async function () {
       const data = JSON.parse(message.data);
       if (data.type === "update") {
         latestData = data;
+      } else if (data.type === "goal") {
+        UpdateScore(data.first_player_score, data.second_player_score);
+        ShowModal({
+          view: CountDownModal(3),
+          onConfirm: () => {},
+        });
+      } else if (data.type === "game_over") {
+        const view = data.winner === me.username ? WinModal() : LoseModal();
+        ShowModal({
+          view,
+          onConfirm: () => (window.location.href = "/home"),
+          hasPriority: true,
+        });
       }
     }
 
     function setupWebSocket() {
-      const lobbySocket = new AuthWebSocket(
-        `wss://localhost:4433/ws/game/${uuid}/`
-      );
-      lobbySocket.onerror = (error) => {
+      loadingManager.itemStart("WebSocket");
+      const Socket = new AuthWebSocket(`wss://localhost:4433/ws/game/${uuid}/`);
+      Socket.onopen = () => {
+        console.log("WebSocket connected");
+        loadingManager.itemEnd("WebSocket");
+      };
+      Socket.onerror = (error) => {
         console.error("WebSocket error:", error);
+        loadingManager.itemEnd("WebSocket");
+
+        ShowModal({
+          view: ErrorModal(),
+          onConfirm: () => (window.location.href = "/home"),
+          hasPriority: true,
+        });
       };
 
-      lobbySocket.onclose = (event) => {
+      Socket.onclose = (event) => {
         console.log("WebSocket closed:", event.code, event.reason);
       };
-      lobbySocket.addEventListener("message", (message) => {
+      Socket.addEventListener("message", (message) => {
         handleWebSocketMessages(message);
       });
-
-      lobbySocket.addEventListener("close", () => {
-        console.log("WebSocket disconnected");
-      });
-      lobbySocket.addEventListener("error", (error) => {
-        console.error("WebSocket error:", error);
-      });
+      return Socket;
     }
 
     function animate() {
@@ -344,9 +373,36 @@ export default async function () {
       }
       renderer.render(scene, camera);
     }
-
+    InitScoreBoard();
     animate();
-    setupWebSocket();
+    const GameSocket = setupWebSocket();
+    function StartMovementLoop() {
+      if (intervalId) return;
+      intervalId = setInterval(() => {
+        if (keysPressed["ArrowLeft"]) handleMovement(GameSocket, "left");
+        else if (keysPressed["ArrowRight"]) handleMovement(GameSocket, "right");
+      }, 50);
+    }
+
+    function StopMovementLoop() {
+      if (!intervalId) return;
+      if (!keysPressed["ArrowLeft"] && !keysPressed["ArrowRight"]) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (keysPressed[e.key]) return;
+      keysPressed[e.key] = true;
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") StartMovementLoop();
+    });
+
+    document.addEventListener("keyup", (e) => {
+      console.log("keyup", e.key);
+      delete keysPressed[e.key];
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") StopMovementLoop();
+    });
 
     window.addEventListener("resize", () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -356,4 +412,44 @@ export default async function () {
   }
 
   await init();
+}
+
+function handleMovement(Socket, action) {
+  Socket.send(JSON.stringify({ type: "move", action }));
+}
+
+async function InitScoreBoard() {
+  const {
+    first_player,
+    second_player,
+    first_player_score,
+    second_player_score,
+  } = await loadMatchInfo();
+  SetPlayerInfo(first_player, first_player_score, true);
+  SetPlayerInfo(second_player, second_player_score);
+}
+
+function SetPlayerInfo(player, score, isMe = false) {
+  const PlayerImage = document.getElementById(
+    `player-image-${isMe ? "1" : "2"}`
+  );
+  const PlayerName = document.getElementById(`player-name-${isMe ? "1" : "2"}`);
+  const PlayerScore = document.getElementById(
+    `player-score-${isMe ? "1" : "2"}`
+  );
+  PlayerImage.src = player.image_url;
+  PlayerName.innerText = player.username;
+  PlayerScore.innerText = score;
+}
+
+const UpdateScore = (FpScore, SpScore) => {
+  const FPlayerScore = document.getElementById(`player-score-1`);
+  const SPlayerScore = document.getElementById(`player-score-2`);
+  FPlayerScore.innerText = FpScore;
+  SPlayerScore.innerText = SpScore;
+};
+
+async function loadMatchInfo() {
+  const matchUp = await getMatchInfo(uuid);
+  return matchUp;
 }

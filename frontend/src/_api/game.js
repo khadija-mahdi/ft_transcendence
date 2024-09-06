@@ -12,8 +12,13 @@ export const removeTournament = async (id) => {
 };
 
 export const RegisterTournament = async (id, data) => {
-  return await fetchWithAuth(`/game/Tournament/register/${id}/`, {
+  return await fetchWithAuth(`/api/v1/game/Tournament/register/${id}/`, {
     method: "POST",
     body: JSON.stringify(data),
   });
+};
+
+export const getMatchInfo = async (uuid) => {
+  const Response = await fetchWithAuth(`/api/v1/game/match-info/${uuid}/`);
+  return Response;
 };
