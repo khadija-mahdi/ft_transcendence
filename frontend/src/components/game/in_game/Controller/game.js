@@ -339,7 +339,7 @@ export default async function () {
 
 		function setupWebSocket() {
 			loadingManager.itemStart("WebSocket");
-			const Socket = new AuthWebSocket(`wss://localhost:4433/ws/game/${uuid}/`);
+			const Socket = new AuthWebSocket(`/ws/game/${uuid}/`);
 			Socket.onopen = () => {
 				console.log("WebSocket connected");
 				loadingManager.itemEnd("WebSocket");

@@ -102,10 +102,7 @@ async function fetchOnlinePlayer() {
 		const response = await fetchWithAuth(apiUrl, {
 			method: "GET",
 		});
-		return response.results.map((result) => ({
-			...result,
-			image_url: result.image_url?.replace("https://localhost/", "/"),
-		}));
+		return response.results
 	} catch (error) {
 		return [];
 	}
@@ -123,6 +120,11 @@ export default async function renderOnlinePlayers() {
 		const emptyComponent = Empty("No OnlinePlayers Found");
 		const emptyContainer = document.createElement("div");
 		emptyContainer.className = "emptyContainer";
+		emptyContainer.style.width = "100%";
+		emptyContainer.style.height = "100%";
+		emptyContainer.style.display = "flex";
+		emptyContainer.style.justifyContent = "center";
+		emptyContainer.style.alignItems = "center";
 		emptyContainer.appendChild(emptyComponent);
 		OnlinePlayersContainer.appendChild(emptyContainer);
 	} else {

@@ -1,8 +1,8 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
-import AuthWebSocket from "/lib/authwebsocket.js";
-import { fetchMyData } from "/src/_api/user.js";
+import AuthWebSocket from "/src/lib/authwebsocket.js";
 import { handleThreeDotPanel } from "./threeDot.js";
 import { ChatRoomsPanel } from "./chat.js";
+import { fetchMyData } from "/src/_api/user.js";
 
 const myData = await fetchMyData();
 
@@ -54,14 +54,15 @@ async function fetchMessages(id, cursor = null) {
 		let allMessages = [];
 
 		try {
-			while (apiUrl) {
+			// while (apiUrl) {
 				const response = await fetchWithAuth(apiUrl, {
 					method: "GET",
 				});
 
 				allMessages = allMessages.concat(response.results);
+				console.log("allMessages" , allMessages);
 				apiUrl = response.next;
-			}
+			// }
 
 			return allMessages;
 		} catch (error) {
@@ -70,58 +71,10 @@ async function fetchMessages(id, cursor = null) {
 	}
 }
 
-let isLoading = false;
-let cursor = null;
-
-async function loadMoreMessages(selectedChat) {
-	if (isLoading) return;
-	isLoading = true;
-
-	const { messages, newCursor } = await fetchMessages(selectedChat.id, cursor);
-	cursor = newCursor;
-
-	if (messages.length > 0) {
-		prependMessagesToUI(messages);
-	}
-
-	isLoading = false;
-}
-
-function prependMessagesToUI(messages) {
-	const messagesContent = document.getElementById("messages-content");
-
-	if (messagesContent) {
-		messages.forEach(message => {
-			const messageElement = document.createElement('div');
-			message.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file');
-			messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
-
-			if (message.image_file) {
-				messageElement.innerHTML = `
-                    <div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
-                        <img class="image_file-content" src="${message.image_file}" alt="image message" />
-                    </div>
-                `;
-			} else {
-				messageElement.innerHTML = `
-                    <div class="message-content">${message.message}</div>
-                    <div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
-                        ${new Date(message.created_at).toLocaleTimeString()}
-                    </div>
-                `;
-			}
-
-			messagesContent.insertBefore(messageElement, messagesContent.firstChild);
-		});
-	}
-}
-
-
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	return /*html*/ `
 	<div class="panel-container">
-		<!-- Header content -->
 		<button class="panel-button">
 			<div class="panel-inner-container">
 				<div id="left-arrow-container" class="hidden">
@@ -245,13 +198,12 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	`;
 }
 
-// WebSocket handling
 let socket = null;
 
 function handleWebSocket(selectedChat) {
 	if (selectedChat.id) {
 		socket = new AuthWebSocket(
-			`wss://localhost:4433/ws/chat/${selectedChat.id}/`
+			`/ws/chat/${selectedChat.id}/`
 		);
 
 		socket.onmessage = (event) => {
@@ -274,22 +226,24 @@ function handleWebSocket(selectedChat) {
 
 function appendMessageToUI(message) {
 	const messagesContent = document.getElementById("messages-content");
-
 	if (messagesContent) {
 		const messageElement = document.createElement("div");
 		message.message
 			? messageElement.classList.add("message")
-			: messageElement.classList.add("image-file");
+			: messageElement.classList.add("image-file-content");
 		messageElement.classList.add(
 			message.sender_username === myData.username ? "sent" : "received"
 		);
 
-		if (image_file) {
+		if (message.image_file) {
 			messageElement.innerHTML = `
-				<div class="image_file ${message.sender_username === myData.username ? "sent" : "received"
+				<div class="image_file ${message.sender_username === myData.username
+					? "sent"
+					: "received"
 				}">
-					<img class="image_file-content" src=${message.image_file
-				} alt="image message" ></img>
+					<img class="image_file-content" src="${message.image_file ||
+				"/public/assets/images/defualtgroupProfile.png"
+				}" alt="image message" />
 				</div>
 			`;
 		} else {
@@ -301,10 +255,12 @@ function appendMessageToUI(message) {
 				</div>
 			`;
 		}
-
 		messagesContent.appendChild(messageElement);
-
 		messagesContent.scrollTop = messagesContent.scrollHeight;
+		messagesContent.scrollTo({
+			top: messagesContent.scrollHeight,
+			behavior: "smooth",
+		});
 	}
 }
 
@@ -337,46 +293,8 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 			room_id: selectedChat.id,
 			created_at: new Date().toISOString(),
 		};
-
-		const messagesContent = document.getElementById("messages-content");
-		if (messagesContent) {
-			const messageElement = document.createElement("div");
-			payload.message
-				? messageElement.classList.add("message")
-				: messageElement.classList.add("image-file-content");
-			messageElement.classList.add(
-				payload.sender_username === myData.username ? "sent" : "received"
-			);
-
-			if (payload.image_file) {
-				messageElement.innerHTML = `
-                    <div class="image_file ${payload.sender_username === myData.username
-						? "sent"
-						: "received"
-					}">
-                        <img class="image_file-content" src="${payload.image_file ||
-					"/public/assets/images/defualtgroupProfile.png"
-					}" alt="image message" />
-                    </div>
-                `;
-			} else {
-				messageElement.innerHTML = `
-                    <div class="message-content">${payload.message}</div>
-                    <div class="message-time ${payload.sender_username === myData.username ? "sent" : ""
-					}">
-                        ${new Date(payload.created_at).toLocaleTimeString()}
-                    </div>
-                `;
-			}
-			socket.send(JSON.stringify(payload));
-			messagesContent.appendChild(messageElement);
-
-			messagesContent.scrollTop = messagesContent.scrollHeight;
-			messagesContent.scrollTo({
-				top: messagesContent.scrollHeight,
-				behavior: "smooth",
-			});
-		}
+		socket.send(JSON.stringify(payload));
+		appendMessageToUI(payload)
 	} catch (error) {
 		return;
 	}
@@ -568,7 +486,6 @@ async function handleChatContent(selectedChat) {
 	handleWebSocket(selectedChat);
 	initializeSendImage(selectedChat);
 
-	// Bind send button click event
 	const sendButton = document.querySelector(".send-button");
 	if (sendButton) {
 		sendButton.addEventListener("click", (event) =>
@@ -576,7 +493,6 @@ async function handleChatContent(selectedChat) {
 		);
 	}
 
-	// Bind textarea enter keypress event
 	const textarea = document.querySelector(".message-textarea");
 	if (textarea) {
 		textarea.addEventListener("keypress", (event) =>
@@ -584,6 +500,7 @@ async function handleChatContent(selectedChat) {
 		);
 	}
 }
+
 export async function renderMessagesItems(selectedChat) {
 	let previousSmallWindow = null;
 	let chatPanel = "";

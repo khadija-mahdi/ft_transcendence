@@ -1,3 +1,4 @@
+import { API_URL } from "/config.js"
 export function getCookieValue(name) {
 	const cookies = document.cookie.split(";");
 	for (let i = 0; i < cookies.length; i++) {
@@ -29,7 +30,7 @@ export const fetchWithAuth = async (
 
 	const refresh = getCookieValue("refresh");
 	const access = getCookieValue("access");
-	const BaseUrl = "https://localhost:4433";
+	const BaseUrl = `https://${API_URL}`;
 	if (!access && !refresh) {
 		console.log("No access token or refresh token");
 		return;

@@ -70,10 +70,7 @@ async function fetchMyFriends(q) {
 			const response = await fetchWithAuth(apiUrl, {
 				method: "GET",
 			});
-			return response.results.map((result) => ({
-				...result,
-				image_url: result.image_url?.replace("https://localhost/", "/"),
-			}));
+			return response.results
 		} catch (error) {
 			return [];
 		}

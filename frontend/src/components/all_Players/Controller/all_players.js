@@ -172,18 +172,12 @@ async function fetchAllPlayer(q) {
 		let pending = await fetchWithAuth(pendingurl, {
 			method: "GET",
 		});
-		pendingRes = pending.results.map((result) => ({
-			...result,
-			image_url: result.image_url?.replace("https://localhost/", "/"),
-		}));
+		pendingRes = pending.results;
 
 		let recommended = await fetchWithAuth(recommendedUrl, {
 			method: "GET",
 		});
-		recommendedRes = recommended.results.map((result) => ({
-			...result,
-			image_url: result.image_url?.replace("https://localhost/", "/"),
-		}));
+		recommendedRes = recommended.results
 		return { Recommended: recommendedRes, pending: pendingRes };
 	} catch (error) {
 		return { Recommended: [], pending: [] };

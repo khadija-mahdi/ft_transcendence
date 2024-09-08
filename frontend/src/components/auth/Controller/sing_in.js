@@ -1,3 +1,4 @@
+import { API_URL } from "/config.js";
 export const oauth2Providers = [
 	{
 		provider: "google",
@@ -22,7 +23,7 @@ export function handleGoogleLogin() {
 	const params = new URLSearchParams({
 		response_type: "code",
 		client_id: oauth2Providers[0].client_id,
-		redirect_uri: `https://localhost:4433/auth/`,
+		redirect_uri: `https://${API_URL}/auth/`,
 		prompt: "select_account",
 		access_type: "offline",
 		state: oauth2Providers[0].provider,
@@ -36,7 +37,7 @@ function handleIntraLogin() {
 	const params = new URLSearchParams({
 		response_type: "code",
 		client_id: oauth2Providers[1].client_id,
-		redirect_uri: `https://localhost:4433/auth/`,
+		redirect_uri: `$https://${API_URL}/auth/`,
 		prompt: "select_account",
 		access_type: "offline",
 		state: oauth2Providers[1].provider,

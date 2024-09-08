@@ -1,5 +1,5 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
-import AuthWebSocket from "/lib/authwebsocket.js";
+import AuthWebSocket from "/src/lib/authwebsocket.js";
 import { renderMessagesItems } from "./headerChat.js";
 
 let clickedIndex = 0;
@@ -177,7 +177,7 @@ export async function ChatRoomsPanel() {
 	rooms = await fetchRooms("", isFilter);
 	renderRoomsList(rooms);
 
-	const socket = new AuthWebSocket("wss://localhost:4433/ws/rooms/");
+	const socket = new AuthWebSocket("/ws/rooms/");
 
 	socket.onmessage = (event) => {
 		const data = JSON.parse(event.data);

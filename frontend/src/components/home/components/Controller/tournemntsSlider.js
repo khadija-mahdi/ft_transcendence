@@ -46,10 +46,7 @@ async function fetchAnnouncement() {
 		const response = await fetchWithAuth(apiUrl, {
 			method: "GET",
 		});
-		return response.results.slice(0, 3).map((result) => ({
-			...result,
-			icon: result.icon?.replace("https://localhost/", "/"),
-		}));
+		return response.results
 	} catch (error) {
 		return [];
 	}
@@ -57,21 +54,20 @@ async function fetchAnnouncement() {
 
 export default async function renderCarousel() {
 	const tournaments = await fetchAnnouncement();
+	console.log("slider :", tournaments)
 	const carousel = document.getElementById("carousel");
 	if (!tournaments.length) {
 		const emptyComponent = Empty("No tournaments Announced Found");
-		// Create a container for the empty component
 		const emptyContainer = document.createElement("div");
 		emptyContainer.className = "emptyContainer";
-		// Apply styles to make it fill width and height
 		emptyContainer.style.width = "100%";
 		emptyContainer.style.height = "100%";
 		emptyContainer.style.display = "flex";
 		emptyContainer.style.justifyContent = "center";
 		emptyContainer.style.alignItems = "center";
 		emptyContainer.appendChild(emptyComponent);
-		carousel.innerHTML = ""; // Clear existing content
-		carousel.appendChild(emptyContainer); // Append the container
+		carousel.innerHTML = "";
+		carousel.appendChild(emptyContainer);
 	} else {
 		let carouselItems = tournaments
 			.map((tournament, index) => {

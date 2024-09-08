@@ -3,7 +3,7 @@ export default function () {
 	<body>
 		<div id="team-leader">
 			<a href="/profile" class="user-link">
-				<img id="user-image" class="user-image" src="https://cdn.intra.42.fr/users/7e42d280d5d245fbd6afcee00e6d5478/kmahdi.JPG" alt="user Image">
+				<img id="user-image" class="user-image" src="" alt="user Image">
 				<div class="user-info">
 					<div id="fullname" class="user-name">Khadija Mahdi</div>
 					<div class="user-status">Your Status</div>

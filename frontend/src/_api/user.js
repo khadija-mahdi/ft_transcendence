@@ -34,7 +34,7 @@ export const updateProfile = async (data) => {
 };
 
 export async function fetchNotifications() {
-	let apiUrl = `https://localhost:4433/api/v1/notifications/`;
+	let apiUrl = `/api/v1/notifications/`;
 	let Notification = [];
 	try {
 		// while (apiUrl) {

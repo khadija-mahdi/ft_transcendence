@@ -99,18 +99,15 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 async function fetchOnlinePlayer(q) {
 	let apiUrl = "";
 	if (!q || q === '')
-		apiUrl = "https://localhost:4433/api/v1/users/online-players";
+		apiUrl = "/api/v1/users/online-players";
 	else
-		apiUrl = `https://localhost:4433/api/v1/users/online-players/?search=${q}`;
+		apiUrl = `/api/v1/users/online-players/?search=${q}`;
 
 	try {
 		const response = await fetchWithAuth(apiUrl, {
 			method: "GET",
 		});
-		return response.results.map((result) => ({
-			...result, image_url: result.image_url?.replace("https://localhost/",
-				"https://localhost:4433/")
-		}));
+		return response.results
 	} catch (error) {
 		return [];
 	}

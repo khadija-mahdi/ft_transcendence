@@ -39,7 +39,7 @@ class ChatRoomsListView(ListCreateAPIView):
         ).order_by(
             '-last_message_time'
         )
-        
+
         return queryset
 
 
@@ -74,7 +74,7 @@ class MessagesView(ListCreateAPIView):
         return ChatMessage.objects.\
             filter(chatRoom__id=id, chatRoom__members=user).\
             exclude(id__in=RemovedMessage.objects.filter(user=user).values('message_id')).\
-            order_by('created_at')
+            order_by('created_at').reverse()
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
