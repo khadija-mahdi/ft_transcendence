@@ -1,12 +1,12 @@
 import {
 	tournamentWrapper,
 	tournamentElement,
-} from "../../tournaments/View/Tournaments.js";
-import UserSection from "../components/View/UserSection.js";
-import TopPlayers from "../components/View/TopPlayer.js";
-import OnlinePlayers from "../components/View/OnlinePlayers.js";
-import UserFriends from "../components/View/UserFriends.js";
-import tournemntsSlider from "../components/View/tournemntsSlider.js";
+} from "/src/components/tournaments/View/Tournaments.js";
+import UserSection from "/src/components/home/components/View/UserSection.js";
+import TopPlayers from "/src/components/home/components/View/TopPlayer.js";
+import OnlinePlayers from "/src/components/home/components/View/OnlinePlayers.js";
+import UserFriends from "/src/components/home/components/View/UserFriends.js";
+import tournemntsSlider from "/src/components/home/components/View/tournemntsSlider.js";
 
 export default function () {
 	return /*html*/ `

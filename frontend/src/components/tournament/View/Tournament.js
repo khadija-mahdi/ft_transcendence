@@ -95,7 +95,7 @@ export default function tournaments() {
             <h6 class="streaming-title">Streaming</h6>
           </div>
           <div class="streaming-content">
-            <img src="/lib/empty.svg" alt="empty" width="{50}" height="{50}" />
+            <img src="/src/lib/empty.svg" alt="empty" width="{50}" height="{50}" />
             <p class="coming-soon">Coming Soon!</p>
           </div>
           <form

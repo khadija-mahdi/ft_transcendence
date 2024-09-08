@@ -43,7 +43,7 @@ class Game():
 
             isFinished = await database_sync_to_async(lambda: self.matchup.game_over)()
             if isFinished:
-                return self.cleanup()
+                return None
 
         except Matchup.DoesNotExist:
             self.matchup = None
@@ -157,7 +157,7 @@ class Game():
             self.matchup.second_player_score += 1
 
         await database_sync_to_async(self.matchup.save)()
-        winner, Loser = self.determine_winner_and_loser()
+        winner, Loser = await self.determine_winner_and_loser()
 
         if winner:
             self.matchup.Winner = winner
@@ -180,17 +180,24 @@ class Game():
             'second_player_score': self.matchup.second_player_score
         })
 
-    def determine_winner_and_loser(self):
+    async def determine_winner_and_loser(self):
+        SecondPlayer = self.second_player
+        if not self.second_player:
+            try:
+                SecondPlayer = await database_sync_to_async(User.objects.get)(username='Robot')
+            except User.DoesNotExist:
+                SecondPlayer = await database_sync_to_async(User.objects.create_user)(email="robot@gmail.com", password=None, username="Robot")
+        print('SecondPlayer username ', SecondPlayer.username)
         if Debugging:
-            return [self.first_player, self.second_player]
+            return [self.first_player, SecondPlayer]
         if self.matchup.first_player_score >= 15 and self.matchup.first_player_score - self.matchup.second_player_score >= 2:
-            return [self.first_player, self.second_player]
+            return [self.first_player, SecondPlayer]
         elif self.matchup.second_player_score >= 15 and self.matchup.second_player_score - self.matchup.first_player_score >= 2:
-            return [self.second_player, self.first_player]
+            return [SecondPlayer, self.first_player]
         if self.matchup.first_player_score >= 20 and self.matchup.first_player_score > self.matchup.second_player_score:
-            return [self.first_player, self.second_player]
+            return [self.first_player, SecondPlayer]
         elif self.matchup.second_player_score >= 20 and self.matchup.second_player_score > self.matchup.first_player_score:
-            return [self.second_player, self.first_player]
+            return [SecondPlayer, self.first_player]
         return [None, None]
 
     async def cleanup(self):
@@ -214,6 +221,8 @@ class GameManager():
         async with self.lock:
             if room_id not in self.games:
                 game = await Game.create(room_id)
+                if not game:
+                    return None
                 self.games[room_id] = game
                 asyncio.create_task(game.game_loop())
             return self.games[room_id]

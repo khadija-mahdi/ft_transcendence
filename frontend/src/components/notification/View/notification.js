@@ -1,4 +1,4 @@
-import html from "../../../lib/html-template.js";
+import html from "/src/lib/html-template.js";
 
 export default function () {
 	return html`

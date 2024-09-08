@@ -1,6 +1,6 @@
-import { fetchWithAuth } from "/lib/apiMock.js";
-import { handleSubmit, Validator, reset } from "/lib/Validator.js";
-import { updateProfile, UserDetailByUsername } from "/_api/user.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { handleSubmit, Validator, reset } from "/src/lib/Validator.js";
+import { updateProfile, UserDetailByUsername } from "/src/_api/user.js";
 
 let data = {};
 
@@ -16,7 +16,7 @@ async function UpdateData(UpdateData, schema) {
 	}
 }
 
-function ImageButton(setSelectedImage = () => {}) {
+function ImageButton(setSelectedImage = () => { }) {
 	let imageInput = document.getElementById("imageInput");
 	const imageLabel = document.getElementById("imageLabel");
 	const initialImageLabelContent = imageLabel.innerHTML;

@@ -1,12 +1,12 @@
 const html = String.raw;
-import { Empty } from "/lib/Empty.js";
-import { fetchWithAuth } from "/lib/apiMock.js";
+import { Empty } from "/src/lib/Empty.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
 
 export function SliderItem(tournament, index) {
-	let href = "components/home/components/assets/valorant1.jpg";
-	if (index === 1) href = "components/home/components/assets/valorant_img.jpg";
+	let href = "/src/components/home/components/assets/valorant1.jpg";
+	if (index === 1) href = "/src/components/home/components/assets/valorant_img.jpg";
 	else if (index === 2)
-		href = "components/home/components/assets/valorant_img0.jpg";
+		href = "/src/components/home/components/assets/valorant_img0.jpg";
 	return html` <div class="t-container">
 		<div class="t-container-details">
 			<div class="t-title-container">

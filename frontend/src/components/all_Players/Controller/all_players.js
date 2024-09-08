@@ -1,5 +1,5 @@
-import { Empty } from "../../../../lib/Empty.js";
-import { fetchWithAuth } from "../../../../lib/apiMock.js";
+import { Empty } from "/src/lib/Empty.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
 
 export function AllPlayerContainer({ name, href, number }) {
 	const container = document.createElement("div");

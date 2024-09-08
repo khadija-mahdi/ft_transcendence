@@ -1,6 +1,6 @@
-import { fetchWithAuth } from "../../../lib/apiMock.js";
-import { fetchNotifications } from "/_api/user.js";
-import { Empty } from "/lib/Empty.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { fetchNotifications } from "/src/_api/user.js";
+import { Empty } from "/src/lib/Empty.js";
 
 const notifications = await fetchNotifications();
 
@@ -9,7 +9,7 @@ async function loadNavbar() {
 
 	if (!path.startsWith("/game") && !path.startsWith("/auth/")) {
 		try {
-			const response = await fetch("/components/navBar/View/navBar.html");
+			const response = await fetch("/src/components/navBar/View/navBar.html");
 			if (!response.ok) throw new Error("Network response was not ok");
 			const navbarHTML = await response.text();
 
@@ -81,16 +81,15 @@ export function renderNotifications() {
 			notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${
-											notification.sender.image_url ||
-											"/public/assets/images/defaultImageProfile.jpg"
-										}" alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src="${notification.sender.image_url ||
+				"/public/assets/images/defaultImageProfile.jpg"
+				}" alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
                     <div class="notification-time">${formatDate(
-											notification.created_at
-										)}</div>
+					notification.created_at
+				)}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">

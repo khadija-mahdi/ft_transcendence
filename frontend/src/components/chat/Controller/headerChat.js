@@ -1,6 +1,6 @@
-import { fetchWithAuth } from "../../../../lib/apiMock.js";
-import AuthWebSocket from "../../../lib/authwebsocket.js";
-import { fetchMyData } from "/_api/user.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
+import AuthWebSocket from "/lib/authwebsocket.js";
+import { fetchMyData } from "/src/_api/user.js";
 import { handleThreeDotPanel } from "./threeDot.js";
 import { ChatRoomsPanel } from "./chat.js";
 
@@ -131,21 +131,19 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 				</div>
 				<img
 					class="panel-image"
-					src="${
-						selectedChat.room_icon ||
-						" /public/assets/images/defaultGroupProfile.png"
-					}"
+					src="${selectedChat.room_icon ||
+		" /public/assets/images/defaultGroupProfile.png"
+		}"
 				alt="Profile Image"
                     />
 				<a href='/profile?username=${selectedChat.room_name}' class="panel-link">
 					<div class="panel-room-name">${selectedChat.room_name}</div>
 					<div class="panel-room-status">
-						${
-							selectedChat.type === "private"
-								? selectedChat.receiverUser &&
-								  selectedChat.receiverUser[0].status
-								: "No members"
-						}
+						${selectedChat.type === "private"
+			? selectedChat.receiverUser &&
+			selectedChat.receiverUser[0].status
+			: "No members"
+		}
 					</div>
 				</a>
 			</div>
@@ -179,20 +177,17 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 		<div id="messages-content" class="messages-content"></div>
 		<div id="send-message" class="send-message">
 			<div class="send-message-container">
-				${
-					isFriend || selectedChat.type !== "private"
-						? `
+				${isFriend || selectedChat.type !== "private"
+			? `
                         <div class="send-message-content">
-                            ${
-															selectedChat.type === "private"
-																? `
+                            ${selectedChat.type === "private"
+				? `
                                 <div class="invite-icon-container">
-                                    <a href="/match-making?player=${
-																			(selectedChat.receiverUser &&
-																				selectedChat.receiverUser[0]
-																					.username) ||
-																			0
-																		}">
+                                    <a href="/match-making?player=${(selectedChat.receiverUser &&
+					selectedChat.receiverUser[0]
+						.username) ||
+				0
+				}">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width='24'
@@ -208,8 +203,8 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                                     <div class="invite-text">Invite</div>
                                 </div>
                             `
-																: ""
-														}
+				: ""
+			}
 							<div class="send-image-container" id="send-image-container">
 								<!-- Image upload UI will be rendered here -->
 							</div>
@@ -233,18 +228,17 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                             </button>
                         </div>
                     `
-						: `
-                        ${
-													selectedChat.type === "private"
-														? `
+			: `
+                        ${selectedChat.type === "private"
+				? `
                             <div class="no-friend-message">
                                 You can't send a message to a user that you are not friends with
                             </div>
                         `
-														: ""
-												}
+				: ""
+			}
                     `
-				}
+		}
 			</div>
 		</div>
 	</div>
@@ -292,19 +286,16 @@ function appendMessageToUI(message) {
 
 		if (image_file) {
 			messageElement.innerHTML = `
-				<div class="image_file ${
-					message.sender_username === myData.username ? "sent" : "received"
+				<div class="image_file ${message.sender_username === myData.username ? "sent" : "received"
 				}">
-					<img class="image_file-content" src=${
-						message.image_file
-					} alt="image message" ></img>
+					<img class="image_file-content" src=${message.image_file
+				} alt="image message" ></img>
 				</div>
 			`;
 		} else {
 			messageElement.innerHTML = `
 				<div class="message-content">${message.message}</div>
-				<div class="message-time ${
-					message.sender_username === myData.username ? "sent" : ""
+				<div class="message-time ${message.sender_username === myData.username ? "sent" : ""
 				}">
 					${new Date(message.created_at).toLocaleTimeString()}
 				</div>
@@ -359,23 +350,20 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 
 			if (payload.image_file) {
 				messageElement.innerHTML = `
-                    <div class="image_file ${
-											payload.sender_username === myData.username
-												? "sent"
-												: "received"
-										}">
-                        <img class="image_file-content" src="${
-													payload.image_file ||
-													"/public/assets/images/defualtgroupProfile.png"
-												}" alt="image message" />
+                    <div class="image_file ${payload.sender_username === myData.username
+						? "sent"
+						: "received"
+					}">
+                        <img class="image_file-content" src="${payload.image_file ||
+					"/public/assets/images/defualtgroupProfile.png"
+					}" alt="image message" />
                     </div>
                 `;
 			} else {
 				messageElement.innerHTML = `
                     <div class="message-content">${payload.message}</div>
-                    <div class="message-time ${
-											payload.sender_username === myData.username ? "sent" : ""
-										}">
+                    <div class="message-time ${payload.sender_username === myData.username ? "sent" : ""
+					}">
                         ${new Date(payload.created_at).toLocaleTimeString()}
                     </div>
                 `;
@@ -551,22 +539,19 @@ async function handleChatContent(selectedChat) {
 
 			if (message.image_file) {
 				messageElement.innerHTML = `
-                    <div class="image_file ${
-											message.sender_username === myData.username
-												? "sent"
-												: "received"
-										}">
-                        <img class="image_file-content" src="${
-													message.image_file
-												}" alt="image message" />
+                    <div class="image_file ${message.sender_username === myData.username
+						? "sent"
+						: "received"
+					}">
+                        <img class="image_file-content" src="${message.image_file
+					}" alt="image message" />
                     </div>
                 `;
 			} else {
 				messageElement.innerHTML = `
                     <div class="message-content">${message.message}</div>
-                    <div class="message-time ${
-											message.sender_username === myData.username ? "sent" : ""
-										}">
+                    <div class="message-time ${message.sender_username === myData.username ? "sent" : ""
+					}">
                         ${new Date(message.created_at).toLocaleTimeString()}
                     </div>
                 `;

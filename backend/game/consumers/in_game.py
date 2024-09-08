@@ -12,9 +12,13 @@ class InGame(AsyncWebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.game_manager: GameManager = self.scope['url_route']['kwargs']['game_manager']
         self.game: Game = await self.game_manager.get_or_create_game(self.room_name)
-        if self.isUserPartOfThisGame():
-            print("the User isn't part of this game")
+        if not self.game:
+            print('game is finished play another game')
             return
+        # this does not work check it
+        # if self.isUserPartOfThisGame():
+        #     print("the User isn't part of this game")
+        #     return
         await self.game.add_player(self.user)
         self.room_group_name = f"game_{self.room_name}"
         await self.channel_layer.group_add(

@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "/lib/apiMock.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
 
 export const fetchMyData = async () => {
 	const apiUrl = "/api/v1/users/me/";

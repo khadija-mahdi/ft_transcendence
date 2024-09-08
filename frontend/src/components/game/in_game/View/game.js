@@ -1,7 +1,7 @@
 const html = String.raw;
 
 export function PlayerBoard(firstPlayer = true) {
-  return html`<div class="player-board" data-reversed="${!firstPlayer}">
+	return html`<div class="player-board" data-reversed="${!firstPlayer}">
     <div class="player-info" data-reversed="${!firstPlayer}">
       <img
         src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
@@ -16,7 +16,7 @@ export function PlayerBoard(firstPlayer = true) {
 }
 
 export default () => {
-  return html`
+	return html`
     <div id="loading-screen">
       <div id="progress-bar-container">
         <div id="progress-bar"></div>
@@ -35,50 +35,50 @@ export default () => {
 };
 
 export function ShowModal({
-  view,
-  onConfirm = () => {},
-  onCancel = () => {},
-  hasPriority = false,
+	view,
+	onConfirm = () => { },
+	onCancel = () => { },
+	hasPriority = false,
 }) {
-  const modalContainer = document.querySelector(".popup-container");
+	const modalContainer = document.querySelector(".popup-container");
 
-  const modalPriority = modalContainer.dataset.hasPriority;
-  if (modalPriority === "true" && !hasPriority) return;
-  console.log("here", modalPriority, hasPriority);
-  modalContainer.style.visibility = "visible";
-  modalContainer.innerHTML = "";
-  modalContainer.dataset.hasPriority = hasPriority;
+	const modalPriority = modalContainer.dataset.hasPriority;
+	if (modalPriority === "true" && !hasPriority) return;
+	console.log("here", modalPriority, hasPriority);
+	modalContainer.style.visibility = "visible";
+	modalContainer.innerHTML = "";
+	modalContainer.dataset.hasPriority = hasPriority;
 
-  const modal = document.createElement("div");
-  modal.classList.add("modal");
-  modal.innerHTML = view;
+	const modal = document.createElement("div");
+	modal.classList.add("modal");
+	modal.innerHTML = view;
 
-  const confirmButton = modal.querySelector(".confirm");
-  const cancelButton = modal.querySelector(".cancel");
+	const confirmButton = modal.querySelector(".confirm");
+	const cancelButton = modal.querySelector(".cancel");
 
-  function remove() {
-    modalContainer.style.visibility = "hidden";
-    modal.remove();
-  }
-  confirmButton?.addEventListener("click", () => {
-    onConfirm();
-    remove();
-  });
+	function remove() {
+		modalContainer.style.visibility = "hidden";
+		modal.remove();
+	}
+	confirmButton?.addEventListener("click", () => {
+		onConfirm();
+		remove();
+	});
 
-  cancelButton?.addEventListener("click", () => {
-    onCancel();
-    remove();
-  });
+	cancelButton?.addEventListener("click", () => {
+		onCancel();
+		remove();
+	});
 
-  modalContainer.appendChild(modal);
+	modalContainer.appendChild(modal);
 }
 
 export function WinModal() {
-  return html`
+	return html`
     <div class="win-modal-container">
       <div class="icon-container">
         <img
-          src="/components/game/in_game/assets/prize-icon.png"
+          src="/src/components/game/in_game/assets/prize-icon.png"
           alt="Prize Icon"
           srcset=""
         />
@@ -93,11 +93,11 @@ export function WinModal() {
 }
 
 export function LoseModal() {
-  return html`
+	return html`
     <div class="win-modal-container">
       <div class="icon-container">
         <img
-          src="/components/game/in_game/assets/lost-icon.png"
+          src="/src/components/game/in_game/assets/lost-icon.png"
           alt="Prize Icon"
           srcset=""
           style="width: 100px; height: 100px;"
@@ -113,11 +113,11 @@ export function LoseModal() {
 }
 
 export function ErrorModal() {
-  return html`
+	return html`
     <div class="win-modal-container">
       <div class="icon-container">
         <img
-          src="/components/game/in_game/assets/lost-icon.png"
+          src="/src/components/game/in_game/assets/lost-icon.png"
           alt="Prize Icon"
           srcset=""
           style="width: 100px; height: 100px;"
@@ -136,26 +136,26 @@ export function ErrorModal() {
 }
 
 export function CountDownModal(startNumber) {
-  let currentNumber = startNumber;
-  const countDownInterval = setInterval(() => {
-    const countDownPlaceholder = document.getElementById(
-      "count-down-placeholder"
-    );
-    if (!countDownPlaceholder) return clearInterval(countDownInterval);
-    if (currentNumber <= 0) {
-      const modalContainer = document.querySelector(".popup-container");
-      modalContainer.style.visibility = "hidden";
+	let currentNumber = startNumber;
+	const countDownInterval = setInterval(() => {
+		const countDownPlaceholder = document.getElementById(
+			"count-down-placeholder"
+		);
+		if (!countDownPlaceholder) return clearInterval(countDownInterval);
+		if (currentNumber <= 0) {
+			const modalContainer = document.querySelector(".popup-container");
+			modalContainer.style.visibility = "hidden";
 
-      return clearInterval(countDownInterval);
-    }
-    currentNumber -= 1;
-    countDownPlaceholder.innerText = currentNumber !== 0 ? currentNumber : "GO";
-    countDownPlaceholder.style.animation = "none";
-    void countDownPlaceholder.offsetWidth; // by accessing offsetWidth forces the browser to perform a layout recalculation (reflow)
-    countDownPlaceholder.style.animation = " pop-in 0.3s ease-out";
-  }, 1000);
+			return clearInterval(countDownInterval);
+		}
+		currentNumber -= 1;
+		countDownPlaceholder.innerText = currentNumber !== 0 ? currentNumber : "GO";
+		countDownPlaceholder.style.animation = "none";
+		void countDownPlaceholder.offsetWidth; // by accessing offsetWidth forces the browser to perform a layout recalculation (reflow)
+		countDownPlaceholder.style.animation = " pop-in 0.3s ease-out";
+	}, 1000);
 
-  return html`
+	return html`
     <div class="countdown-container">
       <p id="count-down-placeholder">${startNumber}</p>
     </div>

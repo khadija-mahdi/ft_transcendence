@@ -1,5 +1,5 @@
-import { fetchWithAuth } from "../../../../lib/apiMock.js";
-import AuthWebSocket from "../../../lib/authwebsocket.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
+import AuthWebSocket from "/lib/authwebsocket.js";
 import { renderMessagesItems } from "./headerChat.js";
 
 let clickedIndex = 0;
@@ -79,21 +79,19 @@ function renderMessengerItem(item) {
 	const lastMessageTime = formatTime(item.last_message?.created_at);
 
 	const messengerItem = document.createElement("div");
-	messengerItem.className = `messenger-item ${
-		clickedIndex === item.id
+	messengerItem.className = `messenger-item ${clickedIndex === item.id
 			? "selected"
 			: item.unseen_messages_count
-			? "highlight"
-			: ""
-	}`;
+				? "highlight"
+				: ""
+		}`;
 
 	messengerItem.innerHTML = `
         <div class="content">
             <div class="avatar">
-                <img  src="${
-									item.room_icon ||
-									"/public/assets/images/defualtgroupProfile.png"
-								}" alt="${item.room_name}">
+                <img  src="${item.room_icon ||
+		"/public/assets/images/defualtgroupProfile.png"
+		}" alt="${item.room_name}">
             </div>
             <div class="info">
                 <div class="name">${item.room_name}</div>
@@ -101,19 +99,17 @@ function renderMessengerItem(item) {
             </div>
         </div>
         <div class="message-info">
-            ${
-							item.unseen_messages_count !== 0 &&
-							clickedIndex !== item.id &&
-							item.last_message &&
-							item.last_message.id !== null
-								? `<div class="unread-count">${item.unseen_messages_count}</div>`
-								: `<div class=""></div>`
-						}
-			${
-				lastMessageTime
-					? `<div class="timestamp">${lastMessageTime}</div>`
-					: `<div></div>`
-			}
+            ${item.unseen_messages_count !== 0 &&
+			clickedIndex !== item.id &&
+			item.last_message &&
+			item.last_message.id !== null
+			? `<div class="unread-count">${item.unseen_messages_count}</div>`
+			: `<div class=""></div>`
+		}
+			${lastMessageTime
+			? `<div class="timestamp">${lastMessageTime}</div>`
+			: `<div></div>`
+		}
         </div>
     `;
 
@@ -207,7 +203,7 @@ export async function ChatRoomsPanel() {
 	};
 }
 
-function ChatSmallWindow() {}
+function ChatSmallWindow() { }
 
 export default async function () {
 	ChatRoomsPanel();

@@ -1,11 +1,10 @@
-import { Empty } from "../../../../lib/Empty.js";
-import { fetchWithAuth } from "../../../../lib/apiMock.js";
+import { Empty } from "/src/lib/Empty.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
 
 export function TopPlayerContainer({ name, href, number, index }) {
 	const container = document.createElement("div");
-	container.className = `${
-		index === 1 ? "topPlayers-container-highlight" : "friend-container"
-	}`;
+	container.className = `${index === 1 ? "topPlayers-container-highlight" : "friend-container"
+		}`;
 
 	const link = document.createElement("a");
 	link.href = `/profile?username=${name}`;
@@ -40,9 +39,8 @@ export function TopPlayerContainer({ name, href, number, index }) {
 	indexWrapper.className = "topPlayers-arrow-container";
 
 	const indexDiv = document.createElement("div");
-	indexDiv.className = `topPlayers-arrow ${
-		index === 1 ? "topPlayers-highlight" : ""
-	}`;
+	indexDiv.className = `topPlayers-arrow ${index === 1 ? "topPlayers-highlight" : ""
+		}`;
 	indexDiv.textContent = index; // Display the index
 
 	indexWrapper.appendChild(indexDiv);

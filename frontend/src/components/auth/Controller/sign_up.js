@@ -1,7 +1,7 @@
 import {
 	OAuthSingIn,
 	handleOAuthLogin,
-} from "/components/auth/Controller/sing_in.js";
+} from "/src/components/auth/Controller/sing_in.js";
 
 export async function SingUP() {
 	const email_input = document.getElementById("email");

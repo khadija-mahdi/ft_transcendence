@@ -9,10 +9,10 @@ import {
 	SendFriendRequest as SendFriendRequestApi,
 	RemoveFriendRequest as RemoveFriendRequestApi,
 	AcceptFriendRequest as AcceptFriendRequestApi,
-} from "/_api/user.js";
-import { Empty } from "/lib/Empty.js";
-import { DropDown } from "/lib/drop-down.js";
-import { BlockUser, RemoveFriend } from "../../../_api/user.js";
+} from "/src/_api/user.js";
+import { Empty } from "/src/lib/Empty.js";
+import { DropDown } from "/src/lib/drop-down.js";
+import { BlockUser, RemoveFriend } from "/src/_api/user.js";
 
 const html = String.raw;
 
@@ -239,15 +239,15 @@ function ProfileButtonContent() {
 		return html`
 			<div class="cta-buttons">
 				${ProfileCTA(
-					"/assets/icons/add-fill.svg",
-					"Accept Request",
-					"AcceptFriendRequest"
-				)}
+			"/assets/icons/add-fill.svg",
+			"Accept Request",
+			"AcceptFriendRequest"
+		)}
 				${ProfileCTA(
-					"/assets/icons/light_close.png",
-					"decline Request",
-					"DeclineFriendRequest"
-				)}
+			"/assets/icons/light_close.png",
+			"decline Request",
+			"DeclineFriendRequest"
+		)}
 			</div>
 		`;
 	}

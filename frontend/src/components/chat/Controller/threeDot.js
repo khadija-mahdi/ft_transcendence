@@ -1,5 +1,5 @@
-import { showPopup } from "/lib/Confirm.js";
-import { fetchWithAuth } from "/lib/apiMock.js";
+import { showPopup } from "/src/lib/Confirm.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
 
 export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
 	const isAdmin = true;
@@ -10,24 +10,22 @@ export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
 			if (!optionsPanel.classList.contains("hidden")) {
 				optionsPanel.innerHTML = `
                     <div class="panel-options-content">
-                        ${
-													selectedChat.type === "private"
-														? `
+                        ${selectedChat.type === "private"
+						? `
                             <button id="clear-chat" class="panel-option-button">Clear Chat</button>
                             <button id="close-chat" class="panel-option-button">Close Chat</button>
                             <button id="delete-chat" class="panel-option-button">Delete Chat</button>
                             <button id="block-user" class="panel-option-button">Block</button>
                         `
-														: `
+						: `
                             <button id="group-info" class="panel-option-button">Group Info</button>
                             <button id="exit-group" class="panel-option-button">Exit Group</button>
-                            ${
-															isAdmin
-																? `<button id="delete-group" class="panel-option-button">Delete Group</button>`
-																: ""
-														}
+                            ${isAdmin
+							? `<button id="delete-group" class="panel-option-button">Delete Group</button>`
+							: ""
+						}
                         `
-												}
+					}
                     </div>
                 `;
 

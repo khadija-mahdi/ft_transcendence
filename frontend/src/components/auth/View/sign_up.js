@@ -7,11 +7,11 @@ export default () => {
 			<form id="authForm" class="auth-form">
 				<div class="social-auth">
 					<div class="social-auth-option intra" id="intraAuth">
-						<img src="/components/auth/assets/42_logo.svg" alt="intra logo">
+						<img src="/public/assets/42_logo.svg" alt="intra logo">
 						<p class= sing>Continue with Intra</p>
 					</div>
 					<div class="social-auth-option google" id="googleAuth">
-						<img src="/components/auth/assets/google.svg" alt="intra logo">
+						<img src="/public/assets/google.svg" alt="intra logo">
 						<p class=sing>Continue with Google</p>
 					</div>
 				</div>

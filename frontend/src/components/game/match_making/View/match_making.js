@@ -1,7 +1,7 @@
 			 export default () => {
 				return /*html*/ `
 				<div class="bg-image">
-					<img src="components/game/match_making/assets/images/matching-bg.jpg" alt="Background" class="bg-img">
+					<img src="/public/game/matching-bg.jpg" alt="Background" class="bg-img">
 				</div>
 				<div class="container">
 				<button class="play_now_button" onclick="handleButtonClick()">

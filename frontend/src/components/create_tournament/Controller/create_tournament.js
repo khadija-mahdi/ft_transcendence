@@ -1,4 +1,4 @@
-import { fetchWithAuth } from "../../../../lib/apiMock.js";
+import { fetchWithAuth } from "/src/lib/apiMock.js";
 
 export default function () {
 	const form = document.getElementById("createTournamentForm");
