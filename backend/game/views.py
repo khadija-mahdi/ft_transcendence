@@ -1,7 +1,7 @@
 
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveAPIView, CreateAPIView
-
+from django.db.models import Q
 from .tasks import start_scheduler
 from .serializers import (
     GameSerializer,
@@ -104,9 +104,11 @@ class MatchHistory(ListAPIView):
 
     def get_queryset(self):
         pk = self.kwargs['pk']
+        print(pk)
         try:
-            user = User.objects.get(pk=pk)
-            return Matchup.objects.filter(first_player=user, second_player=user)
+            user = User.objects.get(id=pk)
+            print(user)
+            return Matchup.objects.filter(Q(first_player=user) | Q(second_player=user))
         except User.DoesNotExist:
             return []
 

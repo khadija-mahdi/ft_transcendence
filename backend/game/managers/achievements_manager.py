@@ -108,6 +108,8 @@ class AchievementsManager:
             return None
 
     async def handleUserAchievements(self, user: User):
+        if not user:
+            return
         user.current_xp += self.IncrementingXpSteps
         user.total_xp += self.IncrementingXpSteps
         UserRank: Ranks = await database_sync_to_async(lambda: user.rank)()
@@ -122,6 +124,8 @@ class AchievementsManager:
         await self.handleTotalWins(user)
 
     async def handleLoserUser(self, user: User):
+        if not user:
+            return
         user.current_xp -= self.DecrementingXpSteps
         user.total_xp -= self.DecrementingXpSteps
         UserRank: Ranks = await database_sync_to_async(lambda: user.rank)()

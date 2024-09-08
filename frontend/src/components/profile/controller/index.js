@@ -197,13 +197,14 @@ function PopulateTournamentMatches(data) {
 }
 
 function PopulateMatches(data) {
+	console.log(data.results.splice(0, 5));
 	const matchHistory = document.getElementById("match-history");
 	if (data.count === 0) {
 		matchHistory.append(Empty("No matches found"));
 		return;
 	}
 
-	data.results.forEach((match) => {
+	data.results.splice(0,5).forEach((match) => {
 		matchHistory.innerHTML += matchItem(match);
 	});
 }

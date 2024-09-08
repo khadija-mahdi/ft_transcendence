@@ -151,7 +151,7 @@ class UserDetailSerializer(serializers.ModelSerializer, BaseUserSerializer):
 
     def __init__(self, *args, **kwargs):
         super(UserDetailSerializer, self).__init__(*args, **kwargs)
-        if self.context.get('view').kwargs.get('pk') == self.context.get('request').user.id:
+        if self.context.get('view') and  self.context.get('view').kwargs.get('pk') == self.context.get('request').user.id:
             self.fields.pop('send_request')
 
     class Meta:
