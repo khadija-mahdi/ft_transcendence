@@ -1,6 +1,5 @@
 import { Empty } from "/src/lib/Empty.js";
-import { fetchWithAuth } from "/src/lib/apiMock.js";
-
+import { fetchMyFriends } from "/src/_api/user.js";
 export function FriendContainer({ name, href, number }) {
 	const container = document.createElement("div");
 	container.className = "friend-container";
@@ -58,17 +57,6 @@ export function FriendContainer({ name, href, number }) {
 	return container;
 }
 
-async function fetchMyFriends() {
-	const apiUrl = "/api/v1/users/friend-list";
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		return response.results
-	} catch (error) {
-		return [];
-	}
-}
 
 export default async function renderFriends() {
 	const friends = await fetchMyFriends();

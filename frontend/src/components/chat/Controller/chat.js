@@ -1,25 +1,13 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 import AuthWebSocket from "/src/lib/authwebsocket.js";
 import { renderMessagesItems } from "./headerChat.js";
+import { fetchRooms } from "/src/_api/user.js";
 
 let clickedIndex = 0;
 let isFilter = false;
 let rooms = [];
 
-async function fetchRooms(q = "", filter = false) {
-	let apiUrl = filter
-		? "/api/v1/chat/filter-rooms/"
-		: `/api/v1/chat/rooms/?q=${q}`;
 
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		return response.results;
-	} catch (error) {
-		return [];
-	}
-}
 
 function getLastMessage({ lastMessage, type }) {
 	const username = "YourUsername";

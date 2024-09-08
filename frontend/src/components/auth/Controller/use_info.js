@@ -1,3 +1,4 @@
+import { API_URL } from "/config.js";
 export default function init() {
 	const url = new URL(window.location.href);
 	const params = new URLSearchParams(url.search);
@@ -24,7 +25,7 @@ export default function init() {
 			continueButton.disabled = true;
 			continueButton.textContent = "Loading ...";
 
-			fetch("/api/v1/auth/register-user/", {
+			fetch(`${API_URL}/api/v1/auth/register-user/`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

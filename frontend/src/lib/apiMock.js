@@ -30,7 +30,10 @@ export const fetchWithAuth = async (
 
 	const refresh = getCookieValue("refresh");
 	const access = getCookieValue("access");
-	const BaseUrl = `https://${API_URL}`;
+	let BaseUrl = `https://${API_URL}`;
+	if(url.startsWith(`https://${API_URL}`)){ 
+		BaseUrl = '';
+	}
 	if (!access && !refresh) {
 		console.log("No access token or refresh token");
 		return;

@@ -1,3 +1,5 @@
+import { API_URL } from "/config.js";
+
 export default function init() {
 	const continueButton = document.getElementById("code_2fa");
 	const url = new URL(window.location.href);
@@ -11,13 +13,13 @@ export default function init() {
 			const input1 = document.getElementById("input1").value;
 			const input2 = document.getElementById("input2").value;
 			const input3 = document.getElementById("input3").value;
-			const input4 = document.getElementById("input4").value;
+			const input4 = documezznt.getElementById("input4").value;
 
 			const verificationCode = `${input1}${input2}${input3}${input4}`;
 			errorMessage.textContent = "";
 			continueButton.disabled = true;
 			continueButton.textContent = "Loading ...";
-			fetch("/api/v1/auth/verify-email/", {
+			fetch(`https://${API_URL}/api/v1/auth/verify-email/`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

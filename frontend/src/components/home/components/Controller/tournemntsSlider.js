@@ -69,7 +69,7 @@ export default async function renderCarousel() {
 		carousel.innerHTML = "";
 		carousel.appendChild(emptyContainer);
 	} else {
-		let carouselItems = tournaments
+		let carouselItems = tournaments.slice(0, 3)
 			.map((tournament, index) => {
 				return html`
 					<div class="item ${index === 0 ? "active" : ""}">
@@ -79,7 +79,7 @@ export default async function renderCarousel() {
 			})
 			.join("");
 
-		let carouselIndicators = tournaments
+		let carouselIndicators = tournaments.slice(0, 3)
 			.map((_, index) => {
 				return html`
 					<li

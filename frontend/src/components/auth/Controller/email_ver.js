@@ -1,3 +1,5 @@
+import { API_URL } from "/config.js";
+
 export default function init() {
 	const continueButton = document.getElementById("contInfo");
 	const url = new URL(window.location.href);
@@ -22,7 +24,7 @@ export default function init() {
 			errorMessage.textContent = "";
 			continueButton.disabled = true;
 			continueButton.textContent = "Loading ...";
-			fetch("/api/v1/auth/verify-email/", {
+			fetch(`${API_URL}/api/v1/auth/verify-email/`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

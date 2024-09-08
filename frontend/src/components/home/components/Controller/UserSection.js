@@ -1,31 +1,7 @@
 import { Empty } from "/src/lib/Empty.js";
-import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { fetchMyData, fetchLogData, fetchRooms } from "/src/_api/user.js";
 
-async function fetchLogData() {
-	const apiUrl = "/api/v1/users/rank-logs/";
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		return response;
-	} catch (error) {
-		return [];
-	}
-}
-
-async function fetchMyData() {
-	const apiUrl = "/api/v1/users/me/";
-
-	try {
-		const data = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		return data;
-	} catch (error) {
-		return {};
-	}
-}
-
+const room = await fetchRooms();
 function PrepareUserChart(inputData) {
 	const chart = document.getElementById("user-chart");
 	const ctx = chart.getContext("2d");
@@ -118,7 +94,7 @@ export default async function () {
 	document.getElementById("rank-order").innerText =
 		user.rank && user.rank.hierarchy_order;
 	document.getElementById("coins").innerText = user.coins;
-	document.getElementById("messages-count").innerText = -1;
+	document.getElementById("messages-count").innerText = room[0].unseen_messages_count;
 
 	const inputData = await fetchLogData();
 	const chart = document.getElementById("chart-container");

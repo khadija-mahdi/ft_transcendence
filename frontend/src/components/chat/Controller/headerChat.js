@@ -5,8 +5,12 @@ import { ChatRoomsPanel } from "./chat.js";
 import { fetchMyData } from "/src/_api/user.js";
 
 const myData = await fetchMyData();
-
 let selectedImage = null;
+let apiUrl = null;
+let isLoading = false;
+let allMessagesLoaded = false;
+let socket = null;
+
 
 export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
 	const popupContainer = document.getElementById("popup-sendImage-container");
@@ -48,28 +52,48 @@ export function hideSendImagePopup() {
 	popupContainer.classList.add("hidden");
 }
 
-async function fetchMessages(id, cursor = null) {
-	if (id) {
-		let apiUrl = `/api/v1/chat/room/${id}`;
-		let allMessages = [];
 
-		try {
-			// while (apiUrl) {
-				const response = await fetchWithAuth(apiUrl, {
-					method: "GET",
-				});
 
-				allMessages = allMessages.concat(response.results);
-				console.log("allMessages" , allMessages);
-				apiUrl = response.next;
-			// }
+async function fetchMessages(id) {
+	if (isLoading || allMessagesLoaded) return;
+	isLoading = true;
 
-			return allMessages;
-		} catch (error) {
-			return [];
-		}
+	if (apiUrl === null) {
+		apiUrl = `/api/v1/chat/room/${id}`;
 	}
+
+	try {
+		const response = await fetchWithAuth(apiUrl, { method: "GET" });
+		if (response.results.length) {
+			appendMessages(response.results);
+
+			apiUrl = response.next;
+			if (!apiUrl) {
+				allMessagesLoaded = true;
+			}
+		} else {
+			allMessagesLoaded = true;
+		}
+	} catch (error) {
+		console.error('Error fetching messages:', error);
+	}
+
+	isLoading = false;
 }
+
+function appendMessages(messages) {
+	const chatWindow = document.getElementById('messages-content');
+
+	const scrollTopBefore = chatWindow.scrollTop;
+	messages.forEach(message => {
+		appendMessageToUI(message, true);
+	});
+
+	// chatWindow.scrollTop = chatWindow.scrollHeight - scrollTopBefore;
+}
+
+
+
 
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
@@ -136,7 +160,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                             ${selectedChat.type === "private"
 				? `
                                 <div class="invite-icon-container">
-                                    <a href="/match-making?player=${(selectedChat.receiverUser &&
+                                    <a href="/game/match-making?player=${(selectedChat.receiverUser &&
 					selectedChat.receiverUser[0]
 						.username) ||
 				0
@@ -198,8 +222,6 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	`;
 }
 
-let socket = null;
-
 function handleWebSocket(selectedChat) {
 	if (selectedChat.id) {
 		socket = new AuthWebSocket(
@@ -224,7 +246,7 @@ function handleWebSocket(selectedChat) {
 	}
 }
 
-function appendMessageToUI(message) {
+function appendMessageToUI(message, prepend = false) {
 	const messagesContent = document.getElementById("messages-content");
 	if (messagesContent) {
 		const messageElement = document.createElement("div");
@@ -241,9 +263,7 @@ function appendMessageToUI(message) {
 					? "sent"
 					: "received"
 				}">
-					<img class="image_file-content" src="${message.image_file ||
-				"/public/assets/images/defualtgroupProfile.png"
-				}" alt="image message" />
+					<img class="image_file-content" src="${message.image_file}" alt="image message" />
 				</div>
 			`;
 		} else {
@@ -255,7 +275,11 @@ function appendMessageToUI(message) {
 				</div>
 			`;
 		}
-		messagesContent.appendChild(messageElement);
+		if (prepend) {
+			messagesContent.insertBefore(messageElement, messagesContent.firstChild);  // Prepend message
+		} else {
+			messagesContent.appendChild(messageElement);  // Append message for normal cases
+		}
 		messagesContent.scrollTop = messagesContent.scrollHeight;
 		messagesContent.scrollTo({
 			top: messagesContent.scrollHeight,
@@ -433,56 +457,7 @@ async function handleChatContent(selectedChat) {
 	const optionsPanel = document.getElementById("options-panel");
 	handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
 
-	const messagesContent = document.getElementById("messages-content");
-	const messageElement = document.createElement("div");
-	messageElement.innerHTML = `
-        <div id="loader-container" class="loader-container">
-            <div class="loading-text">Loading<span class="dots"></span></div>
-        </div>`;
-	messagesContent.appendChild(messageElement);
-
-	let messages = await fetchMessages(selectedChat.id, null);
-	const loading = document.getElementById("loader-container");
-	loading.innerHTML = "";
-
-	if (messagesContent && messages) {
-		messages.forEach((message) => {
-			const messageElement = document.createElement("div");
-			message.message
-				? messageElement.classList.add("message")
-				: messageElement.classList.add("image-file");
-			messageElement.classList.add(
-				message.sender_username === myData.username ? "sent" : "received"
-			);
-
-			if (message.image_file) {
-				messageElement.innerHTML = `
-                    <div class="image_file ${message.sender_username === myData.username
-						? "sent"
-						: "received"
-					}">
-                        <img class="image_file-content" src="${message.image_file
-					}" alt="image message" />
-                    </div>
-                `;
-			} else {
-				messageElement.innerHTML = `
-                    <div class="message-content">${message.message}</div>
-                    <div class="message-time ${message.sender_username === myData.username ? "sent" : ""
-					}">
-                        ${new Date(message.created_at).toLocaleTimeString()}
-                    </div>
-                `;
-			}
-			messagesContent.appendChild(messageElement);
-		});
-	}
-	messagesContent.scrollTop = messagesContent.scrollHeight;
-	messagesContent.scrollTo({
-		top: messagesContent.scrollHeight,
-		behavior: "smooth",
-	});
-
+	await fetchMessages(selectedChat.id, null);
 	handleWebSocket(selectedChat);
 	initializeSendImage(selectedChat);
 
@@ -492,7 +467,13 @@ async function handleChatContent(selectedChat) {
 			handleSendMessage(event, selectedChat)
 		);
 	}
+	const chatWindow = document.getElementById('messages-content');
 
+	chatWindow.addEventListener('scroll', () => {
+		if (chatWindow.scrollTop === 0 && !isLoading && !allMessagesLoaded) {
+			fetchMessages(apiUrl);
+		}
+	});
 	const textarea = document.querySelector(".message-textarea");
 	if (textarea) {
 		textarea.addEventListener("keypress", (event) =>

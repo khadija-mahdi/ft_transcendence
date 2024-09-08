@@ -2,6 +2,7 @@ import {
 	OAuthSingIn,
 	handleOAuthLogin,
 } from "/src/components/auth/Controller/sing_in.js";
+import { API_URL } from "/config.js";
 
 export async function SingUP() {
 	const email_input = document.getElementById("email");
@@ -10,7 +11,7 @@ export async function SingUP() {
 	errorMessage.textContent = "";
 	continueButton.disabled = true;
 	continueButton.textContent = "Loading ...";
-	fetch("/api/v1/auth/register-email/", {
+	fetch(`https://${API_URL}/api/v1/auth/register-email/`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
