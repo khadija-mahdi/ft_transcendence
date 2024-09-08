@@ -2,7 +2,7 @@ import os
 from django.conf import settings
 from rest_framework import serializers
 from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, stream, Matchup
-from user.serializers import UserSerializer
+from user.serializers import UserSerializer, UserDetailSerializer
 from django.core.files.storage import default_storage
 from django.contrib.auth.models import AnonymousUser
 
@@ -106,7 +106,7 @@ class TournamentDetailsSerializer(serializers.ModelSerializer, BaseTournamentSer
 
 
 class MatchUpSerializer(serializers.ModelSerializer):
-    first_player = UserSerializer()
+    first_player = UserDetailSerializer()
     second_player = UserSerializer()
     Winner = UserSerializer()
 

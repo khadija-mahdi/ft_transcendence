@@ -157,9 +157,11 @@ class Game():
             self.matchup.second_player_score += 1
 
         await database_sync_to_async(self.matchup.save)()
-        winner, Loser = await self.determine_winner_and_loser()
+        winner, Loser = self.determine_winner_and_loser()
 
         if winner:
+            Winner = None if type(winner) == str else winner
+            Loser = None if type(Loser) == str else Loser
             self.matchup.Winner = winner
             self.matchup.game_over = True
             await database_sync_to_async(self.matchup.save)()
@@ -180,14 +182,8 @@ class Game():
             'second_player_score': self.matchup.second_player_score
         })
 
-    async def determine_winner_and_loser(self):
-        SecondPlayer = self.second_player
-        if not self.second_player:
-            try:
-                SecondPlayer = await database_sync_to_async(User.objects.get)(username='Robot')
-            except User.DoesNotExist:
-                SecondPlayer = await database_sync_to_async(User.objects.create_user)(email="robot@gmail.com", password=None, username="Robot")
-        print('SecondPlayer username ', SecondPlayer.username)
+    def determine_winner_and_loser(self):
+        SecondPlayer = self.second_player if self.second_player else 'ROBOT' 
         if Debugging:
             return [self.first_player, SecondPlayer]
         if self.matchup.first_player_score >= 15 and self.matchup.first_player_score - self.matchup.second_player_score >= 2:

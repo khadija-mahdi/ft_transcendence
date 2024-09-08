@@ -75,7 +75,6 @@ services:
 volumes:
   db_volume:
 
-
 networks:
   mynetwork:
     driver: bridge
