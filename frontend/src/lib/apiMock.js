@@ -21,7 +21,6 @@ export const fetchWithAuth = async (
 		method: "GET"
 	}
 ) => {
-	console.log('URL:', url, options.headers)
 
 	if (options.headers === undefined)
 		options.headers = {}
