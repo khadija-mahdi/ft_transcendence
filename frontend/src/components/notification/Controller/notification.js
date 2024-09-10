@@ -70,9 +70,8 @@ export function renderNotifications() {
 						await fetchWithAuth(apiUrl, {
 							method: "DELETE",
 						});
-
+						console.log("notification remored ,", notification.id)
 						notifications.splice(index, 1);
-
 						renderNotifications();
 					} catch (error) {
 						return;

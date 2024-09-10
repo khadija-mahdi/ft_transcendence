@@ -36,7 +36,7 @@
 	margin-top: 2px;
 }
 
-.progress {
+.progress-user {
 	display: flex;
 	justify-content: space-between;
 	margin-top: 20px;
@@ -220,6 +220,9 @@
 	background-color: #FD4106;
 	/* Highlight background color */
 	color: white;
+	padding: 0 8px;
+	justify-content: center;
+	align-items: center;
 	/* Text color */
 }
 

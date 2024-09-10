@@ -26,7 +26,7 @@ export function TopPlayerContainer({ name, href, number, index }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
+	levelDiv.textContent = ` ${number} `;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -39,14 +39,14 @@ export function TopPlayerContainer({ name, href, number, index }) {
 	indexWrapper.className = "topPlayers-arrow-container";
 
 	const indexDiv = document.createElement("div");
-	indexDiv.className = `topPlayers-arrow ${index === 1 ? "topPlayers-highlight" : ""
-		}`;
+	indexDiv.className = `topPlayers - arrow ${index === 1 ? "topPlayers-highlight" : ""
+		} `;
 	indexDiv.textContent = index; // Display the index
 
 	indexWrapper.appendChild(indexDiv);
 
 	const indexLink = document.createElement("a");
-	indexLink.href = `/profile?username=${name}`;
+	indexLink.href = `/ profile ? username = ${name} `;
 	indexLink.className = "friend-arrow-link";
 	indexLink.appendChild(indexWrapper);
 
@@ -85,7 +85,9 @@ export default async function rendertopPlayers() {
 			const friendComponent = TopPlayerContainer({
 				name: friend.username,
 				href: friend.image_url,
-				number: friend.level,
+				number: friend.xp_required && friend.current_xp
+					? `Level${friend.current_xp} "/" ${friend.rank.xp_required} `
+					: "Level 0/0",
 				index: index + 1, // Assuming index starts from 1
 			});
 			const friendWrapper = document.createElement("div");

@@ -25,7 +25,7 @@ export function FriendContainer({ name, href, number }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
+	levelDiv.textContent = ` ${number} `;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -48,7 +48,7 @@ export function FriendContainer({ name, href, number }) {
 	svg.appendChild(path);
 
 	const arrowLink = document.createElement("a");
-	arrowLink.href = `/profile?username=${name}`;
+	arrowLink.href = `/ profile ? username = ${name} `;
 	arrowLink.className = "friend-arrow-link";
 	arrowLink.appendChild(svg);
 
@@ -63,7 +63,7 @@ async function fetchMyFriends(q) {
 
 	if (!q || q === "") apiUrl = "/api/v1/users/friend-list";
 	else
-		apiUrl = `/api/v1/users/search-user/?none_friend_only=false&search_query=${q}`;
+		apiUrl = `/ api / v1 / users / search - user /? none_friend_only = false & search_query=${q} `;
 
 	if (apiUrl) {
 		try {
@@ -96,7 +96,7 @@ export default async function renderFriends() {
 			window.history.replaceState(
 				null,
 				"",
-				`${window.location.pathname}?${urlParams}`
+				`${window.location.pathname}?${urlParams} `
 			);
 
 			// Fetch friends based on search query
@@ -125,11 +125,13 @@ export default async function renderFriends() {
 			emptyContainer.appendChild(emptyComponent);
 			friendsContainer.appendChild(emptyContainer);
 		} else {
-			friends.forEach((friend) => {
+			friends.forEach((user) => {
 				const friendComponent = FriendContainer({
-					name: friend.username,
-					href: friend.image_url,
-					number: friend.level,
+					name: user.username,
+					href: user.image_url,
+					number: user.xp_required && user.current_xp
+						? `Level${user.current_xp} "/" ${user.rank.xp_required} `
+						: "Level 0/0",
 				});
 				const friendWrapper = document.createElement("div");
 				friendWrapper.className = "friend-wrapper";

@@ -94,7 +94,7 @@ export default async function () {
 	document.getElementById("rank-order").innerText =
 		user.rank && user.rank.hierarchy_order;
 	document.getElementById("coins").innerText = user.coins;
-	document.getElementById("messages-count").innerText = room[0].unseen_messages_count;
+	document.getElementById("messages-count").innerText = room[0] ? room[0].unseen_messages_count :  0;
 
 	const inputData = await fetchLogData();
 	const chart = document.getElementById("chart-container");

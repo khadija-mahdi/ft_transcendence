@@ -24,7 +24,7 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
+	levelDiv.textContent = ` ${number} `;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -71,12 +71,13 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 	svg.appendChild(defs);
 
 	const arrowLink = document.createElement("a");
-	arrowLink.href = `/profile?username=${name}}`;
+	arrowLink.href = `/ profile ? username = ${name}
+} `;
 	arrowLink.className = "friend-arrow-link";
 	arrowLink.appendChild(svg);
 
 	const inviteLink = document.createElement("a");
-	inviteLink.href = `/match-making?player=${name}`;
+	inviteLink.href = `/ match - making ? player = ${name} `;
 	inviteLink.className = "invite-button";
 
 	const inviteContent = document.createElement("div");
@@ -101,7 +102,7 @@ async function fetchOnlinePlayer(q) {
 	if (!q || q === '')
 		apiUrl = "/api/v1/users/online-players";
 	else
-		apiUrl = `/api/v1/users/online-players/?search=${q}`;
+		apiUrl = `/ api / v1 / users / online - players /? search = ${q} `;
 
 	try {
 		const response = await fetchWithAuth(apiUrl, {
@@ -134,7 +135,7 @@ export default async function renderOnlinePlayers() {
 			window.history.replaceState(
 				null,
 				"",
-				`${window.location.pathname}?${urlParams}`
+				`${window.location.pathname}?${urlParams} `
 			);
 
 			const OnlinePlayers = await fetchOnlinePlayer(term);
@@ -162,11 +163,13 @@ export default async function renderOnlinePlayers() {
 			emptyContainer.appendChild(emptyComponent);
 			OnlinePlayersContainer.appendChild(emptyContainer);
 		} else {
-			OnlinePlayers.forEach((friend) => {
+			OnlinePlayers.forEach((user) => {
 				const friendComponent = OnlinePlayerContainer({
-					name: friend.username,
-					href: friend.image_url,
-					number: friend.level,
+					name: user.username,
+					href: user.image_url,
+					number: user.xp_required && user.current_xp
+						? `Level${user.current_xp} "/" ${user.rank.xp_required} `
+						: "Level 0/0",
 				});
 				const friendWrapper = document.createElement("div");
 				friendWrapper.className = "friend-wrapper";

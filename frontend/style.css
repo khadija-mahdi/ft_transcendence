@@ -759,14 +759,14 @@ input[type="number"] {
 	overflow: hidden;
 }
 
-.progress {
+.progress_popup {
 	width: 0;
 	height: 100%;
 	background-color: #FD4106;
 	animation: fill 4s infinite;
 }
 
-/* @keyframes fill {
+@keyframes fill {
 	0% {
 		width: 0;
 	}
@@ -775,7 +775,7 @@ input[type="number"] {
 		width: 100%;
 	}
 }
- */
+
 
 
 .hidden {

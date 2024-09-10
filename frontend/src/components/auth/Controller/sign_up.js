@@ -30,13 +30,13 @@ export async function SingUP() {
 			} else {
 				return response.json().then((data) => {
 					throw new Error(
-						data.message || `HTTP error! Status: ${response.status}`
+						data.detail
 					);
 				});
 			}
 		})
 		.catch((error) => {
-			errorMessage.textContent = `Pleas correct you email form`;
+			errorMessage.textContent = error;
 		})
 		.finally(() => {
 			continueButton.disabled = false;

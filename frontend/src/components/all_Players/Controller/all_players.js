@@ -24,8 +24,7 @@ export function AllPlayerContainer({ name, href, number }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
-
+	levelDiv.textContent = `${number}`
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
 
@@ -113,7 +112,7 @@ export function PendingContainer({ name, href, number }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
+	levelDiv.textContent = `${number}`;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -309,7 +308,9 @@ export default async function renderAllPlayers() {
 				const friendComponent = AllPlayerContainer({
 					name: friend.username,
 					href: friend.image_url,
-					number: friend.level,
+					number: friend.xp_required && friend.current_xp
+						? `Level${friend.current_xp} "/" ${friend.rank.xp_required}`
+						: "Level 0/0",
 				});
 
 				const friendWrapper = document.createElement("div");
@@ -330,11 +331,13 @@ export default async function renderAllPlayers() {
 			emptyContainer.appendChild(emptyComponent);
 			pendingContainer.appendChild(emptyContainer);
 		} else {
-			pending.forEach((friend) => {
+			pending.forEach((user) => {
 				const friendComponent = PendingContainer({
-					name: friend.username,
-					href: friend.image_url,
-					number: friend.level,
+					name: user.username,
+					href: user.image_url,
+					number: user.xp_required && user.current_xp
+						? `Level${user.current_xp} "/" ${user.rank.xp_required}`
+						: "Level 0/0",
 				});
 
 				const friendWrapper = document.createElement("div");
@@ -346,7 +349,7 @@ export default async function renderAllPlayers() {
 				const declineButton = friendWrapper.querySelector(".decline-button");
 				const Buttons = friendWrapper.querySelector(".buttons");
 				handleFriendRequest(
-					friend.user_id,
+					user.user_id,
 					acceptButton,
 					declineButton,
 					Buttons

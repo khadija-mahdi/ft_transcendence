@@ -1,4 +1,31 @@
 import routes from "/routesConfig.js";
+import AuthWebSocket from "/src/lib/authwebsocket.js";
+import { showMainPopup } from "/src/lib/Confirm.js";
+
+function handleConnectWebSocket() {
+	let ws = new AuthWebSocket(`/ws/user/connect/`);
+	ws.onopen = () => {
+		console.log("connected to ws");
+	};
+	ws.onclose = () => {
+		console.log("disconnected from ws");
+	};
+	ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		console.log("data:", data)
+		showMainPopup({
+			title: data.title ,
+			subtitle: data.description,
+			icon: data.icon ,
+			onCancel: () => {
+				console.log("Popup was closed");
+			}
+		});
+
+	}
+}
+
+
 
 async function loadCSS(href) {
 	if (!href) return;
@@ -51,6 +78,8 @@ function routeGuard(path) {
 }
 
 async function navigate(path) {
+	handleConnectWebSocket()
+
 	const routeConfig = routes[path] || routes["*"];
 	const accessToken = getCookieValue("access");
 	const refreshToken = getCookieValue("refresh");

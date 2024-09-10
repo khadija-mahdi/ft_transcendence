@@ -24,7 +24,7 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
+	levelDiv.textContent = ` ${number} `;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -71,12 +71,13 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 	svg.appendChild(defs);
 
 	const arrowLink = document.createElement("a");
-	arrowLink.href = `/profile?username=${name}}`;
+	arrowLink.href = `/ profile ? username = ${name}
+} `;
 	arrowLink.className = "friend-arrow-link";
 	arrowLink.appendChild(svg);
 
 	const inviteLink = document.createElement("a");
-	inviteLink.href = `/game/match_making?player=${name}`;
+	inviteLink.href = `/ game / match_making ? player = ${name} `;
 	inviteLink.className = "invite-button";
 
 	const inviteContent = document.createElement("div");
@@ -132,7 +133,9 @@ export default async function renderOnlinePlayers() {
 			const friendComponent = OnlinePlayerContainer({
 				name: friend.username,
 				href: friend.image_url,
-				number: friend.level,
+				number: friend.xp_required && friend.current_xp
+					? `Level${friend.current_xp} "/" ${friend.rank.xp_required} `
+					: "Level 0/0",
 				index: index + 1,
 			});
 			const friendWrapper = document.createElement("div");

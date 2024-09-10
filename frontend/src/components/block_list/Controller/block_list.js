@@ -24,7 +24,7 @@ export function BlockListContainer({ name, href, number, index }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
+	levelDiv.textContent = ` ${number} `;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -56,7 +56,7 @@ async function fetchBlockList(q) {
 	if (!q || q === '')
 		apiUrl = "/api/v1/users/blocked-list/";
 	else
-		apiUrl = `/api/v1/users/blocked-list/?search=${q}`;
+		apiUrl = `/ api / v1 / users / blocked - list /? search = ${q} `;
 
 	try {
 		const response = await fetchWithAuth(apiUrl, {
@@ -81,7 +81,7 @@ function handleUnblockUser(userId, Button) {
 
 async function processUnblockUser(userId, button) {
 	try {
-		const url = `/api/v1/users/unblock-user/${userId}/`;
+		const url = `/ api / v1 / users / unblock - user / ${userId}/`;
 		await fetchWithAuth(url, {
 			method: "DELETE",
 		});
@@ -160,11 +160,13 @@ export default async function renderBlockList() {
 			emptyContainer.appendChild(emptyComponent);
 			BlokContainer.appendChild(emptyContainer);
 		} else {
-			BlockList.forEach((friend) => {
+			BlockList.forEach((user) => {
 				const BlockListComponent = BlockListContainer({
-					name: friend.username,
-					href: friend.image_url,
-					number: friend.level,
+					name: user.username,
+					href: user.image_url,
+					number: user.xp_required && user.current_xp
+						? `Level${user.current_xp} "/" ${user.rank.xp_required}`
+						: "Level 0/0",
 				});
 				const friendWrapper = document.createElement("div");
 				friendWrapper.className = "friend-wrapper";
@@ -173,7 +175,7 @@ export default async function renderBlockList() {
 
 				const UnblockButton = friendWrapper.querySelector(".invite-button");
 				handleUnblockUser(
-					friend.id,
+					user.id,
 					UnblockButton,
 				);
 			});

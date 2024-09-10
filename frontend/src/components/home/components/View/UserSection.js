@@ -10,7 +10,7 @@ export default function () {
 				</div>
 			</a>
 
-			<div class="progress">
+			<div class="progress-user">
 				<div id="rank-name" class="progress-text">My Level</div>
 				<div id="current-xp" class="progress-xp">7,900 / 9000</div>
 			</div>

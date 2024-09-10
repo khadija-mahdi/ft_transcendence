@@ -24,7 +24,7 @@ export function FriendContainer({ name, href, number }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `Level ${number}`;
+	levelDiv.textContent = ` ${number} `;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -47,7 +47,7 @@ export function FriendContainer({ name, href, number }) {
 	svg.appendChild(path);
 
 	const arrowLink = document.createElement("a");
-	arrowLink.href = `/profile?username=${name}`;
+	arrowLink.href = `/ profile ? username = ${name} `;
 	arrowLink.className = "friend-arrow-link";
 	arrowLink.appendChild(svg);
 
@@ -80,7 +80,9 @@ export default async function renderFriends() {
 			const friendComponent = FriendContainer({
 				name: friend.username,
 				href: friend.image_url,
-				number: friend.level,
+				number: friend.xp_required && friend.current_xp
+					? `Level${friend.current_xp} "/" ${friend.rank.xp_required} `
+					: "Level 0/0",
 			});
 			const friendWrapper = document.createElement("div");
 			friendWrapper.className = "friend-wrapper";
