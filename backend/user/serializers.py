@@ -109,7 +109,7 @@ class UserFriendsSerializer(serializers.ModelSerializer, BaseUserSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'image_url', 'fullname', 'username', 'current_xp'
+        fields = ['id', 'image_url', 'fullname', 'username', 'current_xp',
                   'url', 'unfriend', 'block', 'message']
 
 
@@ -218,9 +218,9 @@ class FriendRequestSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     fullname = serializers.SerializerMethodField()
     username = serializers.CharField(source='requester.username')
+    current_xp = serializers.IntegerField(source='requester.current_xp', read_only=True)
     manage_friend_request = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
-    current_xp = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = User
