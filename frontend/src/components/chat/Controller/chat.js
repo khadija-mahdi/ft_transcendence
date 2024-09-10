@@ -65,7 +65,7 @@ function renderMessengerItem(item) {
 		type: item.type,
 	});
 	const lastMessageTime = formatTime(item.last_message?.created_at);
-
+	let unseen_messages = clickedIndex === item.id ? 0 : item.unseen_messages_count;
 	const messengerItem = document.createElement("div");
 	messengerItem.className = `messenger-item ${clickedIndex === item.id
 			? "selected"
@@ -91,7 +91,7 @@ function renderMessengerItem(item) {
 			clickedIndex !== item.id &&
 			item.last_message &&
 			item.last_message.id !== null
-			? `<div class="unread-count">${item.unseen_messages_count}</div>`
+			? `<div class="unread-count"> ${unseen_messages}</div>`
 			: `<div class=""></div>`
 		}
 			${lastMessageTime
@@ -115,7 +115,7 @@ async function handleIconClick(item) {
 		const response = await fetchWithAuth(roomDetailUrl, {
 			method: "GET",
 		});
-
+		item.all_messages_count = 0;
 		renderMessagesItems(response);
 	} catch (error) {
 		return [];
