@@ -20,7 +20,7 @@ class ChatConsumer(AsyncWebsocketConsumer, BaseNotification):
             await self.send(text_data=json.dumps({
                 'error': 'Forbidden access'
             }))
-            await self.close(code=1000)  # Use a valid close code
+            await self.close(code=1000)
             return
         self.room_group_name = 'chat_%s' % self.room_id
         await self.channel_layer.group_add(

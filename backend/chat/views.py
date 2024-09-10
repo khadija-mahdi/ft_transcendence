@@ -71,6 +71,8 @@ class MessagesView(ListCreateAPIView):
     def get_queryset(self):
         id = self.kwargs['id']
         user = self.request.user
+        # Set all messages in the room as seen
+        ChatMessage.objects.filter(chatRoom__id=id, chatRoom__members=user).update(seen=True)
         return ChatMessage.objects.\
             filter(chatRoom__id=id, chatRoom__members=user).\
             exclude(id__in=RemovedMessage.objects.filter(user=user).values('message_id')).\

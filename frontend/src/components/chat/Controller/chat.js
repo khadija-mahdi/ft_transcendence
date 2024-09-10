@@ -191,7 +191,6 @@ export async function ChatRoomsPanel() {
 	};
 }
 
-function ChatSmallWindow() { }
 
 export default async function () {
 	ChatRoomsPanel();
