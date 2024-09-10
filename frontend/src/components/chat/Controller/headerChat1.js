@@ -1,15 +1,14 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 import AuthWebSocket from "/src/lib/authwebsocket.js";
+import { fetchMyData } from "/src/_api/user.js";
 import { handleThreeDotPanel } from "./threeDot.js";
 import { ChatRoomsPanel } from "./chat.js";
-import { fetchMyData } from "/src/_api/user.js";
-
 const myData = await fetchMyData();
 let selectedImage = null;
 let apiUrl = null;
 let isLoading = false;
+let allMessagesLoaded = false;
 let socket = null;
-
 
 export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
 	const popupContainer = document.getElementById("popup-sendImage-container");
@@ -51,20 +50,25 @@ export function hideSendImagePopup() {
 	popupContainer.classList.add("hidden");
 }
 
+async function fetchMessages(id) {
+	console.log("api :", apiUrl)
+	// if (isLoading || allMessagesLoaded) return;
+	isLoading = true;
 
-
-
-async function fetchMessages(id, isScroll) {
-	if (!isScroll)
+	if (apiUrl === null) {
 		apiUrl = `/api/v1/chat/room/${id}`;
+	}
 	try {
 		const response = await fetchWithAuth(apiUrl, { method: "GET" });
 		if (response.results.length) {
-			apiUrl = response.next;
-			console.log("the next api is : ", apiUrl)
-
+			// apiUrl = response.next;
+			if (!apiUrl) {
+				allMessagesLoaded = true;
+			}
+			return response.results;
+		} else {
+			allMessagesLoaded = true;
 		}
-		appendMessages(response.results);
 	} catch (error) {
 		console.error('Error fetching messages:', error);
 	}
@@ -72,24 +76,43 @@ async function fetchMessages(id, isScroll) {
 	isLoading = false;
 }
 
-function appendMessages(messages) {
-	const chatWindow = document.getElementById('messages-content');
 
-	const scrollTopBefore = chatWindow.scrollTop;
-	messages.forEach(message => {
-		appendMessageToUI(message, true);
-	});
 
-	// chatWindow.scrollTop = chatWindow.scrollHeight - scrollTopBefore;
+function prependMessagesToUI(messages) {
+	const messagesContent = document.getElementById("messages-content");
+
+	if (messagesContent) {
+		messages.forEach(message => {
+			const messageElement = document.createElement('div');
+			message.message ? messageElement.classList.add('message') : messageElement.classList.add('image-file');
+			messageElement.classList.add(message.sender_username === myData.username ? 'sent' : 'received');
+
+			if (message.image_file) {
+				messageElement.innerHTML = `
+                    <div class="image_file ${message.sender_username === myData.username ? 'sent' : 'received'}">
+                        <img class="image_file-content" src="${message.image_file}" alt="image message" />
+                    </div>
+                `;
+			} else {
+				messageElement.innerHTML = `
+                    <div class="message-content">${message.message}</div>
+                    <div class="message-time ${message.sender_username === myData.username ? 'sent' : ''}">
+                        ${new Date(message.created_at).toLocaleTimeString()}
+                    </div>
+                `;
+			}
+
+			messagesContent.insertBefore(messageElement, messagesContent.firstChild);
+		});
+	}
 }
-
-
 
 
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	return /*html*/ `
 	<div class="panel-container">
+		<!-- Header content -->
 		<button class="panel-button">
 			<div class="panel-inner-container">
 				<div id="left-arrow-container" class="hidden">
@@ -151,7 +174,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                             ${selectedChat.type === "private"
 				? `
                                 <div class="invite-icon-container">
-                                    <a href="/game/match-making?player=${(selectedChat.receiverUser &&
+                                    <a href="/match-making?player=${(selectedChat.receiverUser &&
 					selectedChat.receiverUser[0]
 						.username) ||
 				0
@@ -213,11 +236,10 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 	`;
 }
 
+
+
+
 function handleWebSocket(selectedChat) {
-	if (socket) {
-		console.log("socket is ready open : ,", selectedChat.id)
-		socket.close()
-	}
 	if (selectedChat.id) {
 		socket = new AuthWebSocket(
 			`/ws/chat/${selectedChat.id}/`
@@ -241,24 +263,24 @@ function handleWebSocket(selectedChat) {
 	}
 }
 
-function appendMessageToUI(message, prepend = false) {
+function appendMessageToUI(message) {
 	const messagesContent = document.getElementById("messages-content");
+
 	if (messagesContent) {
 		const messageElement = document.createElement("div");
 		message.message
 			? messageElement.classList.add("message")
-			: messageElement.classList.add("image-file-content");
+			: messageElement.classList.add("image-file");
 		messageElement.classList.add(
 			message.sender_username === myData.username ? "sent" : "received"
 		);
 
-		if (message.image_file) {
+		if (image_file) {
 			messageElement.innerHTML = `
-				<div class="image_file ${message.sender_username === myData.username
-					? "sent"
-					: "received"
+				<div class="image_file ${message.sender_username === myData.username ? "sent" : "received"
 				}">
-					<img class="image_file-content" src="${message.image_file}" alt="image message" />
+					<img class="image_file-content" src=${message.image_file
+				} alt="image message" ></img>
 				</div>
 			`;
 		} else {
@@ -270,16 +292,10 @@ function appendMessageToUI(message, prepend = false) {
 				</div>
 			`;
 		}
-		if (prepend) {
-			messagesContent.insertBefore(messageElement, messagesContent.firstChild);  // Prepend message
-		} else {
-			messagesContent.appendChild(messageElement);
-		}
+
+		messagesContent.appendChild(messageElement);
+
 		messagesContent.scrollTop = messagesContent.scrollHeight;
-		messagesContent.scrollTo({
-			top: messagesContent.scrollHeight,
-			behavior: "smooth",
-		});
 	}
 }
 
@@ -312,8 +328,46 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 			room_id: selectedChat.id,
 			created_at: new Date().toISOString(),
 		};
-		socket.send(JSON.stringify(payload));
-		appendMessageToUI(payload)
+
+		const messagesContent = document.getElementById("messages-content");
+		if (messagesContent) {
+			const messageElement = document.createElement("div");
+			payload.message
+				? messageElement.classList.add("message")
+				: messageElement.classList.add("image-file-content");
+			messageElement.classList.add(
+				payload.sender_username === myData.username ? "sent" : "received"
+			);
+
+			if (payload.image_file) {
+				messageElement.innerHTML = `
+                    <div class="image_file ${payload.sender_username === myData.username
+						? "sent"
+						: "received"
+					}">
+                        <img class="image_file-content" src="${payload.image_file ||
+					"/public/assets/images/defualtgroupProfile.png"
+					}" alt="image message" />
+                    </div>
+                `;
+			} else {
+				messageElement.innerHTML = `
+                    <div class="message-content">${payload.message}</div>
+                    <div class="message-time ${payload.sender_username === myData.username ? "sent" : ""
+					}">
+                        ${new Date(payload.created_at).toLocaleTimeString()}
+                    </div>
+                `;
+			}
+			socket.send(JSON.stringify(payload));
+			messagesContent.appendChild(messageElement);
+
+			messagesContent.scrollTop = messagesContent.scrollHeight;
+			messagesContent.scrollTo({
+				top: messagesContent.scrollHeight,
+				behavior: "smooth",
+			});
+		}
 	} catch (error) {
 		return;
 	}
@@ -452,24 +506,58 @@ async function handleChatContent(selectedChat) {
 	const optionsPanel = document.getElementById("options-panel");
 	handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
 
-	await fetchMessages(selectedChat.id, false);
+	const messagesContent = document.getElementById("messages-content");
+	let messages = await fetchMessages(selectedChat.id, null);
+	if (messagesContent && messages) {
+		messages.forEach((message) => {
+			const messageElement = document.createElement("div");
+			message.message
+				? messageElement.classList.add("message")
+				: messageElement.classList.add("image-file");
+			messageElement.classList.add(
+				message.sender_username === myData.username ? "sent" : "received"
+			);
+
+			if (message.image_file) {
+				messageElement.innerHTML = `
+                    <div class="image_file ${message.sender_username === myData.username
+						? "sent"
+						: "received"
+					}">
+                        <img class="image_file-content" src="${message.image_file
+					}" alt="image message" />
+                    </div>
+                `;
+			} else {
+				messageElement.innerHTML = `
+                    <div class="message-content">${message.message}</div>
+                    <div class="message-time ${message.sender_username === myData.username ? "sent" : ""
+					}">
+                        ${new Date(message.created_at).toLocaleTimeString()}
+                    </div>
+                `;
+			}
+			messagesContent.appendChild(messageElement);
+		});
+	}
+	messagesContent.scrollTop = messagesContent.scrollHeight;
+	messagesContent.scrollTo({
+		top: messagesContent.scrollHeight,
+		behavior: "smooth",
+	});
+
 	handleWebSocket(selectedChat);
 	initializeSendImage(selectedChat);
 
+	// Bind send button click event
 	const sendButton = document.querySelector(".send-button");
 	if (sendButton) {
 		sendButton.addEventListener("click", (event) =>
 			handleSendMessage(event, selectedChat)
 		);
 	}
-	const chatWindow = document.getElementById('messages-content');
 
-	chatWindow.addEventListener('scroll', () => {
-		if (chatWindow.scrollTop === 0 && apiUrl) {
-			console.log("window on top :", chatWindow.scrollTop)
-			fetchMessages(selectedChat.id, true);
-		}
-	});
+	// Bind textarea enter keypress event
 	const textarea = document.querySelector(".message-textarea");
 	if (textarea) {
 		textarea.addEventListener("keypress", (event) =>
@@ -477,7 +565,6 @@ async function handleChatContent(selectedChat) {
 		);
 	}
 }
-
 export async function renderMessagesItems(selectedChat) {
 	let previousSmallWindow = null;
 	let chatPanel = "";

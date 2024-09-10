@@ -63,7 +63,7 @@ class RemoveUserRoomView(APIView):
             return Response({'error': 'Room not found or user is not a member.'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class MessagesView(ListCreateAPIView):
+class MessagesView(ListAPIView):
     serializer_class = ChatMessageSerializer
     queryset = ChatMessage.objects.all()
     permission_classes = [IsAuthenticated]
@@ -71,6 +71,8 @@ class MessagesView(ListCreateAPIView):
     def get_queryset(self):
         id = self.kwargs['id']
         user = self.request.user
+        ChatMessage.objects.filter(
+            chatRoom__id=id, chatRoom__members=user).update(seen=True)
         return ChatMessage.objects.\
             filter(chatRoom__id=id, chatRoom__members=user).\
             exclude(id__in=RemovedMessage.objects.filter(user=user).values('message_id')).\
@@ -81,21 +83,6 @@ class MessagesView(ListCreateAPIView):
         instance.seen = True
         instance.save()
         return Response({'Details': 'Messages Updated!'})
-
-    def create(self, serializer):
-        instance = serializer.save()
-        user = self.request.user
-        room_id = instance.chatRoom_id
-        removed_room = RemovedRoom.objects.get(user=user, room_id=room_id)
-        removed_room.delete()
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f"chat_{instance.chatRoom_id}",
-            {
-                'type': 'chat_message',
-                'message': serializer.data,
-            }
-        )
 
 
 class RemoveUserMessagesView(APIView):

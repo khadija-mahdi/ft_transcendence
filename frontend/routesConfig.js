@@ -96,6 +96,12 @@ const routes = {
 		css: "/src/components/settings/assets/style.css",
 		controller: () => import("/src/components/settings/Controller/Settings.js"),
 	},
+	"/settings/block-list": {
+		title: "Block List",
+		component: () => import("/src/components/block_list/View/block_list.js"),
+		css: "/src/components/block_list/assets/block_list.css",
+		controller: () => import("/src/components/block_list/Controller/block_list.js"),
+	},
 	"/profile": {
 		title: "profile",
 		component: () => import("/src/components/profile/view/index.js"),
