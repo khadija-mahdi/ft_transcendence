@@ -7,7 +7,8 @@ function handleConnectWebSocket() {
 	ws.onopen = () => {
 		console.log("connected to ws");
 	};
-	ws.onclose = () => {
+	ws.onclose = () => 
+	{
 		console.log("disconnected from ws");
 	};
 	ws.onmessage = (event) => {
@@ -21,7 +22,6 @@ function handleConnectWebSocket() {
 				console.log("Popup was closed");
 			}
 		});
-
 	}
 }
 

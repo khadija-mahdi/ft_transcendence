@@ -80,7 +80,7 @@
 	border-radius: 5px;
 }
 
-.play-now-button {
+#play-now-button {
 	display: inline-block;
 	background-color: #ff5500;
 	padding: 10px 40px;

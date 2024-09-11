@@ -1,5 +1,6 @@
 import { tournamentWrapper } from "/src/components/tournaments/View/Tournaments.js";
 import OnlinePlayers from "/src/components/home/components/View/OnlinePlayers.js";
+
 const html = String.raw;
 export default () => {
   return html`
@@ -18,15 +19,15 @@ export default () => {
             </p>
             <div class="button-group">
               <label class="radio-option">
-                <input type="radio" name="opponent" value="Machine" />
+                <input type="radio"  id="opponent-machine"  name="opponent" value="Machine" />
                 <span>Machine</span>
               </label>
               <label class="radio-option">
-                <input type="radio" name="opponent" value="Human" checked />
+                <input type="radio" id="opponent-machine" name="opponent" value="Human" checked />
                 <span>Human</span>
               </label>
             </div>
-            <a href="#" class="play-now-button">Play Now</a>
+            <a href="#" id="play-now-button">Play Now</a>
           </div>
         </div>
 
@@ -34,8 +35,5 @@ export default () => {
       </div>
       <div class="live-tournaments">${tournamentWrapper()}</div>
     </div>
-
-    <link rel="stylesheet" href="index.css" />
-    <script src="index.js"></script>
   `;
 };
