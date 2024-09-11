@@ -14,8 +14,8 @@ export async function fetchNotifications(isScroll = false) {
 		allNotifications.push(...response.results);
 		console.log("response", allNotifications, "apiUrl", apiUrl);
 		Not_length = response.count;
-		renderNotifications(allNotifications);
 		apiUrl = response.next;
+		renderNotifications(allNotifications);
 	} catch (error) {
 		console.error('Error fetching notifications:', error);
 		return [];
@@ -76,6 +76,7 @@ export function handleScroll() {
 
 export function renderNotifications(notifications) {
 	let badge = document.getElementById("notification-badge");
+	console.log("notifications", notifications, "apiUrl", apiUrl);
 	badge.innerHTML = !apiUrl ? notifications.length : notifications.length + "+";
 	if (!notifications) return;
 	function formatDate(dateString) {
@@ -401,7 +402,7 @@ function iconsSmallWindow() {
 										<path fill="#545454"
 											d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
 									</svg>
-									<span id="notification-badge" class="notification-badge">${allNotifications.length}</span> <!-- Add this line -->
+									<span id="notification-badge" class="notification-badge">${apiUrl ? "30+" : allNotifications.length}</span> <!-- Add this line -->
 								</div>
 							</a>
 						</div>
