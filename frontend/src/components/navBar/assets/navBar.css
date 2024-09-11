@@ -360,22 +360,33 @@ body.bg-dark {
 	fill: #FD4106;
 }
 
+.notification-icon-container {
+	position: relative; 
+	display: inline-block;
+	height: 40px;
+	width: 40px;
+}
+
+/* The notification panel */
 .notification-panel {
-	z-index: 50;
-	margin-top: 3px;
 	position: absolute;
-	top: 11;
-	right: 440px;
-	height: 400px;
-	background-color: #242424;
+	z-index: 50;
+	top: 100%; /* Directly below the icon */
+	right: 0; /* Align to the right */
 	width: 276px;
+	background-color: #242424;
 	padding: 2px;
 	border-radius: 4px;
 	display: flex;
 	flex-direction: column;
-
-
+	margin-top: 8px; /* Optional space between the icon and panel */
+	height: 400px;
 }
+
+
+
+
+
 
 .notification-title {
 	font-weight: 600;
@@ -569,6 +580,7 @@ body.bg-dark {
 	border-radius: 6px;
 	overflow: hidden;
 	cursor: pointer;
+	margin-left: 1rem;
 }
 
 .profile-image-container {

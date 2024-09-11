@@ -1,10 +1,27 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
-import { fetchNotifications } from "/src/_api/user.js";
 import { Empty } from "/src/lib/Empty.js";
 
-const notifications = await fetchNotifications();
+let apiUrl = null;
+let allNotifications = [];
+let Not_length = 0;
 
-export function renderNotifications() {
+export async function fetchNotifications(isScroll = false) {
+	if (!isScroll) apiUrl = `/api/v1/notifications/`;
+	try {
+		const response = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
+		allNotifications.push(...response.results);
+		console.log("response", allNotifications, "apiUrl", apiUrl);
+		Not_length = response.count;
+		renderNotifications(allNotifications);
+		apiUrl = response.next;
+	} catch (error) {
+		console.error('Error fetching notifications:', error);
+		return [];
+	}
+}
+export function renderNotifications(notifications) {
 	console.log(notifications);
 	function formatDate(dateString) {
 		const options = {
@@ -72,7 +89,7 @@ export function renderNotifications() {
 						});
 						console.log("notification remored ,", notification.id)
 						notifications.splice(index, 1);
-						renderNotifications();
+						renderNotifications(notifications);
 					} catch (error) {
 						return;
 					}
@@ -83,6 +100,14 @@ export function renderNotifications() {
 }
 
 export default function () {
-	console.log(notifications);
-	renderNotifications();
+	fetchNotifications();
+	const NotContent = document.getElementById("notifications-list");
+	if (!NotContent) return;
+	NotContent.addEventListener('scroll', async () => {
+		if (NotContent.scrollHeight - NotContent.scrollTop === NotContent.clientHeight) {
+			if (apiUrl) {
+				await fetchNotifications(true);
+			}
+		}
+	});
 }
