@@ -1,7 +1,7 @@
 const html = String.raw;
 
 export function matchItem({ first_player, second_player }) {
-  console.log(first_player, second_player); 
+
   return html`
     <a href="/">
       <div class="match-item">
@@ -27,7 +27,7 @@ export function matchItem({ first_player, second_player }) {
               ${first_player?.username|| "Machine"}
             </div>
             <div class="player-level">
-              Level <span>${first_player?.current_xp || "0"}</span>
+              Level <span>${first_player?.current_xp || "---"}</span>
             </div>
           </div>
           <p class="vs-text">VS</p>
@@ -36,7 +36,7 @@ export function matchItem({ first_player, second_player }) {
               ${second_player?.username|| "Machine"}
             </div>
             <div class="player-level">
-              Level <span>${second_player?.current_xp || "0"}</span>
+              Level <span>${second_player?.current_xp || "---"}</span>
             </div>
           </div>
         </div>
