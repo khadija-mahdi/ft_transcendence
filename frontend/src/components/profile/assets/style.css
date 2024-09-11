@@ -549,6 +549,7 @@
     flex-grow: 1;
     flex-direction: column;
     padding-left: 15px;
+    max-width: 60%;
 }
 
 .tournament-name {

@@ -71,19 +71,19 @@ function setProfile() {
 function setUserInfo() {
 	const UserInfoList = [
 		{
-			src: "/assets/icons/fluent_games.png",
+			src: "/src/assets/icons/fluent_games.png",
 			value: "Unavailable",
 		},
 		{
-			src: "/assets/icons/email.png",
+			src: "/src/assets/icons/email.png",
 			value: data.email,
 		},
 		{
-			src: "/assets/icons/money-recive.svg",
+			src: "/src/assets/icons/money-recive.svg",
 			value: `${data.coins} Coins`,
 		},
 		{
-			src: "/assets/icons/connected.png",
+			src: "/src/assets/icons/connected.png",
 			value: data.status,
 		},
 	];
@@ -134,7 +134,7 @@ function setOptionsMenu() {
 		{
 			view: html`
 				<button class="menu-item">
-					<img src="/assets/icons/profile-remove.svg" alt="UnFriend Button" />
+					<img src="/src/assets/icons/profile-remove.svg" alt="UnFriend Button" />
 					<p class="menu-item-text">UnFriend</p>
 				</button>
 			`,
@@ -147,7 +147,7 @@ function setOptionsMenu() {
 		{
 			view: html`
 				<button class="menu-item">
-					<img src="/assets/icons/profile-delete.svg" alt="Block Button" />
+					<img src="/src/assets/icons/profile-delete.svg" alt="Block Button" />
 					<p class="menu-item-text">Block</p>
 				</button>
 			`,
@@ -160,7 +160,7 @@ function setOptionsMenu() {
 		{
 			view: html`
 				<button class="menu-item">
-					<img src="/assets/icons/directbox-send.svg" alt="Invite Button" />
+					<img src="/src/assets/icons/directbox-send.svg" alt="Invite Button" />
 					<p class="menu-item-text">Invite</p>
 				</button>
 			`,
@@ -180,7 +180,7 @@ function setRankInfo() {
 	const UserRankTitle = document.getElementById("rank-title");
 
 	const UserRank = data.rank || null;
-	UserRankIcon.src = UserRank?.icon || "/assets/icons/unranked.png";
+	UserRankIcon.src = UserRank?.icon || "/src/assets/icons/unranked.png";
 	UserRankTitle.textContent = UserRank?.name || "Unranked";
 	UserRankTitle.style.color = UserRank ? "#ff3d00" : "#a2a2a2";
 }
@@ -192,18 +192,17 @@ function PopulateTournamentMatches(data) {
 		return;
 	}
 	data.results.forEach((tournament) => {
-		tournamentHistory.innerHTML += tournamentItem(tournament);
+		console.log(tournament)
+		tournamentHistory.innerHTML += tournamentItem(tournament.tournament);
 	});
 }
 
 function PopulateMatches(data) {
-	console.log(data.results.splice(0, 5));
 	const matchHistory = document.getElementById("match-history");
 	if (data.count === 0) {
 		matchHistory.append(Empty("No matches found"));
 		return;
 	}
-
 	data.results.splice(0,5).forEach((match) => {
 		matchHistory.innerHTML += matchItem(match);
 	});
@@ -225,13 +224,13 @@ function ProfileButtonContent() {
 	if (data.is_friend) {
 		return html`
 			<a href="/messenger?chatroom=${data.id}">
-				${ProfileCTA("/assets/icons/message-filled.svg", "Send Message")}
+				${ProfileCTA("/src/assets/icons/message-filled.svg", "Send Message")}
 			</a>
 		`;
 	}
 	if (data.friend_request_state === FriendRequestState.SENT) {
 		return ProfileCTA(
-			"/assets/icons/light_close.png",
+			"/src/assets/icons/light_close.png",
 			"Cancel Request",
 			"CancelFriendRequest"
 		);
@@ -240,12 +239,12 @@ function ProfileButtonContent() {
 		return html`
 			<div class="cta-buttons">
 				${ProfileCTA(
-			"/assets/icons/add-fill.svg",
+			"/src/assets/icons/add-fill.svg",
 			"Accept Request",
 			"AcceptFriendRequest"
 		)}
 				${ProfileCTA(
-			"/assets/icons/light_close.png",
+			"/src/assets/icons/light_close.png",
 			"decline Request",
 			"DeclineFriendRequest"
 		)}
