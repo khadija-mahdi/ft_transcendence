@@ -7,6 +7,7 @@ let Not_length = 0;
 
 export async function fetchNotifications(isScroll = false) {
 	if (!isScroll) apiUrl = `/api/v1/notifications/`;
+	console.log('is Scroll', isScroll)
 	try {
 		const response = await fetchWithAuth(apiUrl, {
 			method: 'GET',
@@ -26,15 +27,25 @@ export async function fetchNotifications(isScroll = false) {
 async function loadNavbar() {
 	const path = window.location.pathname;
 
-	if (!path.startsWith("/game") && !path.startsWith("/auth/")) {
+	if (path === '/game/choice-game' || (!path.startsWith("/game") && !path.startsWith("/auth/"))) {
 		try {
 			const response = await fetch("/src/components/navBar/View/navBar.html");
 			if (!response.ok) throw new Error("Network response was not ok");
+
 			const navbarHTML = await response.text();
 
 			document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 
 			fetchMyData();
+
+			let playBtn = document.getElementById("playButton");
+			console.log("playBrn :", playBtn)
+			if (playBtn) {
+				if (path === '/game/choice-game') {
+					playBtn.remove();
+				}
+			}
+
 			await fetchNotifications();
 			document.getElementById("notif").addEventListener("click", function () {
 				const panel = document.getElementById("notification-panel");
@@ -64,7 +75,9 @@ export function handleScroll() {
 	const NotContent = document.getElementById("notification-list");
 	if (!NotContent) return;
 	NotContent.addEventListener('scroll', async () => {
-		if (NotContent.scrollHeight - NotContent.scrollTop === NotContent.clientHeight) {
+		const isAtBottom = Math.ceil(NotContent.scrollTop + NotContent.clientHeight) >= NotContent.scrollHeight;
+
+		if (isAtBottom) {
 			if (apiUrl) {
 				await fetchNotifications(true);
 			}

@@ -104,7 +104,8 @@ export default function () {
 	const NotContent = document.getElementById("notifications-list");
 	if (!NotContent) return;
 	NotContent.addEventListener('scroll', async () => {
-		if (NotContent.scrollHeight - NotContent.scrollTop === NotContent.clientHeight) {
+		const isAtBottom = Math.ceil(NotContent.scrollTop + NotContent.clientHeight) >= NotContent.scrollHeight;
+		if (isAtBottom) {
 			if (apiUrl) {
 				await fetchNotifications(true);
 			}

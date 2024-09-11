@@ -56,7 +56,7 @@ async function fetchBlockList(q) {
 	if (!q || q === '')
 		apiUrl = "/api/v1/users/blocked-list/";
 	else
-		apiUrl = `/ api / v1 / users / blocked - list /? search = ${q} `;
+		apiUrl = `/api/v1/users/blocked-list/?search_query=${q}`;
 
 	try {
 		const response = await fetchWithAuth(apiUrl, {
