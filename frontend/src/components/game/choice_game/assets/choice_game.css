@@ -21,18 +21,17 @@ body {
     flex-direction: column;
     gap: 20px;
     width: 100%;
-    max-width: 1500px;
     padding: 20px;
 }
 
 .section-container {
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
+    gap: 20px;
 }
 
 .select-game-section {
-    width: 76%;
+
+    flex: 1;
     /* Take more space */
     height: 450px;
     background-color: #333;
@@ -109,18 +108,12 @@ body {
     border-radius: 5px;
 }
 
-.online-players {
-    background-color: #2c2c2c;
-    padding: 30px;
-    font-size: 13px;
+.online-players-cg {
+    min-width: 381px;
     border-radius: 8px;
-    width: 300px;
-    font-family: Arial, sans-serif;
+    overflow: hidden;
 }
 
-.online-players h3 {
-    color: white;
-}
 
 
 .filter-btn {
@@ -176,143 +169,6 @@ body {
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-}
-
-
-.tournaments-section {
-    background-color: #333;
-    padding: 20px;
-    border-radius: 15px;
-    width: 100%;
-    min-height: 400px;
-    font-size: 12px;
-}
-
-.create-tournament-button {
-    background-color: #FE284F;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 12px;
-    font-weight: bold;
-    float: right;
-    margin-top: -30px;
-}
-
-.live-tournaments {
-    /* margin-top: 50px; */
-    background-color: #161616;
-    padding: 20px;
-    font-size: 11px;
-    border-radius: 10px;
-    width: 100%;
-    /* Smaller width for sidebar */
-    height: 400px;
-    /* Same height as game section */
-    /* position: relative; */
-    /* Needed for the absolute positioning of the button */
-
-    display: flex;
-    flex-direction: column;
-    gap: 10px
-}
-
-
-.live-tournaments h2 {
-    /* margin-bottom: 20px; */
-}
-
-.live-tournaments ul {
-    list-style: none;
-    padding: 0;
-}
-
-.live-tournaments ul li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 10px;
-    background-color: #333;
-    /* Dark grey for list item background */
-    margin-bottom: 20px;
-    height: 90px;
-    border-radius: 8px;
-    /* Optional: Rounded corners */
-}
-
-.live-tournaments ul li img {
-    /* width: 40px;
-    height: 40px;
-    object-fit: cover; */
-}
-
-.tournament-info {
-    flex: 1;
-    margin-left: 10px;
-}
-
-.tournament-info p {
-    font-size: 16px;
-    margin: 0;
-    color: white;
-}
-
-.tournament-info span {
-
-    color: #aaa;
-    float: right;
-    margin-right: 90px;
-    font-size: 12px;
-}
-
-
-.tournament-numbers {
-    color: white;
-    font-size: 19px;
-    position: absolute;
-    top: 80px;
-    /* Adjust this to control the vertical position */
-    right: 150px;
-    /* Aligns to the right */
-}
-
-.tournament-numbers1 {
-    color: white;
-    font-size: 19px;
-    position: absolute;
-    top: 190px;
-    /* Adjust this to control the vertical position */
-    right: 150px;
-    /* Aligns to the right */
-}
-
-.tournament-numbers2 {
-    color: white;
-    font-size: 19px;
-    position: absolute;
-    top: 300px;
-    /* Adjust this to control the vertical position */
-    right: 150px;
-    /* Aligns to the right */
-}
-
-
-.create-tournament-btn {
-    background-color: #FE284F;
-    color: white;
-    padding: 5px 15px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    /* position: absolute; */
-    /* Positioning the button */
-    /* top: 10px; */
-    /* Position from the top */
-    /* right: 20px; */
-    /* Position from the right */
-    cursor: pointer;
-    outline: none;
-    border: none;
 }
 
 
@@ -420,4 +276,14 @@ body {
     justify-content: space-between;
 
     /* align-items: baseline; */
+}
+
+
+@media screen and (max-width: 1024px){
+    .section-container {
+        flex-direction: column;
+    }
+    .online-players-cg{
+        min-height: 400px;
+    }
 }
