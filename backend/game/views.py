@@ -79,22 +79,14 @@ class RetrieveTournament(RetrieveDestroyAPIView):
 
 
 class RegisterToTournament(CreateAPIView):
-    "register to a tournament"
-    "if the user is already registered, it will unregister the user from the tournament"
-    "if the user is registered to any other tournament within the a margin of 1 hour,"
-    "instruction will be given to unregister from the other tournament first"
-
-    class RegisterToTournamentSerializer(serializers.Serializer):
-        pass
-
-    serializer_class = RegisterToTournamentSerializer
+    serializer_class = TournamentsRegisteredPlayersSerializer
     queryset = TournamentsRegisteredPlayers.objects.all()
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         tournament = get_object_or_404(Tournament, pk=self.kwargs.get('pk'))
-        if tournament.finished:
-            return serializers.ValidationError("Tournament is already finished")
+        if tournament.finished or tournament.ongoing:
+            return serializers.ValidationError("Tournament is already started or finished")
         bracket = Brackets.objects.filter(
             tournament=tournament
         ).filter(player=self.request.user).filter(round_number=1)
@@ -114,9 +106,7 @@ class RegisterToTournament(CreateAPIView):
                 "You are already registered to another tournament within the last hour.\
                     Please unregister from the other tournament first.")
         Brackets(tournament=tournament, player=self.request.user).save()
-        TournamentsRegisteredPlayers.objects.create(
-            user=self.request.user, tournament=tournament)
-
+        serializer.save(user=self.request.user, tournament=tournament)
 
 class MatchHistory(ListAPIView):
     serializer_class = MatchUpSerializer

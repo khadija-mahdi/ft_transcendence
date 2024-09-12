@@ -17,5 +17,5 @@ urlpatterns = [
     path('tournament-history/<int:pk>/',
          view=views.TournamentHistory.as_view(), name='tournament-history'),
     path('ongoing-tournaments/',
-         view=views.UsersUpcomingTournaments.as_view(), name='ongoing-tournaments'),
+         view=views.OngoingTournaments.as_view(), name='ongoing-tournaments'),
 ]
