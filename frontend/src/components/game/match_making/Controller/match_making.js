@@ -12,17 +12,17 @@ export default function ()
   const game_mode = new URLSearchParams(window.location.search).get("game_mode");
   if (game_mode === undefined)
     game_mode = 'multiplayer'
-  if (game_mode !== 'multiplayer' || game_mode !== 'singleplayer') 
-  {
-    console.log("oussama ddxxx");
+  if (game_mode !== 'multiplayer' && game_mode !== 'singleplayer') {
+    console.log("Game mode");
     // showPopup({
     //   title: "An Error",
-    //   subtitle: "You've Selected UnRecognazed Game Mode Please try Again",
+    //   subtitle: "You've Selected UnRecognized Game Mode Please try Again",
     //   onCancel: () => {
     //     window.location.href = "/";
     //   },
     // });
   }
+  
   const loobySocket = new AuthWebSocket(`/ws/game/normal/looby/?game_mode=${game_mode}`);
   loobySocket.onopen = () =>
   {
