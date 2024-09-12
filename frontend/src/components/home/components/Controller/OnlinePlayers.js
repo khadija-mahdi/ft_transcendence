@@ -77,7 +77,7 @@ export function OnlinePlayerContainer({ name, href, number, index }) {
 	arrowLink.appendChild(svg);
 
 	const inviteLink = document.createElement("a");
-	inviteLink.href = `/ game / match_making ? player = ${name} `;
+	inviteLink.href = `/game/match_making?player=${name} `;
 	inviteLink.className = "invite-button";
 
 	const inviteContent = document.createElement("div");

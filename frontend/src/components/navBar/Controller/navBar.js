@@ -1,33 +1,56 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
-import { fetchNotifications } from "/src/_api/user.js";
 import { Empty } from "/src/lib/Empty.js";
 
-const notifications = await fetchNotifications();
+let apiUrl = null;
+let allNotifications = [];
+let Not_length = 0;
+
+export async function fetchNotifications(isScroll = false) {
+	if (!isScroll) apiUrl = `/api/v1/notifications/`;
+	console.log('is Scroll', isScroll)
+	try {
+		const response = await fetchWithAuth(apiUrl, {
+			method: 'GET',
+		});
+		allNotifications.push(...response.results);
+		console.log("response", allNotifications, "apiUrl", apiUrl);
+		Not_length = response.count;
+		apiUrl = response.next;
+		renderNotifications(allNotifications);
+	} catch (error) {
+		console.error('Error fetching notifications:', error);
+		return [];
+	}
+}
+
 
 async function loadNavbar() {
 	const path = window.location.pathname;
 
-	if (!path.startsWith("/game") && !path.startsWith("/auth/")) {
+	if (path === '/game/choice-game' || (!path.startsWith("/game") && !path.startsWith("/auth/"))) {
 		try {
 			const response = await fetch("/src/components/navBar/View/navBar.html");
 			if (!response.ok) throw new Error("Network response was not ok");
+
 			const navbarHTML = await response.text();
 
 			document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 
-			renderNavBrContent();
-
 			fetchMyData();
-			let badge = document.getElementById("notification-badge");
-			badge.innerHTML = notifications.length;
-			renderNotifications();
 
+			let playBtn = document.getElementById("playButton");
+			console.log("playBrn :", playBtn)
+			if (playBtn) {
+				if (path === '/game/choice-game') {
+					playBtn.remove();
+				}
+			}
+
+			await fetchNotifications();
 			document.getElementById("notif").addEventListener("click", function () {
 				const panel = document.getElementById("notification-panel");
 				panel.classList.toggle("hidden");
 			});
-
-			document.addEventListener("DOMContentLoaded", renderNotifications);
 
 			document.addEventListener("click", function (event) {
 				const panel = document.getElementById("notification-panel");
@@ -39,13 +62,36 @@ async function loadNavbar() {
 					panel.classList.add("hidden");
 				}
 			});
+
+			handleScroll();
 		} catch (error) {
-			return;
+			console.error('Error loading navbar:', error);
 		}
 	}
 }
-export function renderNotifications() {
-	console.log(notifications);
+
+
+export function handleScroll() {
+	const NotContent = document.getElementById("notification-list");
+	if (!NotContent) return;
+	NotContent.addEventListener('scroll', async () => {
+		const isAtBottom = Math.ceil(NotContent.scrollTop + NotContent.clientHeight) >= NotContent.scrollHeight;
+
+		if (isAtBottom) {
+			if (apiUrl) {
+				await fetchNotifications(true);
+			}
+		}
+	});
+}
+
+
+
+export function renderNotifications(notifications) {
+	let badge = document.getElementById("notification-badge");
+	console.log("notifications", notifications, "apiUrl", apiUrl);
+	badge.innerHTML = !apiUrl ? notifications.length : notifications.length + "+";
+	if (!notifications) return;
 	function formatDate(dateString) {
 		const options = {
 			year: "numeric",
@@ -58,6 +104,7 @@ export function renderNotifications() {
 	}
 	let href = "";
 	const notificationList = document.getElementById("notification-list");
+	if (!notificationList) return;
 	notificationList.innerHTML = "";
 
 	if (("is randring : ", !notifications.length)) {
@@ -124,6 +171,7 @@ export function renderNotifications() {
 }
 
 function renderNavBrContent() {
+
 	const navItems = document.querySelectorAll(".nav-item.nav a");
 
 	navItems.forEach((navItem) => {
@@ -160,7 +208,6 @@ async function fetchMyData() {
 	}
 }
 
-// Ensure DOM is fully loaded before calling fetchMyData
 document.addEventListener("DOMContentLoaded", function () {
 	fetchMyData();
 });
@@ -368,7 +415,7 @@ function iconsSmallWindow() {
 										<path fill="#545454"
 											d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
 									</svg>
-									<span id="notification-badge" class="notification-badge">${notifications.length}</span> <!-- Add this line -->
+									<span id="notification-badge" class="notification-badge">${apiUrl ? "30+" : allNotifications.length}</span> <!-- Add this line -->
 								</div>
 							</a>
 						</div>

@@ -4,25 +4,26 @@ import { mountTournamentsWs } from "/src/lib/tournamentRt.js";
 import { showMainPopup } from "/src/lib/Confirm.js";
 
 function handleConnectWebSocket() {
-  let ws = new AuthWebSocket(`/ws/user/connect/`);
-  ws.onopen = () => {
-    console.log("connected to ws");
-  };
-  ws.onclose = () => {
-    console.log("disconnected from ws");
-  };
-  ws.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    console.log("data:", data);
-    showMainPopup({
-      title: data.title,
-      subtitle: data.description,
-      icon: data.icon,
-      onCancel: () => {
-        console.log("Popup was closed");
-      },
-    });
-  };
+	let ws = new AuthWebSocket(`/ws/user/connect/`);
+	ws.onopen = () => {
+		console.log("connected to ws");
+	};
+	ws.onclose = () => 
+	{
+		console.log("disconnected from ws");
+	};
+	ws.onmessage = (event) => {
+		const data = JSON.parse(event.data);
+		console.log("data:", data)
+		showMainPopup({
+			title: data.title ,
+			subtitle: data.description,
+			icon: data.icon ,
+			onCancel: () => {
+				console.log("Popup was closed");
+			}
+		});
+	}
 }
 
 async function loadCSS(href) {
