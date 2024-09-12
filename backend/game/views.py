@@ -1,6 +1,6 @@
 
 from django.shortcuts import get_object_or_404
-from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveAPIView, CreateAPIView
+from rest_framework.generics import ListCreateAPIView, ListAPIView, RetrieveDestroyAPIView, DestroyAPIView, RetrieveAPIView, CreateAPIView
 from django.db.models import Q
 from .tasks import start_scheduler
 from .serializers import (
@@ -14,9 +14,10 @@ from rest_framework import serializers
 from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, Matchup
 from user.models import User
 from rest_framework.permissions import IsAuthenticated
-from datetime import datetime
+from datetime import datetime, timedelta
 from .services import notify_tournament_users
-
+from rest_framework.response import Response
+from django.http import Http404
 
 class ListGame(ListAPIView):
     serializer_class = GameSerializer
@@ -99,14 +100,34 @@ class RegisterToTournament(CreateAPIView):
 
         OtherTournaments = TournamentsRegisteredPlayers.objects.filter(
             user=self.request.user)\
-            .exclude(created_at__gte=datetime.datetime.now() - datetime.timedelta(hours=1))\
-            .exclude(created_at__lte=datetime.datetime.now() + datetime.timedelta(hours=1))
+            .exclude(created_at__gte=datetime.now() - timedelta(hours=1))\
+            .exclude(created_at__lte=datetime.now() + timedelta(hours=1))
         if OtherTournaments.exists():
             raise serializers.ValidationError(
                 "You are already registered to another tournament within the last hour.\
                     Please unregister from the other tournament first.")
         Brackets(tournament=tournament, player=self.request.user).save()
         serializer.save(user=self.request.user, tournament=tournament)
+
+
+class UnRegisterToTournament(DestroyAPIView):
+    serializer_class = TournamentsRegisteredPlayersSerializer
+    queryset = TournamentsRegisteredPlayers.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            tournament = get_object_or_404(Tournament, pk=self.kwargs.get('pk'))
+            if tournament.finished or tournament.ongoing:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            TournamentsRegisteredPlayers.objects.filter(
+                user=self.request.user, tournament=tournament).delete()
+            Brackets.objects.filter(tournament=tournament,
+                                    player=self.request.user).delete()
+        except Http404:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class MatchHistory(ListAPIView):
     serializer_class = MatchUpSerializer

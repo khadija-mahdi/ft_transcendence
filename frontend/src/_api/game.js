@@ -18,6 +18,12 @@ export const RegisterTournament = async (id, data) => {
 	});
 };
 
+
+export const UnRegisterTournament = async (id) => {
+	return await fetchWithAuth(`/api/v1/game/Tournament/unregister/${id}/`, {
+		method: "DELETE",
+	});
+};
 export const getMatchInfo = async (uuid) => {
 	const Response = await fetchWithAuth(`/api/v1/game/match-info/${uuid}/`);
 	return Response;

@@ -14,6 +14,8 @@ urlpatterns = [
          view=views.RetrieveTournament.as_view(), name='tournament-detail'),
     path('Tournament/register/<int:pk>/',
          view=views.RegisterToTournament.as_view(), name='tournament-register'),
+     path('Tournament/unregister/<int:pk>/',
+         view=views.UnRegisterToTournament.as_view(), name='tournament-unregister'),
     path('tournament-history/<int:pk>/',
          view=views.TournamentHistory.as_view(), name='tournament-history'),
     path('ongoing-tournaments/',

@@ -138,9 +138,9 @@ class MatchInfoSerializer(serializers.ModelSerializer):
 
 
 class TournamentsRegisteredPlayersSerializer(serializers.ModelSerializer):
-    tournament = TournamentSerializer()
+    tournament = TournamentSerializer(read_only=True)
     alias = serializers.CharField()
-    
+    user = UserSerializer(read_only=True)
     class Meta:
         model = TournamentsRegisteredPlayers
         fields = '__all__'
