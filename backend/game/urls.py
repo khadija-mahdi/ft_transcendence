@@ -5,7 +5,8 @@ urlpatterns = [
     path('game-information/', view=views.ListGame.as_view(), name='home'),
     path('match-history/<int:pk>/',
          view=views.MatchHistory.as_view(), name='match-history'),
-    path('match-info/<str:game_uuid>/', view=views.MatchInfo.as_view(), name='game-info'),
+    path('match-info/<str:game_uuid>/',
+         view=views.MatchInfo.as_view(), name='game-info'),
     path('Tournament/', view=views.listTournaments.as_view(), name='tournament'),
     path('Tournament-announcements/', view=views.listTournaments.as_view(),
          name='Tournament-announcements'),
@@ -15,4 +16,6 @@ urlpatterns = [
          view=views.RegisterToTournament.as_view(), name='tournament-register'),
     path('tournament-history/<int:pk>/',
          view=views.TournamentHistory.as_view(), name='tournament-history'),
+    path('ongoing-tournaments/',
+         view=views.UsersUpcomingTournaments.as_view(), name='ongoing-tournaments'),
 ]

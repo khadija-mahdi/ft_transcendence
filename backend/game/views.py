@@ -14,12 +14,26 @@ from rest_framework import serializers
 from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, Matchup
 from user.models import User
 from rest_framework.permissions import IsAuthenticated
-import datetime
+from datetime import datetime
+from .services import notify_tournament_users
 
 
 class ListGame(ListAPIView):
     serializer_class = GameSerializer
     queryset = Game.objects.all()
+
+
+def FillOutRegisteredPlayers(tournament: Tournament, names=[]):
+    for username in names:
+        user = User.objects.get(username=username)
+        TournamentsRegisteredPlayers.objects.create(
+            user=user, tournament=tournament)
+
+
+def MockTest(tournament):
+    FillOutRegisteredPlayers(tournament=tournament, names=[
+                             'ayoub', 'aitouna', 'khadija'])
+    notify_tournament_users(tournament.id)
 
 
 class listTournaments(ListCreateAPIView):
@@ -36,14 +50,21 @@ class listTournaments(ListCreateAPIView):
         combined_list = private_list | public_list
         return combined_list.order_by('is_public').reverse()
 
-    # def perform_create(self, serializer):
-        # start_date_str = self.request.data.get('start_date')
-        # start_date = datetime.strptime(start_date_str, '%Y-%m-%dT%H:%M:%S')  # Adjust the format as needed
-        # if start_date < datetime.now():
-        #     raise serializers.ValidationError(
-        #         "Start date must be in the future")
-        # tournament_id = super().perform_create(serializer).data.get('id')
-        # start_scheduler(tournament_id, start_date)
+    def perform_create(self, serializer):
+        if not serializer.is_valid():
+            raise serializers.ValidationError("Invalid data")
+
+        start_date_str = self.request.data.get('start_date')
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%dT%H:%M')
+        print('start_date', start_date, datetime.now())
+        if start_date < datetime.now():
+            raise serializers.ValidationError(
+                "Start date must be in the future")
+
+        tournament = serializer.save()
+        MockTest(tournament)
+        print(tournament)
+        # start_scheduler(tournament.id, start_date)
 
 
 class listAnnouncements(ListCreateAPIView):
@@ -119,6 +140,7 @@ class MatchInfo(RetrieveAPIView):
     lookup_field = 'game_uuid'
     permission_classes = [IsAuthenticated]
 
+
 class TournamentHistory(ListAPIView):
     serializer_class = TournamentsRegisteredPlayersSerializer
     queryset = TournamentsRegisteredPlayers.objects.all()
@@ -126,6 +148,14 @@ class TournamentHistory(ListAPIView):
 
     def get_queryset(self):
         return TournamentsRegisteredPlayers.objects.filter(user=self.request.user)
+
+
+class OngoingTournaments(ListAPIView):
+    serializer_class = TournamentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Tournament.objects.filter(registered_users=self.request.user).filter(ongoing=True)
 
 
 class JoinGameLooby():

@@ -28,6 +28,7 @@ class Tournament(models.Model):
     uuid = models.CharField(max_length=200, blank=False,
                             null=False, default=uuid.uuid4)
     finished = models.BooleanField(default=False)
+    ongoing = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -216,6 +216,7 @@ class TournamentManager():
                 print('create new tournament')
                 tournament = await TournamentRoutine.create(uuid)
                 if tournament is None:
+                    print(f'No Tournament Record Found {uuid}')
                     return None
 
                 self.tournaments[uuid] = tournament

@@ -49,7 +49,7 @@ class TournamentSerializer(serializers.ModelSerializer, BaseTournamentSerializer
 
     class Meta:
         model = Tournament
-        fields = ['id', 'icon', 'icon_file', 'name', 'description', 'start_date',
+        fields = ['id', 'icon', 'icon_file', 'name', 'description', 'uuid', 'start_date',
                   'max_players', 'is_public', 'is_monetized', 'url', 'register']
 
     def create(self, validated_data):
