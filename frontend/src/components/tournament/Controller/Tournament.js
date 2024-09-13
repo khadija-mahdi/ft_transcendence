@@ -125,6 +125,7 @@ async function handleRegisterFormSubmit(_data) {
       />
     </div>`,
     onConfirm: async (formData) => {
+      console.log('confirm called')
       await RegisterTournament(id, formData);
       data = await GetTournamentDetails(id);
       setTournamentDetails();

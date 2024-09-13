@@ -5,6 +5,7 @@ export function showPopup({
 	onConfirm = () => { },
 	onCancel = () => { },
 }) {
+
 	const popupContainer = document.getElementById("popup-container");
 	const popupTitle = document.getElementById("popup-title");
 	const popupSubtitle = document.getElementById("popup-subtitle");
@@ -32,7 +33,8 @@ export function showPopup({
 	};
 
 
-	inputForm.addEventListener("submit", (event) => {
+
+	const onSubmit = (event) => {
 		event.preventDefault();
 		const data = {};
 		for (let element of event.target.elements) {
@@ -40,15 +42,18 @@ export function showPopup({
 		}
 		onConfirm(data);
 		hidePopup();
-	});
+	}
 
+	inputForm.addEventListener("submit", onSubmit);
 	popupContainer.classList.remove("hidden");
+
+	function hidePopup() {
+		popupContainer.classList.add("hidden");
+		inputForm.removeEventListener('submit', onSubmit)
+	}
 }
 
-function hidePopup() {
-	const popupContainer = document.getElementById("popup-container");
-	popupContainer.classList.add("hidden");
-}
+
 
 export function showMainPopup({
 	title,
