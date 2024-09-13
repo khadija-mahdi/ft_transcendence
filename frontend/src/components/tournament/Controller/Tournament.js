@@ -74,7 +74,7 @@ function setTournamentDetails() {
       (data) =>
         html`
           <ul class="bracket-half">
-            ${data.map((player) => BracketCard(player.player)).join("")}
+            ${data.map((player) => BracketCard(player.player, player.alias)).join("")}
           </ul>
         `
     )
@@ -87,7 +87,7 @@ function setTournamentDetails() {
       (data) =>
         html`
           <ul class="bracket-half">
-            ${data.map((player) => BracketCard(player.player)).join("")}
+            ${data.map((player) => BracketCard(player.player, player.alias)).join("")}
           </ul>
         `
     )
@@ -124,8 +124,8 @@ async function handleRegisterFormSubmit(_data) {
         id="alias"
       />
     </div>`,
-    onConfirm: async (data) => {
-      await RegisterTournament(id, data);
+    onConfirm: async (formData) => {
+      await RegisterTournament(id, formData);
       data = await GetTournamentDetails(id);
       setTournamentDetails();
     },

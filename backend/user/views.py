@@ -21,10 +21,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from transcendent.consumers import NotifyUser
 import json
-from django.utils import timezone
-from datetime import timedelta
 from api.serializers import NotificationSerializer
 from django.core.exceptions import ObjectDoesNotExist
+from game.models import Matchup
 
 
 class BaseNotification():
@@ -276,18 +275,21 @@ class InvitePlayer(APIView, BaseNotification):
 
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
-        game_room_id = str(uuid.uuid4())
+        game_uuid = str(uuid.uuid4())
+        Matchup.objects.create(
+            game_uuid=game_uuid, first_player=self.request.user, second_player=user)
         self._create_notification(
             addressee=user,
             title='Game invitation',
-            description=f'{self.request.user.username} invited you to a game room {game_room_id}',
+            description=f'{self.request.user.username} invited you to a game room {game_uuid}',
             type='invite',
-            action=game_room_id
+            action=game_uuid
         )
-        return Response({'message': 'Invitation sent', 'game_room_id': game_room_id})
+        return Response({'message': 'Invitation sent', 'game_room_id': game_uuid})
 
 
 class SendTestNotification(APIView):
+
     def get(self, request):
         user = User.objects.get(id=1)
         notification = Notification(

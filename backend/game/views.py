@@ -18,6 +18,8 @@ from datetime import datetime, timedelta
 from .services import notify_tournament_users
 from rest_framework.response import Response
 from django.http import Http404
+from rest_framework import status
+
 
 class ListGame(ListAPIView):
     serializer_class = GameSerializer
@@ -106,7 +108,10 @@ class RegisterToTournament(CreateAPIView):
             raise serializers.ValidationError(
                 "You are already registered to another tournament within the last hour.\
                     Please unregister from the other tournament first.")
-        Brackets(tournament=tournament, player=self.request.user).save()
+        
+        alias = serializer.validated_data.get('alias')
+        Brackets(tournament=tournament,
+                 player=self.request.user, alias=alias).save()
         serializer.save(user=self.request.user, tournament=tournament)
 
 
@@ -117,7 +122,8 @@ class UnRegisterToTournament(DestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         try:
-            tournament = get_object_or_404(Tournament, pk=self.kwargs.get('pk'))
+            tournament = get_object_or_404(
+                Tournament, pk=self.kwargs.get('pk'))
             if tournament.finished or tournament.ongoing:
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             TournamentsRegisteredPlayers.objects.filter(

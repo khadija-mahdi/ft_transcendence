@@ -25,10 +25,11 @@ class GameSerializer(serializers.ModelSerializer):
 
 class BracketsSerializer(serializers.ModelSerializer):
     player = UserSerializer()
+    alias = serializers.CharField()
 
     class Meta:
         model = Brackets
-        fields = ['player', 'round_number']
+        fields = ['player', 'alias', 'round_number']
 
 
 class StreamsSerializer(serializers.ModelSerializer):
@@ -141,7 +142,7 @@ class TournamentsRegisteredPlayersSerializer(serializers.ModelSerializer):
     tournament = TournamentSerializer(read_only=True)
     alias = serializers.CharField()
     user = UserSerializer(read_only=True)
+
     class Meta:
         model = TournamentsRegisteredPlayers
         fields = '__all__'
-

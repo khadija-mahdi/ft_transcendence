@@ -4,7 +4,7 @@ const id = new URL(window.location.href).searchParams.get(
   "selected-tournament"
 );
 
-export function BracketCard(player = {}) {
+export function BracketCard(player = {}, alias = null) {
   if (!player?.image_url && !player?.username)
     return html` <li class="bracket-card">
       <div class="bracket-card-content"></div>
@@ -21,7 +21,7 @@ export function BracketCard(player = {}) {
           />
         </div>
         <div class="bracket-info">
-          <div class="bracket-user">${player.username || "USER"}</div>
+          <div class="bracket-user">${alias || player.username || "USER"}</div>
           <div class="bracket-level">
             Level <span>${player.current_xp || 0}xp</span>
           </div>
@@ -95,7 +95,12 @@ export default function tournaments() {
             <h6 class="streaming-title">Streaming</h6>
           </div>
           <div class="streaming-content">
-            <img src="/src/lib/empty.svg" alt="empty" width="{50}" height="{50}" />
+            <img
+              src="/src/lib/empty.svg"
+              alt="empty"
+              width="{50}"
+              height="{50}"
+            />
             <p class="coming-soon">Coming Soon!</p>
           </div>
           <form

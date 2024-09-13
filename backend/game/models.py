@@ -66,8 +66,9 @@ class TournamentsRegisteredPlayers(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.alias:
-            self.alias = self.user.username 
-        return super().save( *args, **kwargs)
+            self.alias = self.user.username
+        return super().save(*args, **kwargs)
+
 
 class Matchup(models.Model):
     first_player = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -94,6 +95,11 @@ class Brackets(models.Model):
     round_number = models.IntegerField(null=False, default=1)
     player = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='player', null=False, default=None)
-
+    alias = models.CharField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.alias:
+            self.alias = self.player.username
+        return super().save(*args, **kwargs)
