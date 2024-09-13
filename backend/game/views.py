@@ -28,10 +28,12 @@ class ListGame(ListAPIView):
 
 def FillOutRegisteredPlayers(tournament: Tournament, names=[]):
     for username in names:
-        user = User.objects.get(username=username)
-        TournamentsRegisteredPlayers.objects.create(
-            user=user, tournament=tournament)
-
+        try:
+            user = User.objects.get(username=username)
+            TournamentsRegisteredPlayers.objects.create(
+                user=user, tournament=tournament)
+        except User.DoesNotExist:
+            print(f'this user doesn not exists {username}')
 
 def MockTest(tournament):
     FillOutRegisteredPlayers(tournament=tournament, names=[
@@ -65,7 +67,7 @@ class listTournaments(ListCreateAPIView):
                 "Start date must be in the future")
 
         tournament = serializer.save()
-        # MockTest(tournament)
+        MockTest(tournament)
         print(tournament)
         # start_scheduler(tournament.id, start_date)
 

@@ -15,6 +15,7 @@ class TournamentRoutine():
     lock = None
     tournament = None
     current_round = 1
+    WaitingPeriod = 5 * 60 # wait 5 minutes before running 
 
     def __init__(self, uuid) -> None:
         self.uuid = uuid
@@ -109,28 +110,25 @@ class TournamentRoutine():
         await self.create_matches(self.waiting_players)
 
     async def tournament_loop(self):
-        while True:
-            self.time_in_s += 1
-            print(f'{self.time_in_s} tick...')
-            if len(self.waiting_players) == self.tournament.max_players or self.time_in_s >= 10:
-                print('All Players Showed Up')
-                print(
-                    f'self.tournament.max_players, { self.tournament.max_players}, waiting_players, {self.waiting_players}')
-                await self.create_initial_matches()
-                break
-            elif self.time_in_s >= 120:
-                print('still Waiting')
-                print(
-                    f'self.tournament.max_players, { self.tournament.max_players}, waiting_players, {self.waiting_players}')
-                if len(self.waiting_players) < self.tournament.max_players / 2:
-                    print('Not Enough Players Showed Up')
-                    return await self.emit(
-                        {'status': 'over', 'reason': 'Not Enough Player Showed Up'})
-                else:
-                    print('All Players Showed Up')
-                    self.create_initial_matches()
-                break
-            await asyncio.sleep(1)
+        async with self.lock:
+            while True:
+                self.time_in_s += 1
+                # print(f'{self.time_in_s} tick...')
+                if len(self.waiting_players) == self.tournament.max_players or self.time_in_s >= self.WaitingPeriod:
+                    await self.create_initial_matches()
+                    break
+                elif self.time_in_s >= self.WaitingPeriod:
+                    print('still Waiting')
+                    print(
+                        f'self.tournament.max_players, { self.tournament.max_players}, waiting_players, {self.waiting_players}')
+                    if len(self.waiting_players) < self.tournament.max_players / 2:
+                        print('Not Enough Players Showed Up')
+                        return await self.emit(
+                            {'status': 'over', 'reason': 'Not Enough Player Showed Up'})
+                    else:
+                        self.create_initial_matches()
+                    break
+                await asyncio.sleep(1)
 
     async def check_round_completion(self):
         print(f'called check_round_completion to tournament_{self.uuid}')
@@ -212,6 +210,8 @@ class TournamentManager():
     async def get_or_create_tournament(self, uuid) -> TournamentRoutine:
         self.lock = await self.get_lock()
         async with self.lock:
+            print(f'looking by {uuid} ')
+            print(f'stored tournaments {self.tournaments} ')
             if uuid not in self.tournaments:
                 print('create new tournament')
                 tournament = await TournamentRoutine.create(uuid)
