@@ -84,10 +84,7 @@
 	width: 100%;
   }
   
-  .radio-option:hover {
-	background-color: #444444; /* Change background on hover for entire button */
-  }
-  
+
   
   #play-now-button {
 	display: inline-block;

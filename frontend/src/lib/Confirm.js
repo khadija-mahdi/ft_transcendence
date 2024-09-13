@@ -3,7 +3,8 @@ export function showPopup({
 	subtitle,
 	inputBody = null,
 	onConfirm = () => { },
-	onCancel = () => { },
+	onCancel = null,
+	closeable = true
 }) {
 
 	const popupContainer = document.getElementById("popup-container");
@@ -14,6 +15,7 @@ export function showPopup({
 	const inputForm = document.getElementById("input-form");
 	const inputFormBody = document.getElementById("input-form-body");
 
+	console.log(popupTitle)
 	if (inputBody) {
 		inputFormBody.innerHTML = inputBody;
 	}
@@ -21,11 +23,15 @@ export function showPopup({
 	popupTitle.textContent = title;
 	popupSubtitle.textContent = subtitle;
 
-
-	popupCancel.onclick = () => {
-		if (onCancel) onCancel();
-		hidePopup();
-	};
+	if (!closeable)
+		popupClose.remove()
+	if (!onCancel)
+		popupCancel.remove()
+	else
+		popupCancel.onclick = () => {
+			if (onCancel) onCancel();
+			hidePopup();
+		};
 
 	popupClose.onclick = () => {
 		if (onCancel) onCancel();

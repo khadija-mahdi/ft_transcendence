@@ -106,6 +106,7 @@ async function navigate(path) {
 		const componentModule = await route.component();
 		const component = componentModule.default;
 		if (typeof component === "function") {
+		
 			app.innerHTML = component();
 		} else {
 			app.innerHTML = (await (await routes["*"].component()).default)();
