@@ -31,6 +31,15 @@ export default function () {
 	setTournaments(3);
 	OnlinePlayers();
 
+	document.querySelectorAll('.radio-option input[type="radio"]').forEach((radio) => {
+		radio.addEventListener('change', function() {
+		  document.querySelectorAll('.radio-option').forEach(option => {
+			option.classList.remove('selected'); // Remove the 'selected' class from all options
+		  });
+		  this.parentNode.classList.add('selected'); // Add the 'selected' class to the clicked option
+		});
+	  });
+	  
 	const playNowButton = document.getElementById('play-now-button');
 
 	playNowButton.addEventListener('click', (event) => {

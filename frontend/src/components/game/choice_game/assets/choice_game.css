@@ -48,47 +48,62 @@
 	color: #e1e1e1;
 }
 
+/* Keep the same button layout and only change the color */
 .button-group {
 	display: flex;
 	gap: 30px;
+	justify-content: center; /* Center the buttons */
 	margin-bottom: 20px;
-	padding-left: 150px;
-}
-
-.radio-option {
+  }
+  
+  .radio-option {
 	background-color: #262626;
 	color: white;
-	padding: 10px;
-	border-radius: 5px;
+	padding: 10px 20px;
+	border-radius: 8px;
 	cursor: pointer;
-	font-size: 14px;
-	display: inline-block;
-}
-
-.radio-option input[type="radio"] {
+	font-size: 16px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	/* transition: background-color 0.3s ease; Smooth transition for background color */
+	width: 120px; /* Ensures all buttons have equal width */
+	text-align: center; /* Centers text inside */
+  }
+  
+  .radio-option input[type="radio"] {
 	display: none;
-}
-
-.radio-option span {
+  }
+  
+  .radio-option.selected {
+	background-color: #FE284F; /* Full button background color when selected */
+  }
+  
+  .radio-option span {
 	display: inline-block;
-}
-
-.radio-option input[type="radio"]:checked+span {
-	background-color: #FE284F;
-	font-weight: bold;
-	padding: 10px;
-	border-radius: 5px;
-}
-
-#play-now-button {
+	width: 100%;
+  }
+  
+  .radio-option:hover {
+	background-color: #444444; /* Change background on hover for entire button */
+  }
+  
+  
+  #play-now-button {
 	display: inline-block;
 	background-color: #ff5500;
-	padding: 10px 40px;
-	font-size: 25px;
+	padding: 12px 50px;
+	font-size: 20px;
 	color: white;
 	text-decoration: none;
-	border-radius: 5px;
-}
+	border-radius: 8px;
+	transition: background-color 0.3s ease;
+  }
+  
+  #play-now-button:hover {
+	background-color: #ff4422; /* Lighter color on hover */
+  }
+  
 
 .online-players-cg {
 	min-width: 381px;

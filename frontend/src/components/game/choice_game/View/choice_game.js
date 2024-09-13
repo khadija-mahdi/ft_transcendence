@@ -18,15 +18,15 @@ export default () => {
               Who Will You Face? Choose your opponent and dive into the action!
             </p>
             <div class="button-group">
-              <label class="radio-option">
-                <input type="radio"  id="opponent-machine"  name="opponent" value="Machine" />
-                <span>Machine</span>
-              </label>
-              <label class="radio-option">
-                <input type="radio" id="opponent-machine" name="opponent" value="Human" checked />
-                <span>Human</span>
-              </label>
-            </div>
+  <label class="radio-option">
+    <input type="radio" id="opponent-machine" name="opponent" value="Machine" />
+    <span>Machine</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" id="opponent-human" name="opponent" value="Human" checked />
+    <span>Human</span>
+  </label>
+</div>
             <a href="#" id="play-now-button">Play Now</a>
           </div>
         </div>
