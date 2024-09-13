@@ -63,10 +63,10 @@ class Ball():
 
 
 class Paddle():
-    PADDLE_SPEED = 2
+    PADDLE_SPEED = 3
     AI_MODE = False
 
-    def __init__(self, x, y, is_ai=False, ai_difficulty=2):
+    def __init__(self, x, y, is_ai=False, ai_difficulty=1):
         self.x = x
         self.y = y
         self.is_ai = is_ai

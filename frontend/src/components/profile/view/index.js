@@ -23,7 +23,7 @@ export default function profileView() {
 						<div class="p-profile-details">
 							<div class="p-profile-name-container">
 								<h6 class="p-profile-name" id="profile-name">FullName</h6>
-								<p class="p-profile-username" id="profile-username">
+								<p class="p-profile-username" id="p-profile-username-label">
 									@UserName
 								</p>
 							</div>

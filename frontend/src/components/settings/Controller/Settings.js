@@ -5,6 +5,7 @@ import { updateProfile, UserDetailByUsername } from "/src/_api/user.js";
 let data = {};
 
 async function UpdateData(UpdateData, schema) {
+	console.log('updated data', UpdateData)
 	try {
 		await updateProfile(UpdateData);
 	} catch (error) {
@@ -46,7 +47,9 @@ function ImageButton(setSelectedImage = () => { }) {
 	}
 
 	function handleImageInputChange(e) {
+		console.log('handleImageInputChange called')
 		const file = e.target.files[0];
+		console.log('file is ', file)
 		if (!file) return;
 
 		imageLabel.innerHTML = "";
@@ -55,6 +58,7 @@ function ImageButton(setSelectedImage = () => { }) {
 		setSelectedImage(file);
 
 		reader.onload = (event) => {
+			console.log('renderer loaded')
 			imageLabel.appendChild(CreateImagePreview(event));
 			imageLabel.style.color = "transparent";
 		};
@@ -82,6 +86,7 @@ function SetPersonalInfo() {
 
 function PersonalInfoForm() {
 	const form = document.getElementById("personal-info-form");
+	let image = null;
 	const schema = {
 		first_name: new Validator().string().max(50),
 		last_name: new Validator().string().max(50),
@@ -96,11 +101,15 @@ function PersonalInfoForm() {
 	};
 
 	ImageButton((selectedImage) => {
-		console.log("Selected image: ", selectedImage);
+		image = selectedImage
 	});
 
 	form.addEventListener("submit", (event) =>
-		handleSubmit(event, schema, UpdateData)
+		handleSubmit(event, schema, (formData) => {
+			if (image)
+				formData['image_file'] = image
+			UpdateData(formData)
+		})
 	);
 }
 
@@ -113,11 +122,7 @@ function AccountSecurityForm() {
 			.string()
 			.min(5)
 			.max(50)
-			.costume((value) => {
-				return value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
-					? null
-					: "this field must be an email";
-			}),
+			.email()
 	};
 
 	form.addEventListener("submit", (event) =>

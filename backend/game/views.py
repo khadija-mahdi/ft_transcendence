@@ -65,7 +65,7 @@ class listTournaments(ListCreateAPIView):
                 "Start date must be in the future")
 
         tournament = serializer.save()
-        MockTest(tournament)
+        # MockTest(tournament)
         print(tournament)
         # start_scheduler(tournament.id, start_date)
 
@@ -108,7 +108,7 @@ class RegisterToTournament(CreateAPIView):
             raise serializers.ValidationError(
                 "You are already registered to another tournament within the last hour.\
                     Please unregister from the other tournament first.")
-        
+
         alias = serializer.validated_data.get('alias')
         Brackets(tournament=tournament,
                  player=self.request.user, alias=alias).save()
