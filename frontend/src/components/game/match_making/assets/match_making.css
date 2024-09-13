@@ -52,7 +52,7 @@ html {
 	text-align: center;
 	overflow: hidden;
 	font-family: Arial, sans-serif;
-	margin-top: 1rem;
+	/* margin-top: 1rem; */
 
 }
 
@@ -69,6 +69,8 @@ html {
 	height: 300px;
 	object-fit: cover;
 	overflow: hidden;
+	background: white;
+
 }
 
 .player-info {
@@ -110,8 +112,18 @@ html {
 	position: absolute;
 	top: 20px;
 	left: 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 4px;
 }
 
+#countdown-timer {
+	width: 80%;
+	text-align: center;
+}
+
+.play_now_button svg {}
 
 .scroll-parent {
 	position: relative;
@@ -156,5 +168,23 @@ html {
 
 	to {
 		transform: translateY(0);
+	}
+}
+
+.fade-in-image {
+	animation: fadeIn 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn {
+	0% {
+		opacity: 0.75;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0.75;
 	}
 }

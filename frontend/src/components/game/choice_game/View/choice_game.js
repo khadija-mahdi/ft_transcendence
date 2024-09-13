@@ -22,7 +22,7 @@ export default () => {
     <input type="radio" id="opponent-machine" name="opponent" value="Machine" />
     <span>Machine</span>
   </label>
-  <label class="radio-option">
+  <label class="radio-option selected">
     <input type="radio" id="opponent-human" name="opponent" value="Human" checked />
     <span>Human</span>
   </label>

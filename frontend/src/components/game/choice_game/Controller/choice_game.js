@@ -1,13 +1,11 @@
 const params = new URLSearchParams(window.location.search);
 import { setTournaments } from "/src/components/tournaments/Controller/Tournaments.js";
 import OnlinePlayers from "/src/components/home/components/Controller/OnlinePlayers.js";
-import AuthWebSocket from "/src/lib/authwebsocket.js";
 
 
 const mode = params.get("mode");
 
 export default function () {
-	console.log("choice game Type here ");
 	const head = document.head;
 
 	const cssFiles = [
@@ -32,11 +30,12 @@ export default function () {
 	OnlinePlayers();
 
 	document.querySelectorAll('.radio-option input[type="radio"]').forEach((radio) => {
+		const radioOption = document.querySelectorAll('.radio-option')
 		radio.addEventListener('change', function() {
-		  document.querySelectorAll('.radio-option').forEach(option => {
-			option.classList.remove('selected'); // Remove the 'selected' class from all options
+			radioOption.forEach(option => {
+			option.classList.remove('selected');
 		  });
-		  this.parentNode.classList.add('selected'); // Add the 'selected' class to the clicked option
+		  this.parentNode.classList.add('selected');
 		});
 	  });
 	  

@@ -3,7 +3,8 @@ export function showPopup({
 	subtitle,
 	inputBody = null,
 	onConfirm = () => { },
-	onCancel = () => { },
+	onCancel = null,
+	closeable = true
 }) {
 
 	const popupContainer = document.getElementById("popup-container");
@@ -14,6 +15,7 @@ export function showPopup({
 	const inputForm = document.getElementById("input-form");
 	const inputFormBody = document.getElementById("input-form-body");
 
+	console.log(popupTitle)
 	if (inputBody) {
 		inputFormBody.innerHTML = inputBody;
 	}
@@ -21,11 +23,15 @@ export function showPopup({
 	popupTitle.textContent = title;
 	popupSubtitle.textContent = subtitle;
 
-
-	popupCancel.onclick = () => {
-		if (onCancel) onCancel();
-		hidePopup();
-	};
+	if (!closeable)
+		popupClose.remove()
+	if (!onCancel)
+		popupCancel.remove()
+	else
+		popupCancel.onclick = () => {
+			if (onCancel) onCancel();
+			hidePopup();
+		};
 
 	popupClose.onclick = () => {
 		if (onCancel) onCancel();
@@ -60,6 +66,8 @@ export function showMainPopup({
 	subtitle,
 	icon,
 	inputBody = null,
+	type,
+	sender,
 	onCancel = () => { },
 	duration = 10000
 }) {
@@ -69,6 +77,13 @@ export function showMainPopup({
 	const popupClose = document.getElementById("main-popup-close");
 	const popupIcon = document.getElementById("main-popup-icon");
 	const progress = document.querySelector(".progress_popup");
+	const link = document.getElementById("not-Type");
+	if (type === "friend-request")
+		link.href = `/profile?username=${sender.username}`;
+	else if (type === "messenger")
+		link.href = `/messenger?chatroom=${sender.id}`;
+	else if (type === "invite")
+		link.href = `/match-making?player=${sender.username}`;
 
 	popupTitle.textContent = title;
 	popupSubtitle.innerHTML = subtitle;
