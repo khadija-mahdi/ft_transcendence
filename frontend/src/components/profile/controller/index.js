@@ -102,7 +102,7 @@ function setProfileData() {
 	const profileName = document.getElementById("profile-name");
 	profileName.textContent = (data.full_name ?? data.username).toUpperCase();
 
-	const profileUsername = document.getElementById("profile-username");
+	const profileUsername = document.getElementById("p-profile-username-label");
 	profileUsername.textContent = `@${data.username}`;
 
 	ManageFriendButton();
@@ -203,7 +203,7 @@ function PopulateMatches(data) {
 		matchHistory.append(Empty("No matches found"));
 		return;
 	}
-	data.results.splice(0,5).forEach((match) => {
+	data.results.splice(0, 5).forEach((match) => {
 		matchHistory.innerHTML += matchItem(match);
 	});
 }

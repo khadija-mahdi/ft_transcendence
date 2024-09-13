@@ -168,7 +168,7 @@ export default function () {
 								</div>
 								<label class="switch">
 									<input type="checkbox" id="enable-2fa" />
-									<span class="slider"></span>
+									<span class="slider round"></span>
 								</label>
 							</div>
 

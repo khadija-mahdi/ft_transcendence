@@ -135,9 +135,13 @@
 }
 
 .upload-text {
-	font-size: 0.875rem;
-	text-align: center;
-	color: #878787;
+	font-family: Inter;
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 16.94px;
+	letter-spacing: -0.03em;
+	text-align: center;	
+	padding-top: 10px;
 }
 
 .upload-text-bold {
@@ -149,6 +153,11 @@
 	opacity: 0;
 	width: 0;
 	height: 0;
+}
+
+.text-muted {
+    color: #878787;
+    font-size: 12px;
 }
 
 .error-text {
@@ -336,48 +345,47 @@
 }
 
 .switch {
-	position: relative;
-	display: inline-block;
-	width: 34px;
-	height: 14px;
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
 }
 
 .switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 .slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #ccc;
-	transition: 0.4s;
-	border-radius: 34px;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50px;
+	width: 50px;
+	height: 25px;
 }
 
 .slider:before {
-	position: absolute;
-	content: "";
-	height: 10px;
-	width: 10px;
-	left: 2px;
-	bottom: 2px;
-	background-color: white;
-	transition: 0.4s;
-	border-radius: 50%;
+    position: absolute;
+    content: "";
+    height: 25px;
+    width: 25px;
+    right: 0;
+    bottom: 0;
+	top: 0px;
+    background-color: #292929;
+    transition: .4s;
+    border-radius: 50%;
 }
 
 input:checked + .slider {
-	background-color: #2196f3;
-}
-
-input:checked + .slider:before {
-	transform: translateX(20px);
+    background-color: #2196F3;
 }
 
 .primary-gradient {

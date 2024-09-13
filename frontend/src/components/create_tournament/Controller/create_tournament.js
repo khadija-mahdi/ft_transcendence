@@ -88,11 +88,8 @@ export default function () {
 		try {
 			const res = await fetchWithAuth("/api/v1/game/Tournament/", {
 				method: "POST",
-				headers: {
-					"Content-Type": "multipart/form-data",
-				},
 				body: formData,
-			});
+			}, false);
 			if (!res.ok) {
 				throw new Error("Failed to create the tournament");
 			}

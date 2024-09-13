@@ -40,11 +40,8 @@ export const updateProfile = async (data) => {
 	}
 	const Response = await fetchWithAuth("/api/v1/users/me/", {
 		method: "PUT",
-		headers: {
-			"Content-Type": "multipart/form-data",
-		},
 		body: formData,
-	});
+	}, false);
 	return Response;
 };
 
