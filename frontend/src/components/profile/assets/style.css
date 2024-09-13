@@ -378,7 +378,7 @@
     overflow: hidden;
 }
 
-.progress-bar {
+.progress-bar-profile {
     height: 100%;
     width: 60px;
     background-color: #ff3d00;
@@ -388,7 +388,7 @@
     border-radius: 0.25rem;
 }
 
-.progress-bar h6 {
+.progress-bar-profile h6 {
     font-size: 1rem;
     font-weight: 600;
     color: #fff;

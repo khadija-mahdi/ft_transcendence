@@ -111,7 +111,7 @@ function setProfileData() {
 function setProgress() {
 	const xp = document.querySelector(".xp");
 	xp.textContent = `${data.current_xp}XP`;
-	const progressBar = document.querySelector(".progress-bar");
+	const progressBar = document.querySelector(".progress-bar-profile");
 	progressBar.style.width = data.rankProgressPercentage;
 	const percentage = document.querySelector(".progress-percentage");
 	percentage.textContent =

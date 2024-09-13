@@ -60,6 +60,8 @@ export function showMainPopup({
 	subtitle,
 	icon,
 	inputBody = null,
+	type,
+	sender,
 	onCancel = () => { },
 	duration = 10000
 }) {
@@ -69,6 +71,13 @@ export function showMainPopup({
 	const popupClose = document.getElementById("main-popup-close");
 	const popupIcon = document.getElementById("main-popup-icon");
 	const progress = document.querySelector(".progress_popup");
+	const link = document.getElementById("not-Type");
+	if (type === "friend-request")
+		link.href = `/profile?username=${sender.username}`;
+	else if (type === "messenger")
+		link.href = `/messenger?chatroom=${sender.id}`;
+	else if (type === "invite")
+		link.href = `/match-making?player=${sender.username}`;
 
 	popupTitle.textContent = title;
 	popupSubtitle.innerHTML = subtitle;

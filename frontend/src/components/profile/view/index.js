@@ -52,7 +52,7 @@ export default function profileView() {
 							</div>
 						</div>
 						<div class="progress-bar-container">
-							<div class="progress-bar">
+							<div class="progress-bar-profile">
 								<h6 class="progress-percentage">10%</h6>
 							</div>
 							<div class="xp">
