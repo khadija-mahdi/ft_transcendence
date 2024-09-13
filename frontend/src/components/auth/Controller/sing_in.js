@@ -112,7 +112,7 @@ export async function SingIn() {
 
 		const data = await response.json();
 		if (!data.access || !data.refresh) {
-			history.pushState(null, null, "/sign_in_2fa");
+			history.pushState(null, null, "/auth/2fa/");
 			window.location.reload();
 			return;
 		}
