@@ -65,7 +65,6 @@ class InvitesManager():
         else:
             print('uuid does exists on list')
         if uuid in self.registered_users and len(self.registered_users[uuid]) > 0:
-            self.registered_users[uuid] = []
             return self.registered_users[uuid][0]
         return None  # Return None if no match found
 

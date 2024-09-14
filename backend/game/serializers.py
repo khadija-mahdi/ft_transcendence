@@ -47,7 +47,7 @@ class TournamentSerializer(serializers.ModelSerializer, BaseTournamentSerializer
         view_name='tournament-register')
     icon = serializers.SerializerMethodField(read_only=True)
     icon_file = serializers.FileField(write_only=True)
-
+    uuid = serializers.UUIDField(format='hex_verbose', read_only=True)
     class Meta:
         model = Tournament
         fields = ['id', 'icon', 'icon_file', 'name', 'description', 'uuid', 'start_date',

@@ -35,6 +35,7 @@ def FillOutRegisteredPlayers(tournament: Tournament, names=[]):
         except User.DoesNotExist:
             print(f'this user doesn not exists {username}')
 
+
 def MockTest(tournament):
     FillOutRegisteredPlayers(tournament=tournament, names=[
                              'ayoub', 'aitouna', 'khadija'])
@@ -75,7 +76,8 @@ class listTournaments(ListCreateAPIView):
 class listAnnouncements(ListCreateAPIView):
     serializer_class = TournamentSerializer
     queryset = Tournament.objects.all().filter(
-        is_monetized=True).order_by('created_at').reverse()[:3]
+        is_monetized=True).filter(finished=False).\
+        filter(ongoing=False).order_by('created_at').reverse()[:3]
 
 
 class RetrieveTournament(RetrieveDestroyAPIView):

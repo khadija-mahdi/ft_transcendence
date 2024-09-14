@@ -6,11 +6,10 @@ from api.models import Notification
 from api.serializers import NotificationSerializer
 
 
-def send_notification(notification, type='notification', request=None):
+def send_notification(notification, request=None):
     channel_layer = get_channel_layer()
     notification_serialized = NotificationSerializer(
         notification, context={'request': request}).data
-    notification_serialized['type'] = type  # type of notification
     str_obj = json.dumps(notification_serialized)
     NotifyUser(notification_serialized['recipient']
                ['id'], str_obj, channel_layer)

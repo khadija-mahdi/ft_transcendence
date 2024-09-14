@@ -15,7 +15,7 @@ class TournamentRoutine():
     lock = None
     tournament = None
     current_round = 1
-    WaitingPeriod = 5 * 60 # wait 5 minutes before running 
+    WaitingPeriod = 5 * 60  # wait 5 minutes before running
 
     def __init__(self, uuid) -> None:
         self.uuid = uuid
@@ -29,6 +29,9 @@ class TournamentRoutine():
             self.tournament = await database_sync_to_async(Tournament.objects.get)(uuid=uuid, finished=False)
         except Tournament.DoesNotExist:
             return None
+        except Exception as error:
+            print(f'error occurred while getting tournament {uuid}: {error}')
+        
         asyncio.create_task(self.tournament_loop())
         return self
 
@@ -113,7 +116,7 @@ class TournamentRoutine():
         async with self.lock:
             while True:
                 self.time_in_s += 1
-                # print(f'{self.time_in_s} tick...')
+                print(f'{self.time_in_s} tick...')
                 if len(self.waiting_players) == self.tournament.max_players or self.time_in_s >= self.WaitingPeriod:
                     await self.create_initial_matches()
                     break
