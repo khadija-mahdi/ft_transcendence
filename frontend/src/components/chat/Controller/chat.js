@@ -2,6 +2,8 @@ import { fetchWithAuth } from "/src/lib/apiMock.js";
 import AuthWebSocket from "/src/lib/authwebsocket.js";
 import { renderMessagesItems } from "./headerChat.js";
 import { fetchRooms } from "/src/_api/user.js";
+import { API_URL } from "/config.js";
+
 
 let clickedIndex = 0;
 let isFilter = false;
@@ -68,17 +70,16 @@ function renderMessengerItem(item) {
 	let unseen_messages = clickedIndex === item.id ? 0 : item.unseen_messages_count;
 	const messengerItem = document.createElement("div");
 	messengerItem.className = `messenger-item ${clickedIndex === item.id
-			? "selected"
-			: item.unseen_messages_count
-				? "highlight"
-				: ""
+		? "selected"
+		: item.unseen_messages_count
+			? "highlight"
+			: ""
 		}`;
 
 	messengerItem.innerHTML = `
         <div class="content">
             <div class="avatar">
-                <img  src="${item.room_icon ||
-		"/public/assets/images/defualtgroupProfile.png"
+                <img  class="img_avatar_room" src="${item.room_icon
 		}" alt="${item.room_name}">
             </div>
             <div class="info">
@@ -136,10 +137,15 @@ function updateRooms(newRoom) {
 }
 
 function renderRoomsList(rooms) {
+	console.log("rooms :", rooms);
 	const messengerContainer = document.getElementById("messenger-container");
 	if (messengerContainer) {
 		messengerContainer.innerHTML = "";
-		rooms.forEach((item) => renderMessengerItem(item));
+		rooms.forEach((item) => {
+			if (item.room_icon)
+				item.room_icon = item.room_icon.startsWith(`https://${API_URL}/media/`) ? item.room_icon : `https://${API_URL}/media/public/profile-images/00_img.jpg`;
+			renderMessengerItem(item)
+		});
 	}
 }
 

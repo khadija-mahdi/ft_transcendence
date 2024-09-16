@@ -31,24 +31,24 @@ export default function () {
 
 	document.querySelectorAll('.radio-option input[type="radio"]').forEach((radio) => {
 		const radioOption = document.querySelectorAll('.radio-option')
-		radio.addEventListener('change', function() {
+		radio.addEventListener('change', function () {
 			radioOption.forEach(option => {
-			option.classList.remove('selected');
-		  });
-		  this.parentNode.classList.add('selected');
+				option.classList.remove('selected');
+			});
+			this.parentNode.classList.add('selected');
 		});
-	  });
-	  
+	});
+
 	const playNowButton = document.getElementById('play-now-button');
 
 	playNowButton.addEventListener('click', (event) => {
 		console.log("button cliqued");
-		
+
 		event.preventDefault();
 		console.log("oussama ousaada ------------------------");
 		const selectedOpponent = document.querySelector('input[name="opponent"]:checked').value;
 
-		let url = 'https://localhost:4433/game/match_making';
+		let url = '/game/match_making';
 		let query = 'multiplayer'
 		if (selectedOpponent === 'Machine')
 			query = 'singleplayer'

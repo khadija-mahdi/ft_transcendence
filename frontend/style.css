@@ -728,7 +728,7 @@ input[type="number"] {
 	border: none;
 }
 
-.main-popup-header .close-button {
+.close-button {
 	background: none;
 	border: none;
 	font-size: 30px;

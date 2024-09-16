@@ -31,3 +31,6 @@ menting an API.
 	- catch Error on login with intra if user is ready exist !!
 	- Profile Match history
 	
+# HANDLE 
+- when block user it's should remove from friends 
+-

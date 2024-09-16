@@ -16,15 +16,14 @@ export default function profileView() {
 						<div class="profile-pic">
 							<img
 								id="profile-pic"
-								src="https://images.unsplash.com/photo-1667053508464-eb11b394df83?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+								src=" "
 								alt="profile"
 							/>
 						</div>
 						<div class="p-profile-details">
 							<div class="p-profile-name-container">
-								<h6 class="p-profile-name" id="profile-name">FullName</h6>
+								<h6 class="p-profile-name" id="profile-name"></h6>
 								<p class="p-profile-username" id="p-profile-username-label">
-									@UserName
 								</p>
 							</div>
 							<div id="profile-cta-container">
@@ -53,10 +52,10 @@ export default function profileView() {
 						</div>
 						<div class="progress-bar-container">
 							<div class="progress-bar-profile">
-								<h6 class="progress-percentage">10%</h6>
+								<h6 class="progress-percentage"></h6>
 							</div>
 							<div class="xp">
-								<h6>600XP</h6>
+								<h6></h6>
 							</div>
 						</div>
 					</div>

@@ -1,5 +1,6 @@
 import { Empty } from "/src/lib/Empty.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { API_URL } from "/config.js";
 
 export function AllPlayerContainer({ name, href, number }) {
 	const container = document.createElement("div");
@@ -307,7 +308,7 @@ export default async function renderAllPlayers() {
 			Recommended.forEach((friend) => {
 				const friendComponent = AllPlayerContainer({
 					name: friend.username,
-					href: friend.image_url,
+					href: friend.image && friend.image_url.startsWith(`https://${API_URL}/media/`) ? friend.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
 					number: friend.xp_required && friend.current_xp
 						? `Level${friend.current_xp} "/" ${friend.rank.xp_required}`
 						: "Level 0/0",
@@ -334,7 +335,7 @@ export default async function renderAllPlayers() {
 			pending.forEach((user) => {
 				const friendComponent = PendingContainer({
 					name: user.username,
-					href: user.image_url,
+					href: user.image && user.image_url.startsWith(`https://${API_URL}/media/`) ? user.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
 					number: user.xp_required && user.current_xp
 						? `Level${user.current_xp} "/" ${user.rank.xp_required}`
 						: "Level 0/0",

@@ -1,5 +1,7 @@
 import { Empty } from "/src/lib/Empty.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { API_URL } from "/config.js";
+
 
 export function TopPlayerContainer({ name, href, number, index }) {
 	const container = document.createElement("div");
@@ -84,7 +86,7 @@ export default async function rendertopPlayers() {
 		topPlayers.slice(0, 4).forEach((friend, index) => {
 			const friendComponent = TopPlayerContainer({
 				name: friend.username,
-				href: friend.image_url,
+				href: friend.image && friend.image_url.startsWith(`https://${API_URL}/media/`) ? friend.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
 				number: friend.xp_required && friend.current_xp
 					? `Level${friend.current_xp} "/" ${friend.rank.xp_required} `
 					: "Level 0/0",

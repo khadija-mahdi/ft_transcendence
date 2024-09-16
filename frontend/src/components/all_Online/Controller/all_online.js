@@ -1,5 +1,8 @@
 import { Empty } from "/src/lib/Empty.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { API_URL } from "/config.js";
+
+
 import { InvitePlayer } from "/src/_api/user.js";
 export function OnlinePlayerContainer({ name, href, number, index }) {
   const container = document.createElement("div");
@@ -157,29 +160,28 @@ export default async function renderOnlinePlayers() {
     };
   }
 
-  function renderOnlinePlayersList(OnlinePlayers) {
-    OnlinePlayersContainer.innerHTML = "";
-    if (!OnlinePlayers.length) {
-      const emptyComponent = Empty("No OnlinePlayers Found");
-      const emptyContainer = document.createElement("div");
-      emptyContainer.className = "emptyContainer";
-      emptyContainer.appendChild(emptyComponent);
-      OnlinePlayersContainer.appendChild(emptyContainer);
-    } else {
-      OnlinePlayers.forEach((user) => {
-        const friendComponent = OnlinePlayerContainer({
-          name: user.username,
-          href: user.image_url,
-          number:
-            user.xp_required && user.current_xp
-              ? `Level${user.current_xp} "/" ${user.rank.xp_required} `
-              : "Level 0/0",
-        });
-        const friendWrapper = document.createElement("div");
-        friendWrapper.className = "friend-wrapper";
-        friendWrapper.appendChild(friendComponent);
-        OnlinePlayersContainer.appendChild(friendWrapper);
-      });
-    }
-  }
+	function renderOnlinePlayersList(OnlinePlayers) {
+		OnlinePlayersContainer.innerHTML = "";
+		if (!OnlinePlayers.length) {
+			const emptyComponent = Empty("No OnlinePlayers Found");
+			const emptyContainer = document.createElement("div");
+			emptyContainer.className = "emptyContainer";
+			emptyContainer.appendChild(emptyComponent);
+			OnlinePlayersContainer.appendChild(emptyContainer);
+		} else {
+			OnlinePlayers.forEach((user) => {
+				const friendComponent = OnlinePlayerContainer({
+					name: user.username,
+					href: user.image && user.image_url.startsWith(`https://${API_URL}/media/`) ? user.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
+					number: user.xp_required && user.current_xp
+						? `Level${user.current_xp} "/" ${user.rank.xp_required} `
+						: "Level 0/0",
+				});
+				const friendWrapper = document.createElement("div");
+				friendWrapper.className = "friend-wrapper";
+				friendWrapper.appendChild(friendComponent);
+				OnlinePlayersContainer.appendChild(friendWrapper);
+			});
+		}
+	}
 }

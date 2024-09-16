@@ -1,5 +1,7 @@
 import { Empty } from "/src/lib/Empty.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { fetchBlockList } from "/src/_api/user.js";
+
 
 export function BlockListContainer({ name, href, number, index }) {
 	const container = document.createElement("div");
@@ -51,28 +53,11 @@ export function BlockListContainer({ name, href, number, index }) {
 	return container;
 }
 
-async function fetchBlockList(q) {
-	let apiUrl = "";
-	if (!q || q === '')
-		apiUrl = "/api/v1/users/blocked-list/";
-	else
-		apiUrl = `/api/v1/users/blocked-list/?search_query=${q}`;
 
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		console.log("url : ", apiUrl, "response.results : ", response.results);
-		return response.results
-	} catch (error) {
-		return [];
-	}
-}
 
 
 
 function handleUnblockUser(userId, Button) {
-	console.log("userId : ", userId, "Button : ", Button);
 	Button.addEventListener("click", async function () {
 		await processUnblockUser(userId, Button);
 	});
@@ -81,7 +66,7 @@ function handleUnblockUser(userId, Button) {
 
 async function processUnblockUser(userId, button) {
 	try {
-		const url = `/ api / v1 / users / unblock - user / ${userId}/`;
+		const url = `/api/v1/users/unblock-user/${userId}/`;
 		await fetchWithAuth(url, {
 			method: "DELETE",
 		});

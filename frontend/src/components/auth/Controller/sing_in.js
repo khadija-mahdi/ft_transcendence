@@ -1,4 +1,6 @@
 import { API_URL } from "/config.js";
+import { showPopup } from "/src/lib/Confirm.js";
+
 export const oauth2Providers = [
 	{
 		provider: "google",
@@ -37,12 +39,13 @@ function handleIntraLogin() {
 	const params = new URLSearchParams({
 		response_type: "code",
 		client_id: oauth2Providers[1].client_id,
-		redirect_uri: `$https://${API_URL}/auth/`,
+		redirect_uri: `https://${API_URL}/auth/`,
 		prompt: "select_account",
 		access_type: "offline",
 		state: oauth2Providers[1].provider,
 		scope: oauth2Providers[1].scope,
 	});
+	console.log(params);
 	const url = `${oauth2Providers[1].AuthUrl}?${params}`;
 	window.location.href = url;
 }
@@ -70,8 +73,6 @@ export async function handleOAuthLogin() {
 	if (code && provider) {
 		try {
 			const response = await fetch(`/api/v1/auth/${provider}/?code=${code}`);
-			if (!response.ok)
-				throw new Error(`HTTP error! status: ${response.status}`);
 			const data = await response.json();
 
 			if (data.access && data.refresh) {
@@ -81,6 +82,22 @@ export async function handleOAuthLogin() {
 				window.location.reload();
 			}
 		} catch (error) {
+			showPopup({
+				title: "this username is already taken",
+				subtitle: "Feel free to choose another one",
+				inputBody: `<div class="form-field">
+				  <input
+					class="input-field"
+					placeholder="Your new username"
+					type="text"
+					name="alias"
+					id="alias"
+				  />
+				</div>`,
+				onConfirm: async (formData) => {
+					console.log('confirm called')
+				},
+			});
 			return;
 		}
 	}

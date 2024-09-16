@@ -17,10 +17,10 @@ export function SliderItem(tournament, index) {
 
 			<div class="t-cta-container">
 				<div class="t-cta-list" aria-label="Navigate to profile">
-					<a href="/tournaments" style="z-index: 99">
+					<a href="/tournaments/tournament?selected-tournament=${tournament.id}" style="z-index: 99">
 						<button class=" t-cta">Register now</button>
 					</a>
-					<a href="/tournaments" class="t-learn-container"
+					<a href="/tournaments/tournament?selected-tournament=${tournament.id}" class="t-learn-container"
 						><button class="t-learn">Learn more</button>
 					</a>
 				</div>
@@ -185,7 +185,7 @@ export function initializeCarousel() {
 
 	function startTimer() {
 		// wait 2 seconds before calling goInactive
-		timeoutID = window.setInterval(() => nextItem(currentItem), 2000);
+		timeoutID = window.setInterval(() => nextItem(currentItem), 6000);
 	}
 
 	function resetTimer() {
