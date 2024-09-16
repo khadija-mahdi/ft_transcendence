@@ -185,7 +185,7 @@ export function initializeCarousel() {
 
 	function startTimer() {
 		// wait 2 seconds before calling goInactive
-		timeoutID = window.setInterval(() => nextItem(currentItem), 2000);
+		timeoutID = window.setInterval(() => nextItem(currentItem), 6000);
 	}
 
 	function resetTimer() {

@@ -1,5 +1,8 @@
 import { Empty } from "/src/lib/Empty.js";
 import { fetchMyFriends } from "/src/_api/user.js";
+import { API_URL } from "/config.js";
+
+
 export function FriendContainer({ name, href, number }) {
 	const container = document.createElement("div");
 	container.className = "friend-container";
@@ -79,7 +82,7 @@ export default async function renderFriends() {
 		friends.slice(0, 4).forEach((friend) => {
 			const friendComponent = FriendContainer({
 				name: friend.username,
-				href: friend.image_url,
+				href: friend.image && friend.image_url.startsWith(`https://${API_URL}/media/`) ? friend.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
 				number: friend.xp_required && friend.current_xp
 					? `Level${friend.current_xp} "/" ${friend.rank.xp_required} `
 					: "Level 0/0",
