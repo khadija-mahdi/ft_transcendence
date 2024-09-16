@@ -15,7 +15,6 @@ export function showPopup({
 	const inputForm = document.getElementById("input-form");
 	const inputFormBody = document.getElementById("input-form-body");
 
-	console.log(popupTitle)
 	if (inputBody) {
 		inputFormBody.innerHTML = inputBody;
 	}

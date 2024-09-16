@@ -128,8 +128,8 @@ export function renderNotifications(notifications) {
 			notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${notification.sender.image_url ||
-				"/public/assets/images/defaultImageProfile.jpg"
+                    <img class="notification-image" src="${notification.sender ? notification.sender.image_url :
+					"/public/assets/images/defaultImageProfile.jpg"
 				}" alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">

@@ -16,13 +16,30 @@ export const fetchMyData = async () => {
 export async function fetchRooms(q = "", filter = false) {
 	let apiUrl = filter
 		? "/api/v1/chat/filter-rooms/"
-		: `/api/v1/chat/rooms/?q=${q}`;
+		: q ? `/api/v1/chat/rooms/?q=${q}` : "/api/v1/chat/rooms/";
 
 	try {
 		const response = await fetchWithAuth(apiUrl, {
 			method: "GET",
 		});
 		return response.results;
+	} catch (error) {
+		return [];
+	}
+}
+
+export async function fetchBlockList(q) {
+	let apiUrl = "";
+	if (!q || q === '')
+		apiUrl = "/api/v1/users/blocked-list/";
+	else
+		apiUrl = `/api/v1/users/blocked-list/?search_query=${q}`;
+
+	try {
+		const response = await fetchWithAuth(apiUrl, {
+			method: "GET",
+		});
+		return response.results
 	} catch (error) {
 		return [];
 	}

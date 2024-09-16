@@ -1,9 +1,14 @@
 import { showPopup } from "/src/lib/Confirm.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { fetchBlockList } from "/src/_api/user.js";
+
+
+const blockList = await fetchBlockList();
 
 export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
 	const isAdmin = true;
-
+	const isBlocked = selectedChat && selectedChat.receiverUser && blockList.some((user) => user.username === selectedChat.receiverUser[0].username);
+	console.log("blocklis", blockList, "isblocked :", isBlocked, "receiver :", selectedChat.receiverUser[0]);
 	if (threeDots && optionsPanel) {
 		threeDots.addEventListener("click", () => {
 			optionsPanel.classList.toggle("hidden");
@@ -15,7 +20,7 @@ export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
                             <button id="clear-chat" class="panel-option-button">Clear Chat</button>
                             <button id="close-chat" class="panel-option-button">Close Chat</button>
                             <button id="delete-chat" class="panel-option-button">Delete Chat</button>
-                            <button id="block-user" class="panel-option-button">Block</button>
+                            <button id="${isBlocked ? "unblock-user" : "block-user"}" class="panel-option-button">${isBlocked ? "unBlock" : "Block"}</button>
                         `
 						: `
                             <button id="group-info" class="panel-option-button">Group Info</button>
@@ -58,9 +63,16 @@ function attachButtonListeners(selectedChat) {
 	}
 
 	const blockUserBtn = document.getElementById("block-user");
+	const unblockUserBtn = document.getElementById("unblock-user");
 	if (blockUserBtn) {
 		blockUserBtn.addEventListener("click", () => {
-			blockUser(selectedChat);
+			blockUnBlockUser(selectedChat, "block");
+		});
+	}
+	else if (unblockUserBtn) {
+
+		unblockUserBtn.addEventListener("click", () => {
+			blockUnBlockUser(selectedChat, "unblock");
 		});
 	}
 
@@ -140,16 +152,19 @@ function deleteChat(selectedChat) {
 	});
 }
 
-function blockUser(selectedChat) {
+function blockUnBlockUser(selectedChat, action) {
+	let met = action === "block" ? "POST" : "DELETE";
 	showPopup({
-		title: "Are you sure you want to block this user?",
-		subtitle: "You will no longer be friends or able to send messages.",
+		title: `Are you sure you want to ${action} this user?`,
+		subtitle: action === "block" ? "You will no longer be friends or able to send messages."
+			: "You will be able to send messages and be friends again.",
 		onConfirm: async () => {
 			try {
 				if (selectedChat.id) {
-					let url = `/api/v1/users/block-user/${selectedChat.id}/`;
+					let url = action === "block" ? `/api/v1/users/${action}-user/${selectedChat.receiverUser[0].id}/ ` :
+						`/api/v1/users/${action}-user/${selectedChat.receiverUser[0].id}/ `;
 					await fetchWithAuth(url, {
-						method: "POST",
+						method: met,
 						headers: {
 							"Content-Type": "application/json",
 						},

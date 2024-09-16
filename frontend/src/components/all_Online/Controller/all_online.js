@@ -1,5 +1,7 @@
 import { Empty } from "/src/lib/Empty.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
+import { API_URL } from "/config.js";
+
 
 export function OnlinePlayerContainer({ name, href, number, index }) {
 	const container = document.createElement("div");
@@ -166,7 +168,7 @@ export default async function renderOnlinePlayers() {
 			OnlinePlayers.forEach((user) => {
 				const friendComponent = OnlinePlayerContainer({
 					name: user.username,
-					href: user.image_url,
+					href: user.image && user.image_url.startsWith(`https://${API_URL}/media/`) ? user.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
 					number: user.xp_required && user.current_xp
 						? `Level${user.current_xp} "/" ${user.rank.xp_required} `
 						: "Level 0/0",

@@ -90,9 +90,6 @@ export default function () {
 				method: "POST",
 				body: formData,
 			}, false);
-			if (!res.ok) {
-				throw new Error("Failed to create the tournament");
-			}
 			window.location.href = "/home";
 		} catch (error) {
 			errorElement.textContent =

@@ -2,7 +2,9 @@ import { fetchWithAuth } from "/src/lib/apiMock.js";
 import AuthWebSocket from "/src/lib/authwebsocket.js";
 import { handleThreeDotPanel } from "./threeDot.js";
 import { ChatRoomsPanel } from "./chat.js";
-import { fetchMyData } from "/src/_api/user.js";
+import { fetchMyData, fetchMyFriends } from "/src/_api/user.js";
+import { API_URL } from "/config.js";
+
 
 const myData = await fetchMyData();
 let selectedImage = null;
@@ -61,7 +63,6 @@ async function fetchMessages(id, isScroll) {
 		const response = await fetchWithAuth(apiUrl, { method: "GET" });
 		if (response.results.length) {
 			apiUrl = response.next;
-			console.log("the next api is : ", apiUrl)
 
 		}
 		appendMessages(response.results);
@@ -99,9 +100,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 				</div>
 				<img
 					class="panel-image"
-					src="${selectedChat.room_icon ||
-		" /public/assets/images/defaultGroupProfile.png"
-		}"
+					src="${selectedChat.room_icon.startsWith(`https://${API_URL}/media/`) ? selectedChat.room_icon : `https://${API_URL}/media/public/profile-images/00_img.jpg`}"
 				alt="Profile Image"
                     />
 				<a href='/profile?username=${selectedChat.room_name}' class="panel-link">
@@ -151,7 +150,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                             ${selectedChat.type === "private"
 				? `
                                 <div class="invite-icon-container">
-                                    <a href="/game/match-making?player=${(selectedChat.receiverUser &&
+                                    <a href="/game/match_making?player=${(selectedChat.receiverUser &&
 					selectedChat.receiverUser[0]
 						.username) ||
 				0
@@ -348,6 +347,7 @@ function handleSendMessage(event, selectedChat) {
 
 function initializeSendImage(selectedChat) {
 	const sendImageContainer = document.getElementById("send-image-container");
+	if (!sendImageContainer) return;
 
 	let file = null;
 	let TypeError = false;
@@ -466,7 +466,6 @@ async function handleChatContent(selectedChat) {
 
 	chatWindow.addEventListener('scroll', () => {
 		if (chatWindow.scrollTop === 0 && apiUrl) {
-			console.log("window on top :", chatWindow.scrollTop)
 			fetchMessages(selectedChat.id, true);
 		}
 	});
@@ -483,7 +482,9 @@ export async function renderMessagesItems(selectedChat) {
 	let chatPanel = "";
 	let rooms = document.getElementById("rooms");
 	const originRooms = rooms.innerHTML;
-	const isFriend = true;
+	const friends = await fetchMyFriends();
+
+	const isFriend = friends.some((friend) => friend.username === selectedChat.room_name);
 
 	function checkWindowSize() {
 		const isSmallWindow = window.innerWidth <= 836;

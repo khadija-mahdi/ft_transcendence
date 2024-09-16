@@ -24,7 +24,7 @@ export default function init() {
 			errorMessage.textContent = "";
 			continueButton.disabled = true;
 			continueButton.textContent = "Loading ...";
-			fetch(`${API_URL}/api/v1/auth/verify-email/`, {
+			fetch(`/api/v1/auth/verify-email/`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

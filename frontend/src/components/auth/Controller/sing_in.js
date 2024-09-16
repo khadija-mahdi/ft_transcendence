@@ -37,12 +37,13 @@ function handleIntraLogin() {
 	const params = new URLSearchParams({
 		response_type: "code",
 		client_id: oauth2Providers[1].client_id,
-		redirect_uri: `$https://${API_URL}/auth/`,
+		redirect_uri: `https://${API_URL}/auth/`,
 		prompt: "select_account",
 		access_type: "offline",
 		state: oauth2Providers[1].provider,
 		scope: oauth2Providers[1].scope,
 	});
+	console.log(params);
 	const url = `${oauth2Providers[1].AuthUrl}?${params}`;
 	window.location.href = url;
 }

@@ -163,8 +163,6 @@
 }
 
 .messenger-item img {
-	width: 53px;
-	height: 53px;
 	border-radius: 50%;
 	background: white;
 }
@@ -177,6 +175,13 @@
 
 .messenger-item .content .avatar {
 	padding-left: 10px;
+}
+
+.img_avatar_room {
+	min-width: 53px;
+	max-width: 53px;
+	height: 53px;
+	min-height: 53px;
 
 }
 

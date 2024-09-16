@@ -148,6 +148,6 @@ function matchCountdown(
 }
 
 function handleButtonClick() {
-	window.location.href = "https://localhost:4433/game/choice-game";
+	window.location.href = "/game/choice-game";
 }
 
