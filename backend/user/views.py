@@ -275,17 +275,20 @@ class InvitePlayer(APIView, BaseNotification):
 
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
-        game_uuid = str(uuid.uuid4())
-        Matchup.objects.create(
-            game_uuid=game_uuid, first_player=self.request.user, second_player=user)
+        invite_id = str(uuid.uuid4())
+
         self._create_notification(
             addressee=user,
             title='Game invitation',
-            description=f'{self.request.user.username} invited you to a game room {game_uuid}',
-            type='invite',
-            action=game_uuid
+            description=f'{self.request.user.username} invited you to a game room',
+            type='game-invite',
+            action=json.dump(
+                {
+                    "invite_id": invite_id,
+                    "player": self.request.user.username
+                })
         )
-        return Response({'message': 'Invitation sent', 'game_room_id': game_uuid})
+        return Response({'message': 'Invitation sent', 'invite_id': invite_id})
 
 
 class SendTestNotification(APIView):

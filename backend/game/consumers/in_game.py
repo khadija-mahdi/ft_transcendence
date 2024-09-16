@@ -28,14 +28,12 @@ class InGame(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         print('User Disconnected')
-
-        if await self.game.remove_player(self.user):
-            print(
-                f'No player left in the game. Removing game. {self.room_name}')
+        if self.game:
+            await self.game.remove_player(self.user)
             await self.game_manager.remove_game(self.room_name)
-        await self.channel_layer.group_discard(
-            self.room_group_name, self.channel_name
-        )
+            await self.channel_layer.group_discard(
+                self.room_group_name, self.channel_name
+            )
 
     async def isUserPartOfThisGame(self):
         isFp = self.user.username != self.game.matchup.first_player.username

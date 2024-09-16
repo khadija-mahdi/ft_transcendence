@@ -6,6 +6,8 @@ from game.managers.achievements_manager import AchievementsManager
 from user.models import User
 from game.models import Matchup, Tournament
 from game.utils.game_utils import Ball, Paddle, Config
+from typing import Dict
+
 Debugging = False
 
 
@@ -30,6 +32,7 @@ class Game():
         self.channel_layer = get_channel_layer()
         self.pause = False
         self.waiting_in_ms = 0
+        self.matchup: Matchup = None
 
     @classmethod
     async def create(cls, room_id):
@@ -66,7 +69,13 @@ class Game():
         async with self.lock:
             if player in self.players:
                 try:
-                    self.players.remove(player)
+                    self.matchup.game_over = True
+                    if len(self.players) > 1:
+                        Loser = player
+                        self.players.remove(player)
+                        winner = self.players[0]
+                        await self.handle_winner(winner=winner, Loser=Loser)
+                    await database_sync_to_async(self.matchup.save)()
                 except ValueError:
                     pass
             return len(self.players) == 0
@@ -158,9 +167,11 @@ class Game():
 
         await database_sync_to_async(self.matchup.save)()
         winner, Loser = self.determine_winner_and_loser()
+        await self.handle_winner(winner, Loser)
 
+    async def handle_winner(self, winner, Loser):
         if winner:
-            Winner = None if type(winner) == str else winner
+            winner = None if type(winner) == str else winner
             Loser = None if type(Loser) == str else Loser
             self.matchup.Winner = winner
             self.matchup.game_over = True
@@ -168,7 +179,7 @@ class Game():
             await self.NotifyTournamentConsumer(winner)
             await self.emit(dict_data={
                 'type': 'game_over',
-                'winner': winner.username
+                'winner': winner.username if winner else "ROBOT"
             })
             if self.tournament is None and winner:
                 await AchievementsManager().handleUserAchievements(user=winner)
@@ -183,7 +194,7 @@ class Game():
         })
 
     def determine_winner_and_loser(self):
-        SecondPlayer = self.second_player if self.second_player else 'ROBOT' 
+        SecondPlayer = self.second_player if self.second_player else 'ROBOT'
         if Debugging:
             return [self.first_player, SecondPlayer]
         if self.matchup.first_player_score >= 15 and self.matchup.first_player_score - self.matchup.second_player_score >= 2:
@@ -204,7 +215,7 @@ class Game():
 
 class GameManager():
     def __init__(self):
-        self.games = {}
+        self.games: Dict[str, Game] = {}
         self.lock = None
 
     async def get_lock(self):
@@ -225,6 +236,7 @@ class GameManager():
 
     async def remove_game(self, room_id):
         self.lock = await self.get_lock()
+
         async with self.lock:
             if room_id in self.games:
                 await self.games[room_id].cleanup()
