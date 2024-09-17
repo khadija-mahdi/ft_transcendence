@@ -15,9 +15,10 @@ export function BracketCard(player = {}, alias = null) {
       <div class="bracket-card-content">
         <div class="bracket-avatar">
           <img
-            src="${player.image_url || "/assets/images/profile.jpg"}"
+            src="${player.image_url}"
             alt="profile Icon"
             class="avatar-image"
+            onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
           />
         </div>
         <div class="bracket-info">
@@ -40,7 +41,7 @@ export default function tournaments() {
           <img
             class="card-image"
             id="tournament-image"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgKjTMSLXUNCq2j0fYA9KgZKnfuudUX5Q6Pg&s"
+            onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
           />
           <div class="card-text">
             <div class="card-title" id="tournament-title"></div>
@@ -146,18 +147,19 @@ export function StatusTableRow(match = {}) {
           <div class="player-images">
             <div class="player-avatar">
               <img
-                src="${match.first_player.image_url ||
-                "/assets/images/profile.jpg"}"
+                src="${match.first_player.image_url}"
                 alt="profile"
                 class="avatar-image"
+                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
               />
             </div>
             <div class="player-avatar">
               <img
-                src="${match.second_player.image_url ||
-                "/assets/images/profile.jpg"}"
+                src="${match.second_player.image_url}"
                 alt="profile"
                 class="avatar-image"
+                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
+
               />
             </div>
           </div>
@@ -183,9 +185,10 @@ export function StatusTableRow(match = {}) {
         <div class="winner-row">
           <div class="winner-avatar">
             <img
-              src="${match.Winner?.image_url || "/assets/images/profile.jpg"}"
+              src="${match.Winner?.image_url}"
               alt="profile"
               class="avatar-image"
+              onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
             />
           </div>
           <div class="winner-info">

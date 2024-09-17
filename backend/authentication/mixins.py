@@ -1,3 +1,4 @@
+import uuid
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import requests
 from rest_framework import exceptions as rest_exceptions
@@ -81,6 +82,8 @@ class OAuth2Authentication:
         except User.DoesNotExist:
             if (self.serializer_class is None):
                 raise ValidationError('serializer_class is not defined')
+            user = User.objects.filter(username=user_data['username']).exists()
+            user_data['username'] += f'-{uuid.uuid4().hex[:6].upper()}'
             serializer = self.serializer_class(data=user_data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
@@ -96,7 +99,7 @@ class OAuth2Authentication:
         }
 
     def OAuth2_get_access_token(self, code) -> str:
-        
+
         data = {
             'code': code,
             'client_id': self.client_id,

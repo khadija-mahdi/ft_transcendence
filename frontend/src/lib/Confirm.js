@@ -25,7 +25,7 @@ export function showPopup({
 	if (!closeable)
 		popupClose.remove()
 	if (!onCancel)
-		popupCancel.remove()
+		popupCancel?.remove()
 	else
 		popupCancel.onclick = () => {
 			if (onCancel) onCancel();

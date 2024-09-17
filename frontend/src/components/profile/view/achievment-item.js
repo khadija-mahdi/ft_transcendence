@@ -8,7 +8,12 @@ export function achievementItem({ name, description, icon }) {
         <p class="top-achievement-description">${description}</p>
       </div>
       <div class="top-achievement-icon">
-        <img src="${icon || ""}" alt="Icon" class="top-achievement-image" />
+        <img
+          src="${icon}"
+          onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
+          alt="Icon"
+          class="top-achievement-image"
+        />
       </div>
     </li>
   `;

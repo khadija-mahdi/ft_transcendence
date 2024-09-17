@@ -6,67 +6,68 @@ let allNotifications = [];
 let Not_length = 0;
 
 export async function fetchNotifications(isScroll = false) {
-	if (!isScroll) apiUrl = `/api/v1/notifications/`;
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
-		});
-		allNotifications.push(...response.results);
-		console.log("response", allNotifications, "apiUrl", apiUrl);
-		Not_length = response.count;
-		renderNotifications(allNotifications);
-		apiUrl = response.next;
-	} catch (error) {
-		console.error('Error fetching notifications:', error);
-		return [];
-	}
+  if (!isScroll) apiUrl = `/api/v1/notifications/`;
+  try {
+    const response = await fetchWithAuth(apiUrl, {
+      method: "GET",
+    });
+    allNotifications.push(...response.results);
+    console.log("response", allNotifications, "apiUrl", apiUrl);
+    Not_length = response.count;
+    renderNotifications(allNotifications);
+    apiUrl = response.next;
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    return [];
+  }
 }
 export function renderNotifications(notifications) {
-	console.log(notifications);
-	function formatDate(dateString) {
-		const options = {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-		};
-		return new Date(dateString).toLocaleString(undefined, options);
-	}
-	let href = "";
-	const notificationList = document.getElementById("notifications-list");
-	notificationList.innerHTML = "";
+  console.log(notifications);
+  function formatDate(dateString) {
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleString(undefined, options);
+  }
+  let href = "";
+  const notificationList = document.getElementById("notifications-list");
+  notificationList.innerHTML = "";
 
-	if (("is randring : ", !notifications.length)) {
-		const emptyComponent = Empty("No Notification Found");
-		const emptyContainer = document.createElement("div");
-		emptyContainer.className = "emptyContainer";
-		emptyContainer.appendChild(emptyComponent);
-		notificationList.appendChild(emptyContainer);
-	} else {
-		notifications.forEach((notification, index) => {
-			if (notification.type === "friend-request")
-				href = `/profile?username=${notification.sender.username}`;
-			else if (notification.type === "messenger")
-				href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-			else if (notification.type === "invite")
-				href = `/match-making?player=${notification.sender.username}`;
+  if (("is randring : ", !notifications.length)) {
+    const emptyComponent = Empty("No Notification Found");
+    const emptyContainer = document.createElement("div");
+    emptyContainer.className = "emptyContainer";
+    emptyContainer.appendChild(emptyComponent);
+    notificationList.appendChild(emptyContainer);
+  } else {
+    notifications.forEach((notification, index) => {
+      if (notification.type === "friend-request")
+        href = `/profile?username=${notification.sender.username}`;
+      else if (notification.type === "messenger")
+        href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
+      else if (notification.type === "invite")
+        href = `/match-making?player=${notification.sender.username}`;
 
-			const notificationItem = document.createElement("li");
-			notificationItem.className = "notification-item";
+      const notificationItem = document.createElement("li");
+      notificationItem.className = "notification-item";
 
-			notificationItem.innerHTML = /*html*/ `
+      notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${notification.sender.image_url ||
-				"/public/assets/images/defaultImageProfile.jpg"
-				}" alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src="${
+                      notification.sender.image_url ||
+                      "/public/assets/images/defaultImageProfile.jpg"
+                    }" alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
                     <div class="notification-time">${formatDate(
-					notification.created_at
-				)}</div>
+                      notification.created_at
+                    )}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">
@@ -77,38 +78,40 @@ export function renderNotifications(notifications) {
 				</svg>
             </div>
         `;
-			notificationList.appendChild(notificationItem);
+      notificationList.appendChild(notificationItem);
 
-			const removeNot = notificationItem.querySelector(".remove-not");
-			if (removeNot) {
-				removeNot.addEventListener("click", async function () {
-					let apiUrl = `/api/v1/notifications/${notification.id}/`;
-					try {
-						await fetchWithAuth(apiUrl, {
-							method: "DELETE",
-						});
-						console.log("notification remored ,", notification.id)
-						notifications.splice(index, 1);
-						renderNotifications(notifications);
-					} catch (error) {
-						return;
-					}
-				});
-			}
-		});
-	}
+      const removeNot = notificationItem.querySelector(".remove-not");
+      if (removeNot) {
+        removeNot.addEventListener("click", async function () {
+          let apiUrl = `/api/v1/notifications/${notification.id}/`;
+          try {
+            await fetchWithAuth(apiUrl, {
+              method: "DELETE",
+            });
+            console.log("notification remored ,", notification.id);
+            notifications.splice(index, 1);
+            renderNotifications(notifications);
+          } catch (error) {
+            return;
+          }
+        });
+      }
+    });
+  }
 }
 
 export default function () {
-	fetchNotifications();
-	const NotContent = document.getElementById("notifications-list");
-	if (!NotContent) return;
-	NotContent.addEventListener('scroll', async () => {
-		const isAtBottom = Math.ceil(NotContent.scrollTop + NotContent.clientHeight) >= NotContent.scrollHeight;
-		if (isAtBottom) {
-			if (apiUrl) {
-				await fetchNotifications(true);
-			}
-		}
-	});
+  fetchNotifications();
+  const NotContent = document.getElementById("notifications-list");
+  if (!NotContent) return;
+  NotContent.addEventListener("scroll", async () => {
+    const isAtBottom =
+      Math.ceil(NotContent.scrollTop + NotContent.clientHeight) >=
+      NotContent.scrollHeight;
+    if (isAtBottom) {
+      if (apiUrl) {
+        await fetchNotifications(true);
+      }
+    }
+  });
 }

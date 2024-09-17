@@ -4,11 +4,10 @@ export function PlayerBoard(firstPlayer = true) {
 	return html`<div class="player-board" data-reversed="${!firstPlayer}">
     <div class="player-info" data-reversed="${!firstPlayer}">
       <img
-        src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
         id="player-image-${firstPlayer ? 1 : 2}"
         alt=""
-        srcset=""
-      />
+        onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
+        />
       <p id="player-name-${firstPlayer ? 1 : 2}"></p>
     </div>
     <div id="player-score-${firstPlayer ? 1 : 2}" class="score">06</div>

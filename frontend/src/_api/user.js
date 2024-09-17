@@ -174,3 +174,15 @@ export async function fetchLogData() {
 		return [];
 	}
 }
+
+export async function fetchRanking() {
+	const apiUrl = "/api/v1/users/ranking/";
+	try {
+		const response = await fetchWithAuth(apiUrl, {
+			method: "GET",
+		});
+		return response;
+	} catch (error) {
+		return [];
+	}
+}

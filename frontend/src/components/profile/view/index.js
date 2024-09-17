@@ -6,7 +6,7 @@ export default function profileView() {
 			<div class="profile-header">
 				<img
 					src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
-					alt="profile background image"
+					alt="bg image"
 					class="header-img"
 				/>
 				<div class="overlay"></div>
@@ -16,8 +16,8 @@ export default function profileView() {
 						<div class="profile-pic">
 							<img
 								id="profile-pic"
-								src=" "
 								alt="profile"
+								onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
 							/>
 						</div>
 						<div class="p-profile-details">
@@ -39,10 +39,10 @@ export default function profileView() {
 								<div class="rank-details">
 									<img
 										id="rank-icon"
-										src="https://listium-res.cloudinary.com/image/upload/w_800,h_800,c_limit,q_auto,f_auto/uxakd266pstgitxtxlwk.png"
 										alt="profile"
+										onerror="this.onerror=null;this.src='/public/assets/icons/unranked.png';"
 									/>
-									<p id="rank-title">Unranked</p>
+									<p id="rank-title"></p>
 								</div>
 							</div>
 							<div class="top-achievements">
@@ -69,8 +69,8 @@ export default function profileView() {
 							<!-- CTA -->
 							<button id="invite-btn">
 								<img
-									src="/assets/icons/directbox-send.svg"
-									alt="Call To Action Button Icon"
+									src="/public/assets/icons/directbox-send.svg"
+									alt="CTA"
 								/>
 								<p>Invite</p>
 							</button>

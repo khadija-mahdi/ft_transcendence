@@ -1,11 +1,12 @@
 const html = String.raw;
 
-export function tournamentItem({ name, description, max_players }) {
+export function tournamentItem({ name, icon, description, max_players }) {
   return html`
     <li>
       <div class="tournament-item">
         <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgKjTMSLXUNCq2j0fYA9KgZKnfuudUX5Q6Pg&s"
+          src="${icon}"
+          onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
           alt="Tournament Icon"
         />
         <div class="tournament-details">
@@ -16,22 +17,6 @@ export function tournamentItem({ name, description, max_players }) {
           <div>
             <div>${max_players}</div>
             <div class="max-players-text">Max Players</div>
-          </div>
-          <div class="arrow-icon">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-            >
-              <path
-                stroke="#fff"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="{1.5}"
-                d="m9 5.405 7 7-7 7"
-              />
-            </svg>
           </div>
         </div>
       </div>

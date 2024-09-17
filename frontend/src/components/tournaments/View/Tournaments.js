@@ -14,9 +14,9 @@ export function tournamentElement({
 					<div class="tournament-info">
 						<img
 							class="tournament-icon"
-							src="${icon ||
-							"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgKjTMSLXUNCq2j0fYA9KgZKnfuudUX5Q6Pg&s"}"
+							src="${icon}"
 							alt="tournament icon"
+							onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
 						/>
 						<div class="tournament-details">
 							<div class="tournament-name">${name}</div>
