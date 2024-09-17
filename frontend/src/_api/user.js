@@ -80,7 +80,8 @@ export async function fetchNotifications() {
 	}
 }
 
-export const UserDetailByUsername = async (username) => {
+export const UserDetailByUsername = async (username) =>
+{
 	const res = await fetchWithAuth(`/api/v1/users/${username}/`);
 	return res;
 };

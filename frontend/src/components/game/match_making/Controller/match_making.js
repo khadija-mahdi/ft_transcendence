@@ -83,7 +83,7 @@ export default async function () {
 	loobySocket.onmessage = (message) => {
 		const data = JSON.parse(message.data);
 		console.log("data", data);
-		matchCountdown(15, `/game?uuid=${data.game_uuid}`, data.second_player);
+		matchCountdown(5, `/game?uuid=${data.game_uuid}`, data.second_player);
 	};
 
 
@@ -126,25 +126,28 @@ function matchCountdown(
 		remainingTime--;
 
 		const secondPlayerCard = document.getElementById("second-player")
-		const second_player_data = await UserDetailByUsername(second_player)
-		secondPlayerCard.innerHTML = "";
-		secondPlayerCard.style.height = 'null';
-		secondPlayerCard.innerHTML = `
-		<div class="player-card">
-			<img src=${second_player_data.image_url} alt="Player Image" class="player-image">
-			<div class="player-info">
-				<div class="player-name">${second_player_data.username}</div>
-				<div class="player-rank">
-					<img src=${second_player_data.rank && second_player_data.rank.icon ? second_player_data.rank.icon : "/public/assets/icons/Gold_3_Rank.png"} alt="Rank Icon" class="rank-icon">
-					<span class="player-level">Lvl.${second_player_data.current_xp}/ ${second_player_data.rank ? second_player_data.rank.xp_required : 0}</span>
+		if(second_player){
+			const second_player_data = await UserDetailByUsername(second_player)
+			secondPlayerCard.innerHTML = "";
+			secondPlayerCard.style.height = 'null';
+			secondPlayerCard.innerHTML = `
+			<div class="player-card">
+				<img src=${second_player_data.image_url} alt="Player Image" class="player-image">
+				<div class="player-info">
+					<div class="player-name">${second_player_data.username}</div>
+					<div class="player-rank">
+						<img src=${second_player_data.rank && second_player_data.rank.icon ? second_player_data.rank.icon : "/public/assets/icons/Gold_3_Rank.png"} alt="Rank Icon" class="rank-icon">
+						<span class="player-level">Lvl.${second_player_data.current_xp}/ ${second_player_data.rank ? second_player_data.rank.xp_required : 0}</span>
+					</div>
 				</div>
-			</div>
-		</div>`
+			</div>`
+		}
 		if (remainingTime < 0) {
 			clearInterval(intervalId);
 			window.location.href = path
 		}
 	}, 1000);
+	
 }
 
 function handleButtonClick() {
