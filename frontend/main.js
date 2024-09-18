@@ -20,6 +20,7 @@ function handleConnectWebSocket() {
 			icon: data.icon,
 			type: data.type,
 			sender: data.sender,
+			action: data.action,
 			onCancel: () => {
 				console.log("Popup was closed");
 			}

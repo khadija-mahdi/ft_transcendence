@@ -5,14 +5,14 @@ export default function () {
 			<a href="/profile" class="user-link">
 				<img id="user-image" class="user-image" src="" alt="user Image">
 				<div class="user-info">
-					<div id="fullname" class="user-name">Khadija Mahdi</div>
+					<div id="fullname" class="user-name"></div>
 					<div class="user-status">Your Status</div>
 				</div>
 			</a>
 
 			<div class="progress-user">
 				<div id="rank-name" class="progress-text">My Level</div>
-				<div id="current-xp" class="progress-xp">7,900 / 9000</div>
+				<div id="current-xp" class="progress-xp"></div>
 			</div>
 
 			<div id="chart-container" class="chart-container">	
@@ -64,7 +64,7 @@ export default function () {
 						</svg>
 						Messages
 					</div>
-					<div id="messages-count" class="message-value">12</div>
+					<div id="messages-count" class="message-value"></div>
 				</div>
 			</a>
 		</div>

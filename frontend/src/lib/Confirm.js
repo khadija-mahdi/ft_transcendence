@@ -67,9 +67,12 @@ export function showMainPopup({
 	inputBody = null,
 	type,
 	sender,
+	action,
 	onCancel = () => { },
 	duration = 10000
 }) {
+	action = JSON.parse(action);'{"invite_id": "94b77b7d-01aa-4d14-93df-a4525190b629", "player": "ayoub-a"}'
+	console.log("hreef:", action.invite_id);
 	const popupContainer = document.getElementById("main-popup-container");
 	const popupTitle = document.getElementById("main-popup-title");
 	const popupSubtitle = document.getElementById("main-popup-subtitle");
@@ -77,13 +80,12 @@ export function showMainPopup({
 	const popupIcon = document.getElementById("main-popup-icon");
 	const progress = document.querySelector(".progress_popup");
 	const link = document.getElementById("not-Type");
-	if (type === "friend-request")
+	if (type === "friend-https://localhost:4433request")
 		link.href = `/profile?username=${sender.username}`;
 	else if (type === "messenger")
 		link.href = `/messenger?chatroom=${sender.id}`;
-	else if (type === "invite")
-		link.href = `/match-making?player=${sender.username}`;
-
+	else if (type === "game-invite")
+		link.href = `/game/match_making?player=${action.player}&invite-uuid=${action.invite_id}`;
 	popupTitle.textContent = title;
 	popupSubtitle.innerHTML = subtitle;
 	popupIcon.src = icon || "/public/assets/images/PopUp.jpg";

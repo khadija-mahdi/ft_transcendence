@@ -1,5 +1,7 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 import { Empty } from "/src/lib/Empty.js";
+import { API_URL } from "/config.js";
+
 
 let apiUrl = null;
 let allNotifications = [];
@@ -74,10 +76,14 @@ async function loadNavbar() {
 export function handleScroll() {
 	const NotContent = document.getElementById("notification-list");
 	if (!NotContent) return;
-	NotContent.addEventListener('scroll', async () => {
-		const isAtBottom = Math.ceil(NotContent.scrollTop + NotContent.clientHeight) >= NotContent.scrollHeight;
 
+	NotContent.addEventListener('scroll', async () => {
+		const scrollPosition = NotContent.scrollTop + NotContent.clientHeight;
+		const scrollHeight = NotContent.scrollHeight;
+		const tolerance = 5;
+		const isAtBottom = scrollPosition >= (scrollHeight - tolerance);		
 		if (isAtBottom) {
+			console.log('isAtBottom', isAtBottom , "apiUrl", apiUrl);
 			if (apiUrl) {
 				await fetchNotifications(true);
 			}
@@ -89,7 +95,6 @@ export function handleScroll() {
 
 export function renderNotifications(notifications) {
 	let badge = document.getElementById("notification-badge");
-	console.log("notifications", notifications, "apiUrl", apiUrl);
 	badge.innerHTML = !apiUrl ? notifications.length : notifications.length + "+";
 	if (!notifications) return;
 	function formatDate(dateString) {
@@ -107,7 +112,7 @@ export function renderNotifications(notifications) {
 	if (!notificationList) return;
 	notificationList.innerHTML = "";
 
-	if (("is randring : ", !notifications.length)) {
+	if ((!notifications.length)) {
 		const emptyComponent = Empty("No Notification Found");
 		const emptyContainer = document.createElement("div");
 		emptyContainer.className = "emptyContainer";
@@ -115,6 +120,9 @@ export function renderNotifications(notifications) {
 		notificationList.appendChild(emptyContainer);
 	} else {
 		notifications.forEach((notification, index) => {
+			if (notification.sender && (!notification.sender.image_url || notification.sender.image_url.startsWith(`https://${API_URL}/media/`))) {
+				notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
+			}
 			if (notification.type === "friend-request")
 				href = `/profile?username=${notification.sender.username}`;
 			else if (notification.type === "messenger")
@@ -128,15 +136,13 @@ export function renderNotifications(notifications) {
 			notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src="${notification.sender ? notification.sender.image_url :
-					"/public/assets/images/defaultImageProfile.jpg"
-				}" alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src= ${notification.sender && notification.sender.image_url ? notification.sender.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`} alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
                     <div class="notification-time">${formatDate(
-					notification.created_at
-				)}</div>
+				notification.created_at
+			)}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">
@@ -160,7 +166,7 @@ export function renderNotifications(notifications) {
 
 						notifications.splice(index, 1);
 
-						renderNotifications();
+						renderNotifications(notifications);
 					} catch (error) {
 						return;
 					}
@@ -253,8 +259,9 @@ function ProfilePanel(user) {
 		}
 	});
 
-	document.getElementById("profile-image").src =
-		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+	console.log("user", user);
+
+	document.getElementById("profile-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
 	document.getElementById("panel-profile-image").src =
 		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
 	document.getElementById("profile-username").textContent = user.username;
