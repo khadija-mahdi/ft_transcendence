@@ -1,9 +1,8 @@
 import { Empty } from "/src/lib/Empty.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 import { API_URL } from "/config.js";
-
-
 import { InvitePlayer } from "/src/_api/user.js";
+
 export function OnlinePlayerContainer({ name, href, number, index }) {
   const container = document.createElement("div");
   container.className = "friend-container";

@@ -278,11 +278,11 @@ class InvitePlayer(APIView, BaseNotification):
         invite_id = str(uuid.uuid4())
 
         self._create_notification(
-            addressee=user,
+            recipient=user,
             title='Game invitation',
             description=f'{self.request.user.username} invited you to a game room',
             type='game-invite',
-            action=json.dump(
+            action=json.dumps(
                 {
                     "invite_id": invite_id,
                     "player": self.request.user.username

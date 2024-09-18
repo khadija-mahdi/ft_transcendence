@@ -472,6 +472,7 @@
   flex-direction: column;
   gap: 0.75rem;
   min-width: 30%;
+  min-height: 30rem;
   overflow-y: scroll;
 }
 
