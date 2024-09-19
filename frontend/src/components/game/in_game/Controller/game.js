@@ -24,31 +24,33 @@ const config = {
   paddleWidth: 3,
   paddleHeight: 0.5,
   paddleDepth: 15,
-};
+  selectedPerspective: "FPerspective",
+  Perspectives: {
+    FPerspective: {
+      position: {
+        x: 269.13,
+        y: 96,
+        z: 3.1,
+      },
+      rotation: {
+        x: -1.537864937968381,
+        y: -1.225414904638361,
+        z: -1.5357998077952344,
+      },
+    },
 
-const FirstPlayerPerspective = {
-  position: {
-    x: 269.13,
-    y: 96,
-    z: 3.1,
-  },
-  rotation: {
-    x: -1.537864937968381,
-    y: -1.225414904638361,
-    z: -1.5357998077952344,
-  },
-};
-
-const SecondPlayerPerspective = {
-  position: {
-    x: -269.13,
-    y: 96,
-    z: 3.1,
-  },
-  rotation: {
-    x: -1.537864937968381,
-    y: 1.225414904638361,
-    z: 1.5357998077952344,
+    SPerspective: {
+      position: {
+        x: -269.13,
+        y: 96,
+        z: 3.1,
+      },
+      rotation: {
+        x: -1.537864937968381,
+        y: 1.225414904638361,
+        z: 1.5357998077952344,
+      },
+    },
   },
 };
 
@@ -266,9 +268,10 @@ function Camera(isFirstPlayer = true) {
   const aspect = window.innerWidth / window.innerHeight;
   const near = 0.1;
   const far = 1000;
-  const PlayerPerspective = !isFirstPlayer
-    ? FirstPlayerPerspective
-    : SecondPlayerPerspective;
+
+  config.selectedPerspective = isFirstPlayer ? "FPerspective" : "SPerspective";
+  const PlayerPerspective = config.Perspectives[config.selectedPerspective];
+
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.set(
     PlayerPerspective.position.x,
@@ -415,11 +418,17 @@ export default async function () {
     animate();
 
     const GameSocket = setupWebSocket();
+    const directions = {
+      left: config.selectedPerspective === "FPerspective" ? "left" : "right",
+      right: config.selectedPerspective === "FPerspective" ? "right" : "left",
+    };
     function StartMovementLoop() {
       if (intervalId) return;
       intervalId = setInterval(() => {
-        if (keysPressed["ArrowLeft"]) handleMovement(GameSocket, "left");
-        else if (keysPressed["ArrowRight"]) handleMovement(GameSocket, "right");
+        if (keysPressed["ArrowLeft"])
+          handleMovement(GameSocket, directions.left);
+        else if (keysPressed["ArrowRight"])
+          handleMovement(GameSocket, directions.right);
       }, 50);
     }
 
