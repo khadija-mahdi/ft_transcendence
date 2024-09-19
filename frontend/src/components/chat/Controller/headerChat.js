@@ -15,73 +15,73 @@ let isLoading = false;
 let socket = null;
 
 export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
-	const popupContainer = document.getElementById("popup-sendImage-container");
-	const popupPreview = document.getElementById("popup-sendImage-preview");
-	const popupError = document.getElementById("popup-sendImage-error");
-	const popupConfirm = document.getElementById("popup-sendImage-confirm");
-	const popupCancel = document.getElementById("popup-sendImage-cancel");
-	const popupClose = document.getElementById("popup-sendImage-close");
+  const popupContainer = document.getElementById("popup-sendImage-container");
+  const popupPreview = document.getElementById("popup-sendImage-preview");
+  const popupError = document.getElementById("popup-sendImage-error");
+  const popupConfirm = document.getElementById("popup-sendImage-confirm");
+  const popupCancel = document.getElementById("popup-sendImage-cancel");
+  const popupClose = document.getElementById("popup-sendImage-close");
 
-	if (error) {
-		popupPreview.classList.add("hidden");
-		popupError.classList.remove("hidden");
-	} else {
-		popupPreview.src = imageSrc;
-		popupPreview.classList.remove("hidden");
-		popupError.classList.add("hidden");
-	}
+  if (error) {
+    popupPreview.classList.add("hidden");
+    popupError.classList.remove("hidden");
+  } else {
+    popupPreview.src = imageSrc;
+    popupPreview.classList.remove("hidden");
+    popupError.classList.add("hidden");
+  }
 
-	popupContainer.classList.remove("hidden");
+  popupContainer.classList.remove("hidden");
 
-	popupConfirm.onclick = () => {
-		if (onConfirm) onConfirm();
-		hideSendImagePopup();
-	};
+  popupConfirm.onclick = () => {
+    if (onConfirm) onConfirm();
+    hideSendImagePopup();
+  };
 
-	popupCancel.onclick = () => {
-		if (onCancel) onCancel();
-		hideSendImagePopup();
-	};
+  popupCancel.onclick = () => {
+    if (onCancel) onCancel();
+    hideSendImagePopup();
+  };
 
-	popupClose.onclick = () => {
-		if (onCancel) onCancel();
-		hideSendImagePopup();
-	};
+  popupClose.onclick = () => {
+    if (onCancel) onCancel();
+    hideSendImagePopup();
+  };
 }
 
 export function hideSendImagePopup() {
-	const popupContainer = document.getElementById("popup-sendImage-container");
-	popupContainer.classList.add("hidden");
+  const popupContainer = document.getElementById("popup-sendImage-container");
+  popupContainer.classList.add("hidden");
 }
 
 async function fetchMessages(id, isScroll) {
-	if (!isScroll) apiUrl = `/api/v1/chat/room/${id}`;
-	try {
-		const response = await fetchWithAuth(apiUrl, { method: "GET" });
-		if (response.results.length) {
-			apiUrl = response.next;
-		}
-		appendMessages(response.results);
-	} catch (error) {
-		console.error("Error fetching messages:", error);
-	}
+  if (!isScroll) apiUrl = `/api/v1/chat/room/${id}`;
+  try {
+    const response = await fetchWithAuth(apiUrl, { method: "GET" });
+    if (response.results.length) {
+      apiUrl = response.next;
+    }
+    appendMessages(response.results);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+  }
 
-	isLoading = false;
+  isLoading = false;
 }
 
 function appendMessages(messages) {
-	const chatWindow = document.getElementById("messages-content");
+  const chatWindow = document.getElementById("messages-content");
 
-	const scrollTopBefore = chatWindow.scrollTop;
-	messages.forEach((message) => {
-		appendMessageToUI(message, true);
-	});
+  const scrollTopBefore = chatWindow.scrollTop;
+  messages.forEach((message) => {
+    appendMessageToUI(message, true);
+  });
 
-	// chatWindow.scrollTop = chatWindow.scrollHeight - scrollTopBefore;
+  // chatWindow.scrollTop = chatWindow.scrollHeight - scrollTopBefore;
 }
 
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
-	return html`
+  return html`
     <div class="panel-container">
       <button class="panel-button">
         <div class="panel-inner-container">
@@ -104,10 +104,10 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
           <img
             class="panel-image"
             src="${selectedChat.room_icon.startsWith(
-		`https://${API_URL}/media/`
-	)
-			? selectedChat.room_icon
-			: `https://${API_URL}/media/public/profile-images/00_img.jpg`}"
+              `https://${API_URL}/media/`
+            )
+              ? selectedChat.room_icon
+              : `https://${API_URL}/media/public/profile-images/00_img.jpg`}"
             alt="Profile Image"
           />
           <a
@@ -117,9 +117,9 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
             <div class="panel-room-name">${selectedChat.room_name}</div>
             <div class="panel-room-status">
               ${selectedChat.type === "private"
-			? selectedChat.receiverUser &&
-			selectedChat.receiverUser[0].status
-			: "No members"}
+                ? selectedChat.receiverUser &&
+                  selectedChat.receiverUser[0].status
+                : "No members"}
             </div>
           </a>
         </div>
@@ -153,14 +153,14 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
       <div id="messages-content" class="messages-content"></div>
       <div id="send-message" class="send-message">
         <div class="send-message-container">
-		${isFriend || selectedChat.type !== "private"
-			? `
+          ${isFriend || selectedChat.type !== "private"
+            ? `
                         <div class="send-message-content">
-                            ${selectedChat.type === "private"
-				? `
-                                <div id="invite-chat"  class="invite-icon-container">
-                                    <div
-				}">
+                            ${
+                              selectedChat.type === "private"
+                                ? `
+                                <div  id="invite-chat" class="invite-icon-container">
+                                    <div>
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width='24'
@@ -176,8 +176,9 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                                     <div class="invite-text">Invite</div>
                                 </div>
                             `
-				: ""
-			}
+                                : ""
+                            }
+					
 							<div class="send-image-container" id="send-image-container">
 								<!-- Image upload UI will be rendered here -->
 							</div>
@@ -201,15 +202,16 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                             </button>
                         </div>
                     `
-			: `
-                        ${selectedChat.type === "private"
-				? `
+            : `
+                        ${
+                          selectedChat.type === "private"
+                            ? `
                             <div class="no-friend-message">
                                 You can't send a message to a user that you are not friends with
                             </div>
                         `
-				: ""
-			}
+                            : ""
+                        }
                     `}
         </div>
       </div>
@@ -218,145 +220,148 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
 }
 
 function handleWebSocket(selectedChat) {
-	if (socket) {
-		console.log("socket is ready open : ,", selectedChat.id);
-		socket.close();
-	}
-	if (selectedChat.id) {
-		socket = new AuthWebSocket(`/ws/chat/${selectedChat.id}/`);
+  if (socket) {
+    console.log("socket is ready open : ,", selectedChat.id);
+    socket.close();
+  }
+  if (selectedChat.id) {
+    socket = new AuthWebSocket(`/ws/chat/${selectedChat.id}/`);
 
-		socket.onmessage = (event) => {
-			const receivedMessage = JSON.parse(event.data);
-			const newMessage = {
-				message: receivedMessage.message.message,
-				image_file: receivedMessage.message.image,
-				seen: false,
-				created_at: new Date(
-					receivedMessage.message.created_at
-				).toLocaleTimeString(),
-				id: receivedMessage.message.id || 0,
-				sender_username: receivedMessage.message.sender_username,
-				type: receivedMessage.message.message ? "text" : "image",
-			};
-			appendMessageToUI(newMessage);
-		};
-	}
+    socket.onmessage = (event) => {
+      const receivedMessage = JSON.parse(event.data);
+      const newMessage = {
+        message: receivedMessage.message.message,
+        image_file: receivedMessage.message.image,
+        seen: false,
+        created_at: new Date(
+          receivedMessage.message.created_at
+        ).toLocaleTimeString(),
+        id: receivedMessage.message.id || 0,
+        sender_username: receivedMessage.message.sender_username,
+        type: receivedMessage.message.message ? "text" : "image",
+      };
+      appendMessageToUI(newMessage);
+    };
+  }
 }
 
 function appendMessageToUI(message, prepend = false) {
-	const messagesContent = document.getElementById("messages-content");
-	if (messagesContent) {
-		const messageElement = document.createElement("div");
-		message.message
-			? messageElement.classList.add("message")
-			: messageElement.classList.add("image-file-content");
-		messageElement.classList.add(
-			message.sender_username === myData.username ? "sent" : "received"
-		);
+  const messagesContent = document.getElementById("messages-content");
+  if (messagesContent) {
+    const messageElement = document.createElement("div");
+    message.message
+      ? messageElement.classList.add("message")
+      : messageElement.classList.add("image-file-content");
+    messageElement.classList.add(
+      message.sender_username === myData.username ? "sent" : "received"
+    );
 
-		if (message.image_file) {
-			messageElement.innerHTML = `
-				<div class="image_file ${message.sender_username === myData.username ? "sent" : "received"
-				}">
-					<img class="image_file-content" src="${message.image_file
-				}" alt="image message" />
+    if (message.image_file) {
+      messageElement.innerHTML = `
+				<div class="image_file ${
+          message.sender_username === myData.username ? "sent" : "received"
+        }">
+					<img class="image_file-content" src="${
+            message.image_file
+          }" alt="image message" />
 				</div>
 			`;
-		} else {
-			messageElement.innerHTML = `
+    } else {
+      messageElement.innerHTML = `
 				<div class="message-content">${message.message}</div>
-				<div class="message-time ${message.sender_username === myData.username ? "sent" : ""
-				}">
+				<div class="message-time ${
+          message.sender_username === myData.username ? "sent" : ""
+        }">
 					${new Date(message.created_at).toLocaleTimeString()}
 				</div>
 			`;
-		}
-		if (prepend) {
-			messagesContent.insertBefore(messageElement, messagesContent.firstChild); // Prepend message
-		} else {
-			messagesContent.appendChild(messageElement);
-		}
-		messagesContent.scrollTop = messagesContent.scrollHeight;
-		messagesContent.scrollTo({
-			top: messagesContent.scrollHeight,
-			behavior: "smooth",
-		});
-	}
+    }
+    if (prepend) {
+      messagesContent.insertBefore(messageElement, messagesContent.firstChild); // Prepend message
+    } else {
+      messagesContent.appendChild(messageElement);
+    }
+    messagesContent.scrollTop = messagesContent.scrollHeight;
+    messagesContent.scrollTo({
+      top: messagesContent.scrollHeight,
+      behavior: "smooth",
+    });
+  }
 }
 
 async function sendMessage(content, selectedChat, imageFile = null) {
-	let imageBase64 = null;
-	if (imageFile) {
-		imageBase64 = await new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				const base64data = reader.result?.split(",")[1];
-				base64data
-					? resolve(base64data)
-					: reject(new Error("Failed to read image file."));
-			};
-			reader.onerror = reject;
-			reader.readAsDataURL(imageFile);
-		});
-	}
+  let imageBase64 = null;
+  if (imageFile) {
+    imageBase64 = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64data = reader.result?.split(",")[1];
+        base64data
+          ? resolve(base64data)
+          : reject(new Error("Failed to read image file."));
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(imageFile);
+    });
+  }
 
-	try {
-		const payload = {
-			id: selectedChat.id,
-			message: content,
-			image_file: imageBase64
-				? `data:${imageFile?.type};base64,${imageBase64}`
-				: null,
-			seen: false,
-			sender_username: myData.username,
-			type: imageFile ? "image" : "text",
-			room_id: selectedChat.id,
-			created_at: new Date().toISOString(),
-		};
-		socket.send(JSON.stringify(payload));
-		appendMessageToUI(payload);
-	} catch (error) {
-		return;
-	}
+  try {
+    const payload = {
+      id: selectedChat.id,
+      message: content,
+      image_file: imageBase64
+        ? `data:${imageFile?.type};base64,${imageBase64}`
+        : null,
+      seen: false,
+      sender_username: myData.username,
+      type: imageFile ? "image" : "text",
+      room_id: selectedChat.id,
+      created_at: new Date().toISOString(),
+    };
+    socket.send(JSON.stringify(payload));
+    appendMessageToUI(payload);
+  } catch (error) {
+    return;
+  }
 }
 
 function handleImageConfirm(file, selectedChat) {
-	selectedImage = file;
-	sendMessage("", selectedChat, selectedImage);
+  selectedImage = file;
+  sendMessage("", selectedChat, selectedImage);
 }
 
 function handleTextareaKeyPress(event, selectedChat) {
-	if (event.key === "Enter" && !event.shiftKey) {
-		event.preventDefault();
-		const message = event.target.value.trim();
-		if (message) {
-			sendMessage(message, selectedChat);
-			event.target.value = "";
-		}
-	}
+  if (event.key === "Enter" && !event.shiftKey) {
+    event.preventDefault();
+    const message = event.target.value.trim();
+    if (message) {
+      sendMessage(message, selectedChat);
+      event.target.value = "";
+    }
+  }
 }
 
 function handleSendMessage(event, selectedChat) {
-	event.preventDefault();
-	const textarea = document.querySelector(".message-textarea");
-	const message = textarea.value.trim();
-	if (message) {
-		sendMessage(message, selectedChat);
-		textarea.value = "";
-	}
+  event.preventDefault();
+  const textarea = document.querySelector(".message-textarea");
+  const message = textarea.value.trim();
+  if (message) {
+    sendMessage(message, selectedChat);
+    textarea.value = "";
+  }
 }
 [];
 
 function initializeSendImage(selectedChat) {
-	const sendImageContainer = document.getElementById("send-image-container");
-	if (!sendImageContainer) return;
+  const sendImageContainer = document.getElementById("send-image-container");
+  if (!sendImageContainer) return;
 
-	let file = null;
-	let TypeError = false;
+  let file = null;
+  let TypeError = false;
 
-	const renderUploadUI = () => {
-		sendImageContainer.innerHTML = selectedImage
-			? `
+  const renderUploadUI = () => {
+    sendImageContainer.innerHTML = selectedImage
+      ? `
                 <label class="upload-label">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -373,7 +378,7 @@ function initializeSendImage(selectedChat) {
 				</svg> 
                 <div class="invite-text" style="color: #3342ff">Uploaded</div>
             `
-			: `
+      : `
                 <label class="upload-label">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -393,145 +398,147 @@ function initializeSendImage(selectedChat) {
                 </label>
             `;
 
-		document
-			.getElementById("image-upload")
-			?.addEventListener("change", handleImageUpload);
-		document
-			.getElementById("remove-image")
-			?.addEventListener("click", removeImage);
-		document
-			.getElementById("confirm-image")
-			?.addEventListener("click", confirmImage);
-	};
+    document
+      .getElementById("image-upload")
+      ?.addEventListener("change", handleImageUpload);
+    document
+      .getElementById("remove-image")
+      ?.addEventListener("click", removeImage);
+    document
+      .getElementById("confirm-image")
+      ?.addEventListener("click", confirmImage);
+  };
 
-	const handleImageUpload = (e) => {
-		file = e.target.files[0];
-		if (file) {
-			if (file.type !== "image/png" && file.type !== "image/jpeg") {
-				TypeError = true;
-			} else {
-				TypeError = false;
-				selectedImage = URL.createObjectURL(file);
-			}
-			renderUploadUI();
-			showSendImagePopup({
-				imageSrc: selectedImage,
-				onConfirm: async () => {
-					try {
-						handleImageConfirm(file, selectedChat);
-						removeImage();
-					} catch (error) {
-						removeImage();
-						return;
-					}
-				},
-				onCancel: () => {
-					removeImage();
-				},
-				error: TypeError,
-			});
-		}
-	};
+  const handleImageUpload = (e) => {
+    file = e.target.files[0];
+    if (file) {
+      if (file.type !== "image/png" && file.type !== "image/jpeg") {
+        TypeError = true;
+      } else {
+        TypeError = false;
+        selectedImage = URL.createObjectURL(file);
+      }
+      renderUploadUI();
+      showSendImagePopup({
+        imageSrc: selectedImage,
+        onConfirm: async () => {
+          try {
+            handleImageConfirm(file, selectedChat);
+            removeImage();
+          } catch (error) {
+            removeImage();
+            return;
+          }
+        },
+        onCancel: () => {
+          removeImage();
+        },
+        error: TypeError,
+      });
+    }
+  };
 
-	const removeImage = () => {
-		selectedImage = null;
-		file = null;
-		renderUploadUI();
-	};
+  const removeImage = () => {
+    selectedImage = null;
+    file = null;
+    renderUploadUI();
+  };
 
-	const confirmImage = () => {
-		if (file && !error) {
-			handleImageConfirm(file);
-		}
-		removeImage();
-	};
+  const confirmImage = () => {
+    if (file && !error) {
+      handleImageConfirm(file);
+    }
+    removeImage();
+  };
 
-	renderUploadUI();
+  renderUploadUI();
 }
 
 async function handleChatContent(selectedChat) {
-	const threeDots = document.getElementById("three-dots");
-	const optionsPanel = document.getElementById("options-panel");
-	handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
+  const threeDots = document.getElementById("three-dots");
+  const optionsPanel = document.getElementById("options-panel");
+  handleThreeDotPanel(threeDots, optionsPanel, selectedChat);
 
-	await fetchMessages(selectedChat.id, false);
-	handleWebSocket(selectedChat);
-	initializeSendImage(selectedChat);
+  await fetchMessages(selectedChat.id, false);
+  handleWebSocket(selectedChat);
+  initializeSendImage(selectedChat);
 
-	const sendButton = document.querySelector(".send-button");
-	if (sendButton) {
-		sendButton.addEventListener("click", (event) =>
-			handleSendMessage(event, selectedChat)
-		);
-	}
-	const chatWindow = document.getElementById("messages-content");
+  const sendButton = document.querySelector(".send-button");
+  if (sendButton) {
+    sendButton.addEventListener("click", (event) =>
+      handleSendMessage(event, selectedChat)
+    );
+  }
+  const chatWindow = document.getElementById("messages-content");
 
-	chatWindow.addEventListener("scroll", () => {
-		if (chatWindow.scrollTop === 0 && apiUrl) {
-			fetchMessages(selectedChat.id, true);
-		}
-	});
-	const inviteBtn = document.createElement("invite-chat");
-	console.log("invite button is:", inviteBtn)
-	inviteBtn.addEventListener("click", async () => {
-		const res = await InvitePlayer(id);
-		window.location.href = `/game/match_making?player=${selectedChat.room_}&invite-uuid=${res.invite_id}`;
-	});
-	const textarea = document.querySelector(".message-textarea");
-	if (textarea) {
-		textarea.addEventListener("keypress", (event) =>
-			handleTextareaKeyPress(event, selectedChat)
-		);
-	}
+  chatWindow.addEventListener("scroll", () => {
+    if (chatWindow.scrollTop === 0 && apiUrl) {
+      fetchMessages(selectedChat.id, true);
+    }
+  });
+  const inviteBtn = document.getElementById("invite-chat");
+  console.log("invite button is:", inviteBtn);
+  inviteBtn.addEventListener("click", async () => {
+	console.log("invite button clicked", selectedChat);
+	let id = selectedChat && selectedChat.receiverUser ? selectedChat.receiverUser[0].id : 0;
+    const res = await InvitePlayer(id);
+    window.location.href = `/game/match_making?player=${selectedChat.room_name}&invite-uuid=${res.invite_id}`;
+  });
+  const textarea = document.querySelector(".message-textarea");
+  if (textarea) {
+    textarea.addEventListener("keypress", (event) =>
+      handleTextareaKeyPress(event, selectedChat)
+    );
+  }
 }
 
 export async function renderMessagesItems(selectedChat) {
-	let previousSmallWindow = null;
-	let chatPanel = "";
-	let rooms = document.getElementById("rooms");
-	const originRooms = rooms.innerHTML;
-	const friends = await fetchMyFriends();
+  let previousSmallWindow = null;
+  let chatPanel = "";
+  let rooms = document.getElementById("rooms");
+  const originRooms = rooms.innerHTML;
+  const friends = await fetchMyFriends();
 
-	const isFriend = friends.some(
-		(friend) => friend.username === selectedChat.room_name
-	);
+  const isFriend = friends.some(
+    (friend) => friend.username === selectedChat.room_name
+  );
 
-	function checkWindowSize() {
-		const isSmallWindow = window.innerWidth <= 836;
+  function checkWindowSize() {
+    const isSmallWindow = window.innerWidth <= 836;
 
-		if (isSmallWindow !== previousSmallWindow) {
-			previousSmallWindow = isSmallWindow;
+    if (isSmallWindow !== previousSmallWindow) {
+      previousSmallWindow = isSmallWindow;
 
-			if (isSmallWindow) {
-				rooms.innerHTML = "";
-				rooms.style.padding = "0";
-				chatPanel = rooms;
-				chatPanel.innerHTML = "";
-				chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);
-				let returnArrow = document.getElementById("left-arrow-container");
-				if (returnArrow) {
-					returnArrow.style.display = "block";
-					returnArrow.addEventListener("click", () => {
-						rooms.innerHTML = originRooms;
-						rooms.style.padding = "1rem";
-						ChatRoomsPanel();
-					});
-				}
-				handleChatContent(selectedChat);
-			} else {
-				rooms.innerHTML = originRooms;
-				rooms.style.padding = "1rem";
-				ChatRoomsPanel();
-				chatPanel = document.getElementById("chat-panel");
-				chatPanel.innerHTML = "";
-				chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);
-				handleChatContent(selectedChat);
-			}
-		}
-	}
+      if (isSmallWindow) {
+        rooms.innerHTML = "";
+        rooms.style.padding = "0";
+        chatPanel = rooms;
+        chatPanel.innerHTML = "";
+        chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);
+        let returnArrow = document.getElementById("left-arrow-container");
+        if (returnArrow) {
+          returnArrow.style.display = "block";
+          returnArrow.addEventListener("click", () => {
+            rooms.innerHTML = originRooms;
+            rooms.style.padding = "1rem";
+            ChatRoomsPanel();
+          });
+        }
+        handleChatContent(selectedChat);
+      } else {
+        rooms.innerHTML = originRooms;
+        rooms.style.padding = "1rem";
+        ChatRoomsPanel();
+        chatPanel = document.getElementById("chat-panel");
+        chatPanel.innerHTML = "";
+        chatPanel.innerHTML = ChatRoomHeaderUi(selectedChat, isFriend);
+        handleChatContent(selectedChat);
+      }
+    }
+  }
 
-	checkWindowSize();
-	window.addEventListener("resize", () => {
-		setTimeout(checkWindowSize, 100);
-	});
+  checkWindowSize();
+  window.addEventListener("resize", () => {
+    setTimeout(checkWindowSize, 100);
+  });
 }

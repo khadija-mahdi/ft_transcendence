@@ -1,7 +1,7 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 import { Empty } from "/src/lib/Empty.js";
 import { API_URL } from "/config.js";
-
+import { SerializeInviteAction } from "/src/lib/Confirm.js";
 
 let apiUrl = null;
 let allNotifications = [];
@@ -9,10 +9,10 @@ let Not_length = 0;
 
 export async function fetchNotifications(isScroll = false) {
 	if (!isScroll) apiUrl = `/api/v1/notifications/`;
-	console.log('is Scroll', isScroll)
+	console.log("is Scroll", isScroll);
 	try {
 		const response = await fetchWithAuth(apiUrl, {
-			method: 'GET',
+			method: "GET",
 		});
 		allNotifications.push(...response.results);
 		console.log("response", allNotifications, "apiUrl", apiUrl);
@@ -20,16 +20,18 @@ export async function fetchNotifications(isScroll = false) {
 		apiUrl = response.next;
 		renderNotifications(allNotifications);
 	} catch (error) {
-		console.error('Error fetching notifications:', error);
+		console.error("Error fetching notifications:", error);
 		return [];
 	}
 }
 
-
 async function loadNavbar() {
 	const path = window.location.pathname;
 
-	if (path === '/game/choice-game' || (!path.startsWith("/game") && !path.startsWith("/auth/"))) {
+	if (
+		path === "/game/choice-game" ||
+		(!path.startsWith("/game") && !path.startsWith("/auth/"))
+	) {
 		try {
 			const response = await fetch("/src/components/navBar/View/navBar.html");
 			if (!response.ok) throw new Error("Network response was not ok");
@@ -41,9 +43,9 @@ async function loadNavbar() {
 			fetchMyData();
 
 			let playBtn = document.getElementById("playButton");
-			console.log("playBrn :", playBtn)
+			console.log("playBrn :", playBtn);
 			if (playBtn) {
-				if (path === '/game/choice-game') {
+				if (path === "/game/choice-game") {
 					playBtn.remove();
 				}
 			}
@@ -67,31 +69,28 @@ async function loadNavbar() {
 
 			handleScroll();
 		} catch (error) {
-			console.error('Error loading navbar:', error);
+			console.error("Error loading navbar:", error);
 		}
 	}
 }
-
 
 export function handleScroll() {
 	const NotContent = document.getElementById("notification-list");
 	if (!NotContent) return;
 
-	NotContent.addEventListener('scroll', async () => {
+	NotContent.addEventListener("scroll", async () => {
 		const scrollPosition = NotContent.scrollTop + NotContent.clientHeight;
 		const scrollHeight = NotContent.scrollHeight;
 		const tolerance = 5;
-		const isAtBottom = scrollPosition >= (scrollHeight - tolerance);		
+		const isAtBottom = scrollPosition >= scrollHeight - tolerance;
 		if (isAtBottom) {
-			console.log('isAtBottom', isAtBottom , "apiUrl", apiUrl);
+			console.log("isAtBottom", isAtBottom, "apiUrl", apiUrl);
 			if (apiUrl) {
 				await fetchNotifications(true);
 			}
 		}
 	});
 }
-
-
 
 export function renderNotifications(notifications) {
 	let badge = document.getElementById("notification-badge");
@@ -112,7 +111,7 @@ export function renderNotifications(notifications) {
 	if (!notificationList) return;
 	notificationList.innerHTML = "";
 
-	if ((!notifications.length)) {
+	if (!notifications.length) {
 		const emptyComponent = Empty("No Notification Found");
 		const emptyContainer = document.createElement("div");
 		emptyContainer.className = "emptyContainer";
@@ -120,15 +119,20 @@ export function renderNotifications(notifications) {
 		notificationList.appendChild(emptyContainer);
 	} else {
 		notifications.forEach((notification, index) => {
-			if (notification.sender && (!notification.sender.image_url || notification.sender.image_url.startsWith(`https://${API_URL}/media/`))) {
+			notification.action = SerializeInviteAction(notification.action);
+			if (
+				notification.sender &&
+				(!notification.sender.image_url ||
+					notification.sender.image_url.startsWith(`https://${API_URL}/media/`))
+			) {
 				notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
 			}
 			if (notification.type === "friend-request")
 				href = `/profile?username=${notification.sender.username}`;
 			else if (notification.type === "messenger")
 				href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-			else if (notification.type === "invite")
-				href = `/match-making?player=${notification.sender.username}`;
+			else if (notification.type === "game-invite" && notification.action)
+				href = `/game/match_making?player=${notification.action.player}&invite-uuid=${notification.action.invite_id}`;
 
 			const notificationItem = document.createElement("li");
 			notificationItem.className = "notification-item";
@@ -136,13 +140,16 @@ export function renderNotifications(notifications) {
 			notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src= ${notification.sender && notification.sender.image_url ? notification.sender.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`} alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src= ${notification.sender && notification.sender.image_url
+					? notification.sender.image_url
+					: `https://${API_URL}/media/public/profile-images/00_img.jpg`
+				} alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
                     <div class="notification-time">${formatDate(
-				notification.created_at
-			)}</div>
+					notification.created_at
+				)}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">
@@ -177,7 +184,6 @@ export function renderNotifications(notifications) {
 }
 
 function renderNavBrContent() {
-
 	const navItems = document.querySelectorAll(".nav-item.nav a");
 
 	navItems.forEach((navItem) => {
@@ -261,7 +267,8 @@ function ProfilePanel(user) {
 
 	console.log("user", user);
 
-	document.getElementById("profile-image").src = user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+	document.getElementById("profile-image").src =
+		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
 	document.getElementById("panel-profile-image").src =
 		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
 	document.getElementById("profile-username").textContent = user.username;
@@ -422,7 +429,8 @@ function iconsSmallWindow() {
 										<path fill="#545454"
 											d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
 									</svg>
-									<span id="notification-badge" class="notification-badge">${apiUrl ? "30+" : allNotifications.length}</span> <!-- Add this line -->
+									<span id="notification-badge" class="notification-badge">${apiUrl ? "30+" : allNotifications.length
+		}</span> <!-- Add this line -->
 								</div>
 							</a>
 						</div>
@@ -434,4 +442,3 @@ function iconsSmallWindow() {
 }
 
 loadNavbar();
-

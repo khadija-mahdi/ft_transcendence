@@ -116,7 +116,7 @@ function hideMainPopup() {
 }
 
 
-function SerializeInviteAction(action) {
+export function SerializeInviteAction(action) {
 	try {
 		return JSON.parse(action)
 	}

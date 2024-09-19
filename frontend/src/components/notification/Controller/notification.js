@@ -1,6 +1,7 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 import { Empty } from "/src/lib/Empty.js";
 import { API_URL } from "/config.js";
+import { SerializeInviteAction } from "/src/lib/Confirm.js";
 
 
 let apiUrl = null;
@@ -47,15 +48,21 @@ export function renderNotifications(notifications) {
 		notificationList.appendChild(emptyContainer);
 	} else {
 		notifications.forEach((notification, index) => {
-			if (notification.sender && (!notification.sender.image_url || notification.sender.image_url.startsWith(`https://${API_URL}/media/`))) {
+			notification.action = SerializeInviteAction(notification.action);
+			if (
+				notification.sender &&
+				(!notification.sender.image_url ||
+					notification.sender.image_url.startsWith(`https://${API_URL}/media/`))
+			) {
 				notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
 			}
 			if (notification.type === "friend-request")
 				href = `/profile?username=${notification.sender.username}`;
 			else if (notification.type === "messenger")
 				href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-			else if (notification.type === "invite")
-				href = `/match-making?player=${notification.sender.username}`;
+			else if (notification.type === "game-invite" && notification.action)
+				href = `/game/match_making?player=${notification.action.player}&invite-uuid=${notification.action.invite_id}`;
+
 
 			const notificationItem = document.createElement("li");
 			notificationItem.className = "notification-item";
