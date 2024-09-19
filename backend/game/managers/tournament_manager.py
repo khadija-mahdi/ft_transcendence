@@ -6,20 +6,21 @@ from user.models import User
 from game.models import Matchup, Tournament, Brackets
 from game.managers.achievements_manager import AchievementsManager
 import random
-from typing import Dict
+from typing import Dict, List
 
 
 class TournamentRoutine():
-    waiting_players = []
-    time_in_s = 0
-    lock = None
-    tournament = None
-    current_round = 1
-    WaitingPeriod = 5 * 60  # wait 5 minutes before running
+    # 5 * 60  # wait 5 minutes before running
 
     def __init__(self, uuid) -> None:
-        self.uuid = uuid
+        self.uuid: str = uuid
         self.channel_layer = get_channel_layer()
+        self.waiting_players: List[User] = []
+        self.time_in_s: int = 0
+        self.lock = None
+        self.tournament: Tournament = None
+        self.current_round: int = 1
+        self.WaitingPeriod: int = 30
 
     @classmethod
     async def create(cls, uuid):
@@ -31,15 +32,17 @@ class TournamentRoutine():
             return None
         except Exception as error:
             print(f'error occurred while getting tournament {uuid}: {error}')
-        
+
         asyncio.create_task(self.tournament_loop())
         return self
 
-    async def add_player(self, player):
+    async def add_player(self, player: User):
         print(f'called add_player {player.username} to tournament_{self.uuid}')
         async with self.lock:
             if player not in self.waiting_players:
                 self.waiting_players.append(player)
+            else:
+                print(f' Sorry player already in list {self.waiting_players}')
 
     async def remove_player(self, player):
         async with self.lock:
@@ -47,9 +50,9 @@ class TournamentRoutine():
                 self.waiting_players.remove(player)
             return len(self.waiting_players) == 0
 
-    async def emit_match_info(self, match):
-        first_player = await database_sync_to_async(User.objects.get)(id=match.first_player.id)
-        second_player = await database_sync_to_async(User.objects.get)(id=match.second_player.id)
+    async def emit_match_info(self, match: Matchup):
+        first_player: User = await database_sync_to_async(User.objects.get)(id=match.first_player.id)
+        second_player: User = await database_sync_to_async(User.objects.get)(id=match.second_player.id)
         match_info = {
             'type': 'match_info',
             'match_uuid': str(match.game_uuid),
@@ -58,14 +61,18 @@ class TournamentRoutine():
         }
         await self.emit(match_info)
 
-    async def create_matches(self, players):
-        async with self.lock:
-            random.shuffle(players)
-        print(f'called create_matches to tournament_{self.uuid}')
+    async def create_matches(self, players: User):
+
+        random.shuffle(players)
+        print(f'called create to {self.uuid} players: {players}')
+
         await database_sync_to_async(Brackets.objects.filter(
             tournament=self.tournament).delete)()
+
         for i in range(0, len(players), 2):
+            print(f' matchine i={i}')
             if i + 1 < len(players):
+                print('in making of a matchup')
                 matchup = Matchup(
                     first_player=players[i],
                     second_player=players[i + 1],
@@ -78,6 +85,7 @@ class TournamentRoutine():
                 del players[i:i + 2]
                 print(
                     f'created match between {matchup.first_player.username} and {matchup.second_player.username}')
+
         if len(players) > 0:
             print('last player automatically moved to next round')
             bracket = Brackets(
@@ -110,16 +118,17 @@ class TournamentRoutine():
         ).save()
 
     async def create_initial_matches(self):
-        await self.create_matches(self.waiting_players)
+        await self.create_matches(self.waiting_players.copy())
 
     async def tournament_loop(self):
-        async with self.lock:
-            while True:
-                self.time_in_s += 1
-                print(f'{self.time_in_s} tick...')
+        while True:
+            self.time_in_s += 1
+
+            print(f'{self.time_in_s} tick...')
+
+            async with self.lock:
                 if len(self.waiting_players) == self.tournament.max_players or self.time_in_s >= self.WaitingPeriod:
                     await self.create_initial_matches()
-                    break
                 elif self.time_in_s >= self.WaitingPeriod:
                     print('still Waiting')
                     print(
@@ -131,7 +140,9 @@ class TournamentRoutine():
                     else:
                         self.create_initial_matches()
                     break
-                await asyncio.sleep(1)
+            await asyncio.sleep(1)
+
+    # this called every end of tournament game
 
     async def check_round_completion(self):
         print(f'called check_round_completion to tournament_{self.uuid}')
@@ -156,36 +167,35 @@ class TournamentRoutine():
 
     async def prepare_next_round(self):
         print(f'called prepare_next_round to tournament_{self.uuid}')
-        async with self.lock:
-            self.current_round += 1
-            current_round_winners = await database_sync_to_async(
-                lambda: list(Matchup.objects.filter(
-                    tournament=self.tournament,
-                    game_over=True,
-                    Winner__isnull=False,
-                    round_number=self.current_round - 1
-                ).values_list('Winner', flat=True))
-            )()
-            if len(current_round_winners) == 0:
-                if self.tournament.finished is False:
-                    self.tournament.finished = True
-                    await database_sync_to_async(self.tournament.save)()
-                    return await self.emit({'status': 'over', 'reason': 'No Winner Found'})
-                return
-            if len(current_round_winners) > 1:
-                winners = await database_sync_to_async(
-                    lambda: list(User.objects.filter(
-                        id__in=current_round_winners))
-                )()
-                print(f'winners, {winners}')
-                self.create_matches(winners)
-            else:
-                print('Tournament Over')
-                tournament_winner = await database_sync_to_async(User.objects.get)(id=current_round_winners[0])
+        self.current_round += 1
+        current_round_winners = await database_sync_to_async(
+            lambda: list(Matchup.objects.filter(
+                tournament=self.tournament,
+                game_over=True,
+                Winner__isnull=False,
+                round_number=self.current_round - 1
+            ).values_list('Winner', flat=True))
+        )()
+        if len(current_round_winners) == 0:
+            if self.tournament.finished is False:
                 self.tournament.finished = True
                 await database_sync_to_async(self.tournament.save)()
-                AchievementsManager().handleUserAchievements(user=tournament_winner)
-                await self.emit({'status': 'over', 'winner': tournament_winner.username})
+                return await self.emit({'status': 'over', 'reason': 'No Winner Found'})
+            return
+        if len(current_round_winners) > 1:
+            winners = await database_sync_to_async(
+                lambda: list(User.objects.filter(
+                    id__in=current_round_winners))
+            )()
+            print(f'winners, {winners}')
+            self.create_matches(winners)
+        else:
+            print('Tournament Over')
+            tournament_winner = await database_sync_to_async(User.objects.get)(id=current_round_winners[0])
+            self.tournament.finished = True
+            await database_sync_to_async(self.tournament.save)()
+            AchievementsManager().handleUserAchievements(user=tournament_winner)
+            await self.emit({'status': 'over', 'winner': tournament_winner.username})
 
     async def emit(self, dict_data):
         print(f'called emit to tournament_{self.uuid}')

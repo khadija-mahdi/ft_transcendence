@@ -51,6 +51,18 @@ class BaseNotification():
         send_notification(notification)
 
 
+class UserMixine():
+
+    def getFriendsQ(self, user):
+        block_list = BlockList.objects.filter(
+            Q(user=user) | Q(blocked_user=user))
+        query = user.friends.all().filter(status='online')
+        query = query.exclude(
+            id__in=block_list.values_list('blocked_user', flat=True))
+        query = query.exclude(id__in=block_list.values_list('user', flat=True))
+        return query
+
+
 class UsersList(generics.ListAPIView):
     class QuerySerializer(serializers.Serializer):
         is_none_friend = serializers.BooleanField(required=False)
@@ -62,9 +74,9 @@ class UsersList(generics.ListAPIView):
         is_none_friend = False
         if user.is_anonymous:
             return User.objects.all()
-        query_serializer = self.QuerySerializer(data=self.request.query_params)
-        if query_serializer.is_valid():
-            is_none_friend = query_serializer.validated_data.get(
+        serializer = self.QuerySerializer(data=self.request.query_params)
+        if serializer.is_valid():
+            is_none_friend = serializer.validated_data.get(
                 'is_none_friend', False)
         if is_none_friend:
             return User.objects.exclude(id__in=user.friends.all()).exclude(id=user.id)
@@ -213,7 +225,7 @@ class RemoveFriend(generics.DestroyAPIView):
         return
 
 
-class OnlineFriendsList(generics.ListAPIView):
+class OnlineFriendsList(generics.ListAPIView, UserMixine):
     class QuerySerializer(serializers.Serializer):
         filterbyName = serializers.BooleanField(required=False)
         filterByLevel = serializers.BooleanField(required=False)
@@ -223,20 +235,21 @@ class OnlineFriendsList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        query_serializer = self.QuerySerializer(data=self.request.query_params)
-        friends_query = self.request.user.friends.all().filter(status='online')
-        if query_serializer.is_valid():
-            filterbyName = query_serializer.validated_data.get('filterbyName')
-            filterByLevel = query_serializer.validated_data.get(
-                'filterByLevel')
-            search = query_serializer.validated_data.get('search')
+        serializer = self.QuerySerializer(data=self.request.query_params)
+
+        query = self.getFriendsQ(self.request.user)
+
+        if serializer.is_valid():
+            filterbyName = serializer.validated_data.get('filterbyName')
+            filterByLevel = serializer.validated_data.get('filterByLevel')
+            search = serializer.validated_data.get('search')
             if filterbyName:
-                return friends_query.order_by('username')
+                return query.order_by('username')
             if filterByLevel:
-                return friends_query.order_by('rank__hierarchy_order').order_by('current_xp').reverse()
+                return query.order_by('rank__hierarchy_order').order_by('current_xp').reverse()
             if search:
-                return friends_query.filter(Q(username__icontains=search) | Q(email__icontains=search))
-        return friends_query
+                return query.filter(Q(username__icontains=search) | Q(email__icontains=search))
+        return query
 
 
 class RankAchievementList(APIView):
@@ -325,7 +338,7 @@ class SearchUser(generics.ListAPIView):
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def get_my_friends_query(self, search_query):
+    def get_my_query(self, search_query):
         user = self.request.user
         block_list = BlockList.objects.filter(
             Q(user=user) | Q(blocked_user=user))
@@ -335,7 +348,7 @@ class SearchUser(generics.ListAPIView):
                      .values_list('blocked_user', flat=True))\
             .exclude(id__in=block_list.values_list('user', flat=True))
 
-    def get_none_friends_query(self, search_query):
+    def get_none_query(self, search_query):
         user = self.request.user
         return User.objects.filter(
             Q(username__icontains=search_query) | Q(email__icontains=search_query))\
@@ -344,17 +357,17 @@ class SearchUser(generics.ListAPIView):
     def get_queryset(self):
         none_friend_only = False
         search_query = ""
-        query_serializer = self.QuerySerializer(data=self.request.query_params)
-        if query_serializer.is_valid():
-            none_friend_only = query_serializer.validated_data.get(
+        serializer = self.QuerySerializer(data=self.request.query_params)
+        if serializer.is_valid():
+            none_friend_only = serializer.validated_data.get(
                 'none_friend_only')
-            search_query = query_serializer.validated_data.get('search_query')
+            search_query = serializer.validated_data.get('search_query')
         search_query = search_query if search_query is not None else ""
 
         if not none_friend_only:
-            return self.get_my_friends_query(search_query)
+            return self.get_my_query(search_query)
         else:
-            return self.get_none_friends_query(search_query)
+            return self.get_none_query(search_query)
 
 
 class RecommendUsers(generics.ListAPIView):
@@ -381,18 +394,13 @@ class AppendingRequests(generics.ListAPIView):
         return Friends_Request.objects.filter(addressee=self.request.user)
 
 
-class FriendList(generics.ListAPIView):
+class FriendList(generics.ListAPIView, UserMixine):
     serializer_class = UserFriendsSerializer
     queryset = User.objects.all()
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        block_list = BlockList.objects.filter(
-            Q(user=user) | Q(blocked_user=user))
-        return user.friends.all().exclude(id__in=block_list
-                                          .values_list('blocked_user', flat=True))\
-            .exclude(id__in=block_list.values_list('user', flat=True))
+        return self.getFriendsQ(self.request.user)
 
 
 class UnblockUser(generics.DestroyAPIView):
@@ -402,7 +410,7 @@ class UnblockUser(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         pk = self.kwargs.get("pk")
         blocked_user = get_object_or_404(User, pk=pk)
-        print('blocked user', blocked_user)
+
         BlockList.objects.filter(
             user=self.request.user, blocked_user=blocked_user).delete()
         return

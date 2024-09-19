@@ -54,13 +54,10 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         try:
             if isinstance(message, str):
                 message = json.loads(message)
-            status = message['status']
-            if status == 'over':
+            if 'status' in message and message['status'] == 'over':
                 print(f'closing connection for {self.user}')
                 await self.close()
         except json.JSONDecodeError:
             print('Failed to decode JSON message:', message)
-        except KeyError:
-            print('Key "status" not found in message:', message)
         except Exception as e:
             print(f'Unexpected error: {e}')
