@@ -41,13 +41,11 @@ async function handleInviteLobby(invite_id, second_player) {
   };
   loobySocket.onmessage = (message) => {
     const data = JSON.parse(message.data);
-    console.log("data", data);
     matchCountdown(5, `/game?uuid=${data.game_uuid}`, null);
   };
 }
 
 function handleNormalLobby(game_mode) {
-  console.log("game_mode", game_mode);
   if (game_mode === "singleplayer") {
     const secondPlayerCard = document.getElementById("second-player");
     secondPlayerCard.innerHTML = "";
@@ -84,7 +82,6 @@ function handleNormalLobby(game_mode) {
   };
   loobySocket.onmessage = (message) => {
     const data = JSON.parse(message.data);
-    console.log("data", data);
     matchCountdown(5, `/game?uuid=${data.game_uuid}`, data.second_player);
   };
 }

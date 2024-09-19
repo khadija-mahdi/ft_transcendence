@@ -54,7 +54,6 @@ async function fetchAnnouncement() {
 
 export default async function renderCarousel() {
 	const tournaments = await fetchAnnouncement();
-	console.log("slider :", tournaments)
 	const carousel = document.getElementById("carousel");
 	if (!tournaments.length) {
 		const emptyComponent = Empty("No tournaments Announced Found");

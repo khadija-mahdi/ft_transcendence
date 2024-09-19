@@ -15,7 +15,6 @@ export async function fetchNotifications(isScroll = false) {
 			method: "GET",
 		});
 		allNotifications.push(...response.results);
-		console.log("response", allNotifications, "apiUrl", apiUrl);
 		Not_length = response.count;
 		renderNotifications(allNotifications);
 		apiUrl = response.next;
@@ -120,7 +119,6 @@ export default function () {
 		const tolerance = 5;
 		const isAtBottom = scrollPosition >= (scrollHeight - tolerance);
 		if (isAtBottom) {
-			console.log('isAtBottom', isAtBottom, "apiUrl", apiUrl);
 			if (apiUrl) {
 				await fetchNotifications(true);
 			}

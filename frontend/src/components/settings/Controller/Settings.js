@@ -5,7 +5,6 @@ import { updateProfile, UserDetailByUsername } from "/src/_api/user.js";
 let data = {};
 
 async function UpdateData(UpdateData, schema) {
-	console.log('updated data', UpdateData)
 	try {
 		await updateProfile(UpdateData);
 	} catch (error) {
@@ -47,9 +46,7 @@ function ImageButton(setSelectedImage = () => { }) {
 	}
 
 	function handleImageInputChange(e) {
-		console.log('handleImageInputChange called')
 		const file = e.target.files[0];
-		console.log('file is ', file)
 		if (!file) return;
 
 		imageLabel.innerHTML = "";
@@ -58,7 +55,6 @@ function ImageButton(setSelectedImage = () => { }) {
 		setSelectedImage(file);
 
 		reader.onload = (event) => {
-			console.log('renderer loaded')
 			imageLabel.appendChild(CreateImagePreview(event));
 			imageLabel.style.color = "transparent";
 		};
@@ -74,7 +70,6 @@ function ImageButton(setSelectedImage = () => { }) {
 }
 
 function SetPersonalInfo() {
-	console.log(data);
 	const { first_name, last_name, username, enabled_2fa, email } = data;
 	document.getElementById("first_name").placeholder =
 		first_name || "First Name";

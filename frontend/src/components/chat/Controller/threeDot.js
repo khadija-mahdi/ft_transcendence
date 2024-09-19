@@ -8,7 +8,6 @@ const blockList = await fetchBlockList();
 export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
 	const isAdmin = true;
 	const isBlocked = selectedChat && selectedChat.receiverUser && blockList.some((user) => user.username === selectedChat.receiverUser[0].username);
-	console.log("blocklis", blockList, "isblocked :", isBlocked, "receiver :", selectedChat.receiverUser[0]);
 	if (threeDots && optionsPanel) {
 		threeDots.addEventListener("click", () => {
 			optionsPanel.classList.toggle("hidden");

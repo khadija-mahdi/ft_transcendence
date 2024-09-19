@@ -197,7 +197,6 @@ function PopulateTournamentMatches(data) {
     return;
   }
   data.results.forEach((tournament) => {
-    console.log(tournament);
     tournamentHistory.innerHTML += tournamentItem(tournament.tournament);
   });
 }
@@ -209,7 +208,6 @@ function PopulateMatches(data) {
     return;
   }
   data.results.forEach((match) => {
-    console.log(match);
     matchHistory.innerHTML += matchItem(match);
   });
 }

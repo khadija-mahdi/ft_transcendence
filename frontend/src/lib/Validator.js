@@ -95,9 +95,7 @@ export function handleSubmit(event, schema = {}, OnSubmit = () => { }) {
 }
 
 export function reset(schema) {
-	console.log("reset(schema):", schema);
 	for (let key in schema) {
-		console.log("reset(schema) key:", key);
 		const helperText = document.getElementById(`${key}-error-text`);
 		const input = document.getElementById(key);
 		if (helperText) helperText.innerText = "";

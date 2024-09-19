@@ -62,7 +62,6 @@ loadingManager.onProgress = (item, loaded, total) => {
 };
 
 loadingManager.onLoad = () => {
-  console.log("HERE");
   document.getElementById("loading-screen").style.display = "none";
   document.querySelector(".score-count-container").style.visibility = "visible";
 };
@@ -106,22 +105,22 @@ async function loadTable(scene) {
   // Load textures
   const diffuseTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_diff_1k.jpg",
-    () => console.log("Diffuse texture loaded"),
+    () => { },
     (err) => console.error("Failed to load diffuse texture", err)
   );
   const roughnessTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_rough_1k.jpg",
-    () => console.log("Roughness texture loaded"),
+    () => { },
     (err) => console.error("Failed to load roughness texture", err)
   );
   const normalTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_nor_gl_1k.jpg",
-    () => console.log("Normal texture loaded"),
+    () => { },
     (err) => console.error("Failed to load normal texture", err)
   );
   const displacementTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_disp_1k.png",
-    () => console.log("Displacement texture loaded"),
+    () => { },
     (err) => console.error("Failed to load displacement texture", err)
   );
 
@@ -356,7 +355,7 @@ export default async function () {
         UpdateScore(data.first_player_score, data.second_player_score);
         ShowModal({
           view: CountDownModal(3),
-          onConfirm: () => {},
+          onConfirm: () => { },
         });
       } else if (data.type === "game_over") {
         let view = null;
@@ -447,7 +446,6 @@ export default async function () {
     });
 
     document.addEventListener("keyup", (e) => {
-      console.log("keyup", e.key);
       delete keysPressed[e.key];
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") StopMovementLoop();
     });

@@ -9,13 +9,11 @@ let Not_length = 0;
 
 export async function fetchNotifications(isScroll = false) {
 	if (!isScroll) apiUrl = `/api/v1/notifications/`;
-	console.log("is Scroll", isScroll);
 	try {
 		const response = await fetchWithAuth(apiUrl, {
 			method: "GET",
 		});
 		allNotifications.push(...response.results);
-		console.log("response", allNotifications, "apiUrl", apiUrl);
 		Not_length = response.count;
 		apiUrl = response.next;
 		renderNotifications(allNotifications);
@@ -43,7 +41,6 @@ async function loadNavbar() {
 			fetchMyData();
 
 			let playBtn = document.getElementById("playButton");
-			console.log("playBrn :", playBtn);
 			if (playBtn) {
 				if (path === "/game/choice-game") {
 					playBtn.remove();
@@ -84,7 +81,6 @@ export function handleScroll() {
 		const tolerance = 5;
 		const isAtBottom = scrollPosition >= scrollHeight - tolerance;
 		if (isAtBottom) {
-			console.log("isAtBottom", isAtBottom, "apiUrl", apiUrl);
 			if (apiUrl) {
 				await fetchNotifications(true);
 			}
@@ -265,7 +261,6 @@ function ProfilePanel(user) {
 		}
 	});
 
-	console.log("user", user);
 
 	document.getElementById("profile-image").src =
 		user.image_url || "/public/assets/images/defaultImageProfile.jpg";

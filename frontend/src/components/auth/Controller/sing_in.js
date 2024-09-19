@@ -45,7 +45,6 @@ function handleIntraLogin() {
 		state: oauth2Providers[1].provider,
 		scope: oauth2Providers[1].scope,
 	});
-	console.log(params);
 	const url = `${oauth2Providers[1].AuthUrl}?${params}`;
 	window.location.href = url;
 }
@@ -95,7 +94,6 @@ export async function handleOAuthLogin() {
 				  />
 				</div>`,
 				onConfirm: async (formData) => {
-					console.log('confirm called')
 				},
 			});
 			return;

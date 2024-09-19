@@ -13,7 +13,6 @@ function handleConnectWebSocket() {
 	};
 	ws.onmessage = (event) => {
 		const data = JSON.parse(event.data);
-		console.log("data:", data)
 		showMainPopup({
 			title: data.title,
 			subtitle: data.description,
@@ -22,7 +21,6 @@ function handleConnectWebSocket() {
 			sender: data.sender,
 			action: data.action,
 			onCancel: () => {
-				console.log("Popup was closed");
 			}
 		});
 	}

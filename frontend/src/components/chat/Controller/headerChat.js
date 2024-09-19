@@ -477,9 +477,7 @@ async function handleChatContent(selectedChat) {
     }
   });
   const inviteBtn = document.getElementById("invite-chat");
-  console.log("invite button is:", inviteBtn);
   inviteBtn.addEventListener("click", async () => {
-	console.log("invite button clicked", selectedChat);
 	let id = selectedChat && selectedChat.receiverUser ? selectedChat.receiverUser[0].id : 0;
     const res = await InvitePlayer(id);
     window.location.href = `/game/match_making?player=${selectedChat.room_name}&invite-uuid=${res.invite_id}`;

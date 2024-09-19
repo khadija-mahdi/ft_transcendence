@@ -43,7 +43,6 @@ export function ShowModal({
 
 	const modalPriority = modalContainer.dataset.hasPriority;
 	if (modalPriority === "true" && !hasPriority) return;
-	console.log("here", modalPriority, hasPriority);
 	modalContainer.style.visibility = "visible";
 	modalContainer.innerHTML = "";
 	modalContainer.dataset.hasPriority = hasPriority;

@@ -137,7 +137,6 @@ function updateRooms(newRoom) {
 }
 
 function renderRoomsList(rooms) {
-	console.log("rooms :", rooms);
 	const messengerContainer = document.getElementById("messenger-container");
 	if (messengerContainer) {
 		messengerContainer.innerHTML = "";

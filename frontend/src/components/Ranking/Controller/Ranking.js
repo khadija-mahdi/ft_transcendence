@@ -5,7 +5,6 @@ export default async function () {
   const data = await fetchRanking();
   data.results.forEach((item, index) => {
     const tr = rankingItem({index: index + 1, ...item});
-    console.log(tr);
     ranking.innerHTML += tr;
   });
 }

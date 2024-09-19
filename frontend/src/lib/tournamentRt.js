@@ -11,7 +11,6 @@ export function TournamentWs(uuid) {
   };
   socket.onmessage = (event) => {
     const data = JSON.parse(event.data);
-    console.log("data:", data);
   };
 }
 

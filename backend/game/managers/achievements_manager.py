@@ -112,12 +112,16 @@ class AchievementsManager:
             return
         user.current_xp += self.IncrementingXpSteps
         user.total_xp += self.IncrementingXpSteps
+
         UserRank: Ranks = await database_sync_to_async(lambda: user.rank)()
-        next_rank = await self.getNextRank(UserRank.hierarchy_order if not UserRank else 0)
-        if user.current_xp >= UserRank.xp_required and next_rank is not None:
-            user.current_xp -= UserRank.xp_required
+        current_xp_required = UserRank.xp_required if UserRank else 0
+        next_rank = await self.getNextRank(UserRank.hierarchy_order if UserRank else 0)
+
+        if user.current_xp >= current_xp_required and next_rank is not None:
+            user.current_xp -= current_xp_required
             user.rank = next_rank
         await database_sync_to_async(user.save)()
+
         await self.handleWinStreak(user)
         await self.handleTotalPoints(user)
         await self.handleZeroLoss(user)
