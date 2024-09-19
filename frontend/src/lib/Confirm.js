@@ -67,12 +67,11 @@ export function showMainPopup({
 	inputBody = null,
 	type,
 	sender,
-	action,
+	action = null,
 	onCancel = () => { },
 	duration = 10000
 }) {
-	action = JSON.parse(action);'{"invite_id": "94b77b7d-01aa-4d14-93df-a4525190b629", "player": "ayoub-a"}'
-	console.log("hreef:", action.invite_id);
+	action = SerializeInviteAction(action)
 	const popupContainer = document.getElementById("main-popup-container");
 	const popupTitle = document.getElementById("main-popup-title");
 	const popupSubtitle = document.getElementById("main-popup-subtitle");
@@ -84,7 +83,7 @@ export function showMainPopup({
 		link.href = `/profile?username=${sender.username}`;
 	else if (type === "messenger")
 		link.href = `/messenger?chatroom=${sender.id}`;
-	else if (type === "game-invite")
+	else if (type === "game-invite" && action)
 		link.href = `/game/match_making?player=${action.player}&invite-uuid=${action.invite_id}`;
 	popupTitle.textContent = title;
 	popupSubtitle.innerHTML = subtitle;
@@ -114,4 +113,13 @@ export function showMainPopup({
 function hideMainPopup() {
 	const popupContainer = document.getElementById("main-popup-container");
 	popupContainer.classList.add("hidden");
+}
+
+
+function SerializeInviteAction(action) {
+	try {
+		return JSON.parse(action)
+	}
+	catch (error) { }
+	return null
 }

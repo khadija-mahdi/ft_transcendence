@@ -4,14 +4,15 @@ import { handleThreeDotPanel } from "./threeDot.js";
 import { ChatRoomsPanel } from "./chat.js";
 import { fetchMyData, fetchMyFriends } from "/src/_api/user.js";
 import { API_URL } from "/config.js";
+import { InvitePlayer } from "/src/_api/user.js";
 
+const html = String.raw;
 
 const myData = await fetchMyData();
 let selectedImage = null;
 let apiUrl = null;
 let isLoading = false;
 let socket = null;
-
 
 export function showSendImagePopup({ imageSrc, onConfirm, onCancel, error }) {
 	const popupContainer = document.getElementById("popup-sendImage-container");
@@ -53,107 +54,112 @@ export function hideSendImagePopup() {
 	popupContainer.classList.add("hidden");
 }
 
-
-
-
 async function fetchMessages(id, isScroll) {
-	if (!isScroll)
-		apiUrl = `/api/v1/chat/room/${id}`;
+	if (!isScroll) apiUrl = `/api/v1/chat/room/${id}`;
 	try {
 		const response = await fetchWithAuth(apiUrl, { method: "GET" });
 		if (response.results.length) {
 			apiUrl = response.next;
-
 		}
 		appendMessages(response.results);
 	} catch (error) {
-		console.error('Error fetching messages:', error);
+		console.error("Error fetching messages:", error);
 	}
 
 	isLoading = false;
 }
 
 function appendMessages(messages) {
-	const chatWindow = document.getElementById('messages-content');
+	const chatWindow = document.getElementById("messages-content");
 
 	const scrollTopBefore = chatWindow.scrollTop;
-	messages.forEach(message => {
+	messages.forEach((message) => {
 		appendMessageToUI(message, true);
 	});
 
 	// chatWindow.scrollTop = chatWindow.scrollHeight - scrollTopBefore;
 }
 
-
-
-
-
 export function ChatRoomHeaderUi(selectedChat, isFriend) {
-	return /*html*/ `
-	<div class="panel-container">
-		<button class="panel-button">
-			<div class="panel-inner-container">
-				<div id="left-arrow-container" class="hidden">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24"height="24"fill="none">
-						<path stroke="white" strokeLinecap="round"strokeLinejoin="round" strokeWidth="1.5" d="M15 18.595l-7-7 7-7"/>
-					</svg>
-				</div>
-				<img
-					class="panel-image"
-					src="${selectedChat.room_icon.startsWith(`https://${API_URL}/media/`) ? selectedChat.room_icon : `https://${API_URL}/media/public/profile-images/00_img.jpg`}"
-				alt="Profile Image"
-                    />
-				<a href='/profile?username=${selectedChat.room_name}' class="panel-link">
-					<div class="panel-room-name">${selectedChat.room_name}</div>
-					<div class="panel-room-status">
-						${selectedChat.type === "private"
+	return html`
+    <div class="panel-container">
+      <button class="panel-button">
+        <div class="panel-inner-container">
+          <div id="left-arrow-container" class="hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+            >
+              <path
+                stroke="white"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M15 18.595l-7-7 7-7"
+              />
+            </svg>
+          </div>
+          <img
+            class="panel-image"
+            src="${selectedChat.room_icon.startsWith(
+		`https://${API_URL}/media/`
+	)
+			? selectedChat.room_icon
+			: `https://${API_URL}/media/public/profile-images/00_img.jpg`}"
+            alt="Profile Image"
+          />
+          <a
+            href="/profile?username=${selectedChat.room_name}"
+            class="panel-link"
+          >
+            <div class="panel-room-name">${selectedChat.room_name}</div>
+            <div class="panel-room-status">
+              ${selectedChat.type === "private"
 			? selectedChat.receiverUser &&
 			selectedChat.receiverUser[0].status
-			: "No members"
-		}
-					</div>
-				</a>
-			</div>
-			<div class="panel-three-points-container">
-				<div class="panel-three-points" id="three-dots">
-					<!-- SVG for three dots -->
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width='20'
-						height='21'
-						fill="none"
-					>
-						<path
-							stroke="#F8F8F8"
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={1.5}
-							d="M12 6.42a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Z"
-						/>
-					</svg>
-				</div>
-			</div>
-		</button>
+			: "No members"}
+            </div>
+          </a>
+        </div>
+        <div class="panel-three-points-container">
+          <div class="panel-three-points" id="three-dots">
+            <!-- SVG for three dots -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="21"
+              fill="none"
+            >
+              <path
+                stroke="#F8F8F8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="{1.5}"
+                d="M12 6.42a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Zm0 7.04a.96.96 0 1 0 0-1.92.96.96 0 0 0 0 1.92Z"
+              />
+            </svg>
+          </div>
+        </div>
+      </button>
 
-		<!-- Options Panel -->
-		<div id="options-panel" class="options-panel hidden">
-			<!-- Options content will be inserted here by JavaScript -->
-		</div>
+      <!-- Options Panel -->
+      <div id="options-panel" class="options-panel hidden">
+        <!-- Options content will be inserted here by JavaScript -->
+      </div>
 
-		<!-- Messages and Send Message Content -->
-		<div id="messages-content" class="messages-content"></div>
-		<div id="send-message" class="send-message">
-			<div class="send-message-container">
-				${isFriend || selectedChat.type !== "private"
+      <!-- Messages and Send Message Content -->
+      <div id="messages-content" class="messages-content"></div>
+      <div id="send-message" class="send-message">
+        <div class="send-message-container">
+		${isFriend || selectedChat.type !== "private"
 			? `
                         <div class="send-message-content">
                             ${selectedChat.type === "private"
 				? `
-                                <div class="invite-icon-container">
-                                    <a href="/game/match_making?player=${(selectedChat.receiverUser &&
-					selectedChat.receiverUser[0]
-						.username) ||
-				0
+                                <div id="invite-chat"  class="invite-icon-container">
+                                    <div
 				}">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -166,7 +172,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                                                 d="M8.253 4.5a6.75 6.75 0 0 0 0 13.5h7.512a6.75 6.75 0 0 0 0-13.5H8.253Zm-2.997 6.75a.75.75 0 0 1 .75-.75h1.5V9a.75.75 0 0 1 1.5 0v1.5h1.5a.75.75 0 1 1 0 1.5h-1.5v1.5a.75.75 0 1 1-1.5 0V12h-1.5a.75.75 0 0 1-.75-.75ZM16.5 13.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0-3a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"
                                             />
                                         </svg>
-                                    </a>
+                                    </div>
                                     <div class="invite-text">Invite</div>
                                 </div>
                             `
@@ -204,23 +210,20 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                         `
 				: ""
 			}
-                    `
-		}
-			</div>
-		</div>
-	</div>
-	`;
+                    `}
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function handleWebSocket(selectedChat) {
 	if (socket) {
-		console.log("socket is ready open : ,", selectedChat.id)
-		socket.close()
+		console.log("socket is ready open : ,", selectedChat.id);
+		socket.close();
 	}
 	if (selectedChat.id) {
-		socket = new AuthWebSocket(
-			`/ws/chat/${selectedChat.id}/`
-		);
+		socket = new AuthWebSocket(`/ws/chat/${selectedChat.id}/`);
 
 		socket.onmessage = (event) => {
 			const receivedMessage = JSON.parse(event.data);
@@ -253,11 +256,10 @@ function appendMessageToUI(message, prepend = false) {
 
 		if (message.image_file) {
 			messageElement.innerHTML = `
-				<div class="image_file ${message.sender_username === myData.username
-					? "sent"
-					: "received"
+				<div class="image_file ${message.sender_username === myData.username ? "sent" : "received"
 				}">
-					<img class="image_file-content" src="${message.image_file}" alt="image message" />
+					<img class="image_file-content" src="${message.image_file
+				}" alt="image message" />
 				</div>
 			`;
 		} else {
@@ -270,7 +272,7 @@ function appendMessageToUI(message, prepend = false) {
 			`;
 		}
 		if (prepend) {
-			messagesContent.insertBefore(messageElement, messagesContent.firstChild);  // Prepend message
+			messagesContent.insertBefore(messageElement, messagesContent.firstChild); // Prepend message
 		} else {
 			messagesContent.appendChild(messageElement);
 		}
@@ -312,7 +314,7 @@ async function sendMessage(content, selectedChat, imageFile = null) {
 			created_at: new Date().toISOString(),
 		};
 		socket.send(JSON.stringify(payload));
-		appendMessageToUI(payload)
+		appendMessageToUI(payload);
 	} catch (error) {
 		return;
 	}
@@ -462,12 +464,18 @@ async function handleChatContent(selectedChat) {
 			handleSendMessage(event, selectedChat)
 		);
 	}
-	const chatWindow = document.getElementById('messages-content');
+	const chatWindow = document.getElementById("messages-content");
 
-	chatWindow.addEventListener('scroll', () => {
+	chatWindow.addEventListener("scroll", () => {
 		if (chatWindow.scrollTop === 0 && apiUrl) {
 			fetchMessages(selectedChat.id, true);
 		}
+	});
+	const inviteBtn = document.createElement("invite-chat");
+	console.log("invite button is:", inviteBtn)
+	inviteBtn.addEventListener("click", async () => {
+		const res = await InvitePlayer(id);
+		window.location.href = `/game/match_making?player=${selectedChat.room_}&invite-uuid=${res.invite_id}`;
 	});
 	const textarea = document.querySelector(".message-textarea");
 	if (textarea) {
@@ -484,7 +492,9 @@ export async function renderMessagesItems(selectedChat) {
 	const originRooms = rooms.innerHTML;
 	const friends = await fetchMyFriends();
 
-	const isFriend = friends.some((friend) => friend.username === selectedChat.room_name);
+	const isFriend = friends.some(
+		(friend) => friend.username === selectedChat.room_name
+	);
 
 	function checkWindowSize() {
 		const isSmallWindow = window.innerWidth <= 836;
@@ -525,123 +535,3 @@ export async function renderMessagesItems(selectedChat) {
 		setTimeout(checkWindowSize, 100);
 	});
 }
-
-
-
-const html = /*html*/ `
-		<div class="Not">
-						<div class="social-icon">
-							<div id="notification-icon" class="icon-container">
-								<button passHref class="icon-link" id="notif">
-									<div class="icon-content">
-										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
-											<path fill="#545454"
-												d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
-										</svg>
-										<span id="notification-badge" class="notification-badge">0</span>
-										<!-- Add this line -->
-									</div>
-								</button>
-							</div>
-							<div id="notification-panel" class="notification-panel hidden">
-								<div class="notification-title">NOTIFICATION</div>
-								<div class="notification-divider"></div>
-								<div class="notification-content">
-									<div id="notification-list" class="notification-list">
-										<div class="notification-item">
-											<a href="" class="notification-link">
-												<div class="notification-image-container">
-													<img class="notification-image"
-														src="components/auth/assets/google.svg" alt="Profile Image"
-														width="35" height="35" />
-												</div>
-												<div class="notification-text-container">
-													<div class="notification-text"> is a notification :</div>
-													<div class="notification-time">10:24</div>
-												</div>
-											</a>
-											<div class="notification-menu-container">
-												<div class="notification-menu">
-													<div id="three-points-trigger" class="three-points-trigger">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-															viewBox="0 0 24 24">
-															<g fill="none">
-																<path
-																	d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-																<path fill="currentColor"
-																	d="M12 16.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3" />
-															</g>
-														</svg>
-													</div>
-													<div id="notification-menu"
-														class="notification-menu-content hidden">
-														<button class="notification-menu-button">
-															<p class="notification-menu-text">Remove</p>
-														</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					<div class="Not">
-						<div class="social-icon">
-							<div id="notification-icon" class="icon-container">
-								<button passHref class="icon-link" id="notif">
-									<div class="icon-content">
-										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
-											<path fill="#545454"
-												d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
-										</svg>
-										<span id="notification-badge" class="notification-badge">0</span>
-										<!-- Add this line -->
-									</div>
-								</button>
-							</div>
-							<div id="notification-panel" class="notification-panel hidden">
-								<div class="notification-title">NOTIFICATION</div>
-								<div class="notification-divider"></div>
-								<div class="notification-content">
-									<div id="notification-list" class="notification-list">
-										<div class="notification-item">
-											<a href="" class="notification-link">
-												<div class="notification-image-container">
-													<img class="notification-image"
-														src="components/auth/assets/google.svg" alt="Profile Image"
-														width="35" height="35" />
-												</div>
-												<div class="notification-text-container">
-													<div class="notification-text"> is a notification :</div>
-													<div class="notification-time">10:24</div>
-												</div>
-											</a>
-											<div class="notification-menu-container">
-												<div class="notification-menu">
-													<div id="three-points-trigger" class="three-points-trigger">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-															viewBox="0 0 24 24">
-															<g fill="none">
-																<path
-																	d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-																<path fill="currentColor"
-																	d="M12 16.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3" />
-															</g>
-														</svg>
-													</div>
-													<div id="notification-menu"
-														class="notification-menu-content hidden">
-														<button class="notification-menu-button">
-															<p class="notification-menu-text">Remove</p>
-														</button>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-				</ul>
-			</div>`

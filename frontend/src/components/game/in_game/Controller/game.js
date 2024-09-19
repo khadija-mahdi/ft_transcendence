@@ -269,7 +269,7 @@ function Camera(isFirstPlayer = true) {
   const near = 0.1;
   const far = 1000;
 
-  config.selectedPerspective = isFirstPlayer ? "FPerspective" : "SPerspective";
+  config.selectedPerspective = !isFirstPlayer ? "FPerspective" : "SPerspective";
   const PlayerPerspective = config.Perspectives[config.selectedPerspective];
 
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
@@ -419,8 +419,8 @@ export default async function () {
 
     const GameSocket = setupWebSocket();
     const directions = {
-      left: config.selectedPerspective === "FPerspective" ? "left" : "right",
-      right: config.selectedPerspective === "FPerspective" ? "right" : "left",
+      left: config.selectedPerspective !== "FPerspective" ? "left" : "right",
+      right: config.selectedPerspective !== "FPerspective" ? "right" : "left",
     };
     function StartMovementLoop() {
       if (intervalId) return;

@@ -42,7 +42,7 @@ async function handleInviteLobby(invite_id, second_player) {
   loobySocket.onmessage = (message) => {
     const data = JSON.parse(message.data);
     console.log("data", data);
-    matchCountdown(15, `/game?uuid=${data.game_uuid}`, null);
+    matchCountdown(5, `/game?uuid=${data.game_uuid}`, null);
   };
 }
 
@@ -85,7 +85,7 @@ function handleNormalLobby(game_mode) {
   loobySocket.onmessage = (message) => {
     const data = JSON.parse(message.data);
     console.log("data", data);
-    matchCountdown(15, `/game?uuid=${data.game_uuid}`, data.second_player);
+    matchCountdown(5, `/game?uuid=${data.game_uuid}`, data.second_player);
   };
 }
 
