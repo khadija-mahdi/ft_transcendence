@@ -1,5 +1,5 @@
 export default function () {
-	return /*html*/`
+  return /*html*/ `
 <div class="flex justify-center items-center">
 	<div class="create-tr-container">
 		<div class="create-tr-title">Create new tournament</div>
@@ -45,7 +45,7 @@ export default function () {
 				<div style="padding: 10px 0">
 					<label for="maxPlayers">Max Players *</label>
 				</div>
-				<input type="number" id="maxPlayers" class="form-input" placeholder="The maximum number of players (0-16)" min="0" max="16" required />
+				<input type="number" id="maxPlayers" class="form-input" placeholder="The maximum number of players (4-16)" min="4" max="16" required />
 			</div>
 
 			<div class="form-group">
@@ -88,4 +88,4 @@ export default function () {
 	</div>
 </div>
 `;
-};
+}

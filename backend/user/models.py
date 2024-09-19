@@ -31,8 +31,8 @@ class User(AbstractUser):
         ('facebook', 'Facebook'),
         ('intra', 'Intra'),
     ]
-
     STATUS_CHOICES = [
+
         ('online', 'Online'),
         ('offline', 'Offline'),
         ('inGame', 'InGame'),

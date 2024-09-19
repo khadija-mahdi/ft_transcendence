@@ -8,6 +8,8 @@ from chat.models import ChatRoom, ChatMessage, RemovedRoom
 from django.core.files.base import ContentFile
 from api.models import Notification  # Import your Notification model
 from user.views import BaseNotification
+from user.models import BlockList
+from django.db.models import Q
 
 channel_layer = get_channel_layer()
 
@@ -63,7 +65,8 @@ class ChatConsumer(AsyncWebsocketConsumer, BaseNotification):
             await self.notify_users(image_data, message_type)
 
     async def chat_message(self, event):
-        if not await self.is_member(self.user, self.room_id):
+        if not await self.is_member(self.user, self.room_id) or\
+                await self.is_there_block(self.room_id):
             await self.send(text_data=json.dumps({
                 'error': 'Forbidden access'
             }))
@@ -154,6 +157,16 @@ class ChatConsumer(AsyncWebsocketConsumer, BaseNotification):
     @database_sync_to_async
     def is_member(self, user, room_id):
         return ChatRoom.objects.filter(id=room_id, members=user).exists()
+
+    @database_sync_to_async
+    def is_there_block(self, room_id):
+        members = ChatRoom.objects.get(id=room_id).members.all()
+        if len(members) != 2:
+            return True
+        query = BlockList.objects.filter(
+            Q(user=members[0]) & Q(blocked_user=members[1]) |
+            Q(user=members[1]) & Q(blocked_user=members[0]))
+        return query.exists()
 
     async def notify_users(self, message, message_type):
         await sync_to_async(self._notify_users_sync)(message, message_type)

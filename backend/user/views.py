@@ -56,7 +56,7 @@ class UserMixine():
     def getFriendsQ(self, user):
         block_list = BlockList.objects.filter(
             Q(user=user) | Q(blocked_user=user))
-        query = user.friends.all().filter(status='online')
+        query = user.friends.all()
         query = query.exclude(
             id__in=block_list.values_list('blocked_user', flat=True))
         query = query.exclude(id__in=block_list.values_list('user', flat=True))
@@ -237,7 +237,7 @@ class OnlineFriendsList(generics.ListAPIView, UserMixine):
     def get_queryset(self):
         serializer = self.QuerySerializer(data=self.request.query_params)
 
-        query = self.getFriendsQ(self.request.user)
+        query = self.getFriendsQ(self.request.user).filter(status='online')
 
         if serializer.is_valid():
             filterbyName = serializer.validated_data.get('filterbyName')

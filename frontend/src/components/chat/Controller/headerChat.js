@@ -229,6 +229,7 @@ function handleWebSocket(selectedChat) {
 
     socket.onmessage = (event) => {
       const receivedMessage = JSON.parse(event.data);
+	  console.log("receivedMessage", receivedMessage);
       const newMessage = {
         message: receivedMessage.message.message,
         image_file: receivedMessage.message.image,
@@ -477,7 +478,7 @@ async function handleChatContent(selectedChat) {
     }
   });
   const inviteBtn = document.getElementById("invite-chat");
-  inviteBtn.addEventListener("click", async () => {
+  inviteBtn?.addEventListener("click", async () => {
 	let id = selectedChat && selectedChat.receiverUser ? selectedChat.receiverUser[0].id : 0;
     const res = await InvitePlayer(id);
     window.location.href = `/game/match_making?player=${selectedChat.room_name}&invite-uuid=${res.invite_id}`;
