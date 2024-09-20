@@ -210,7 +210,7 @@ class Game():
     async def cleanup(self):
         self.is_running = False
         await self.channel_layer.group_send(
-            f"game_{self.room_id}", {'type': 'websocket.close'})
+            f"game_{self.room_id}", {'type': 'close'})
 
 
 class GameManager():

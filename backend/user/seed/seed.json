@@ -368,7 +368,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 3,
                 4
@@ -394,7 +397,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 1,
                 3,
@@ -425,7 +431,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 1,
                 2
@@ -451,7 +460,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 1,
                 2
@@ -477,7 +489,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 1,
                 2
@@ -503,7 +518,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 1,
                 2
@@ -529,7 +547,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 1,
                 2
@@ -555,7 +576,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [
                 1,
                 2
@@ -581,7 +605,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [],
             "user_permissions": [],
             "achievements": []
@@ -614,7 +641,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [],
             "user_permissions": [],
             "achievements": []
@@ -637,7 +667,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [],
             "user_permissions": [],
             "achievements": []
@@ -670,7 +703,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [],
             "user_permissions": [],
             "achievements": []
@@ -703,7 +739,10 @@
             "registration_method": "email",
             "image_url": "/media/public/profile-images/00_img.jpg",
             "groups": [],
-            "rank": 1,
+            "rank": 2,
+            "ranking_logs": [
+                1,2
+            ],
             "friends": [],
             "user_permissions": [],
             "achievements": []

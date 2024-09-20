@@ -24,6 +24,7 @@ class RankAchievement(models.Model):
 
 
 class User(AbstractUser):
+
     email = models.EmailField(unique=True, blank=False, null=False)
     REGISTRATION_CHOICE = [
         ('email', 'Email'),

@@ -18,7 +18,7 @@ export function BracketCard(player = {}, alias = null) {
             src="${player.image_url}"
             alt="profile Icon"
             class="avatar-image"
-            onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
+            onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
           />
         </div>
         <div class="bracket-info">
@@ -147,40 +147,45 @@ export function StatusTableRow(match = {}) {
           <div class="player-images">
             <div class="player-avatar">
               <img
-                src="${match.first_player.image_url}"
+                src="${match.first_player?.image_url}"
                 alt="profile"
                 class="avatar-image"
-                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
+                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
               />
             </div>
             <div class="player-avatar">
               <img
-                src="${match.second_player.image_url}"
+                src="${match.second_player?.image_url}"
                 alt="profile"
                 class="avatar-image"
-                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
-
+                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
               />
             </div>
           </div>
           <div class="player-info">
-            <div class="player-name">${match.first_player.username}</div>
+            <div class="player-name">
+              ${match.first_player.username || "USER"}
+            </div>
             <div class="player-level">
-              Level <span>${match.first_player.current_xp}</span>
+              Level <span>${match.first_player.current_xp || "0"}</span>
             </div>
           </div>
           <p class="vs-text">VS</p>
           <div class="player-info">
-            <div class="player-name">${match.first_player.current_xp}</div>
+            <div class="player-name">
+              ${match.first_player.username || "USER"}
+            </div>
             <div class="player-level">
-              Level <span>${match.first_player.current_xp}</span>
+              Level <span>${match.first_player.current_xp || "0"}</span>
             </div>
           </div>
         </div>
       </td>
-      <td>${match.first_player_score} VS ${match.first_player_score}</td>
-      <td>${new Date().toLocaleString()}</td>
-      <td>${new Date().toLocaleString()}</td>
+      <td>
+        ${match.first_player_score || 0} VS ${match.first_player_score || 0}
+      </td>
+      <td>${new Date(match?.created_at).toLocaleString()}</td>
+      <td>${new Date(match?.updated_at).toLocaleString()}</td>
       <td>
         <div class="winner-row">
           <div class="winner-avatar">
@@ -188,7 +193,7 @@ export function StatusTableRow(match = {}) {
               src="${match.Winner?.image_url}"
               alt="profile"
               class="avatar-image"
-              onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.jpg';"
+              onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
             />
           </div>
           <div class="winner-info">

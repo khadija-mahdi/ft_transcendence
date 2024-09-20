@@ -1,6 +1,6 @@
 # when player wins, game or tournament this manager get notified and update the user achievements and xp and rank accordingly
 from game.models import Matchup, Tournament
-from user.models import User, Achievements, Ranks
+from user.models import User, Achievements, Ranks, RankAchievement
 from channels.db import database_sync_to_async
 
 from django.db.models import QuerySet
@@ -120,6 +120,9 @@ class AchievementsManager:
         if user.current_xp >= current_xp_required and next_rank is not None:
             user.current_xp -= current_xp_required
             user.rank = next_rank
+            rank_achievement = RankAchievement(user=user, rank=next_rank)
+        if rank_achievement:
+            await database_sync_to_async(rank_achievement.save)()
         await database_sync_to_async(user.save)()
 
         await self.handleWinStreak(user)
@@ -133,8 +136,13 @@ class AchievementsManager:
         user.current_xp -= self.DecrementingXpSteps
         user.total_xp -= self.DecrementingXpSteps
         UserRank: Ranks = await database_sync_to_async(lambda: user.rank)()
+        if not UserRank:
+            return
         prevRank = await self.getPrevRank(UserRank.hierarchy_order)
         if user.current_xp < 0:
             user.rank = prevRank
             user.current_xp = await database_sync_to_async(lambda: UserRank.xp_required)() + user.current_xp
+            rank_achievement = RankAchievement(user=user, rank=prevRank)
+        if rank_achievement:
+            await database_sync_to_async(rank_achievement.save)()
         await database_sync_to_async(user.save)()

@@ -86,11 +86,9 @@ function setUserInfo() {
   const userInfoList = document.getElementById("user-info-list");
   UserInfoList.map((item) => (userInfoList.innerHTML += UserInfo(item)));
   const InviteButton = document.getElementById("invite-btn");
+  InviteButton.style.visibility = data.is_my_profile ? "hidden" : "visible";
   InviteButton.addEventListener("click", async () => {
-    try {
-      await InvitePlayer(data.id);
-      window.location.href = `/game/match_making?game_mode=invite&invite-uuid=${res.invite_id}`;
-    } catch (e) {}
+    await SendInvitation(data.username, data.id);
   });
 }
 
@@ -111,7 +109,7 @@ function setProgress() {
   const xp = document.querySelector(".xp");
   xp.textContent = `${data.current_xp}XP`;
   const progressBar = document.querySelector(".progress-bar-profile");
-  progressBar.style.width = data.rankProgressPercentage;
+  progressBar.style.width = `${data.rankProgressPercentage}%`;
   const percentage = document.querySelector(".progress-percentage");
   percentage.textContent =
     data.rankProgressPercentage > 10 ? `${data.rankProgressPercentage}%` : "";
@@ -149,7 +147,10 @@ function setOptionsMenu() {
     {
       view: html`
         <button class="menu-item">
-          <img src="/public/assets/icons/profile-delete.svg" alt="Block Button" />
+          <img
+            src="/public/assets/icons/profile-delete.svg"
+            alt="Block Button"
+          />
           <p class="menu-item-text">Block</p>
         </button>
       `,
@@ -162,15 +163,15 @@ function setOptionsMenu() {
     {
       view: html`
         <button class="menu-item">
-          <img src="/public/assets/icons/directbox-send.svg" alt="Invite Button" />
+          <img
+            src="/public/assets/icons/directbox-send.svg"
+            alt="Invite Button"
+          />
           <p class="menu-item-text">Invite</p>
         </button>
       `,
       handler: async () => {
-        try {
-          await InvitePlayer(data.id);
-          window.location.href = `/game/match_making?game_mode=invite&invite-uuid=${res.invite_id}`;
-        } catch (e) {}
+        await SendInvitation(data.username, data.id);
       },
     },
   ]);
@@ -178,6 +179,13 @@ function setOptionsMenu() {
   dropdown.innerHTML = view;
   dropdown.dataset.show = true;
   Controller();
+}
+
+async function SendInvitation(username, id) {
+  try {
+    const res = await InvitePlayer(id);
+    window.location.href = `/game/match_making?player=${username}&invite-uuid=${res.invite_id}`;
+  } catch (e) {}
 }
 
 function setRankInfo() {

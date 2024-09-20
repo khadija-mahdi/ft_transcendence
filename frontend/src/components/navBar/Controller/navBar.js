@@ -263,9 +263,9 @@ function ProfilePanel(user) {
 
 
 	document.getElementById("profile-image").src =
-		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+		user.image_url || "/public/assets/images/defaultImageProfile.png";
 	document.getElementById("panel-profile-image").src =
-		user.image_url || "/public/assets/images/defaultImageProfile.jpg";
+		user.image_url || "/public/assets/images/defaultImageProfile.png";
 	document.getElementById("profile-username").textContent = user.username;
 	document.getElementById("profile-level").textContent =
 		user.xp_required && user.current_xp

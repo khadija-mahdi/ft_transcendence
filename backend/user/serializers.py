@@ -170,7 +170,10 @@ class UserDetailSerializer(serializers.ModelSerializer, BaseUserSerializer):
 
     def get_rankProgressPercentage(self, obj):
         if obj.rank is None:
-            return 0
+            try:
+                obj.rank = Ranks.objects.get(pk=1)
+            except Exception:
+                return 0
         return (obj.current_xp / obj.rank.xp_required) * 100
 
 
@@ -218,7 +221,8 @@ class FriendRequestSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     fullname = serializers.SerializerMethodField()
     username = serializers.CharField(source='requester.username')
-    current_xp = serializers.IntegerField(source='requester.current_xp', read_only=True)
+    current_xp = serializers.IntegerField(
+        source='requester.current_xp', read_only=True)
     manage_friend_request = serializers.SerializerMethodField()
     url = serializers.SerializerMethodField()
 

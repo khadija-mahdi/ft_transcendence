@@ -255,17 +255,15 @@ class OnlineFriendsList(generics.ListAPIView, UserMixine):
 class RankAchievementList(APIView):
     serializer_class = RankAchievementSerializer
 
-    def get(slef, request):
-        user = request.user
+    def get(self, request):
         ranking_logs = RankAchievement.objects.all().filter(
-            user=user).order_by('achieved_at')
+            user=request.user).order_by('achieved_at')
         data = RankAchievementSerializer(ranking_logs, many=True).data
         return Response(data, status=200)
 
     def post(self, request):
-        user = request.user
         rank_achievement = RankAchievement(
-            user=user, rank=Ranks.objects.get(id=3))
+            user=request.user, rank=Ranks.objects.get(id=3))
         rank_achievement.save()
         return Response(status=201)
 

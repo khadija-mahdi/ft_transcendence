@@ -187,7 +187,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
     "https://192.168.122.1:3000",
     "https://192.168.122.1:3000",
-	"https://10.14.3.1:4433",
+    "https://10.14.3.1:4433",
     "https://localhost:4433",
     # Add other origins as needed
 ]
@@ -197,7 +197,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://localhost:8000",
     "https://192.168.122.1:3000",
     "https://localhost:4433",
-	"https://10.14.3.1:4433",
+    "https://10.14.3.1:4433",
 
     # Add other origins as needed
 ]
@@ -260,4 +260,38 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'SCHEMA_PATH_PREFIX': r'/api/v1/',
+}
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {  # Define custom formats for log messages
+        'verbose': {
+            'format': '{asctime} {levelname} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',  # You can use 'simple' if preferred
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),  # Save to a file
+            'formatter': 'verbose',  # Custom format for the file output
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],  # Send logs to both console and file
+        'level': 'DEBUG',
+        'propagate': True,
+    },
 }

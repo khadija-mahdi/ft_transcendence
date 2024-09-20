@@ -59,6 +59,7 @@ function setTournamentDetails() {
     statusPanel.appendChild(Empty("No games states available"));
   } else {
     games_states.forEach((match) => {
+      console.log(match);
       statusTableBody.innerHTML += StatusTableRow(match);
     });
   }

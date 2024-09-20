@@ -52,3 +52,7 @@ class InGame(AsyncWebsocketConsumer):
 
     async def broadcast(self, event):
         await self.send(text_data=event['message'])
+
+    async def close(self, event):
+        """ Logic to handle websocket close """
+        await self.close()
