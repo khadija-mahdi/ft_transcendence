@@ -26,7 +26,7 @@ export function BlockListContainer({ name, href, number, index }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = ` ${number} `;
+	levelDiv.textContent = `level  ${number} `;;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -149,9 +149,7 @@ export default async function renderBlockList() {
 				const BlockListComponent = BlockListContainer({
 					name: user.username,
 					href: user.image_url,
-					number: user.xp_required && user.current_xp
-						? `Level${user.current_xp} "/" ${user.rank.xp_required}`
-						: "Level 0/0",
+					number: user.current_xp && user.current_xp
 				});
 				const friendWrapper = document.createElement("div");
 				friendWrapper.className = "friend-wrapper";

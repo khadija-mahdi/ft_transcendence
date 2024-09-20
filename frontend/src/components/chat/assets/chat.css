@@ -380,6 +380,12 @@
 	z-index: 50;
 }
 
+@media (max-width: 836px) {
+	.options-panel {
+		top: 200px;
+	}
+	
+}
 .options-panel.hidden {
 	display: none;
 }

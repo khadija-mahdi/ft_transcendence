@@ -1,11 +1,12 @@
 import { showPopup } from "/src/lib/Confirm.js";
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 import { fetchBlockList } from "/src/_api/user.js";
+import { ChatRoomsPanel } from "./chat.js";
 
 
 const blockList = await fetchBlockList();
 
-export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
+export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat, originRooms) {
 	const isAdmin = true;
 	const isBlocked = selectedChat && selectedChat.receiverUser && blockList.some((user) => user.username === selectedChat.receiverUser[0].username);
 	if (threeDots && optionsPanel) {
@@ -33,13 +34,13 @@ export function handleThreeDotPanel(threeDots, optionsPanel, selectedChat) {
                     </div>
                 `;
 
-				attachButtonListeners(selectedChat);
+				attachButtonListeners(selectedChat, originRooms);
 			}
 		});
 	}
 }
 
-function attachButtonListeners(selectedChat) {
+function attachButtonListeners(selectedChat, originRooms) {
 	const clearChatBtn = document.getElementById("clear-chat");
 	if (clearChatBtn) {
 		clearChatBtn.addEventListener("click", () => {
@@ -50,7 +51,7 @@ function attachButtonListeners(selectedChat) {
 	const closeChatBtn = document.getElementById("close-chat");
 	if (closeChatBtn) {
 		closeChatBtn.addEventListener("click", () => {
-			closeChat();
+			closeChat(originRooms);
 		});
 	}
 
@@ -109,10 +110,23 @@ function clearChat(id) {
 	});
 }
 
-function closeChat() {
-	const chatPanel = document.getElementById("chat-panel");
-	chatPanel.innerHTML = "";
-	chatPanel.innerHTML = `				
+function closeChat(originRooms) {
+	let previousSmallWindow = null;
+	let rooms = document.getElementById("rooms");
+	let chatPanel = document.getElementById("chat-panel");
+	function checkWindowSize() {
+		const isSmallWindow = window.innerWidth <= 836;
+
+		if (isSmallWindow !== previousSmallWindow) {
+			previousSmallWindow = isSmallWindow;
+			if (isSmallWindow) {
+				rooms.innerHTML = "";
+				rooms.innerHTML = originRooms;
+				rooms.style.padding = "1rem";
+				ChatRoomsPanel();
+			} else {
+				chatPanel.innerHTML = "";
+				chatPanel.innerHTML = `				
 				<div id="chat-header" class="chat-header">
 					<div class="messenger-title">Messenger</div>
 					<div class="messenger-subtitle">
@@ -122,6 +136,13 @@ function closeChat() {
 						Use Messenger Transcendent on your PC.
 					</div>
 				</div>`;
+			}
+		}
+	}
+	checkWindowSize();
+	window.addEventListener("resize", () => {
+		setTimeout(checkWindowSize, 100);
+	});
 }
 
 function deleteChat(selectedChat) {

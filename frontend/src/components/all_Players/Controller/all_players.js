@@ -25,7 +25,7 @@ export function AllPlayerContainer({ name, href, number }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `${number}`
+	levelDiv.textContent = `level  ${number} `;
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
 
@@ -113,7 +113,7 @@ export function PendingContainer({ name, href, number }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = `${number}`;
+	levelDiv.textContent = `level  ${number} `;;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -309,9 +309,8 @@ export default async function renderAllPlayers() {
 				const friendComponent = AllPlayerContainer({
 					name: friend.username,
 					href: friend.image && friend.image_url.startsWith(`https://${API_URL}/media/`) ? friend.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
-					number: friend.xp_required && friend.current_xp
-						? `Level${friend.current_xp} "/" ${friend.rank.xp_required}`
-						: "Level 0/0",
+					number: friend.current_xp && friend.current_xp
+
 				});
 
 				const friendWrapper = document.createElement("div");
@@ -336,9 +335,7 @@ export default async function renderAllPlayers() {
 				const friendComponent = PendingContainer({
 					name: user.username,
 					href: user.image && user.image_url.startsWith(`https://${API_URL}/media/`) ? user.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
-					number: user.xp_required && user.current_xp
-						? `Level${user.current_xp} "/" ${user.rank.xp_required}`
-						: "Level 0/0",
+					number: user.current_xp && user.current_xp
 				});
 
 				const friendWrapper = document.createElement("div");
