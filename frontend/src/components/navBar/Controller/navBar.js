@@ -267,15 +267,14 @@ function ProfilePanel(user) {
 	document.getElementById("panel-profile-image").src =
 		user.image_url || "/public/assets/images/defaultImageProfile.png";
 	document.getElementById("profile-username").textContent = user.username;
-	document.getElementById("profile-level").textContent =
-		user.xp_required && user.current_xp
-			? `Level${user.current_xp} "/" ${user.rank.xp_required}`
-			: "Level 0/0";
+	document.getElementById("profile-level").textContent = `Level ${user.current_xp}`
 	document.getElementById("panel-fullname").textContent = user.fullname
 		? user.fullname
 		: "";
 	document.getElementById("panel-username").textContent = "@" + user.username;
 	function checkWindowSize() {
+		user.xp_required && user.current_xp
+
 		if (window.innerWidth < 1200) {
 			iconsSmallWindow();
 		} else {

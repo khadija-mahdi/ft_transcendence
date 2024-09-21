@@ -61,7 +61,8 @@ export const fetchWithAuth = async (
 				},
 				body: JSON.stringify({ refresh: refresh }),
 			});
-			if (!refreshResponse.ok) return destroyCookies();
+			console.log("refreshResponse", refreshResponse);
+			if (!refreshResponse) return destroyCookies();
 
 			const refreshData = await refreshResponse.json();
 			SetCookies(refreshData);
@@ -74,9 +75,8 @@ export const fetchWithAuth = async (
 			contentType && contentType.includes("application/json")
 				? await response.json()
 				: await response.text();
-		if (!response.ok) throw new Error(data?.message || "An error occurred");
 		return data;
 	} catch (error) {
-		throw new Error(error.message);
+		console.error("Error fetching data:", error);
 	}
 };

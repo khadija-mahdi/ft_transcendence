@@ -27,7 +27,7 @@ export function FriendContainer({ name, href, number }) {
 
 	const levelDiv = document.createElement("div");
 	levelDiv.className = "friend-level";
-	levelDiv.textContent = ` ${number} `;
+	levelDiv.textContent = `level ${number} `;
 
 	textContainer.appendChild(nameDiv);
 	textContainer.appendChild(levelDiv);
@@ -131,9 +131,7 @@ export default async function renderFriends() {
 				const friendComponent = FriendContainer({
 					name: user.username,
 					href: user.image && user.image_url.startsWith(`https://${API_URL}/media/`) ? user.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
-					number: user.xp_required && user.current_xp
-						? `Level${user.current_xp} "/" ${user.rank.xp_required} `
-						: "Level 0/0",
+					number: user.current_xp && user.current_xp
 				});
 				const friendWrapper = document.createElement("div");
 				friendWrapper.className = "friend-wrapper";

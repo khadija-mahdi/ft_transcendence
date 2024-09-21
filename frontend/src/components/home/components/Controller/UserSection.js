@@ -89,12 +89,11 @@ export default async function () {
 		? user?.fullname
 		: "";
 	document.getElementById("rank-name").innerText = user.rank?.name || "";
-	document.getElementById("current-xp").innerText =
-		user.rank && `${user?.current_xp}/${user?.rank.xp_required}`;
+	document.getElementById("current-xp").innerText = `${user?.current_xp}`;
 	document.getElementById("rank-order").innerText =
 		user.rank && user.rank.hierarchy_order;
 	document.getElementById("coins").innerText = user.coins;
-	document.getElementById("messages-count").innerText = room[0] ? room[0].unseen_messages_count :  0;
+	document.getElementById("messages-count").innerText = room[0] ? room[0].unseen_messages_count : 0;
 
 	const inputData = await fetchLogData();
 	const chart = document.getElementById("chart-container");

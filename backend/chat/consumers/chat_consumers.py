@@ -36,7 +36,8 @@ class ChatConsumer(AsyncWebsocketConsumer, BaseNotification):
             self.channel_name)
 
     async def receive(self, text_data):
-        if not await self.is_member(self.user, self.room_id):
+        if not await self.is_member(self.user, self.room_id) or\
+                await self.is_there_block(self.room_id):
             await self.send(text_data=json.dumps({
                 'error': 'Forbidden access'
             }))

@@ -15,10 +15,17 @@ function getCookie(name) {
 
 export default class AuthWebSocket extends WebSocket {
 	constructor(url, protocols) {
-		url = `wss://${API_URL}` + url;
-		const token = getCookie('access');
-		const modifiedUrl = url.includes('?') ? `${url}&token=${token}` : `${url}?token=${token}`;
-		super(modifiedUrl, protocols);
+		try {
+			url = `wss://${API_URL}` + url;
+			const token = getCookie('access');
+			const modifiedUrl = url.includes('?') ? `${url}&token=${token}` : `${url}?token=${token}`;
+			super(modifiedUrl, protocols);
+			this.onerror = function(event) {
+				// Suppress the error message
+			};
+		} catch (error) {
+			console.log(error);
+		}
 	}
 }
 
