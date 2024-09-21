@@ -71,6 +71,10 @@ class TournamentsRegisteredPlayers(models.Model):
 
 
 class Matchup(models.Model):
+    game_type_choice = [
+        ('online', 'Online'),
+        ('offline', 'Offline')
+    ]
     first_player = models.ForeignKey(User, on_delete=models.CASCADE,
                                      related_name='first_player')
     second_player = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -85,6 +89,8 @@ class Matchup(models.Model):
     round_number = models.IntegerField(default=1)
     first_player_score = models.IntegerField(null=False, default=0)
     second_player_score = models.IntegerField(null=False, default=0)
+    game_type = models.CharField(
+        choices=game_type_choice, default='online')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
