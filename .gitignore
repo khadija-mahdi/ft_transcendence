@@ -1,4 +1,4 @@
 node_modules
 .venv
 .vscode
-backend/debug.log
+backend/*.log
