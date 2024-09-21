@@ -38,7 +38,7 @@ def FillOutRegisteredPlayers(tournament: Tournament, names=[]):
 
 def MockTest(tournament):
     FillOutRegisteredPlayers(tournament=tournament, names=[
-                             'ayoub', 'aitouna', 'khadija'])
+                             'ayoub', 'aitouna', 'khadija', 'mehdi'])
     notify_tournament_users(tournament.id)
 
 

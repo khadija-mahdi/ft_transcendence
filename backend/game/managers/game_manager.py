@@ -7,8 +7,9 @@ from user.models import User
 from game.models import Matchup, Tournament
 from game.utils.game_utils import Ball, Paddle, Config
 from typing import Dict
+import logging
 
-Debugging = False
+logger = logging.getLogger(__name__)
 
 
 class Game():
@@ -137,8 +138,11 @@ class Game():
         )
 
     async def NotifyTournamentConsumer(self, Winner):
+        logger.debug(f'''Notify Tournament {
+            self.tournament} called about the winner''')
         if self.tournament is None:
             return
+        logger.debug(f'the Winner is {Winner}')
         await self.channel_layer.group_send(
             f"tournament_{self.tournament.uuid}",
             {
@@ -195,22 +199,27 @@ class Game():
 
     def determine_winner_and_loser(self):
         SecondPlayer = self.second_player if self.second_player else 'ROBOT'
-        if Debugging:
+
+        if self.matchup.first_player_score >= Config.winScore and self.matchup.first_player_score - self.matchup.second_player_score >= Config.requiredScoreDiff:
             return [self.first_player, SecondPlayer]
-        if self.matchup.first_player_score >= 15 and self.matchup.first_player_score - self.matchup.second_player_score >= 2:
-            return [self.first_player, SecondPlayer]
-        elif self.matchup.second_player_score >= 15 and self.matchup.second_player_score - self.matchup.first_player_score >= 2:
+        elif self.matchup.second_player_score >= Config.winScore and self.matchup.second_player_score - self.matchup.first_player_score >= Config.requiredScoreDiff:
             return [SecondPlayer, self.first_player]
-        if self.matchup.first_player_score >= 20 and self.matchup.first_player_score > self.matchup.second_player_score:
+        if self.matchup.first_player_score >= Config.maxScore and self.matchup.first_player_score > self.matchup.second_player_score:
             return [self.first_player, SecondPlayer]
-        elif self.matchup.second_player_score >= 20 and self.matchup.second_player_score > self.matchup.first_player_score:
+        elif self.matchup.second_player_score >= Config.maxScore and self.matchup.second_player_score > self.matchup.first_player_score:
             return [SecondPlayer, self.first_player]
         return [None, None]
 
     async def cleanup(self):
         self.is_running = False
         await self.channel_layer.group_send(
-            f"game_{self.room_id}", {'type': 'close'})
+            f"game_{self.room_id}",
+            {
+                'type': 'broadcast',
+                'message': json.dumps({
+                    'action': 'close'
+                })
+            })
 
 
 class GameManager():

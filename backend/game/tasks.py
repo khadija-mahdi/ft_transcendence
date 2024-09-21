@@ -5,7 +5,7 @@ from django_apscheduler.jobstores import DjangoJobStore, register_events
 from apscheduler.triggers.date import DateTrigger
 from game.services import notify_tournament_users
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) 
 
 
 def start_scheduler(tournament_id, trigger_time):

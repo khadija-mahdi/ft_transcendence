@@ -1,5 +1,7 @@
 from . import views
 from django.urls import path
+import logging
+
 
 urlpatterns = [
     path('', view=views.UsersList.as_view(), name='users'),

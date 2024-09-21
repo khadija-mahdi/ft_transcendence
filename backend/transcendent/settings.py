@@ -268,7 +268,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {  # Define custom formats for log messages
         'verbose': {
-            'format': '{asctime} {levelname} {module} {message}',
+            'format': '{asctime} {levelname} {name} {message}',
             'style': '{',
         },
         'simple': {
@@ -289,9 +289,16 @@ LOGGING = {
             'formatter': 'verbose',  # Custom format for the file output
         },
     },
-    'root': {
-        'handlers': ['console', 'file'],  # Send logs to both console and file
-        'level': 'DEBUG',
-        'propagate': True,
+    'loggers': {
+        logger_name: {
+            'level': 'WARNING',
+            'propagate': True,
+        } for logger_name in
+        ('django', 'django.request', 'django.db.backends',
+         'django.template', 'core', 'urllib3', 'asyncio', 'daphne')
     },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['console', 'file'],
+    }
 }

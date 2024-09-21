@@ -136,6 +136,7 @@ class RegisterUserApi(generics.CreateAPIView):
 
 class AuthView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
+
     class AuthSerializer(serializers.Serializer):
         email = serializers.EmailField()
         password = serializers.CharField()
@@ -166,7 +167,7 @@ class AuthView(generics.CreateAPIView):
         validated_data = serializer.validated_data
         email = validated_data.get('email')
         password = validated_data.get('password')
-        print("email :", email, "passwor :", password)
+
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
