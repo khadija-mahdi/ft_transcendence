@@ -51,7 +51,10 @@ class InGame(AsyncWebsocketConsumer):
             print(f'Failed to convert data into JSON: {e}')
 
     async def broadcast(self, event):
-        await self.send(text_data=event['message'])
+        message = event['message']
+        if isinstance(message, dict):
+            message = json.dumps(message)
+        await self.send(text_data=message)
 
     async def close(self, event):
         """ Logic to handle websocket close """

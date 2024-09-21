@@ -11,7 +11,7 @@ class AchievementsManager:
     DecrementingXpSteps = 60
 
     def __init__(self):
-        pass
+        self.rank_achievement = None
 
     def relevantGames(self, user: User, achievement_type: str) -> QuerySet:
         match_up = Matchup.objects.filter(
@@ -120,9 +120,9 @@ class AchievementsManager:
         if user.current_xp >= current_xp_required and next_rank is not None:
             user.current_xp -= current_xp_required
             user.rank = next_rank
-            rank_achievement = RankAchievement(user=user, rank=next_rank)
-        if rank_achievement:
-            await database_sync_to_async(rank_achievement.save)()
+            self.rank_achievement = RankAchievement(user=user, rank=next_rank)
+        if self.rank_achievement:
+            await database_sync_to_async(self.rank_achievement.save)()
         await database_sync_to_async(user.save)()
 
         await self.handleWinStreak(user)
@@ -142,7 +142,7 @@ class AchievementsManager:
         if user.current_xp < 0:
             user.rank = prevRank
             user.current_xp = await database_sync_to_async(lambda: UserRank.xp_required)() + user.current_xp
-            rank_achievement = RankAchievement(user=user, rank=prevRank)
-        if rank_achievement:
-            await database_sync_to_async(rank_achievement.save)()
+            self.rank_achievement = RankAchievement(user=user, rank=prevRank)
+        if self.rank_achievement:
+            await database_sync_to_async(self.rank_achievement.save)()
         await database_sync_to_async(user.save)()

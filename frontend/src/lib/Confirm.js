@@ -1,125 +1,126 @@
 export function showPopup({
-	title,
-	subtitle,
-	inputBody = null,
-	onConfirm = () => { },
-	onCancel = null,
-	closeable = true
+  title,
+  subtitle,
+  inputBody = null,
+  onConfirm = () => {},
+  onCancel = null,
+  closeable = true,
 }) {
+  const popupContainer = document.getElementById("popup-container");
+  const popupTitle = document.getElementById("popup-title");
+  const popupSubtitle = document.getElementById("popup-subtitle");
+  const popupCancel = document.getElementById("popup-cancel");
+  const popupClose = document.getElementById("popup-close");
+  const inputForm = document.getElementById("input-form");
+  const inputFormBody = document.getElementById("input-form-body");
 
-	const popupContainer = document.getElementById("popup-container");
-	const popupTitle = document.getElementById("popup-title");
-	const popupSubtitle = document.getElementById("popup-subtitle");
-	const popupCancel = document.getElementById("popup-cancel");
-	const popupClose = document.getElementById("popup-close");
-	const inputForm = document.getElementById("input-form");
-	const inputFormBody = document.getElementById("input-form-body");
+  if (inputBody) {
+    inputFormBody.innerHTML = inputBody;
+  }
 
-	if (inputBody) {
-		inputFormBody.innerHTML = inputBody;
-	}
+  popupTitle.textContent = title;
+  popupSubtitle.textContent = subtitle;
 
-	popupTitle.textContent = title;
-	popupSubtitle.textContent = subtitle;
+  if (!closeable) popupClose.remove();
+  if (!onCancel) popupCancel?.remove();
+  else
+    popupCancel.onclick = () => {
+      if (onCancel) onCancel();
+      hidePopup();
+    };
 
-	if (!closeable)
-		popupClose.remove()
-	if (!onCancel)
-		popupCancel?.remove()
-	else
-		popupCancel.onclick = () => {
-			if (onCancel) onCancel();
-			hidePopup();
-		};
+  popupClose.onclick = () => {
+    if (onCancel) onCancel();
+    hidePopup();
+  };
 
-	popupClose.onclick = () => {
-		if (onCancel) onCancel();
-		hidePopup();
-	};
+  const onSubmit = (event) => {
+    event.preventDefault();
+    const data = {};
+    for (let element of event.target.elements) {
+      if (element.name) data[element.name] = element.value;
+    }
+    onConfirm(data);
+    hidePopup();
+  };
 
+  inputForm.addEventListener("submit", onSubmit);
+  popupContainer.classList.remove("hidden");
 
-
-	const onSubmit = (event) => {
-		event.preventDefault();
-		const data = {};
-		for (let element of event.target.elements) {
-			if (element.name) data[element.name] = element.value;
-		}
-		onConfirm(data);
-		hidePopup();
-	}
-
-	inputForm.addEventListener("submit", onSubmit);
-	popupContainer.classList.remove("hidden");
-
-	function hidePopup() {
-		popupContainer.classList.add("hidden");
-		inputForm.removeEventListener('submit', onSubmit)
-	}
+  function hidePopup() {
+    popupContainer.classList.add("hidden");
+    inputForm.removeEventListener("submit", onSubmit);
+  }
 }
 
-
-
 export function showMainPopup({
-	title,
-	subtitle,
-	icon,
-	inputBody = null,
-	type,
-	sender,
-	action = null,
-	onCancel = () => { },
-	duration = 10000
+  title,
+  subtitle,
+  icon,
+  inputBody = null,
+  type,
+  sender,
+  action = null,
+  onCancel = () => {},
+  duration = 10000,
 }) {
-	action = SerializeInviteAction(action)
-	const popupContainer = document.getElementById("main-popup-container");
-	const popupTitle = document.getElementById("main-popup-title");
-	const popupSubtitle = document.getElementById("main-popup-subtitle");
-	const popupClose = document.getElementById("main-popup-close");
-	const popupIcon = document.getElementById("main-popup-icon");
-	const progress = document.querySelector(".progress_popup");
-	const link = document.getElementById("not-Type");
-	if (type === "friend-https://localhost:4433request")
-		link.href = `/profile?username=${sender.username}`;
-	else if (type === "messenger")
-		link.href = `/messenger?chatroom=${sender.id}`;
-	else if (type === "game-invite" && action)
-		link.href = `/game/match_making?player=${action.player}&invite-uuid=${action.invite_id}`;
-	popupTitle.textContent = title;
-	popupSubtitle.innerHTML = subtitle;
-	popupIcon.src = icon || "/public/assets/images/PopUp.jpg";
+  action = SerializeInviteAction(action);
+  const popupContainer = document.getElementById("main-popup-container");
+  const popupTitle = document.getElementById("main-popup-title");
+  const popupSubtitle = document.getElementById("main-popup-subtitle");
+  const popupClose = document.getElementById("main-popup-close");
+  const popupIcon = document.getElementById("main-popup-icon");
+  const progress = document.querySelector(".progress_popup");
+  const link = document.getElementById("not-Type");
+  switch (type) {
+    case "friend-request":
+      link.href = `/profile?username=${sender.username}`;
+      break;
+    case "messenger":
+      link.href = `/messenger?chatroom=${sender.id}`;
+      break;
 
-	if (inputBody) {
-		const inputFormBody = document.getElementById("input-form-body");
-		if (inputFormBody) {
-			inputFormBody.innerHTML = inputBody;
-		}
-	}
+    case "game-invite":
+      link.href = `/game/match_making?player=${action?.player}&invite-uuid=${action?.invite_id}`;
+      break;
 
-	popupClose.onclick = () => {
-		onCancel();
-		hideMainPopup();
-	};
+    case "new-game":
+      link.href = `/game?uuid=${action?.match_uuid}`;
+      break;
+  }
+  popupTitle.textContent = title;
+  popupSubtitle.innerHTML = subtitle;
+  popupIcon.src = icon || "/public/assets/images/PopUp.jpg";
 
-	progress.style.animation = `fill ${duration / 1000}s linear forwards`;
+  if (inputBody) {
+    const inputFormBody = document.getElementById("input-form-body");
+    if (inputFormBody) {
+      inputFormBody.innerHTML = inputBody;
+    }
+  }
 
-	popupContainer.classList.remove("hidden");
+  popupClose.onclick = () => {
+    onCancel();
+    hideMainPopup();
+  };
 
-	setTimeout(() => {
-		hideMainPopup();
-	}, duration);
+  progress.style.animation = `fill ${duration / 1000}s linear forwards`;
+
+  popupContainer.classList.remove("hidden");
+
+  setTimeout(() => {
+    hideMainPopup();
+  }, duration);
 }
 
 function hideMainPopup() {
-	const popupContainer = document.getElementById("main-popup-container");
-	popupContainer.classList.add("hidden");
+  const popupContainer = document.getElementById("main-popup-container");
+  popupContainer.classList.add("hidden");
 }
 
-
 export function SerializeInviteAction(action) {
-	try {
-		return JSON.parse(action)
-	}
-	catch (error) { }
-	return null
+  try {
+    return JSON.parse(action);
+  } catch (error) {}
+  return null;
 }

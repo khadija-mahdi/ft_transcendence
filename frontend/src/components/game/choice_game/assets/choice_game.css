@@ -1,119 +1,122 @@
 .main-container {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	width: 100%;
-	height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 1rem;
 }
 
 .section-container {
-	display: flex;
-	gap: 20px;
+  display: flex;
+  gap: 20px;
+  height: 100%;
 }
 
 .select-game-section {
-
-	flex: 1;
-	/* Take more space */
-	height: 450px;
-	background-color: #333;
-	border-radius: 10px;
-	overflow: hidden;
-	position: relative;
+  flex: 1;
+  height: 450px;
+  background-color: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
 }
 
 .select-game-image {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .game-overlay {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .game-title {
-	font-size: 48px;
-	font-weight: bold;
-	margin-bottom: 10px;
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .game-subtitle {
-	font-size: 16px;
-	margin-bottom: 20px;
-	color: #e1e1e1;
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #e1e1e1;
 }
 
 /* Keep the same button layout and only change the color */
 .button-group {
-	display: flex;
-	gap: 30px;
-	justify-content: center; /* Center the buttons */
-	margin-bottom: 20px;
-  }
-  
-  .radio-option {
-	background-color: #262626;
-	color: white;
-	padding: 10px 20px;
-	border-radius: 8px;
-	cursor: pointer;
-	font-size: 16px;
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	/* transition: background-color 0.3s ease; Smooth transition for background color */
-	width: 120px; /* Ensures all buttons have equal width */
-	text-align: center; /* Centers text inside */
-  }
-  
-  .radio-option input[type="radio"] {
-	display: none;
-  }
-  
-  .radio-option.selected {
-	background-color: #FE284F; /* Full button background color when selected */
-  }
-  
-  .radio-option span {
-	display: inline-block;
-	width: 100%;
-  }
-  
-
-  
-  #play-now-button {
-	display: inline-block;
-	background-color: #ff5500;
-	padding: 12px 50px;
-	font-size: 20px;
-	color: white;
-	text-decoration: none;
-	border-radius: 8px;
-	transition: background-color 0.3s ease;
-  }
-  
-  #play-now-button:hover {
-	background-color: #ff4422; /* Lighter color on hover */
-  }
-  
-
-.online-players-cg {
-	min-width: 381px;
-	border-radius: 8px;
-	overflow: hidden;
+  display: flex;
+  gap: 30px;
+  justify-content: center; /* Center the buttons */
+  margin-bottom: 20px;
 }
 
-@media screen and (max-width: 1024px) {
-	.section-container {
-		flex-direction: column;
-	}
+.radio-option {
+  background-color: #262626;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* transition: background-color 0.3s ease; Smooth transition for background color */
+  width: 120px; /* Ensures all buttons have equal width */
+  text-align: center; /* Centers text inside */
+}
 
-	.online-players-cg {
-		min-height: 400px;
-	}
+.radio-option input[type="radio"] {
+  display: none;
+}
+
+.radio-option.selected {
+  background-color: #fe284f; /* Full button background color when selected */
+}
+
+.radio-option span {
+  display: inline-block;
+  width: 100%;
+}
+
+#play-now-button {
+  display: inline-block;
+  background-color: #ff5500;
+  padding: 12px 50px;
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+#play-now-button:hover {
+  background-color: #ff4422; /* Lighter color on hover */
+}
+
+.online-players-cg {
+  min-width: 381px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.live-tournaments {
+  height: 28rem;
+}
+@media screen and (max-width: 1024px) {
+  .section-container {
+    flex-direction: column;
+  }
+
+  .online-players-cg {
+    min-height: 400px;
+  }
+
+  .select-game-section {
+    flex: unset;
+  }
 }

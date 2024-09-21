@@ -9,6 +9,9 @@ class Config():
     paddleWidth = 3
     paddleHeight = 0.5
     paddleDepth = 15
+    winScore = 4
+    maxScore = 7
+    requiredScoreDiff = 2
 
 
 class Ball():

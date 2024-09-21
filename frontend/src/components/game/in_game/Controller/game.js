@@ -354,7 +354,7 @@ export default async function () {
       } else if (data.type === "goal") {
         UpdateScore(data.first_player_score, data.second_player_score);
         ShowModal({
-          view: CountDownModal(3),
+          view: CountDownModal(2),
           onConfirm: () => {},
         });
       } else if (data.type === "game_over") {

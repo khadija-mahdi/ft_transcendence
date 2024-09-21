@@ -24,6 +24,10 @@ import json
 from api.serializers import NotificationSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from game.models import Matchup
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class BaseNotification():
@@ -236,9 +240,7 @@ class OnlineFriendsList(generics.ListAPIView, UserMixine):
 
     def get_queryset(self):
         serializer = self.QuerySerializer(data=self.request.query_params)
-
         query = self.getFriendsQ(self.request.user).filter(status='online')
-
         if serializer.is_valid():
             filterbyName = serializer.validated_data.get('filterbyName')
             filterByLevel = serializer.validated_data.get('filterByLevel')
@@ -291,7 +293,8 @@ class InvitePlayer(APIView, BaseNotification):
         self._create_notification(
             recipient=user,
             title='Game invitation',
-            description=f'{self.request.user.username} invited you to a game room',
+            description=f'''{self.request.user.username
+                             } invited you to a game room''',
             type='game-invite',
             action=json.dumps(
                 {

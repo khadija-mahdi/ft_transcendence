@@ -5,6 +5,9 @@ import uuid
 from channels.db import database_sync_to_async
 from game.models import Matchup
 from game.managers.match_maker import InvitesManager
+import logging
+
+logger = logging.getLogger(__name__) 
 
 
 class GameInvite(AsyncWebsocketConsumer):
@@ -21,10 +24,10 @@ class GameInvite(AsyncWebsocketConsumer):
 
     async def matchmaking(self):
         match_user = await self.InvitesManager.get_match_users(self.invite_id)
-        print('matched user', match_user)
         if match_user is None:
-            print('here!!', self.invite_id, self.user)
             return await self.InvitesManager.addPlayer(self.invite_id, self.user)
+        logger.info(f'''The invited User has accepted {
+            self.user} Playing against {match_user}''')
         game_started_obj = await self.create_game(match_user)
         await self.emit(self.user.id, game_started_obj)
         await self.emit(match_user.id, game_started_obj)
@@ -63,7 +66,7 @@ class GameInvite(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         try:
-            await self.InvitesManager.remove_user(self.user)
+            await self.InvitesManager.remove_user(self.invite_id, self.user)
         except ValueError as e:
             print(e)
         await self.channel_layer.group_discard(
