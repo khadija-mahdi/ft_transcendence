@@ -30,6 +30,7 @@ html {
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
+	min-height: 700px;
 }
 
 .main-cards-container {
@@ -39,6 +40,22 @@ html {
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
+}
+
+@media (max-width: 768px) {
+	#my-card {
+		display: none;
+	}
+
+	.vs {
+		display: none;
+	}
+}
+
+@media (max-height: 780px) {
+	#second-player {
+		height: 500px;
+	}
 }
 
 .player-card {
@@ -123,7 +140,6 @@ html {
 	text-align: center;
 }
 
-.play_now_button svg {}
 
 .scroll-parent {
 	position: relative;

@@ -66,7 +66,7 @@ function handleNormalLobby(game_mode) {
   ) {
     showPopup({
       title: "there is no type",
-      subtitle: "please choose humane or robot to play with ",
+      subtitle: "please choose local,  humane or robot to play with ",
       onConfirm: async () => {
         window.location.href = "/home";
       },
