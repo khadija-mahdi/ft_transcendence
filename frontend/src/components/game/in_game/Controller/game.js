@@ -105,22 +105,22 @@ async function loadTable(scene) {
   // Load textures
   const diffuseTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_diff_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load diffuse texture", err)
   );
   const roughnessTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_rough_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load roughness texture", err)
   );
   const normalTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_nor_gl_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load normal texture", err)
   );
   const displacementTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_disp_1k.png",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load displacement texture", err)
   );
 
@@ -355,7 +355,7 @@ export default async function () {
         UpdateScore(data.first_player_score, data.second_player_score);
         ShowModal({
           view: CountDownModal(2),
-          onConfirm: () => {},
+          onConfirm: () => { },
         });
       } else if (data.type === "game_over") {
         let view = null;
@@ -421,6 +421,7 @@ export default async function () {
       left: config.selectedPerspective !== "FPerspective" ? "left" : "right",
       right: config.selectedPerspective !== "FPerspective" ? "right" : "left",
     };
+
     function StartMovementLoop() {
       if (intervalId) return;
       intervalId = setInterval(() => {
@@ -439,6 +440,26 @@ export default async function () {
       }
     }
 
+    function StartSecondMovementLoop() {
+      if (intervalId) return;
+      intervalId = setInterval(() => {
+        if (keysPressed["a"])
+          handleMovement(GameSocket, directions.left);
+        else if (keysPressed["d"])
+          handleMovement(GameSocket, directions.right);
+      }, 50);
+    }
+
+    function StopSecondMovementLoop() {
+      if (!intervalId) return;
+      if (!keysPressed["a"] && !keysPressed["d"]) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+
+
+    // first player event listerners
     document.addEventListener("keydown", (e) => {
       if (keysPressed[e.key]) return;
       keysPressed[e.key] = true;
@@ -449,6 +470,22 @@ export default async function () {
       delete keysPressed[e.key];
       if (e.key === "ArrowLeft" || e.key === "ArrowRight") StopMovementLoop();
     });
+
+
+    // second local player event listeners
+    document.addEventListener("keydown", (e) => {
+      const key = e.key.toLowerCase()
+      if (keysPressed[key]) return;
+      keysPressed[key] = true;
+      if (key === "a" || key === "d") StartSecondMovementLoop();
+    });
+
+    document.addEventListener("keyup", (e) => {
+      const key = e.key.toLowerCase()
+      delete keysPressed[key];
+      if (key === "a" || key === "d") StopSecondMovementLoop();
+    });
+
 
     window.addEventListener("resize", () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
