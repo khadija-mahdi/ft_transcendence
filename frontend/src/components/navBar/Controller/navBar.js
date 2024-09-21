@@ -180,16 +180,8 @@ export function renderNotifications(notifications) {
 }
 
 function renderNavBrContent() {
-  console.log("renderNavBarContent here !!");
   const navItems = document.querySelectorAll(".nav-item.nav a");
-  console.log("navbar :", navItems);
   navItems.forEach((navItem) => {
-    console.log(
-      "PATH : ",
-      window.location.pathname,
-      "HREF :",
-      navItem.getAttribute("href")
-    );
     if (window.location.pathname.startsWith(navItem.getAttribute("href"))) {
       const svg = navItem.querySelector("svg path");
       const paragraph = navItem.querySelector("p");
@@ -275,7 +267,7 @@ function ProfilePanel(user) {
   document.getElementById("profile-username").textContent = user.username;
   document.getElementById(
     "profile-level"
-  ).textContent = `Level ${user.current_xp}`;
+  ).textContent = `Lvl ${user.current_xp}`;
   document.getElementById("panel-fullname").textContent = user.fullname
     ? user.fullname
     : "";
