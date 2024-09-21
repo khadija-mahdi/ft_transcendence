@@ -26603,3 +26603,15 @@ TypeError: remove_user() missing 1 required positional argument: 'user'
 2024-09-20 17:13:52,498 DEBUG http_protocol HTTP close for ['172.18.0.7', 39384]
 2024-09-20 17:13:52,498 DEBUG http_protocol HTTP response complete for ['172.18.0.7', 39384]
 2024-09-20 17:13:52,499 INFO runserver HTTP GET /api/v1/users/rank-logs/ 200 [0.03, 172.18.0.7:39384]
+2024-09-20 17:15:41,870 DEBUG ws_protocol WebSocket closed for ['172.18.0.7', 39218]
+2024-09-20 17:15:41,873 INFO runserver WebSocket DISCONNECT /ws/user/connect/ [172.18.0.7:39218]
+2024-09-20 17:15:43,685 DEBUG ws_protocol WebSocket closed for ['172.18.0.7', 52428]
+2024-09-20 17:15:43,685 INFO runserver WebSocket DISCONNECT /ws/user/connect/ [172.18.0.7:52428]
+2024-09-21 08:26:22,615 DEBUG selector_events Using selector: EpollSelector
+2024-09-21 08:26:24,983 DEBUG selector_events Using selector: EpollSelector
+2024-09-21 08:26:27,021 DEBUG selector_events Using selector: EpollSelector
+2024-09-21 08:26:28,248 DEBUG selector_events Using selector: EpollSelector
+2024-09-21 08:26:28,754 INFO autoreload Watching for file changes with StatReloader
+2024-09-21 08:26:29,715 INFO server HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+2024-09-21 08:26:29,717 INFO server Configuring endpoint tcp:port=8000:interface=0.0.0.0
+2024-09-21 08:26:29,719 INFO server Listening on TCP address 0.0.0.0:8000
