@@ -122,13 +122,22 @@ export function renderNotifications(notifications) {
       ) {
         notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
       }
-      if (notification.type === "friend-request")
-        href = `/profile?username=${notification.sender.username}`;
-      else if (notification.type === "messenger")
-        href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-      else if (notification.type === "game-invite" && notification.action)
-        href = `/game/match_making?player=${notification.action.player}&invite-uuid=${notification.action.invite_id}`;
+      switch (notification.type) {
+        case "friend-request":
+          href = `/profile?username=${sender.username}`;
+          break;
+        case "messenger":
+          href = `/messenger?chatroom=${sender.id}`;
+          break;
 
+        case "game-invite":
+          href = `/game/match_making?player=${notification.action?.player}&invite-uuid=${notification.action?.invite_id}`;
+          break;
+
+        case "new-game":
+          href = `/game?uuid=${notification.action?.match_uuid}`;
+          break;
+      }
       const notificationItem = document.createElement("li");
       notificationItem.className = "notification-item";
 
