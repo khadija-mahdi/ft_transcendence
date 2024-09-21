@@ -2,6 +2,9 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from game.managers.tournament_manager import TournamentRoutine, TournamentManager
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class TournamentConsumer(AsyncWebsocketConsumer):
@@ -29,6 +32,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         if self.tournament_routine is None:
             return
         lastPlayer = await self.tournament_routine.remove_player(self.user)
+        logger.debug(f'lastPlayer {lastPlayer}')
         if lastPlayer:
             await self.tournament_manager.remove_tournament(self.tournament_id)
         await self.channel_layer.group_discard(

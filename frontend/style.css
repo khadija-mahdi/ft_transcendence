@@ -675,7 +675,7 @@ input[type="number"] {
 	justify-content: center;
 	align-items: start;
 	padding-top: 3rem;
-	z-index: 99;
+	z-index: 9999;
 }
 
 #main-popup-title {
@@ -686,6 +686,7 @@ input[type="number"] {
 	letter-spacing: -0.04em;
 	text-align: left;
 	padding-bottom: 4px;
+	z-index: 9999;
 }
 
 #main-popup-subtitle {

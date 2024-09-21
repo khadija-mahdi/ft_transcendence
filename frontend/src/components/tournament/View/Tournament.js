@@ -173,16 +173,16 @@ export function StatusTableRow(match = {}) {
           <p class="vs-text">VS</p>
           <div class="player-info">
             <div class="player-name">
-              ${match.first_player.username || "USER"}
+              ${match.second_player.username || "USER"}
             </div>
             <div class="player-level">
-              Level <span>${match.first_player.current_xp || "0"}</span>
+              Level <span>${match.second_player.current_xp || "0"}</span>
             </div>
           </div>
         </div>
       </td>
       <td>
-        ${match.first_player_score || 0} VS ${match.first_player_score || 0}
+        ${match.first_player_score || 0} VS ${match.second_player_score || 0}
       </td>
       <td>${new Date(match?.created_at).toLocaleString()}</td>
       <td>${new Date(match?.updated_at).toLocaleString()}</td>

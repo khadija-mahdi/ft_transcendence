@@ -1,0 +1,8 @@
+2024-09-21 13:10:27,064 DEBUG game.managers.tournament_manager Removed player khadijafrom tournament 6c14ee7f-9118-42d2-8b04-7824356eab60
+2024-09-21 13:10:27,064 DEBUG game.consumers.tournament lastPlayer False
+2024-09-21 13:10:27,064 DEBUG game.managers.tournament_manager Removed player mehdifrom tournament 6c14ee7f-9118-42d2-8b04-7824356eab60
+2024-09-21 13:10:27,066 DEBUG game.consumers.tournament lastPlayer False
+2024-09-21 13:10:27,067 DEBUG game.managers.tournament_manager Removed player ayoubfrom tournament 6c14ee7f-9118-42d2-8b04-7824356eab60
+2024-09-21 13:10:27,067 DEBUG game.consumers.tournament lastPlayer False
+2024-09-21 13:10:27,068 DEBUG game.managers.tournament_manager Removed player aitounafrom tournament 6c14ee7f-9118-42d2-8b04-7824356eab60
+2024-09-21 13:10:27,068 DEBUG game.consumers.tournament lastPlayer True

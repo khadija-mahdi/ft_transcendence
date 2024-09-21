@@ -32,6 +32,7 @@ class TournamentRoutine():
         self.lock: asyncio.Lock = None
         self.tournament: Tournament = None
         self.current_round: int = 1
+        self.games_in_progress: bool = False
 
     @classmethod
     async def create(cls, uuid):
@@ -41,13 +42,14 @@ class TournamentRoutine():
         try:
             instance.tournament = await database_sync_to_async(Tournament.objects.get)(uuid=uuid, finished=False)
         except Tournament.DoesNotExist:
-            logger.error(f'Tournament with this id {uuid}\
-                         and still is not finished does not exists')
+            logger.error(f'''Tournament With This Id {uuid}'''
+                         '''Either Its Not Finished Or It Does Not Exists''')
             return None
         except Exception as error:
-            logger.error(f'error occurred while getting tournament \
-                         {uuid}: {error}')
+            logger.error('''Error Occurred While Getting Tournament'''
+                         f'''{uuid}: {error}''')
             return
+        logger.debug(f'Launching Tournament-{uuid} Manager')
         asyncio.create_task(instance.tournament_loop())
         return instance
 
@@ -56,8 +58,8 @@ class TournamentRoutine():
         async with self.lock:
             if player not in self.waiting_players:
                 self.waiting_players.append(player)
-                logger.debug(f'Added player {player.username}\
-                       to tournament {self.uuid}')
+                logger.debug(f'''Added player {player.username}'''
+                             f'''to tournament {self.uuid}''')
             else:
                 logger.warning(
                     f'Player {player.username} already in waiting list.')
@@ -67,8 +69,8 @@ class TournamentRoutine():
         async with self.lock:
             if player in self.waiting_players:
                 self.waiting_players.remove(player)
-                logger.debug(f'Removed player {player.username}\
-                      from tournament {self.uuid}')
+                logger.debug(f'''Removed player {player.username}'''
+                             f'''from tournament {self.uuid}''')
             return len(self.waiting_players) == 0
 
     async def emit(self, dict_data) -> None:
@@ -117,7 +119,8 @@ class TournamentRoutine():
                      f'''for {self.uuid} players {players}''')
         random.shuffle(players)
         await database_sync_to_async(Brackets.objects.filter(
-            tournament=self.tournament).delete)()
+            tournament=self.tournament, round_number=self.current_round
+        ).delete)()
 
         while len(players) >= 2:
             matchup = Matchup(
@@ -136,6 +139,7 @@ class TournamentRoutine():
         logger.debug(f'Remaining Player are {players}')
         if len(players) == 1:
             await self._auto_win_last_player(players[0])
+        self.games_in_progress = True
 
     @database_sync_to_async
     def _create_brackets(self, first_player, second_player) -> None:
@@ -162,7 +166,7 @@ class TournamentRoutine():
         while True:
             self.time_in_s += 1
             logger.debug(
-                f'{self.time_in_s}s has passed sense the start of the tournament')
+                f'{self.time_in_s}s has passed sense the start of the tournament {self.uuid}')
 
             if self.time_in_s < WAIT_PERIOD_SECONDS:
                 await asyncio.sleep(1)
@@ -181,7 +185,6 @@ class TournamentRoutine():
     async def check_round_completion(self):
         """Check if the current round has been completed."""
         """It's triggered at every matchup finishes."""
-
         current_round_matches = await database_sync_to_async(Matchup.objects.filter(
             tournament=self.tournament,
             Winner__isnull=False,
@@ -193,15 +196,21 @@ class TournamentRoutine():
             tournament=self.tournament,
             round_number=self.current_round
         ).count)()
-        logger.info(f'''A Round Completed Stats:'''
-                    f'''Current Round Matches : {current_round_matches}'''
-                    f'''tOtal Round Matches : {total_round_matches}''')
+        logger.info(f'''A Round Completed Stats : \n'''
+                    f''' - current_round {self.current_round} \n'''
+                    f''' - Current Round Matches: {current_round_matches} \n'''
+                    f''' - tOtal Round Matches: {total_round_matches} \n''')
 
-        if current_round_matches == total_round_matches:
+        if current_round_matches == total_round_matches and total_round_matches != 0:
             await self.prepare_next_round()
 
     async def prepare_next_round(self) -> None:
         """Prepare for the next round or declare the tournament winner."""
+
+        if not self.games_in_progress:
+            return
+        self.games_in_progress = False
+
         winners = await database_sync_to_async(
             lambda: list(Matchup.objects.filter(
                 tournament=self.tournament,
@@ -211,21 +220,27 @@ class TournamentRoutine():
             ).values_list('Winner', flat=True))
         )()
 
-        logger.info(f"""PreParing Next Round"""
-                    f"""current_round {self.current_round + 1}"""
-                    f"""this round Winners {winners}""")
+        logger.info(f"""Preparing Next Round \n"""
+                    f"""- current_round {self.current_round + 1} \n"""
+                    f"""- this round Winners {winners}  \n""")
         self.current_round += 1
+        logger.debug(
+            f'length of the Winners list {len(winners)} before first if')
         if len(winners) == 0:
-            if self.tournament.finished is False:
+            if not self.tournament.finished:
                 self.tournament.finished = True
                 await database_sync_to_async(self.tournament.save)()
                 return await self.emit({'type': 'tournament_end', 'message': 'No Winner Found'})
             return
+        logger.debug(
+            f'length of the Winners list {len(winners)} before second if')
         if len(winners) > 1:
-            winners = await database_sync_to_async(
+            winners_list: List[User] = await database_sync_to_async(
                 lambda: list(User.objects.filter(id__in=winners))
             )()
-            return self.create_matches(winners)
+            self.games_in_progress = True
+            logger.debug(f'got the winners from db {winners_list}')
+            return await self.create_matches(winners_list.copy())
         return self._declare_tournament_winner(winners[0])
 
     async def _declare_tournament_winner(self, winner_id: int) -> None:
@@ -275,10 +290,13 @@ class TournamentManager():
                 self.tournaments[uuid] = tournament
             return self.tournaments[uuid]
 
+    async def isTournamentFinished(self, uuid):
+        tournament: Tournament = await database_sync_to_async(Tournament.objects.get)(uuid=uuid)
+        return tournament and tournament.finished
+
     async def remove_tournament(self, uuid) -> None:
         """Removes a tournament from the manager."""
-
         self.lock = await self.get_lock()
         async with self.lock:
-            if uuid in self.tournaments:
+            if uuid in self.tournaments and self.isTournamentFinished(uuid):
                 del self.tournaments[uuid]
