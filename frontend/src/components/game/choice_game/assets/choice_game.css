@@ -11,6 +11,7 @@
   display: flex;
   gap: 20px;
   height: 100%;
+  min-width: 381px;
 }
 
 .select-game-section {
@@ -37,15 +38,17 @@
 }
 
 .game-title {
-  font-size: 48px;
+  font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 10px;
+  padding: 0 1rem;
 }
 
 .game-subtitle {
-  font-size: 16px;
+  font-size: 1rem;
   margin-bottom: 20px;
   color: #e1e1e1;
+  padding: 0 1rem;
 }
 
 /* Keep the same button layout and only change the color */

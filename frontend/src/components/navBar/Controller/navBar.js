@@ -8,144 +8,144 @@ let allNotifications = [];
 let Not_length = 0;
 
 export async function fetchNotifications(isScroll = false) {
-	if (!isScroll) apiUrl = `/api/v1/notifications/`;
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		allNotifications.push(...response.results);
-		Not_length = response.count;
-		apiUrl = response.next;
-		renderNotifications(allNotifications);
-	} catch (error) {
-		console.error("Error fetching notifications:", error);
-		return [];
-	}
+  if (!isScroll) apiUrl = `/api/v1/notifications/`;
+  try {
+    const response = await fetchWithAuth(apiUrl, {
+      method: "GET",
+    });
+    allNotifications.push(...response.results);
+    Not_length = response.count;
+    apiUrl = response.next;
+    renderNotifications(allNotifications);
+  } catch (error) {
+    return [];
+  }
 }
 
 async function loadNavbar() {
-	const path = window.location.pathname;
+  const path = window.location.pathname;
+  if (
+    path === "/game/choice-game" ||
+    (!path.startsWith("/game") && !path.startsWith("/auth/"))
+  ) {
+    try {
+      const response = await fetch("/src/components/navBar/View/navBar.html");
+      if (!response.ok) throw new Error("Network response was not ok");
 
-	if (
-		path === "/game/choice-game" ||
-		(!path.startsWith("/game") && !path.startsWith("/auth/"))
-	) {
-		try {
-			const response = await fetch("/src/components/navBar/View/navBar.html");
-			if (!response.ok) throw new Error("Network response was not ok");
+      const navbarHTML = await response.text();
 
-			const navbarHTML = await response.text();
+      document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 
-			document.body.insertAdjacentHTML("afterbegin", navbarHTML);
+      fetchMyData();
 
-			fetchMyData();
+      let playBtn = document.getElementById("playButton");
+      if (playBtn) {
+        if (path === "/game/choice-game") {
+          playBtn.remove();
+        }
+      }
+      renderNavBrContent();
 
-			let playBtn = document.getElementById("playButton");
-			if (playBtn) {
-				if (path === "/game/choice-game") {
-					playBtn.remove();
-				}
-			}
+      await fetchNotifications();
+      document.getElementById("notif").addEventListener("click", function () {
+        const panel = document.getElementById("notification-panel");
+        panel.classList.toggle("hidden");
+      });
 
-			await fetchNotifications();
-			document.getElementById("notif").addEventListener("click", function () {
-				const panel = document.getElementById("notification-panel");
-				panel.classList.toggle("hidden");
-			});
+      document.addEventListener("click", function (event) {
+        const panel = document.getElementById("notification-panel");
+        const notifButton = document.getElementById("notif");
+        if (
+          !panel.contains(event.target) &&
+          !notifButton.contains(event.target)
+        ) {
+          panel.classList.add("hidden");
+        }
+      });
 
-			document.addEventListener("click", function (event) {
-				const panel = document.getElementById("notification-panel");
-				const notifButton = document.getElementById("notif");
-				if (
-					!panel.contains(event.target) &&
-					!notifButton.contains(event.target)
-				) {
-					panel.classList.add("hidden");
-				}
-			});
-
-			handleScroll();
-		} catch (error) {
-			console.error("Error loading navbar:", error);
-		}
-	}
+      handleScroll();
+    } catch (error) {
+      console.error("Error loading navbar:", error);
+    }
+  }
 }
 
 export function handleScroll() {
-	const NotContent = document.getElementById("notification-list");
-	if (!NotContent) return;
+  const NotContent = document.getElementById("notification-list");
+  if (!NotContent) return;
 
-	NotContent.addEventListener("scroll", async () => {
-		const scrollPosition = NotContent.scrollTop + NotContent.clientHeight;
-		const scrollHeight = NotContent.scrollHeight;
-		const tolerance = 5;
-		const isAtBottom = scrollPosition >= scrollHeight - tolerance;
-		if (isAtBottom) {
-			if (apiUrl) {
-				await fetchNotifications(true);
-			}
-		}
-	});
+  NotContent.addEventListener("scroll", async () => {
+    const scrollPosition = NotContent.scrollTop + NotContent.clientHeight;
+    const scrollHeight = NotContent.scrollHeight;
+    const tolerance = 5;
+    const isAtBottom = scrollPosition >= scrollHeight - tolerance;
+    if (isAtBottom) {
+      if (apiUrl) {
+        await fetchNotifications(true);
+      }
+    }
+  });
 }
 
 export function renderNotifications(notifications) {
-	let badge = document.getElementById("notification-badge");
-	badge.innerHTML = !apiUrl ? notifications.length : notifications.length + "+";
-	if (!notifications) return;
-	function formatDate(dateString) {
-		const options = {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-		};
-		return new Date(dateString).toLocaleString(undefined, options);
-	}
-	let href = "";
-	const notificationList = document.getElementById("notification-list");
-	if (!notificationList) return;
-	notificationList.innerHTML = "";
+  let badge = document.getElementById("notification-badge");
+  badge.innerHTML = !apiUrl ? notifications.length : notifications.length + "+";
+  if (!notifications) return;
+  function formatDate(dateString) {
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleString(undefined, options);
+  }
+  let href = "";
+  const notificationList = document.getElementById("notification-list");
+  if (!notificationList) return;
+  notificationList.innerHTML = "";
 
-	if (!notifications.length) {
-		const emptyComponent = Empty("No Notification Found");
-		const emptyContainer = document.createElement("div");
-		emptyContainer.className = "emptyContainer";
-		emptyContainer.appendChild(emptyComponent);
-		notificationList.appendChild(emptyContainer);
-	} else {
-		notifications.forEach((notification, index) => {
-			notification.action = SerializeInviteAction(notification.action);
-			if (
-				notification.sender &&
-				(!notification.sender.image_url ||
-					notification.sender.image_url.startsWith(`https://${API_URL}/media/`))
-			) {
-				notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
-			}
-			if (notification.type === "friend-request")
-				href = `/profile?username=${notification.sender.username}`;
-			else if (notification.type === "messenger")
-				href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
-			else if (notification.type === "game-invite" && notification.action)
-				href = `/game/match_making?player=${notification.action.player}&invite-uuid=${notification.action.invite_id}`;
+  if (!notifications.length) {
+    const emptyComponent = Empty("No Notification Found");
+    const emptyContainer = document.createElement("div");
+    emptyContainer.className = "emptyContainer";
+    emptyContainer.appendChild(emptyComponent);
+    notificationList.appendChild(emptyContainer);
+  } else {
+    notifications.forEach((notification, index) => {
+      notification.action = SerializeInviteAction(notification.action);
+      if (
+        notification.sender &&
+        (!notification.sender.image_url ||
+          notification.sender.image_url.startsWith(`https://${API_URL}/media/`))
+      ) {
+        notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
+      }
+      if (notification.type === "friend-request")
+        href = `/profile?username=${notification.sender.username}`;
+      else if (notification.type === "messenger")
+        href = `/messenger?chatroom=${notification.sender.id}&groupId=${notification.id}`;
+      else if (notification.type === "game-invite" && notification.action)
+        href = `/game/match_making?player=${notification.action.player}&invite-uuid=${notification.action.invite_id}`;
 
-			const notificationItem = document.createElement("li");
-			notificationItem.className = "notification-item";
+      const notificationItem = document.createElement("li");
+      notificationItem.className = "notification-item";
 
-			notificationItem.innerHTML = /*html*/ `
+      notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src= ${notification.sender && notification.sender.image_url
-					? notification.sender.image_url
-					: `https://${API_URL}/media/public/profile-images/00_img.jpg`
-				} alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src= ${
+                      notification.sender && notification.sender.image_url
+                        ? notification.sender.image_url
+                        : `https://${API_URL}/media/public/profile-images/00_img.jpg`
+                    } alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
                     <div class="notification-time">${formatDate(
-					notification.created_at
-				)}</div>
+                      notification.created_at
+                    )}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">
@@ -156,155 +156,163 @@ export function renderNotifications(notifications) {
 				</svg>
             </div>
         `;
-			notificationList.appendChild(notificationItem);
+      notificationList.appendChild(notificationItem);
 
-			const removeNot = notificationItem.querySelector(".remove-not");
-			if (removeNot) {
-				removeNot.addEventListener("click", async function () {
-					let apiUrl = `/api/v1/notifications/${notification.id}/`;
-					try {
-						await fetchWithAuth(apiUrl, {
-							method: "DELETE",
-						});
+      const removeNot = notificationItem.querySelector(".remove-not");
+      if (removeNot) {
+        removeNot.addEventListener("click", async function () {
+          let apiUrl = `/api/v1/notifications/${notification.id}/`;
+          try {
+            await fetchWithAuth(apiUrl, {
+              method: "DELETE",
+            });
 
-						notifications.splice(index, 1);
+            notifications.splice(index, 1);
 
-						renderNotifications(notifications);
-					} catch (error) {
-						return;
-					}
-				});
-			}
-		});
-	}
+            renderNotifications(notifications);
+          } catch (error) {
+            return;
+          }
+        });
+      }
+    });
+  }
 }
 
 function renderNavBrContent() {
-	const navItems = document.querySelectorAll(".nav-item.nav a");
+  console.log("renderNavBarContent here !!");
+  const navItems = document.querySelectorAll(".nav-item.nav a");
+  console.log("navbar :", navItems);
+  navItems.forEach((navItem) => {
+    console.log(
+      "PATH : ",
+      window.location.pathname,
+      "HREF :",
+      navItem.getAttribute("href")
+    );
+    if (window.location.pathname.startsWith(navItem.getAttribute("href"))) {
+      const svg = navItem.querySelector("svg path");
+      const paragraph = navItem.querySelector("p");
 
-	navItems.forEach((navItem) => {
-		if (window.location.pathname.startsWith(navItem.getAttribute("href"))) {
-			const svg = navItem.querySelector("svg path");
-			const paragraph = navItem.querySelector("p");
+      if (svg) svg.setAttribute("fill", "#FD4106");
+      if (paragraph) paragraph.style.color = "#FD4106";
+      const underline = document.createElement("div");
+      underline.style.width = "100%";
+      underline.style.height = "2px";
+      underline.style.backgroundColor = "#FD4106";
+      underline.style.position = "absolute";
+      underline.style.bottom = "0";
+      underline.style.left = "0";
+      navItem.style.position = "relative";
 
-			if (svg) svg.setAttribute("fill", "#FD4106");
-			if (paragraph) paragraph.style.color = "#FD4106";
-			const underline = document.createElement("div");
-			underline.style.width = "100%";
-			underline.style.height = "2px";
-			underline.style.backgroundColor = "#FD4106";
-			underline.style.position = "absolute";
-			underline.style.bottom = "0";
-			underline.style.left = "0";
-			navItem.style.position = "relative";
-
-			navItem.appendChild(underline);
-		}
-	});
+      navItem.appendChild(underline);
+    }
+  });
 }
 
 async function fetchMyData() {
-	const apiUrl = "/api/v1/users/me/";
+  const apiUrl = "/api/v1/users/me/";
 
-	try {
-		const data = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		ProfilePanel(data);
-	} catch (error) {
-		return;
-	}
+  try {
+    const data = await fetchWithAuth(apiUrl, {
+      method: "GET",
+    });
+    ProfilePanel(data);
+  } catch (error) {
+    return;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-	fetchMyData();
+  fetchMyData();
 });
 
 function ProfilePanel(user) {
-	if (!user) return;
-	const profileIcon = document.getElementById("profile-icon");
-	const profilePanel = document.getElementById("profile-panel");
+  if (!user) return;
+  const profileIcon = document.getElementById("profile-icon");
+  const profilePanel = document.getElementById("profile-panel");
 
-	let isClicked = false;
+  let isClicked = false;
 
-	const toggleProfilePanel = () => {
-		isClicked = !isClicked;
-		profilePanel.style.display = isClicked ? "block" : "none";
-		if (isClicked) {
-			document.getElementById(
-				"profile-icon-toggle"
-			).innerHTML = `<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+  const toggleProfilePanel = () => {
+    isClicked = !isClicked;
+    profilePanel.style.display = isClicked ? "block" : "none";
+    if (isClicked) {
+      document.getElementById(
+        "profile-icon-toggle"
+      ).innerHTML = `<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
 							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
 								stroke-width="1.52" d="M1 1l5.326 5.7a.91.91 0 0 0 1.348 0L13 1" />
 						</svg>`;
-		} else {
-			document.getElementById(
-				"profile-icon-toggle"
-			).innerHTML = `						<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
+    } else {
+      document.getElementById(
+        "profile-icon-toggle"
+      ).innerHTML = `						<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
 							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
 								stroke-width="1.52" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
 						</svg>`;
-		}
-	};
+    }
+  };
 
-	profileIcon.addEventListener("click", toggleProfilePanel);
+  profileIcon.addEventListener("click", toggleProfilePanel);
 
-	document.addEventListener("mousedown", (event) => {
-		const target = event.target;
-		if (
-			profilePanel &&
-			!profilePanel.contains(target) &&
-			!profileIcon.contains(target)
-		) {
-			isClicked = false;
-			profilePanel.style.display = "none";
-		}
-	});
+  document.addEventListener("mousedown", (event) => {
+    const target = event.target;
+    if (
+      profilePanel &&
+      !profilePanel.contains(target) &&
+      !profileIcon.contains(target)
+    ) {
+      isClicked = false;
+      profilePanel.style.display = "none";
+    }
+  });
 
+  document.getElementById("profile-image").src =
+    user.image_url || "/public/assets/images/defaultImageProfile.png";
+  document.getElementById("panel-profile-image").src =
+    user.image_url || "/public/assets/images/defaultImageProfile.png";
+  document.getElementById("profile-username").textContent = user.username;
+  document.getElementById(
+    "profile-level"
+  ).textContent = `Level ${user.current_xp}`;
+  document.getElementById("panel-fullname").textContent = user.fullname
+    ? user.fullname
+    : "";
+  document.getElementById("panel-username").textContent = "@" + user.username;
+  function checkWindowSize() {
+    user.xp_required && user.current_xp;
 
-	document.getElementById("profile-image").src =
-		user.image_url || "/public/assets/images/defaultImageProfile.png";
-	document.getElementById("panel-profile-image").src =
-		user.image_url || "/public/assets/images/defaultImageProfile.png";
-	document.getElementById("profile-username").textContent = user.username;
-	document.getElementById("profile-level").textContent = `Level ${user.current_xp}`
-	document.getElementById("panel-fullname").textContent = user.fullname
-		? user.fullname
-		: "";
-	document.getElementById("panel-username").textContent = "@" + user.username;
-	function checkWindowSize() {
-		user.xp_required && user.current_xp
+    if (window.innerWidth < 1200) {
+      iconsSmallWindow();
+    } else {
+      let icons = document.getElementById("icons-panel-links");
+      let social = document.getElementById("social-panel-links");
+      social.innerHTML = ``;
+      icons.innerHTML = ``;
+    }
+  }
 
-		if (window.innerWidth < 1200) {
-			iconsSmallWindow();
-		} else {
-			let icons = document.getElementById("icons-panel-links");
-			let social = document.getElementById("social-panel-links");
-			social.innerHTML = ``;
-			icons.innerHTML = ``;
-		}
-	}
+  checkWindowSize();
 
-	checkWindowSize();
+  window.addEventListener("resize", checkWindowSize);
+  document.getElementById("view-profile-link").addEventListener("click", () => {
+    toggleProfilePanel();
+  });
 
-	window.addEventListener("resize", checkWindowSize);
-	document.getElementById("view-profile-link").addEventListener("click", () => {
-		toggleProfilePanel();
-	});
-
-	document.getElementById("signout-link").addEventListener("click", () => {
-		document.cookie.split(";").forEach((c) => {
-			document.cookie =
-				c.trim().split("=")[0] +
-				"=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-		});
-		window.location.pathname = "/auth/";
-	});
+  document.getElementById("signout-link").addEventListener("click", () => {
+    document.cookie.split(";").forEach((c) => {
+      document.cookie =
+        c.trim().split("=")[0] +
+        "=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+    });
+    window.location.pathname = "/auth/";
+  });
 }
 
 function iconsSmallWindow() {
-	let icons = document.getElementById("icons-panel-links");
-	icons.innerHTML = `
+  let icons = document.getElementById("icons-panel-links");
+  icons.innerHTML = `
 	<div class="icons-panel-links">
 		<div class="navbar-container">
 			<div class="nav-links">
@@ -352,10 +360,10 @@ function iconsSmallWindow() {
 			</div>
 	</div>
 	`;
-	renderNavBrContent();
+  renderNavBrContent();
 
-	let social = document.getElementById("social-panel-links");
-	social.innerHTML = `
+  let social = document.getElementById("social-panel-links");
+  social.innerHTML = `
 	<div class="icons-panel-links">
 			<div class="desktop-nav" style="display: block;">
 				<ul class="social-list">
@@ -423,8 +431,9 @@ function iconsSmallWindow() {
 										<path fill="#545454"
 											d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
 									</svg>
-									<span id="notification-badge" class="notification-badge">${apiUrl ? "30+" : allNotifications.length
-		}</span> <!-- Add this line -->
+									<span id="notification-badge" class="notification-badge">${
+                    apiUrl ? "30+" : allNotifications.length
+                  }</span> <!-- Add this line -->
 								</div>
 							</a>
 						</div>

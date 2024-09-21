@@ -1,0 +1,33 @@
+2024-09-21 10:45:55,624 WARNING django.request Unauthorized: /api/v1/users/me/
+2024-09-21 10:45:55,625 WARNING django.channels.server HTTP GET /api/v1/users/me/ 401 [0.02, 172.18.0.7:33262]
+2024-09-21 10:45:55,627 WARNING django.request Unauthorized: /api/v1/game/ongoing-tournaments/
+2024-09-21 10:45:55,628 WARNING django.channels.server HTTP GET /api/v1/game/ongoing-tournaments/ 401 [0.01, 172.18.0.7:33292]
+2024-09-21 10:57:22,596 DEBUG game.managers.game_manager Notify Tournament None called about the winner
+2024-09-21 10:57:31,614 WARNING django.request Not Found: /api/v1/users/null/
+2024-09-21 11:02:42,519 WARNING django.request Unauthorized: /api/v1/users/me/
+2024-09-21 11:02:42,520 WARNING django.channels.server HTTP GET /api/v1/users/me/ 401 [0.01, 172.18.0.7:58208]
+2024-09-21 11:02:42,521 WARNING django.request Unauthorized: /api/v1/notifications/
+2024-09-21 11:02:42,521 WARNING django.channels.server HTTP GET /api/v1/notifications/ 401 [0.01, 172.18.0.7:58218]
+2024-09-21 11:02:42,528 WARNING django.request Unauthorized: /api/v1/users/me/
+2024-09-21 11:02:42,530 WARNING django.channels.server HTTP GET /api/v1/users/me/ 401 [0.01, 172.18.0.7:58234]
+2024-09-21 11:02:42,533 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2024-09-21 11:02:42,534 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2024-09-21 11:02:42,535 WARNING django.channels.server HTTP POST /api/v1/auth/token/refresh/ 401 [0.01, 172.18.0.7:58246]
+2024-09-21 11:02:42,536 WARNING django.channels.server HTTP POST /api/v1/auth/token/refresh/ 401 [0.01, 172.18.0.7:58242]
+2024-09-21 11:02:42,540 WARNING django.request Unauthorized: /api/v1/auth/token/refresh/
+2024-09-21 11:02:42,540 WARNING django.channels.server HTTP POST /api/v1/auth/token/refresh/ 401 [0.01, 172.18.0.7:58262]
+2024-09-21 11:02:42,544 WARNING django.request Unauthorized: /api/v1/notifications/
+2024-09-21 11:02:42,544 WARNING django.channels.server HTTP GET /api/v1/notifications/ 401 [0.00, 172.18.0.7:58278]
+2024-09-21 11:02:42,596 WARNING django.request Unauthorized: /api/v1/users/me/
+2024-09-21 11:02:42,596 WARNING django.channels.server HTTP GET /api/v1/users/me/ 401 [0.00, 172.18.0.7:58302]
+2024-09-21 11:02:42,638 WARNING django.request Unauthorized: /api/v1/users/me/
+2024-09-21 11:02:42,638 WARNING django.channels.server HTTP GET /api/v1/users/me/ 401 [0.00, 172.18.0.7:58318]
+2024-09-21 11:03:03,916 INFO game.consumers.game_invite The invited User has accepted khadija Playing against ayoub
+2024-09-21 11:03:46,573 DEBUG game.managers.game_manager Notify Tournament None called about the winner
+2024-09-21 11:03:48,930 DEBUG game.managers.game_manager Notify Tournament None called about the winner
+2024-09-21 11:04:21,053 WARNING django.request Not Found: /api/v1/users/null/
+2024-09-21 11:04:21,054 WARNING django.channels.server HTTP GET /api/v1/users/null/ 404 [0.01, 172.18.0.7:35684]
+2024-09-21 11:04:34,487 INFO game.consumers.game_invite The invited User has accepted khadija Playing against ayoub
+2024-09-21 11:05:17,234 DEBUG game.managers.game_manager Notify Tournament None called about the winner
+2024-09-21 11:05:21,597 DEBUG game.managers.game_manager Notify Tournament None called about the winner
+2024-09-21 11:06:19,282 DEBUG game.managers.game_manager Notify Tournament None called about the winner
