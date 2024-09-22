@@ -18,8 +18,6 @@ class BaseTestCase(TestCase):
         self.headers = [
             (b'cookie', f'access={str(self.refresh.access_token)}'.encode()),
             (b'host', b'localhost')]
-
-        print(self.headers)
         self.client.credentials(
             HTTP_AUTHORIZATION=f'Bearer {self.refresh.access_token}'
         )

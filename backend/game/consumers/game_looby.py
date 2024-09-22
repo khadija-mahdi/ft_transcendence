@@ -7,6 +7,9 @@ from game.models import Matchup
 from user.models import User
 import urllib.parse as urlparse
 from urllib.parse import parse_qs
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class GameLobby(AsyncWebsocketConsumer):
@@ -20,7 +23,7 @@ class GameLobby(AsyncWebsocketConsumer):
 
         query_params = parse_qs(self.scope['query_string'].decode('utf-8'))
         self.game_mode = query_params.get('game_mode', [None])[0]
-        print(f'game_mode: {self.game_mode}')
+
         await self.accept()
         await self.matchmaking()
 
@@ -30,7 +33,6 @@ class GameLobby(AsyncWebsocketConsumer):
             match_user = await self.match_maker.get_match_users(self.user)
         if match_user or self.game_mode == 'singleplayer':
             game_started_obj = await self.create_game(match_user)
-            print(f'game_started_obj: {game_started_obj}', match_user)
             await self.emit(self.user.id, game_started_obj)
             if match_user:
                 game_started_obj['message']['player'] = self.user.username
@@ -72,7 +74,7 @@ class GameLobby(AsyncWebsocketConsumer):
         try:
             await self.match_maker.remove_user(self.user)
         except ValueError as e:
-            print(e)
+            logger.error(e)
         await self.channel_layer.group_discard(
             self.room_group_name, self.channel_name
         )

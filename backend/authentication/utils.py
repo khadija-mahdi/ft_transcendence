@@ -11,13 +11,11 @@ GOOGLE_USER_INFO_URL = 'https://www.googleapis.com/oauth2/v3/userinfo'
 def generate_user_tokens(user) -> tuple:
     serializer = TokenObtainPairSerializer()
     token_data = serializer.get_token(user)
-    print(f"token_data => {token_data}")
     access_token = token_data.access_token
     refresh_token = token_data
     return access_token, refresh_token
 
 def google_get_access_token(code, redirect_uri) -> str:
-    print(f"code => {code}")
     data = {
         'code': code,
         'client_id': settings.GOOGLE_OAUTH2_CLIENT_ID,
@@ -33,7 +31,6 @@ def google_get_access_token(code, redirect_uri) -> str:
 
 def google_get_user_data(access_token) -> dict:
     response = requests.get(GOOGLE_USER_INFO_URL, params={'access_token': access_token})
-    print(f"response => {response.json()} {response.raw}")
     
     if not response.ok:
         raise ValidationError('Failed to obtain user data')

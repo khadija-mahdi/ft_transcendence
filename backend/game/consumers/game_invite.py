@@ -7,7 +7,7 @@ from game.models import Matchup
 from game.managers.match_maker import InvitesManager
 import logging
 
-logger = logging.getLogger(__name__) 
+logger = logging.getLogger(__name__)
 
 
 class GameInvite(AsyncWebsocketConsumer):
@@ -68,7 +68,7 @@ class GameInvite(AsyncWebsocketConsumer):
         try:
             await self.InvitesManager.remove_user(self.invite_id, self.user)
         except ValueError as e:
-            print(e)
+            logger.error(e)
         await self.channel_layer.group_discard(
             self.room_group_name, self.channel_name
         )

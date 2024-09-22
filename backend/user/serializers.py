@@ -185,7 +185,6 @@ class RankAchievementSerializer(serializers.ModelSerializer):
         fields = ['id', 'point', 'achieved_at']
 
     def get_point(slef, obj):
-        print(obj.rank.hierarchy_order * obj.rank.xp_required)
         return (obj.rank.hierarchy_order * obj.rank.xp_required)
 
 
@@ -235,7 +234,6 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         return reverse('manage-friend-request', kwargs={"pk": obj.requester.id},  request=self.context.get('request'))
 
     def get_url(self, obj):
-        print(obj)
         return reverse('user', kwargs={"pk": obj.requester.id},  request=self.context.get('request'))
 
     def get_fullname(self, obj):

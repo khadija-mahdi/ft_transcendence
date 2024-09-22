@@ -4,6 +4,9 @@ import json
 from transcendent.consumers import NotifyUser
 from api.models import Notification
 from api.serializers import NotificationSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def send_notification(notification, request=None):
@@ -28,14 +31,14 @@ def create_notification(recipient, title, description, type, action):
 
 
 def notify_tournament_users(tournament_id):
-    print(
-        f'\n-----------\nNotify Tournament {tournament_id} Users\n-----------\n')
+    logger.info(f'Notify Tournament {tournament_id} Users ')
     tournament = Tournament.objects.get(id=tournament_id)
     tournament.ongoing = True
     tournament.save()
     registeredUsers = tournament.registered_users.all()
     for user in registeredUsers:
-        print(f'Notify user {user.username}')
+        logger.debug(
+            f'Sending Notification To User-{user.username}')
         create_notification(
             user,
             tournament.name,

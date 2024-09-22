@@ -19,6 +19,9 @@ from .services import notify_tournament_users
 from rest_framework.response import Response
 from django.http import Http404
 from rest_framework import status
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ListGame(ListAPIView):
@@ -33,7 +36,7 @@ def FillOutRegisteredPlayers(tournament: Tournament, names=[]):
             TournamentsRegisteredPlayers.objects.create(
                 user=user, tournament=tournament)
         except User.DoesNotExist:
-            print(f'this user doesn not exists {username}')
+            logger.error(f'This User Doesn\'t Not Exists {username}')
 
 
 def MockTest(tournament):
@@ -62,14 +65,12 @@ class listTournaments(ListCreateAPIView):
 
         start_date_str = self.request.data.get('start_date')
         start_date = datetime.strptime(start_date_str, '%Y-%m-%dT%H:%M')
-        print('start_date', start_date, datetime.now())
         if start_date < datetime.now():
             raise serializers.ValidationError(
                 "Start date must be in the future")
 
         tournament = serializer.save()
         MockTest(tournament)
-        print(tournament)
         # start_scheduler(tournament.id, start_date)
 
 
@@ -146,10 +147,8 @@ class MatchHistory(ListAPIView):
 
     def get_queryset(self):
         pk = self.kwargs['pk']
-        print(pk)
         try:
             user = User.objects.get(id=pk)
-            print(user)
             return Matchup.objects.filter(Q(first_player=user) | Q(second_player=user))
         except User.DoesNotExist:
             return []

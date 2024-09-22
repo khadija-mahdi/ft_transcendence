@@ -1,4 +1,9 @@
 node_modules
 .venv
 .vscode
-backend/*.log
+*.pyc 
+__pycache__/
+*/__pycache__/
+db.sqlite3
+*.log
+backend/debug.log

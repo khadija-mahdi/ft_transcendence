@@ -4,6 +4,9 @@ from channels.security.websocket import WebsocketDenier
 from user.models import User
 from asgiref.sync import sync_to_async
 from urllib.parse import parse_qs
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class JWTAuthMiddlewareStack():
@@ -25,14 +28,12 @@ class JWTAuthMiddlewareStack():
             else:
                 raise ValueError('No token found')
         except Exception as e:
-            print(f'Error validating token: {e}')
+            logger.error(f'Error validating token: {e}')
             denier = WebsocketDenier()
             return await denier(scope, receive, send)
         return await self.app(scope, receive, send)
 
     def get_cookies(self, scope):
-        # headers = scope.get('headers')
-        # cookies = [x for x in headers if x[0] == b'cookie']
         cookies = self.get_from_headers(scope, b'cookie')
         if not cookies:
             return scope

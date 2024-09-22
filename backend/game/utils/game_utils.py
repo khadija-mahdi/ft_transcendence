@@ -1,4 +1,7 @@
 import math
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Config():
@@ -85,19 +88,16 @@ class Paddle():
         self.y = y
 
     def movePaddle(self, action):
-        print('movePaddle-action: ', action)
         if action == 'left':
             nv = self.y - self.PADDLE_SPEED
             self.y = nv if (nv > self.min_height) else self.min_height
-            print('moved to left', self.y)
 
         elif action == 'right':
             nv = self.y + self.PADDLE_SPEED
             self.y = nv if (nv < self.max_height) else self.max_height
-            print('moved to right', self.y)
         else:
-            print(f'Unsupported Action {action},\n\
-            please make sure to use on of this actions (left|right)')
+            logger.error(f'Unsupported Action {action},'
+                         'please make sure to use on of this actions (left|right)')
 
     def getY(self):
         return self.y

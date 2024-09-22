@@ -19,6 +19,7 @@ class Game():
 
     def __init__(self, room_id):
         self.room_id = room_id
+        self.lock = None
         self.is_running = True
         self.players = []
         self.ball = Ball()
@@ -61,9 +62,12 @@ class Game():
                 self.players.append(player)
             return True
 
-    async def move_paddle(self, player, action):
+    async def move_paddle(self, player, action, player_order=None):
         async with self.lock:
-            paddle = self.player_1_paddle if player == self.first_player else self.player_2_paddle
+            if player_order:
+                paddle = self.player_1_paddle if player_order == 1 else self.player_2_paddle
+            else:
+                paddle = self.player_1_paddle if player == self.first_player else self.player_2_paddle
             paddle.movePaddle(action)
 
     async def remove_player(self, player):
@@ -74,6 +78,8 @@ class Game():
                     if len(self.players) > 1:
                         Loser = player
                         self.players.remove(player)
+                        if self.matchup.Winner:
+                            return
                         winner = self.players[0]
                         await self.handle_winner(winner=winner, Loser=Loser)
                     await database_sync_to_async(self.matchup.save)()
@@ -86,7 +92,8 @@ class Game():
             await asyncio.sleep(1/60)
             if not self.matchup:
                 return await self.emit(type='game_over', message='matchup not found')
-            if len(self.players) != 2 and self.second_player is not None:
+            if len(self.players) != 2 and self.second_player is not None\
+                    and self.matchup.game_type == 'online':
                 self.waiting_in_ms += 16
                 if self.waiting_in_ms >= 20 * 1000:
                     self.matchup.game_over = True
@@ -95,15 +102,18 @@ class Game():
                     await self.NotifyTournamentConsumer(self.matchup.Winner)
                     return await self.emit(type='game_over', message='player did not not register')
                 continue
+
             if self.pause:
                 self.waiting_in_ms += 16.6
                 if self.waiting_in_ms >= 3 * 1000:
                     self.pause = False
                     self.reset_paddles()
                 continue
+
             self.waiting_in_ms = 0
             await self.ball.update(lambda is_left_goal: self.new_point(is_left_goal))
-            if self.second_player is None:
+
+            if self.second_player is None and self.matchup.game_type == 'online':
                 self.player_2_paddle.ai_update(self.ball)
 
             await self.emit(dict_data={
@@ -138,11 +148,10 @@ class Game():
         )
 
     async def NotifyTournamentConsumer(self, Winner):
-        logger.debug(f'''Notify Tournament {
-            self.tournament} called about the winner''')
+        logger.debug(f'Notify Tournament {self.tournament}'
+                     f'About this Game Winner {Winner}')
         if self.tournament is None:
             return
-        logger.debug(f'the Winner is {Winner}')
         await self.channel_layer.group_send(
             f"tournament_{self.tournament.uuid}",
             {

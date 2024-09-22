@@ -20,7 +20,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
         self.tournament_routine: TournamentRoutine = await self.tournament_manager.get_or_create_tournament(self.tournament_id)
 
         if self.tournament_routine is None:
-            print('Tournament not found')
             return await self.close(4004, 'Tournament not found')
         await self.channel_layer.group_add(
             self.tournament_group_name,
@@ -45,7 +44,6 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             JsonData = json.loads(text_data)
         except json.JSONDecodeError:
             return await self.send(text_data=json.dumps({'error': 'Invalid JSON'}))
-        print(f'JsonData is \n{JsonData}')
         return
 
     async def match_result(self, event):
@@ -53,15 +51,13 @@ class TournamentConsumer(AsyncWebsocketConsumer):
 
     async def broadcast(self, event):
         message = event['message']
-        print(message)
         await self.send(text_data=message)
         try:
             if isinstance(message, str):
                 message = json.loads(message)
             if 'status' in message and message['status'] == 'over':
-                print(f'closing connection for {self.user}')
                 await self.close()
         except json.JSONDecodeError:
-            print('Failed to decode JSON message:', message)
+            logger.error('Failed to decode JSON message:', message)
         except Exception as e:
-            print(f'Unexpected error: {e}')
+            logger.error(f'Unexpected error: {e}')

@@ -17,7 +17,9 @@ from rest_framework import views, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from user.models import User
+import logging
 
+logger =  logging.getLogger(__name__)
 
 class AuthApi(generics.GenericAPIView):
     class AuthSerializer(serializers.Serializer):
@@ -68,7 +70,7 @@ class RegisterEmailApi(generics.CreateAPIView):
                 e.detail, list) else e.detail
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': errorMessage})
         except Exception as e:
-            print(f'error => {e.detail}')
+            logger.error(f'error => {e.detail}')
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': str(e.detail)})
         return Response(status=status.HTTP_200_OK)
 
@@ -99,7 +101,7 @@ class VerifyEmailApi(generics.CreateAPIView):
         try:
             self.verify_email(serializer)
         except Exception as e:
-            print(f'error => {e}')
+            logger.error(f'error => {e}')
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': str(e)})
         return Response(status=status.HTTP_200_OK)
 
@@ -129,7 +131,7 @@ class RegisterUserApi(generics.CreateAPIView):
         except IntegrityError as e:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': 'User with this username already exists'})
         except Exception as e:
-            print(f'error => {e}')
+            logger.error(f'error => {e}')
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': str(e)})
         return Response(status=status.HTTP_201_CREATED)
 
@@ -194,7 +196,7 @@ class AuthView(generics.CreateAPIView):
             )
             return status
         except Exception as e:
-            print(f'Error sending email: {e}')
+            logger.error(f'Error sending email: {e}')
             raise
 
 
@@ -224,7 +226,7 @@ class Verify2FAView(generics.CreateAPIView):
                 'refresh': refresh_token
             })
         except Exception as e:
-            print(f'error => {e}')
+            logger.error(f'error => {e}')
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'detail': str(e)})
 
     def verify_email(self, serializer):

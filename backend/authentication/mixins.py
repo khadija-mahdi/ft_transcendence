@@ -16,6 +16,11 @@ from django.shortcuts import redirect
 from urllib.parse import urlencode
 from .utils import generate_user_tokens
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 
 class ApiErrorsMixin:
     """
@@ -67,13 +72,10 @@ class OAuth2Authentication:
             return redirect(f'{login_url}?{params}')
 
         try:
-            print('getting access token\n\n')
             access_token = self.OAuth2_get_access_token(code)
-            print(f'access token => {access_token}\n\n')
-            print('getting user data\n\n')
             user_data = self.OAuth2_get_user_data(access_token)
         except ValidationError as e:
-            print(f'error => {e}')
+            logger.error(f'error While getting user token fom oAuth => {e}')
             return Response(status=400, data={'error': str(e)})
 
         try:
@@ -87,7 +89,6 @@ class OAuth2Authentication:
             serializer = self.serializer_class(data=user_data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
-            print(f'serialize validated data => {validated_data} \n\n')
             return Response(self.get_response_data(user, request))
 
     def get_response_data(self, user, request) -> dict:
@@ -107,7 +108,7 @@ class OAuth2Authentication:
             'redirect_uri': self.redirect_uri,
             'grant_type': 'authorization_code',
         }
-        print(f'data => {data}\n\n')
+
         response = requests.post(self.access_token_url, data=data)
         if not response.ok:
             raise ValidationError(

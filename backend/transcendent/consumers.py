@@ -49,7 +49,6 @@ class ConnectedConsumer(AsyncWebsocketConsumer):
 
 
 def NotifyUser(user_id, notification, channel_layer):
-    print(f'notify user called {user_id}')
     async_to_sync(channel_layer.group_send)(
         notification_group(user_id),
         {

@@ -17,7 +17,6 @@ class GoogleUserSerializer(serializers.ModelSerializer):
         return obj.get('email').split('@')[0]
 
     def save(self, *args, **kwargs):
-        print(self.initial_data)
         self.validated_data['registration_method'] = 'google'
         self.validated_data['image_url'] = self.initial_data.get('picture', '')
         self.validated_data['username'] = self.get_username(self.validated_data)
@@ -38,7 +37,6 @@ class IntraUserSerializer(serializers.ModelSerializer):
         return obj.get('login')
 
     def save(self, *args, **kwargs):
-        print(self.initial_data)
         self.validated_data['registration_method'] = 'intra'
         self.validated_data['username'] = self.get_username(self.initial_data)
         self.validated_data['image_url'] = self.initial_data.get('image', '').get('versions').get('medium')
