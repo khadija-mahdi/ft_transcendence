@@ -33,6 +33,7 @@ function setTournamentDetails() {
     games_states,
     tournament_bracket,
     is_registered,
+    finished
   } = data;
   const tournamentImage = document.getElementById("tournament-image");
   const tournamentTitle = document.getElementById("tournament-title");
@@ -67,7 +68,8 @@ function setTournamentDetails() {
   // Populate the Bracket Board
   const [first_half, second_half] = processBracketData(
     tournament_bracket || [],
-    max_players
+    max_players,
+    finished
   );
 
   bracketContent.innerHTML = first_half

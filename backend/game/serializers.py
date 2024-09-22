@@ -75,11 +75,12 @@ class TournamentDetailsSerializer(serializers.ModelSerializer, BaseTournamentSer
     match_ups = serializers.SerializerMethodField()
     is_my_tournament = serializers.SerializerMethodField()
     is_registered = serializers.SerializerMethodField()
+    finished = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Tournament
         fields = ['id', 'uuid', 'icon', 'name', 'description', 'max_players', 'is_public', 'is_monetized',
-                  'is_registered', 'is_my_tournament', 'tournament_bracket', 'start_date', 'registered_users',
+                  'is_registered', 'finished', 'is_my_tournament', 'tournament_bracket', 'start_date', 'registered_users',
                   'streams', 'games_states', 'match_ups', 'created_at', 'updated_at']
 
     def get_games_states(self, obj):

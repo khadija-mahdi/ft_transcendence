@@ -174,7 +174,7 @@ class UserDetailSerializer(serializers.ModelSerializer, BaseUserSerializer):
                 obj.rank = Ranks.objects.get(pk=1)
             except Exception:
                 return 0
-        return (obj.current_xp / obj.rank.xp_required) * 100
+        return round((obj.current_xp / obj.rank.xp_required) * 100)
 
 
 class RankAchievementSerializer(serializers.ModelSerializer):

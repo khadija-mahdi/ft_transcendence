@@ -26,7 +26,7 @@ const config = {
   tableWidth: 200,
   tableHeight: 10,
   tableDepth: 100,
-  ballRadius: 3,
+  ballRadius: 2.5,
   paddleWidth: 3,
   paddleHeight: 0.5,
   paddleDepth: 15,
@@ -492,7 +492,8 @@ export default async function () {
       if (keysPressed[key]) return;
       keysPressed[key] = true;
       if (key === Buttons.Left || key === Buttons.Right) StartMovementLoop();
-      if (key === Buttons.SecondLeft || key === Buttons.SecondRight) StartSecondMovementLoop();
+      if (GameInfo.game_type === 'offline' &&
+        (key === Buttons.SecondLeft || key === Buttons.SecondRight)) StartSecondMovementLoop();
 
     });
 
@@ -500,7 +501,8 @@ export default async function () {
       const key = e.key.toLowerCase()
       delete keysPressed[key];
       if (key === Buttons.Left || key === Buttons.Right) StopMovementLoop();
-      if (key === Buttons.SecondLeft || key === Buttons.SecondRight) StopSecondMovementLoop();
+      if (GameInfo.game_type === 'offline' &&
+        (key === Buttons.SecondLeft || key === Buttons.SecondRight)) StopSecondMovementLoop();
     });
 
     window.addEventListener("resize", () => {
@@ -513,8 +515,11 @@ export default async function () {
   await init();
 }
 
-function handleMovement(Socket, action, playerOrder = 1) {
-  Socket.send(JSON.stringify({ type: "move", action, 'player-order': playerOrder }));
+function handleMovement(Socket, action, playerOrder = null) {
+  const object = { type: "move", action }
+  if (playerOrder)
+    object['player-order'] = playerOrder
+  Socket.send(JSON.stringify(object));
 }
 
 async function InitScoreBoard({

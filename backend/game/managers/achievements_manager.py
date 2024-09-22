@@ -1,17 +1,22 @@
-# when player wins, game or tournament this manager get notified and update the user achievements and xp and rank accordingly
 from game.models import Matchup, Tournament
 from user.models import User, Achievements, Ranks, RankAchievement
 from channels.db import database_sync_to_async
-
+import logging
 from django.db.models import QuerySet
 
+logger = logging.getLogger(__name__)
 
+
+# when player wins, game or tournament this manager get notified and
+# update the user achievements and xp and rank accordingly
 class AchievementsManager:
-    IncrementingXpSteps = 120
-    DecrementingXpSteps = 60
+    IncrementingXpSteps = 800
+    DecrementingXpSteps = 600
 
     def __init__(self):
         self.rank_achievement = None
+        self.current_xp = 0
+        self.total_xp = 0
 
     def relevantGames(self, user: User, achievement_type: str) -> QuerySet:
         match_up = Matchup.objects.filter(
@@ -92,24 +97,26 @@ class AchievementsManager:
         user.save()
 
     @database_sync_to_async
-    def getNextRank(self, current_rank_order):
+    def getNextRank(self, current_rank_order) -> Ranks:
         try:
             return Ranks.objects.get(hierarchy_order=current_rank_order + 1)
         except Ranks.DoesNotExist:
             return None
 
     @database_sync_to_async
-    def getPrevRank(self, current_rank_order):
-        if current_rank_order <= 0:
-            return None
+    def getPrevRank(self, current_rank_order) -> Ranks:
         try:
-            return Ranks.objects.get(hierarchy_order=current_rank_order - 1)
+            return Ranks.objects.get(
+                hierarchy_order=1 if current_rank_order <= 1
+                else current_rank_order - 1)
         except Ranks.DoesNotExist:
             return None
 
     async def handleUserAchievements(self, user: User):
+        logger.debug(f'Handle User Achievements Called For {user}')
         if not user:
             return
+
         user.current_xp += self.IncrementingXpSteps
         user.total_xp += self.IncrementingXpSteps
 
@@ -117,12 +124,19 @@ class AchievementsManager:
         current_xp_required = UserRank.xp_required if UserRank else 0
         next_rank = await self.getNextRank(UserRank.hierarchy_order if UserRank else 0)
 
+        logger.debug(f'Current Rank {UserRank},\n'
+                     f'Current Xp Required {current_xp_required}\n'
+                     f'Next Rank {next_rank}\n')
+
         if user.current_xp >= current_xp_required and next_rank is not None:
             user.current_xp -= current_xp_required
             user.rank = next_rank
             self.rank_achievement = RankAchievement(user=user, rank=next_rank)
+            logger.debug(f'Updating to Upper Rank {user.current_xp}')
+
         if self.rank_achievement:
             await database_sync_to_async(self.rank_achievement.save)()
+
         await database_sync_to_async(user.save)()
 
         await self.handleWinStreak(user)
@@ -131,18 +145,34 @@ class AchievementsManager:
         await self.handleTotalWins(user)
 
     async def handleLoserUser(self, user: User):
+        logger.debug(f'handle Loser User Called For {user}')
+
         if not user:
             return
+
         user.current_xp -= self.DecrementingXpSteps
         user.total_xp -= self.DecrementingXpSteps
+
         UserRank: Ranks = await database_sync_to_async(lambda: user.rank)()
+
+        logger.debug(f'Current Rank {UserRank},\n'
+                     f'Current Xp {user.current_xp}\n'
+                     f'Total Xp {user.total_xp}\n')
+
         if not UserRank:
             return
-        prevRank = await self.getPrevRank(UserRank.hierarchy_order)
-        if user.current_xp < 0:
-            user.rank = prevRank
-            user.current_xp = await database_sync_to_async(lambda: UserRank.xp_required)() + user.current_xp
-            self.rank_achievement = RankAchievement(user=user, rank=prevRank)
+        newRank: Ranks = await self.getPrevRank(UserRank.hierarchy_order)
+
+        logger.debug(f'new Rank {newRank}')
+
+        if UserRank.hierarchy_order == newRank.hierarchy_order and user.current_xp < 0:
+            user.current_xp = 0
+            user.total_xp = 0
+        elif user.current_xp < 0:
+            user.rank = newRank
+            user.current_xp = newRank.xp_required + user.current_xp
+            self.rank_achievement = RankAchievement(user=user, rank=newRank)
+
         if self.rank_achievement:
             await database_sync_to_async(self.rank_achievement.save)()
         await database_sync_to_async(user.save)()

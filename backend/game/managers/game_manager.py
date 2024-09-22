@@ -26,9 +26,8 @@ class Game():
         halfHeight = (Config.tableDepth / 2)
         halfPaddle = Config.paddleDepth / 2
 
-        self.player_1_paddle = Paddle(5,  halfHeight - halfPaddle)
-        self.player_2_paddle = Paddle(
-            Config.tableWidth - 10, halfHeight - halfPaddle)
+        self.player_1_paddle = Paddle(5,  halfHeight)
+        self.player_2_paddle = Paddle(Config.tableWidth - 10, halfHeight)
 
         self.ball.setPaddles(self.player_1_paddle, self.player_2_paddle)
         self.channel_layer = get_channel_layer()
@@ -168,9 +167,9 @@ class Game():
 
     def reset_paddles(self):
         self.player_1_paddle.updatePosition(
-            (Config.tableDepth / 2) - Config.paddleDepth / 2)
+            (Config.tableDepth / 2))
         self.player_2_paddle.updatePosition(
-            (Config.tableDepth / 2) - Config.paddleDepth / 2)
+            (Config.tableDepth / 2))
 
     async def new_point(self, is_left_goal):
         self.pause = True
@@ -197,7 +196,7 @@ class Game():
                 'type': 'game_over',
                 'winner': winner.username if winner else "ROBOT"
             })
-            if self.tournament is None and self.matchup.game_type != 'online':
+            if self.tournament is None and self.matchup.game_type == 'online':
                 if winner:
                     await AchievementsManager().handleUserAchievements(user=winner)
                 if Loser:

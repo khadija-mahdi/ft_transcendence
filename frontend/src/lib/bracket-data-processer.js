@@ -26,9 +26,14 @@ const get_max_round = (max_player) => {
 
 export const processBracketData = (
 	data,
-	max_players
+	max_players,
+	finished
 ) => {
+
+	const len = data.length || 2
+	max_players = finished ? len : max_players
 	data = RoundList(data, max_players, 1);
+
 	const result = [];
 	for (let i = 0; i < data.length; i++) {
 		const index = (data[i]?.round_number || 1) - 1;
