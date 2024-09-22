@@ -72,7 +72,8 @@ class InGame(AsyncWebsocketConsumer):
     async def broadcast(self, event):
         message = event['message']
         if self.get_message_object(message).get('action') == 'close':
-            raise DenyConnection('This socket has been closed after clean up')
+            await self.close(reason='Socket closed by broadcast action')
+            return
         if isinstance(message, dict):
             message = json.dumps(message)
         await self.send(text_data=message)

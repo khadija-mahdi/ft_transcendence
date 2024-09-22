@@ -35,6 +35,7 @@ def notify_tournament_users(tournament_id):
     tournament = Tournament.objects.get(id=tournament_id)
     tournament.ongoing = True
     tournament.save()
+    logger.debug(f'Tournament {tournament.uuid} is about to start')
     registeredUsers = tournament.registered_users.all()
     for user in registeredUsers:
         logger.debug(
@@ -44,6 +45,6 @@ def notify_tournament_users(tournament_id):
             tournament.name,
             f'Tournament {tournament.name} is about to start',
             'tournament',
-            tournament_id
+            tournament.uuid
         )
     return

@@ -1,100 +1,126 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
 
 export default function () {
-	const form = document.getElementById("createTournamentForm");
-	let imageInput = document.getElementById("imageInput");
-	const imageLabel = document.getElementById("imageLabel");
-	const errorElement = document.getElementById("error");
-	const tr_errorElement = document.getElementById("rt-error");
+  const form = document.getElementById("createTournamentForm");
+  let imageInput = document.getElementById("imageInput");
+  const imageLabel = document.getElementById("imageLabel");
+  const errorElement = document.getElementById("error");
+  const tr_errorElement = document.getElementById("rt-error");
 
-	let selectedImage = null;
+  let selectedImage = null;
 
-	const initialImageLabelContent = imageLabel.innerHTML;
+  const initialImageLabelContent = imageLabel.innerHTML;
+  function toggleMonetize() {
+    const monetizeText = document.getElementById("monetizeText");
+    const monetizeDesc = document.getElementById("monetizeDesc");
+    const isMonetized = document.getElementById("isMonetized");
+    const monetizeSwitch = document.querySelector(".switch-monet");
 
-	function handleImageInputChange(e) {
-		imageLabel.innerHTML = "";
-		const file = e.target.files[0];
-		if (!file) return;
+    if (isPublic.checked) {
+      isMonetized.disabled = false;
+      monetizeText.style.color = "#FFFFFF";
+      monetizeDesc.style.color = "#FFFFFF";
+      monetizeSwitch.style.opacity = "1";
+    } else {
+      isMonetized.disabled = true;
+      isMonetized.checked = false;
+      monetizeText.style.color = "gray";
+      monetizeDesc.style.color = "gray";
+      monetizeSwitch.style.opacity = "0.5"; 
+    }
+  }
+  document
+    .getElementById("isPublic")
+    .addEventListener("change", toggleMonetize);
 
-		selectedImage = file;
+  function handleImageInputChange(e) {
+    imageLabel.innerHTML = "";
+    const file = e.target.files[0];
+    if (!file) return;
 
-		const reader = new FileReader();
-		reader.onload = (event) => {
-			const imageContainer = document.createElement("div");
-			imageContainer.className = "image-preview-container";
+    selectedImage = file;
 
-			const imgElement = document.createElement("img");
-			imgElement.src = event.target.result;
-			imgElement.alt = "Selected";
-			imgElement.className = "image-preview";
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const imageContainer = document.createElement("div");
+      imageContainer.className = "image-preview-container";
 
-			const closeButton = document.createElement("div");
-			closeButton.className = "close-button";
-			closeButton.innerHTML =
-				'<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
+      const imgElement = document.createElement("img");
+      imgElement.src = event.target.result;
+      imgElement.alt = "Selected";
+      imgElement.className = "image-preview";
 
-			closeButton.addEventListener("click", () => {
-				selectedImage = null;
-				imageLabel.innerHTML = initialImageLabelContent;
-				reattachImageInputChange();
-			});
+      const closeButton = document.createElement("div");
+      closeButton.className = "close-button";
+      closeButton.innerHTML =
+        '<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
 
-			imageContainer.appendChild(imgElement);
-			imageContainer.appendChild(closeButton);
-			imageLabel.appendChild(imageContainer);
-			imageLabel.style.color = "transparent";
-		};
-		reader.readAsDataURL(file);
-	}
+      closeButton.addEventListener("click", () => {
+        selectedImage = null;
+        imageLabel.innerHTML = initialImageLabelContent;
+        reattachImageInputChange();
+      });
 
-	function reattachImageInputChange() {
-		imageInput = document.getElementById("imageInput");
-		imageInput.addEventListener("change", handleImageInputChange);
-	}
+      imageContainer.appendChild(imgElement);
+      imageContainer.appendChild(closeButton);
+      imageLabel.appendChild(imageContainer);
+      imageLabel.style.color = "transparent";
+    };
+    reader.readAsDataURL(file);
+  }
 
-	reattachImageInputChange();
+  function reattachImageInputChange() {
+    imageInput = document.getElementById("imageInput");
+    imageInput.addEventListener("change", handleImageInputChange);
+  }
 
-	form.addEventListener("submit", async (e) => {
-		e.preventDefault();
-		const name = document.getElementById("name").value;
-		const description = document.getElementById("description").value;
-		const maxPlayers = document.getElementById("maxPlayers").value;
-		const startDate = document.getElementById("startDate").value;
-		const isPublic = document.getElementById("isPublic").checked;
-		const isMonetized = document.getElementById("isMonetized").checked;
-		const inputTime = new Date(startDate);
-		const currentTime = new Date();
+  reattachImageInputChange();
 
-		if (inputTime <= currentTime) {
-			errorElement.textContent = "Please select a time in the future.";
-			errorElement.style.color = "red";
-			return;
-		} else {
-			errorElement.textContent = "";
-		}
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const description = document.getElementById("description").value;
+    const maxPlayers = document.getElementById("maxPlayers").value;
+    const startDate = document.getElementById("startDate").value;
+    const isPublic = document.getElementById("isPublic").checked;
+    const isMonetized = document.getElementById("isMonetized").checked;
+    const inputTime = new Date(startDate);
+    const currentTime = new Date();
 
-		const formData = new FormData();
-		formData.append("name", name);
-		formData.append("description", description);
-		formData.append("start_date", startDate);
-		formData.append("max_players", maxPlayers);
-		formData.append("is_public", isPublic);
-		formData.append("is_monetized", isMonetized);
+    if (inputTime <= currentTime) {
+      errorElement.textContent = "Please select a time in the future.";
+      errorElement.style.color = "red";
+      return;
+    } else {
+      errorElement.textContent = "";
+    }
 
-		if (selectedImage) {
-			formData.append("icon_file", selectedImage);
-		}
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("start_date", startDate);
+    formData.append("max_players", maxPlayers);
+    formData.append("is_public", isPublic);
+    formData.append("is_monetized", isMonetized);
 
-		try {
-			const res = await fetchWithAuth("/api/v1/game/Tournament/", {
-				method: "POST",
-				body: formData,
-			}, false);
-			window.location.href = "/home";
-		} catch (error) {
-			errorElement.textContent =
-				"An error occurred while creating the tournament.";
-			errorElement.style.color = "red";
-		}
-	});
+    if (selectedImage) {
+      formData.append("icon_file", selectedImage);
+    }
+
+    try {
+      const res = await fetchWithAuth(
+        "/api/v1/game/Tournament/",
+        {
+          method: "POST",
+          body: formData,
+        },
+        false
+      );
+      window.location.href = "/home";
+    } catch (error) {
+      errorElement.textContent =
+        "An error occurred while creating the tournament.";
+      errorElement.style.color = "red";
+    }
+  });
 }

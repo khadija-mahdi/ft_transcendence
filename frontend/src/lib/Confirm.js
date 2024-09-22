@@ -1,3 +1,5 @@
+import { TournamentWs } from "/src/lib/tournamentRt.js";
+import { fetchMyData } from "/src/_api/user.js";
 export function showPopup({
   title,
   subtitle,
@@ -53,7 +55,7 @@ export function showPopup({
   }
 }
 
-export function showMainPopup({
+export async function showMainPopup({
   title,
   subtitle,
   icon,
@@ -72,6 +74,7 @@ export function showMainPopup({
   const popupIcon = document.getElementById("main-popup-icon");
   const progress = document.querySelector(".progress_popup");
   const link = document.getElementById("not-Type");
+  console.log("action", action, "type", type);
   switch (type) {
     case "friend-request":
       link.href = `/profile?username=${sender.username}`;
@@ -86,6 +89,11 @@ export function showMainPopup({
 
     case "new-game":
       link.href = `/game?uuid=${action?.match_uuid}`;
+      break;
+    case "tournament":
+      const me = await fetchMyData();
+      console.log("me", me);
+      TournamentWs(action, me);
       break;
   }
   popupTitle.textContent = title;
@@ -122,5 +130,5 @@ export function SerializeInviteAction(action) {
   try {
     return JSON.parse(action);
   } catch (error) {}
-  return null;
+  return action;
 }
