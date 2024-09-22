@@ -340,7 +340,7 @@ export default async function () {
     renderer = Renderer(scene);
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
-
+    controls.add
     Lights(scene);
 
     const { ballModel, rp, lp } = await loadModels(scene);

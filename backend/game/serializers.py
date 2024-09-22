@@ -48,6 +48,7 @@ class TournamentSerializer(serializers.ModelSerializer, BaseTournamentSerializer
     icon = serializers.SerializerMethodField(read_only=True)
     icon_file = serializers.FileField(write_only=True)
     uuid = serializers.UUIDField(format='hex_verbose', read_only=True)
+
     class Meta:
         model = Tournament
         fields = ['id', 'icon', 'icon_file', 'name', 'description', 'uuid', 'start_date',
@@ -107,16 +108,15 @@ class TournamentDetailsSerializer(serializers.ModelSerializer, BaseTournamentSer
 
 
 class MatchUpSerializer(serializers.ModelSerializer):
-    first_player = UserDetailSerializer()
-    second_player = UserSerializer()
-    Winner = UserSerializer()
-
+    first_player = UserDetailSerializer(read_only=True)
+    second_player = UserSerializer(read_only=True)
+    Winner = UserSerializer(read_only=True)
     class Meta:
         model = Matchup
         fields = ['id', 'first_player', 'second_player', 'Winner',
-                  'first_player_score', 'second_player_score',
-                  'game_over', 'created_at', 'updated_at']
-
+                  'first_player_score', 'second_player_score', 'game_uuid',
+                  'game_type', 'game_over', 'created_at', 'updated_at']
+        read_only_fields = fields
 
 class MatchInfoSerializer(serializers.ModelSerializer):
     first_player = UserSerializer()

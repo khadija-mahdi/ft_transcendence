@@ -42,11 +42,14 @@ class Game():
         self.lock = asyncio.Lock()
         try:
             self.matchup = await database_sync_to_async(Matchup.objects.get)(game_uuid=room_id)
+
             self.first_player = await database_sync_to_async(lambda: self.matchup.first_player)()
             self.second_player = await database_sync_to_async(lambda: self.matchup.second_player)()
             self.tournament = await database_sync_to_async(lambda: self.matchup.tournament)()
 
             isFinished = await database_sync_to_async(lambda: self.matchup.game_over)()
+            logger.debug(
+                f'Getting Game With uuid {room_id} result is {self.matchup.game_type}, isFinished = {isFinished}')
             if isFinished:
                 return None
 

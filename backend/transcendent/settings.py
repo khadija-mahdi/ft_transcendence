@@ -295,7 +295,7 @@ LOGGING = {
             'propagate': True,
         } for logger_name in
         ('django', 'django.request', 'django.db.backends',
-         'django.template', 'core', 'urllib3', 'asyncio', 'daphne')
+         'django.template', 'core', 'urllib3', 'asyncio', 'daphne', 'channels_redis.core')
     },
     'root': {
         'level': 'DEBUG',

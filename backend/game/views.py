@@ -45,6 +45,14 @@ def MockTest(tournament):
     notify_tournament_users(tournament.id)
 
 
+class CreateOfflineGame(CreateAPIView):
+    serializer_class = MatchUpSerializer
+    queryset = Matchup.objects.all()
+
+    def perform_create(self, serializer: MatchUpSerializer):
+        serializer.save(game_type='offline', first_player=self.request.user)
+
+
 class listTournaments(ListCreateAPIView):
     serializer_class = TournamentSerializer
     queryset = Tournament.objects.all()

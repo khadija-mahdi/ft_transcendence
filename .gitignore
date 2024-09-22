@@ -6,4 +6,4 @@ __pycache__/
 */__pycache__/
 db.sqlite3
 *.log
-backend/debug.log
+backend/.nfs*
