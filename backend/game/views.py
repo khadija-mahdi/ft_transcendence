@@ -50,7 +50,9 @@ class CreateOfflineGame(CreateAPIView):
     queryset = Matchup.objects.all()
 
     def perform_create(self, serializer: MatchUpSerializer):
-        serializer.save(game_type='offline', first_player=self.request.user)
+        serializer.save(game_type='offline',
+                        first_player=self.request.user,
+                        second_player=self.request.user)
 
 
 class listTournaments(ListCreateAPIView):
@@ -157,7 +159,7 @@ class MatchHistory(ListAPIView):
         pk = self.kwargs['pk']
         try:
             user = User.objects.get(id=pk)
-            return Matchup.objects.filter(Q(first_player=user) | Q(second_player=user))
+            return Matchup.objects.filter(Q(first_player=user) | Q(second_player=user)).filter(game_type='online')
         except User.DoesNotExist:
             return []
 

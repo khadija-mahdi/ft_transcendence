@@ -111,12 +111,14 @@ class MatchUpSerializer(serializers.ModelSerializer):
     first_player = UserDetailSerializer(read_only=True)
     second_player = UserSerializer(read_only=True)
     Winner = UserSerializer(read_only=True)
+
     class Meta:
         model = Matchup
         fields = ['id', 'first_player', 'second_player', 'Winner',
                   'first_player_score', 'second_player_score', 'game_uuid',
                   'game_type', 'game_over', 'created_at', 'updated_at']
         read_only_fields = fields
+
 
 class MatchInfoSerializer(serializers.ModelSerializer):
     first_player = UserSerializer()
@@ -126,7 +128,7 @@ class MatchInfoSerializer(serializers.ModelSerializer):
         model = Matchup
         fields = ['id', 'first_player', 'second_player', 'Winner',
                   'first_player_score', 'second_player_score',
-                  'game_over', 'created_at', 'updated_at']
+                  'game_type', 'game_over', 'created_at', 'updated_at']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

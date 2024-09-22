@@ -185,7 +185,7 @@ class Game():
         winner, Loser = self.determine_winner_and_loser()
         await self.handle_winner(winner, Loser)
 
-    async def handle_winner(self, winner, Loser):
+    async def handle_winner(self, winner: User, Loser: User):
         if winner:
             winner = None if type(winner) == str else winner
             Loser = None if type(Loser) == str else Loser
@@ -197,10 +197,11 @@ class Game():
                 'type': 'game_over',
                 'winner': winner.username if winner else "ROBOT"
             })
-            if self.tournament is None and winner:
-                await AchievementsManager().handleUserAchievements(user=winner)
-            if Loser:
-                await AchievementsManager().handleLoserUser(user=Loser)
+            if self.tournament is None and self.matchup.game_type != 'online':
+                if winner:
+                    await AchievementsManager().handleUserAchievements(user=winner)
+                if Loser:
+                    await AchievementsManager().handleLoserUser(user=Loser)
             self.is_running = False
 
         await self.emit(dict_data={

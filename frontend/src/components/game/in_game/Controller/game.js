@@ -16,6 +16,12 @@ import {
 
 const uuid = new URLSearchParams(window.location.search).get("uuid");
 
+const Buttons = {
+  Left: 'arrowleft',
+  Right: 'arrowright',
+  SecondLeft: 'a',
+  SecondRight: 'd'
+};
 const config = {
   tableWidth: 200,
   tableHeight: 10,
@@ -51,6 +57,19 @@ const config = {
         z: 1.5357998077952344,
       },
     },
+
+    GPerspective: {
+      position: {
+        x: -0.0003232726615395625,
+        y: 323.1907376027524,
+        z: 0.0000016465594338686714
+      },
+      rotation: {
+        x: -1.570796321700198,
+        y: -0.0000010002534848731485,
+        z: -1.5657029632315764,
+      }
+    }
   },
 };
 
@@ -262,13 +281,15 @@ function addTextToScene(scene) {
   );
 }
 
-function Camera(isFirstPlayer = true) {
+function Camera(isFirstPlayer = true, game_type) {
   const fov = 45;
   const aspect = window.innerWidth / window.innerHeight;
   const near = 0.1;
   const far = 1000;
-
   config.selectedPerspective = !isFirstPlayer ? "FPerspective" : "SPerspective";
+  console.log('game_type', game_type)
+  if (game_type === 'offline')
+    config.selectedPerspective = "GPerspective";
   const PlayerPerspective = config.Perspectives[config.selectedPerspective];
 
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
@@ -332,15 +353,22 @@ export default async function () {
 
   const keysPressed = {};
   let intervalId = null;
+  let SecondintervalId = null;
 
   async function init() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
-    const camera = Camera(GameInfo.first_player.username === me.username);
+    console.log(GameInfo)
+    const camera = Camera(GameInfo.first_player.username === me.username, GameInfo.game_type);
     renderer = Renderer(scene);
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
-    controls.add
+
+    controls.addEventListener('change', () => {
+      console.log('Camera position:', camera.position);
+      console.log('Camera rotation:', camera.rotation);
+    });
+
     Lights(scene);
 
     const { ballModel, rp, lp } = await loadModels(scene);
@@ -425,67 +453,55 @@ export default async function () {
     function StartMovementLoop() {
       if (intervalId) return;
       intervalId = setInterval(() => {
-        if (keysPressed["ArrowLeft"])
+        if (keysPressed[Buttons.Left])
           handleMovement(GameSocket, directions.left);
-        else if (keysPressed["ArrowRight"])
+        else if (keysPressed[Buttons.Right])
           handleMovement(GameSocket, directions.right);
       }, 50);
     }
-
     function StopMovementLoop() {
       if (!intervalId) return;
-      if (!keysPressed["ArrowLeft"] && !keysPressed["ArrowRight"]) {
+      if (!keysPressed[Buttons.Left] && !keysPressed[Buttons.Right]) {
         clearInterval(intervalId);
         intervalId = null;
       }
     }
 
     function StartSecondMovementLoop() {
-      if (intervalId) return;
-      intervalId = setInterval(() => {
-        if (keysPressed["a"])
-          handleMovement(GameSocket, directions.left);
-        else if (keysPressed["d"])
-          handleMovement(GameSocket, directions.right);
+      if (SecondintervalId) return;
+      SecondintervalId = setInterval(() => {
+        if (keysPressed[Buttons.SecondLeft])
+          handleMovement(GameSocket, directions.left, '2');
+        else if (keysPressed[Buttons.SecondRight])
+          handleMovement(GameSocket, directions.right, '2');
       }, 50);
     }
 
     function StopSecondMovementLoop() {
-      if (!intervalId) return;
-      if (!keysPressed["a"] && !keysPressed["d"]) {
-        clearInterval(intervalId);
-        intervalId = null;
+      if (!SecondintervalId) return;
+      if (!keysPressed[Buttons.SecondLeft] && !keysPressed[Buttons.SecondRight]) {
+        clearInterval(SecondintervalId);
+        SecondintervalId = null;
       }
     }
 
 
     // first player event listerners
     document.addEventListener("keydown", (e) => {
-      if (keysPressed[e.key]) return;
-      keysPressed[e.key] = true;
-      if (e.key === "ArrowLeft" || e.key === "ArrowRight") StartMovementLoop();
-    });
-
-    document.addEventListener("keyup", (e) => {
-      delete keysPressed[e.key];
-      if (e.key === "ArrowLeft" || e.key === "ArrowRight") StopMovementLoop();
-    });
-
-
-    // second local player event listeners
-    document.addEventListener("keydown", (e) => {
       const key = e.key.toLowerCase()
       if (keysPressed[key]) return;
       keysPressed[key] = true;
-      if (key === "a" || key === "d") StartSecondMovementLoop();
+      if (key === Buttons.Left || key === Buttons.Right) StartMovementLoop();
+      if (key === Buttons.SecondLeft || key === Buttons.SecondRight) StartSecondMovementLoop();
+
     });
 
     document.addEventListener("keyup", (e) => {
       const key = e.key.toLowerCase()
       delete keysPressed[key];
-      if (key === "a" || key === "d") StopSecondMovementLoop();
+      if (key === Buttons.Left || key === Buttons.Right) StopMovementLoop();
+      if (key === Buttons.SecondLeft || key === Buttons.SecondRight) StopSecondMovementLoop();
     });
-
 
     window.addEventListener("resize", () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -497,8 +513,8 @@ export default async function () {
   await init();
 }
 
-function handleMovement(Socket, action) {
-  Socket.send(JSON.stringify({ type: "move", action }));
+function handleMovement(Socket, action, playerOrder = 1) {
+  Socket.send(JSON.stringify({ type: "move", action, 'player-order': playerOrder }));
 }
 
 async function InitScoreBoard({
