@@ -38,8 +38,9 @@ html {
 	height: 100%;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: center;
 	align-items: center;
+	gap: 10rem;
 }
 
 @media (max-width: 768px) {
@@ -69,6 +70,7 @@ html {
 	text-align: center;
 	overflow: hidden;
 	font-family: Arial, sans-serif;
+	position: relative;
 	/* margin-top: 1rem; */
 
 }
@@ -96,9 +98,13 @@ html {
 }
 
 .player-name {
-	font-size: 22px;
-	font-weight: bold;
-	margin-bottom: 8px;
+	font-family: Inter;
+	font-size: 18px;
+	font-weight: 500;
+	line-height: 21.78px;
+	text-align: center;
+	padding: 0.7rem;
+	
 }
 
 .player-rank {
@@ -109,20 +115,28 @@ html {
 }
 
 .rank-icon {
-	width: 30px;
-	height: 30px;
+	width: 40px;
+	height: 50px;
+	position: absolute;
+	left: 44%;
+	bottom: 27%;
 }
 
 .player-level {
-	font-size: 18px;
-	color: #A0A0A0;
+	font-family: Inter;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 16.94px;
+	text-align: left;
+	color: #A2A2A2;
 }
 
 .vs {
-	font-size: 120px;
-	color: white;
-	margin: 0 20px;
-	font-weight: bold;
+	font-size: 200px;
+	font-weight: 800;
+	line-height: 242.05px;
+	letter-spacing: 0em;
+	text-align: left;	
 }
 
 .play_now_button {

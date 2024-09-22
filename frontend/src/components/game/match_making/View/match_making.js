@@ -59,14 +59,14 @@ export default () => {
                 alt="Player Image"
                 class="player-image"
               />
+              <img
+                src="/public/assets/icons/Gold_3_Rank.png"
+                alt="Rank Icon"
+                class="rank-icon"
+              />
               <div class="player-info">
                 <div class="player-name">@Unknown</div>
                 <div class="player-rank">
-                  <img
-                    src="/public/assets/icons/Gold_3_Rank.png"
-                    alt="Rank Icon"
-                    class="rank-icon"
-                  />
                   <span class="player-level">Lvl.--- </span>
                 </div>
               </div>
@@ -99,15 +99,15 @@ export default () => {
 export function PlayerCard({ username, image_url, rank, current_xp }) {
   return html` <div class="player-card fade-in-image">
     <img src="${image_url}" alt="Player Image" class="player-image" />
+    <img
+      src="${rank?.icon || "/public/assets/icons/unranked.png"}"
+      alt="Rank Icon"
+      class="rank-icon"
+      oneerror="this.onerror=null;this.src='/public/assets/icons/unranked.png';"
+    />
     <div class="player-info">
-      <div class="player-name">${username}</div>
+      <div class="player-name">@${username}</div>
       <div class="player-rank">
-        <img
-          src="${rank?.icon || "/public/assets/icons/unranked.png"}"
-          alt="Rank Icon"
-          class="rank-icon"
-          oneerror="this.onerror=null;this.src='/public/assets/icons/unranked.png';"
-        />
         <span class="player-level">Lvl.${current_xp || "---"}</span>
       </div>
     </div>

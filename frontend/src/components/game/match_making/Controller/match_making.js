@@ -1,6 +1,7 @@
 const params = new URLSearchParams(window.location.search);
 const mode = params.get("mode");
 import { fetchMyData, UserDetailByUsername } from "/src/_api/user.js";
+import { getOfflineGameInfo } from "/src/_api/game.js";
 import AuthWebSocket from "/src/lib/authwebsocket.js";
 import { showPopup } from "/src/lib/Confirm.js";
 import { PlayerCard } from "/src/components/game/match_making/View/match_making.js";
@@ -11,7 +12,7 @@ const searchParams = new URLSearchParams(window.location.search);
 export default async function () {
   const pb = document.getElementById("match-making-play-now-button");
   pb.addEventListener("click", handleButtonClick);
-  startCountdown(60, "/game/choice-game");
+  startCountdown(600, "/game/choice-game");
 
   const myCard = document.getElementById("my-card");
 
@@ -45,7 +46,7 @@ async function handleInviteLobby(invite_id, second_player) {
   };
 }
 
-function handleNormalLobby(game_mode) {
+async function handleNormalLobby(game_mode) {
   if (game_mode === "singleplayer") {
     const secondPlayerCard = document.getElementById("second-player");
     secondPlayerCard.innerHTML = "";
@@ -56,13 +57,19 @@ function handleNormalLobby(game_mode) {
       rank: null,
       current_xp: null,
     });
+  } else if (game_mode === "localPlayers") {
+    const secondPlayerCard = document.getElementById("second-player");
+    secondPlayerCard.innerHTML = "";
+    secondPlayerCard.style.height = "null";
+    secondPlayerCard.innerHTML = PlayerCard(myData);
   }
 
   if (game_mode === undefined) game_mode = "multiplayer";
   if (
     game_mode &&
     game_mode !== "multiplayer" &&
-    game_mode !== "singleplayer"
+    game_mode !== "singleplayer" &&
+    game_mode !== "localPlayers"
   ) {
     showPopup({
       title: "there is no type",
@@ -74,16 +81,21 @@ function handleNormalLobby(game_mode) {
     });
   }
 
-  const loobySocket = new AuthWebSocket(
-    `/ws/game/normal/looby/?game_mode=${game_mode}`
-  );
-  loobySocket.onopen = () => {
-    console.log("Normal WebSocket connected");
-  };
-  loobySocket.onmessage = (message) => {
-    const data = JSON.parse(message.data);
-    matchCountdown(5, `/game?uuid=${data.game_uuid}`, data.second_player);
-  };
+  if (game_mode === "localPlayers") {
+    const offline_game = await getOfflineGameInfo();
+    matchCountdown(5, `/game?uuid=${offline_game.game_uuid}`, null);
+  } else {
+    const loobySocket = new AuthWebSocket(
+      `/ws/game/normal/looby/?game_mode=${game_mode}`
+    );
+    loobySocket.onopen = () => {
+      console.log("Normal WebSocket connected");
+    };
+    loobySocket.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      matchCountdown(5, `/game?uuid=${data.game_uuid}`, data.second_player);
+    };
+  }
 }
 
 function startCountdown(seconds, path) {

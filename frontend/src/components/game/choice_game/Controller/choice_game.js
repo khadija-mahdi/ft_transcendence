@@ -48,6 +48,8 @@ export default function () {
 		let query = 'multiplayer'
 		if (selectedOpponent === 'Machine')
 			query = 'singleplayer'
+		else if (selectedOpponent === 'Local')
+			query = 'localPlayers'
 		window.location.href = `${url}?game_mode=${query}`;
 	});
 }
