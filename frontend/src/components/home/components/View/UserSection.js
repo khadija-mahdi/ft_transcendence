@@ -1,9 +1,11 @@
 export default function () {
-	return /*html*/`
+  return /*html*/ `
 	<body>
 		<div id="team-leader">
 			<a href="/profile" class="user-link">
-				<img id="user-image" class="user-image" src="" alt="user Image">
+				<img id="user-image" class="user-image" src="" alt="user Image"
+				onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
+				>
 				<div class="user-info">
 					<div id="fullname" class="user-name"></div>
 					<div class="user-status">Your Status</div>
@@ -72,4 +74,4 @@ export default function () {
 		<script src="script.js"></script>
 	</body>
     `;
-};
+}

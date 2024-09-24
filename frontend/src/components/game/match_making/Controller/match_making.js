@@ -1,5 +1,6 @@
 const params = new URLSearchParams(window.location.search);
-const mode = params.get("mode");
+const alias1 = params.get("alias1");
+const alias2 = params.get("alias2");
 import { fetchMyData, UserDetailByUsername } from "/src/_api/user.js";
 import { getOfflineGameInfo } from "/src/_api/game.js";
 import AuthWebSocket from "/src/lib/authwebsocket.js";
@@ -8,6 +9,7 @@ import { PlayerCard } from "/src/components/game/match_making/View/match_making.
 
 const myData = await fetchMyData();
 const searchParams = new URLSearchParams(window.location.search);
+let offline_game = null;
 
 export default async function () {
   const pb = document.getElementById("match-making-play-now-button");
@@ -58,10 +60,38 @@ async function handleNormalLobby(game_mode) {
       current_xp: null,
     });
   } else if (game_mode === "localPlayers") {
+    offline_game = await getOfflineGameInfo(alias1, alias2);
     const secondPlayerCard = document.getElementById("second-player");
+    const firstPlayer = document.getElementById("my-card");
     secondPlayerCard.innerHTML = "";
     secondPlayerCard.style.height = "null";
-    secondPlayerCard.innerHTML = PlayerCard(myData);
+    secondPlayerCard.innerHTML = PlayerCard({
+      username: alias1,
+      image_url: "/public/assets/images/robot.webp",
+      rank: null,
+      current_xp: null,
+    });
+    firstPlayer.innerHTML = "";
+    firstPlayer.style.height = "null";
+    firstPlayer.innerHTML = PlayerCard({
+      username: alias2,
+      image_url: "/public/assets/images/robot.webp",
+      rank: null,
+      current_xp: null,
+    });
+    matchCountdown(5, `/game?uuid=${offline_game.game_uuid}`, null);
+  } else {
+    const loobySocket = new AuthWebSocket(
+      `/ws/game/normal/looby/?game_mode=${game_mode}`
+    );
+    loobySocket.onopen = () => {
+      console.log("Normal WebSocket connected");
+    };
+    loobySocket.onmessage = (message) => {
+      const data = JSON.parse(message.data);
+      if (data.game_uuid)
+        matchCountdown(5, `/game?uuid=${data.game_uuid}`, data.second_player);
+    };
   }
 
   if (game_mode === undefined) game_mode = "multiplayer";
@@ -79,22 +109,6 @@ async function handleNormalLobby(game_mode) {
       },
       closeable: false,
     });
-  }
-
-  if (game_mode === "localPlayers") {
-    const offline_game = await getOfflineGameInfo();
-    matchCountdown(5, `/game?uuid=${offline_game.game_uuid}`, null);
-  } else {
-    const loobySocket = new AuthWebSocket(
-      `/ws/game/normal/looby/?game_mode=${game_mode}`
-    );
-    loobySocket.onopen = () => {
-      console.log("Normal WebSocket connected");
-    };
-    loobySocket.onmessage = (message) => {
-      const data = JSON.parse(message.data);
-      matchCountdown(5, `/game?uuid=${data.game_uuid}`, data.second_player);
-    };
   }
 }
 
