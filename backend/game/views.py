@@ -11,7 +11,7 @@ from .serializers import (
     TournamentsRegisteredPlayersSerializer,
     MatchInfoSerializer)
 from rest_framework import serializers
-from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, Matchup
+from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, Matchup, GamePlayer
 from user.models import User
 from rest_framework.permissions import IsAuthenticated
 from datetime import datetime, timedelta
@@ -32,9 +32,9 @@ class ListGame(ListAPIView):
 def FillOutRegisteredPlayers(tournament: Tournament, names=[]):
     for username in names:
         try:
-            user = User.objects.get(username=username)
+            user: User = User.objects.get(username=username)
             TournamentsRegisteredPlayers.objects.create(
-                user=user, tournament=tournament)
+                user=user, tournament=tournament, alias=f'{user.username}-alias')
         except User.DoesNotExist:
             logger.error(f'This User Doesn\'t Not Exists {username}')
 
@@ -50,9 +50,16 @@ class CreateOfflineGame(CreateAPIView):
     queryset = Matchup.objects.all()
 
     def perform_create(self, serializer: MatchUpSerializer):
+        user = self.request.user
+        fPlayer_alias = self.request.data.get('first_player_alias')
+        sPlayer_alias = self.request.data.get('second_player_alias')
+        fPlayer = GamePlayer.objects.create(
+            user=user, alias=fPlayer_alias)
+        sPlayer = GamePlayer.objects.create(
+            user=user, alias=sPlayer_alias)
         serializer.save(game_type='offline',
-                        first_player=self.request.user,
-                        second_player=self.request.user)
+                        first_player=fPlayer,
+                        second_player=sPlayer)
 
 
 class listTournaments(ListCreateAPIView):
@@ -79,9 +86,10 @@ class listTournaments(ListCreateAPIView):
             raise serializers.ValidationError(
                 "Start date must be in the future")
 
-        tournament = serializer.save()
-        MockTest(tournament)
-        # start_scheduler(tournament.id, start_date)
+        tournament: Tournament = serializer.save()
+        if tournament.is_public:
+            MockTest(tournament)
+            # start_scheduler(tournament.id, start_date)
 
 
 class listAnnouncements(ListCreateAPIView):
@@ -95,6 +103,10 @@ class RetrieveTournament(RetrieveDestroyAPIView):
     serializer_class = TournamentDetailsSerializer
     queryset = Tournament.objects.all()
 
+    def get_queryset(self):
+        queryset = Tournament.objects.all()
+        return queryset.filter(owner=self.request.user) | queryset.filter(is_public=True)
+
 
 class RegisterToTournament(CreateAPIView):
     serializer_class = TournamentsRegisteredPlayersSerializer
@@ -102,32 +114,40 @@ class RegisterToTournament(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        tournament = get_object_or_404(Tournament, pk=self.kwargs.get('pk'))
+        tournament: Tournament = get_object_or_404(
+            Tournament, pk=self.kwargs.get('pk'))
         if tournament.finished or tournament.ongoing:
             return serializers.ValidationError("Tournament is already started or finished")
-        bracket = Brackets.objects.filter(
-            tournament=tournament
-        ).filter(player=self.request.user).filter(round_number=1)
+        if tournament.is_public:
+            bracket = Brackets.objects.filter(
+                tournament=tournament
+            ).filter(player=self.request.user).filter(round_number=1)
 
-        if bracket.exists():
-            bracket.delete()
-            TournamentsRegisteredPlayers.objects.filter(
-                user=self.request.user, tournament=tournament).delete()
-            return
+            if bracket.exists():
+                bracket.delete()
+                TournamentsRegisteredPlayers.objects.filter(
+                    user=self.request.user, tournament=tournament).delete()
+                return
 
-        OtherTournaments = TournamentsRegisteredPlayers.objects.filter(
-            user=self.request.user)\
-            .exclude(created_at__gte=datetime.now() - timedelta(hours=1))\
-            .exclude(created_at__lte=datetime.now() + timedelta(hours=1))
-        if OtherTournaments.exists():
-            raise serializers.ValidationError(
-                "You are already registered to another tournament within the last hour.\
-                    Please unregister from the other tournament first.")
+            OtherTournaments = TournamentsRegisteredPlayers.objects\
+                .filter(user=self.request.user)\
+                .exclude(created_at__gte=datetime.now() - timedelta(hours=1))\
+                .exclude(created_at__lte=datetime.now() + timedelta(hours=1))
+
+            if OtherTournaments.exists():
+                raise serializers\
+                    .ValidationError("You are already registered to another tournament within the last hour.")
 
         alias = serializer.validated_data.get('alias')
         Brackets(tournament=tournament,
                  player=self.request.user, alias=alias).save()
         serializer.save(user=self.request.user, tournament=tournament)
+
+        if not tournament.is_public:
+            count = TournamentsRegisteredPlayers.objects\
+                .filter(tournament=tournament).count()
+            if count == tournament.max_players:
+                notify_tournament_users(tournament.pk)
 
 
 class UnRegisterToTournament(DestroyAPIView):

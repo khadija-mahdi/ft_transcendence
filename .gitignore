@@ -7,3 +7,6 @@ __pycache__/
 db.sqlite3
 *.log
 backend/.nfs*
+backend/public/profile-images/*
+backend/public/chat/*
+backend/media/public/*

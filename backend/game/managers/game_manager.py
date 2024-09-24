@@ -4,7 +4,7 @@ import json
 from channels.db import database_sync_to_async
 from game.managers.achievements_manager import AchievementsManager
 from user.models import User
-from game.models import Matchup, Tournament
+from game.models import Matchup, Tournament, GamePlayer
 from game.utils.game_utils import Ball, Paddle, Config
 from typing import Dict
 import logging
@@ -13,8 +13,10 @@ logger = logging.getLogger(__name__)
 
 
 class Game():
-    first_player = None
-    second_player = None
+    first_player: GamePlayer = None
+    second_player: GamePlayer = None
+    first_player_user: User = None
+    second_player_user: User = None
     tournament = None
 
     def __init__(self, room_id):
@@ -24,7 +26,6 @@ class Game():
         self.players = []
         self.ball = Ball()
         halfHeight = (Config.tableDepth / 2)
-        halfPaddle = Config.paddleDepth / 2
 
         self.player_1_paddle = Paddle(5,  halfHeight)
         self.player_2_paddle = Paddle(Config.tableWidth - 10, halfHeight)
@@ -39,11 +40,16 @@ class Game():
     async def create(cls, room_id):
         self = cls(room_id)
         self.lock = asyncio.Lock()
+
         try:
             self.matchup = await database_sync_to_async(Matchup.objects.get)(game_uuid=room_id)
 
             self.first_player = await database_sync_to_async(lambda: self.matchup.first_player)()
+            self.first_player_user = await database_sync_to_async(lambda: self.first_player.user)()
+
             self.second_player = await database_sync_to_async(lambda: self.matchup.second_player)()
+            self.second_player_user = await database_sync_to_async(lambda: self.second_player.user)()
+
             self.tournament = await database_sync_to_async(lambda: self.matchup.tournament)()
 
             isFinished = await database_sync_to_async(lambda: self.matchup.game_over)()
@@ -57,11 +63,19 @@ class Game():
         return self
 
     async def add_player(self, player):
+        logger.debug(f'Add Player {player}')
         async with self.lock:
             if len(self.players) == 2 or player in self.players or not self.matchup:
+                logger.debug(f'either player list is full > {len(self.players) == 2}'
+                             'or player already in player list '
+                             f'> {player in self.players}'
+                             f'or matchup is null {not self.matchup}')
                 return False
-            if player == self.first_player or player == self.second_player:
+            if player == self.first_player_user or player == self.second_player_user:
+                logger.debug('Adding player {player}')
                 self.players.append(player)
+            else:
+                logger.info('player is neither Fp or Sp')
             return True
 
     async def move_paddle(self, player, action, player_order=None):
@@ -69,7 +83,7 @@ class Game():
             if player_order:
                 paddle = self.player_1_paddle if player_order == 1 else self.player_2_paddle
             else:
-                paddle = self.player_1_paddle if player == self.first_player else self.player_2_paddle
+                paddle = self.player_1_paddle if player == self.first_player_user else self.player_2_paddle
             paddle.movePaddle(action)
 
     async def remove_player(self, player):
@@ -90,11 +104,14 @@ class Game():
             return len(self.players) == 0
 
     async def game_loop(self):
+        logger.info('Starting Game Loop For Game'
+                    f'{self.room_id}, {self.is_running}')
+
         while self.is_running:
             await asyncio.sleep(1/60)
             if not self.matchup:
                 return await self.emit(type='game_over', message='matchup not found')
-            if len(self.players) != 2 and self.second_player is not None\
+            if len(self.players) != 2 and self.second_player_user is not None\
                     and self.matchup.game_type == 'online':
                 self.waiting_in_ms += 16
                 if self.waiting_in_ms >= 20 * 1000:
@@ -115,7 +132,7 @@ class Game():
             self.waiting_in_ms = 0
             await self.ball.update(lambda is_left_goal: self.new_point(is_left_goal))
 
-            if self.second_player is None and self.matchup.game_type == 'online':
+            if self.second_player_user is None and self.matchup.game_type == 'online':
                 self.player_2_paddle.ai_update(self.ball)
 
             await self.emit(dict_data={
@@ -176,25 +193,30 @@ class Game():
         self.reset_paddles()
 
         if not is_left_goal:
-            self.matchup.first_player_score += 1
+            self.matchup.first_player.score += 1
         else:
-            self.matchup.second_player_score += 1
+            self.matchup.second_player.score += 1
 
         await database_sync_to_async(self.matchup.save)()
         winner, Loser = self.determine_winner_and_loser()
         await self.handle_winner(winner, Loser)
 
-    async def handle_winner(self, winner: User, Loser: User):
+    async def handle_winner(self, winner: GamePlayer, Loser: GamePlayer):
         if winner:
             winner = None if type(winner) == str else winner
             Loser = None if type(Loser) == str else Loser
             self.matchup.Winner = winner
             self.matchup.game_over = True
+
+            await database_sync_to_async(self.first_player.save)()
+            await database_sync_to_async(self.second_player.save)()
             await database_sync_to_async(self.matchup.save)()
+
             await self.NotifyTournamentConsumer(winner)
+            winner_user: User = await database_sync_to_async(lambda: winner.user)
             await self.emit(dict_data={
                 'type': 'game_over',
-                'winner': winner.username if winner else "ROBOT"
+                'winner': winner_user.username if winner else "The Machine"
             })
             if self.tournament is None and self.matchup.game_type == 'online':
                 if winner:
@@ -205,20 +227,20 @@ class Game():
 
         await self.emit(dict_data={
             'type': 'goal',
-            'first_player_score': self.matchup.first_player_score,
-            'second_player_score': self.matchup.second_player_score
+            'first_player_score': self.matchup.first_player.score,
+            'second_player_score': self.matchup.second_player.score
         })
 
     def determine_winner_and_loser(self):
         SecondPlayer = self.second_player if self.second_player else 'ROBOT'
 
-        if self.matchup.first_player_score >= Config.winScore and self.matchup.first_player_score - self.matchup.second_player_score >= Config.requiredScoreDiff:
+        if self.matchup.first_player.score >= Config.winScore and self.matchup.first_player.score - self.matchup.second_player.score >= Config.requiredScoreDiff:
             return [self.first_player, SecondPlayer]
-        elif self.matchup.second_player_score >= Config.winScore and self.matchup.second_player_score - self.matchup.first_player_score >= Config.requiredScoreDiff:
+        elif self.matchup.second_player.score >= Config.winScore and self.matchup.second_player.score - self.matchup.first_player.score >= Config.requiredScoreDiff:
             return [SecondPlayer, self.first_player]
-        if self.matchup.first_player_score >= Config.maxScore and self.matchup.first_player_score > self.matchup.second_player_score:
+        if self.matchup.first_player.score >= Config.maxScore and self.matchup.first_player.score > self.matchup.second_player.score:
             return [self.first_player, SecondPlayer]
-        elif self.matchup.second_player_score >= Config.maxScore and self.matchup.second_player_score > self.matchup.first_player_score:
+        elif self.matchup.second_player.score >= Config.maxScore and self.matchup.second_player.score > self.matchup.first_player.score:
             return [SecondPlayer, self.first_player]
         return [None, None]
 

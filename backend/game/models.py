@@ -70,25 +70,35 @@ class TournamentsRegisteredPlayers(models.Model):
         return super().save(*args, **kwargs)
 
 
+class GamePlayer(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='game_user', null=True)
+    score = models.IntegerField(null=False, default=0)
+    alias = models.CharField(null=False)
+
+    def save(self, *args, **kwargs):
+        if not self.alias:
+            self.alias = self.user.username if self.user else 'The Machine'
+        return super().save(*args, **kwargs)
+
+
 class Matchup(models.Model):
     game_type_choice = [
         ('online', 'Online'),
         ('offline', 'Offline')
     ]
-    first_player = models.ForeignKey(User, on_delete=models.CASCADE,
-                                     related_name='first_player')
-    second_player = models.ForeignKey(User, on_delete=models.CASCADE,
-                                      related_name='second_player', null=True)
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE,
-                                   related_name='tournament_match_up', null=True)
-    Winner = models.ForeignKey(User, on_delete=models.CASCADE,
-                               related_name='winner', null=True)
+    first_player = models.ForeignKey(
+        GamePlayer, on_delete=models.CASCADE, related_name='first_player')
+    second_player = models.ForeignKey(
+        GamePlayer, on_delete=models.CASCADE, related_name='second_player', null=True)
+    tournament = models.ForeignKey(
+        Tournament, on_delete=models.CASCADE, related_name='tournament_match_up', null=True)
+    Winner = models.ForeignKey(
+        GamePlayer, on_delete=models.CASCADE, related_name='winner', null=True)
     game_over = models.BooleanField(default=False)
     game_uuid = models.CharField(
         max_length=200, blank=False, null=False, unique=True, default=uuid.uuid4)
     round_number = models.IntegerField(default=1)
-    first_player_score = models.IntegerField(null=False, default=0)
-    second_player_score = models.IntegerField(null=False, default=0)
     game_type = models.CharField(
         choices=game_type_choice, default='online')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -96,8 +106,9 @@ class Matchup(models.Model):
 
 
 class Brackets(models.Model):
-    tournament = models.ForeignKey(Tournament, on_delete=models.CASCADE,
-                                   related_name='tournament_bracket', null=False, default=None)
+    tournament = models.ForeignKey(
+        Tournament, on_delete=models.CASCADE, related_name='tournament_bracket',
+        null=False, default=None)
     round_number = models.IntegerField(null=False, default=1)
     player = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='player', null=False, default=None)

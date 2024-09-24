@@ -60,3 +60,14 @@ class JWTAuthMiddlewareStack():
 
     def get_user(self, user_id):
         return User.objects.get(id=user_id)
+
+
+class DisableCSRFMiddlewareForAPI:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        # Adjust this path for your API
+        if request.path.startswith('/api/v1/'):
+            setattr(request, '_dont_enforce_csrf_checks', True)
+        return self.get_response(request)

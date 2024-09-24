@@ -17,10 +17,10 @@ import {
 const uuid = new URLSearchParams(window.location.search).get("uuid");
 
 const Buttons = {
-  Left: 'arrowleft',
-  Right: 'arrowright',
-  SecondLeft: 'a',
-  SecondRight: 'd'
+  Left: "arrowleft",
+  Right: "arrowright",
+  SecondLeft: "a",
+  SecondRight: "d",
 };
 const config = {
   tableWidth: 200,
@@ -62,14 +62,14 @@ const config = {
       position: {
         x: -0.0003232726615395625,
         y: 323.1907376027524,
-        z: 0.0000016465594338686714
+        z: 0.0000016465594338686714,
       },
       rotation: {
         x: -1.570796321700198,
         y: -0.0000010002534848731485,
         z: -1.5657029632315764,
-      }
-    }
+      },
+    },
   },
 };
 
@@ -124,22 +124,22 @@ async function loadTable(scene) {
   // Load textures
   const diffuseTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_diff_1k.jpg",
-    () => { },
+    () => {},
     (err) => console.error("Failed to load diffuse texture", err)
   );
   const roughnessTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_rough_1k.jpg",
-    () => { },
+    () => {},
     (err) => console.error("Failed to load roughness texture", err)
   );
   const normalTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_nor_gl_1k.jpg",
-    () => { },
+    () => {},
     (err) => console.error("Failed to load normal texture", err)
   );
   const displacementTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_disp_1k.png",
-    () => { },
+    () => {},
     (err) => console.error("Failed to load displacement texture", err)
   );
 
@@ -287,9 +287,8 @@ function Camera(isFirstPlayer = true, game_type) {
   const near = 0.1;
   const far = 1000;
   config.selectedPerspective = !isFirstPlayer ? "FPerspective" : "SPerspective";
-  console.log('game_type', game_type)
-  if (game_type === 'offline')
-    config.selectedPerspective = "GPerspective";
+  console.log("game_type", game_type);
+  if (game_type === "offline") config.selectedPerspective = "GPerspective";
   const PlayerPerspective = config.Perspectives[config.selectedPerspective];
 
   const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
@@ -358,15 +357,18 @@ export default async function () {
   async function init() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
-    console.log(GameInfo)
-    const camera = Camera(GameInfo.first_player.username === me.username, GameInfo.game_type);
+    console.log(GameInfo);
+    const camera = Camera(
+      GameInfo.first_player.user.username === me.username,
+      GameInfo.game_type
+    );
     renderer = Renderer(scene);
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
 
-    controls.addEventListener('change', () => {
-      console.log('Camera position:', camera.position);
-      console.log('Camera rotation:', camera.rotation);
+    controls.addEventListener("change", () => {
+      console.log("Camera position:", camera.position);
+      console.log("Camera rotation:", camera.rotation);
     });
 
     Lights(scene);
@@ -383,7 +385,7 @@ export default async function () {
         UpdateScore(data.first_player_score, data.second_player_score);
         ShowModal({
           view: CountDownModal(2),
-          onConfirm: () => { },
+          onConfirm: () => {},
         });
       } else if (data.type === "game_over") {
         let view = null;
@@ -471,38 +473,45 @@ export default async function () {
       if (SecondintervalId) return;
       SecondintervalId = setInterval(() => {
         if (keysPressed[Buttons.SecondLeft])
-          handleMovement(GameSocket, directions.left, '2');
+          handleMovement(GameSocket, directions.left, "2");
         else if (keysPressed[Buttons.SecondRight])
-          handleMovement(GameSocket, directions.right, '2');
+          handleMovement(GameSocket, directions.right, "2");
       }, 50);
     }
 
     function StopSecondMovementLoop() {
       if (!SecondintervalId) return;
-      if (!keysPressed[Buttons.SecondLeft] && !keysPressed[Buttons.SecondRight]) {
+      if (
+        !keysPressed[Buttons.SecondLeft] &&
+        !keysPressed[Buttons.SecondRight]
+      ) {
         clearInterval(SecondintervalId);
         SecondintervalId = null;
       }
     }
 
-
     // first player event listerners
     document.addEventListener("keydown", (e) => {
-      const key = e.key.toLowerCase()
+      const key = e.key.toLowerCase();
       if (keysPressed[key]) return;
       keysPressed[key] = true;
       if (key === Buttons.Left || key === Buttons.Right) StartMovementLoop();
-      if (GameInfo.game_type === 'offline' &&
-        (key === Buttons.SecondLeft || key === Buttons.SecondRight)) StartSecondMovementLoop();
-
+      if (
+        GameInfo.game_type === "offline" &&
+        (key === Buttons.SecondLeft || key === Buttons.SecondRight)
+      )
+        StartSecondMovementLoop();
     });
 
     document.addEventListener("keyup", (e) => {
-      const key = e.key.toLowerCase()
+      const key = e.key.toLowerCase();
       delete keysPressed[key];
       if (key === Buttons.Left || key === Buttons.Right) StopMovementLoop();
-      if (GameInfo.game_type === 'offline' &&
-        (key === Buttons.SecondLeft || key === Buttons.SecondRight)) StopSecondMovementLoop();
+      if (
+        GameInfo.game_type === "offline" &&
+        (key === Buttons.SecondLeft || key === Buttons.SecondRight)
+      )
+        StopSecondMovementLoop();
     });
 
     window.addEventListener("resize", () => {
@@ -516,20 +525,14 @@ export default async function () {
 }
 
 function handleMovement(Socket, action, playerOrder = null) {
-  const object = { type: "move", action }
-  if (playerOrder)
-    object['player-order'] = playerOrder
+  const object = { type: "move", action };
+  if (playerOrder) object["player-order"] = playerOrder;
   Socket.send(JSON.stringify(object));
 }
 
-async function InitScoreBoard({
-  first_player,
-  second_player,
-  first_player_score,
-  second_player_score,
-}) {
-  SetPlayerInfo(first_player, first_player_score, true);
-  SetPlayerInfo(second_player, second_player_score);
+async function InitScoreBoard({ first_player, second_player }) {
+  SetPlayerInfo(first_player.user, first_player.score, true);
+  SetPlayerInfo(second_player.user, second_player.score);
 }
 
 function SetPlayerInfo(player, score, isMe = false) {
@@ -540,9 +543,9 @@ function SetPlayerInfo(player, score, isMe = false) {
   const PlayerScore = document.getElementById(
     `player-score-${isMe ? "1" : "2"}`
   );
-  PlayerImage.src = player.image_url;
-  PlayerName.innerText = player.username;
-  PlayerScore.innerText = score;
+  PlayerImage.src = player?.image_url || "/public/assets/images/robot.webp";
+  PlayerName.innerText = player?.username || "The Machine";
+  PlayerScore.innerText = score || 0;
 }
 
 const UpdateScore = (FpScore, SpScore) => {

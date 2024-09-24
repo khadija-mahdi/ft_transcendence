@@ -1,7 +1,7 @@
 import os
 from django.conf import settings
 from rest_framework import serializers
-from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, stream, Matchup
+from .models import Game, Tournament, TournamentsRegisteredPlayers, Brackets, stream, Matchup, GamePlayer
 from user.serializers import UserSerializer, UserDetailSerializer
 from django.core.files.storage import default_storage
 from django.contrib.auth.models import AnonymousUser
@@ -108,35 +108,56 @@ class TournamentDetailsSerializer(serializers.ModelSerializer, BaseTournamentSer
         return user in obj.registered_users.all()
 
 
+class GamePlayerSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer(read_only=True)
+
+    class Meta:
+        model = GamePlayer
+        fields = '__all__'
+
+
 class MatchUpSerializer(serializers.ModelSerializer):
-    first_player = UserDetailSerializer(read_only=True)
-    second_player = UserSerializer(read_only=True)
-    Winner = UserSerializer(read_only=True)
+    first_player = GamePlayerSerializer(read_only=True)
+    second_player = GamePlayerSerializer(read_only=True)
+    Winner = GamePlayerSerializer(read_only=True)
+
+    first_player_alias = serializers.CharField(
+        write_only=True, required=False, allow_blank=True, default=None)
+    second_player_alias = serializers.CharField(
+        write_only=True, required=False, allow_blank=True, default=None)
 
     class Meta:
         model = Matchup
-        fields = ['id', 'first_player', 'second_player', 'Winner',
-                  'first_player_score', 'second_player_score', 'game_uuid',
-                  'game_type', 'game_over', 'created_at', 'updated_at']
-        read_only_fields = fields
+        fields = ['id', 'first_player', 'first_player_alias', 'second_player', 'second_player_alias', 'Winner',
+                  'game_uuid', 'game_type', 'game_over', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'first_player',  'second_player', 'Winner',
+                            'game_uuid', 'game_type', 'game_over', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        validated_data.pop('first_player_alias')
+        validated_data.pop('second_player_alias')
+        return super().create(validated_data)
 
 
 class MatchInfoSerializer(serializers.ModelSerializer):
-    first_player = UserSerializer()
-    second_player = UserSerializer()
+    first_player = GamePlayerSerializer()
+    second_player = GamePlayerSerializer()
+    Winner = GamePlayerSerializer(read_only=True)
 
     class Meta:
         model = Matchup
         fields = ['id', 'first_player', 'second_player', 'Winner',
-                  'first_player_score', 'second_player_score',
                   'game_type', 'game_over', 'created_at', 'updated_at']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         if not representation["second_player"]:
             representation["second_player"] = {
-                'image_url': 'https://imgcdn.stablediffusionweb.com/2024/3/16/56c125c5-daa3-45aa-8c74-bc8e2bc26128.jpg',
-                'username': 'robot',
+                'user': {
+                    'image_url': 'https://imgcdn.stablediffusionweb.com/2024/3/16/56c125c5-daa3-45aa-8c74-bc8e2bc26128.jpg',
+                    'username': 'The Machine',
+                },
+                'alias': 'The Machine'
             }
         return representation
 

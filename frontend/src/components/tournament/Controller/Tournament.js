@@ -33,8 +33,10 @@ function setTournamentDetails() {
     games_states,
     tournament_bracket,
     is_registered,
-    finished
+    finished,
+    is_public,
   } = data;
+
   const tournamentImage = document.getElementById("tournament-image");
   const tournamentTitle = document.getElementById("tournament-title");
   const tournamentDescription = document.getElementById(
@@ -52,7 +54,9 @@ function setTournamentDetails() {
   tournamentTitle.innerText = name;
   tournamentDescription.innerText = description;
   playerCount.innerText = max_players;
-  RegisterButton.innerText = is_registered ? "Unregister" : "Register";
+
+  RegisterButton.innerText =
+    is_registered && is_public ? "Unregister" : "Register";
 
   const statusPanel = document.querySelector(".status-table-wrapper");
   if (games_states.length === 0) {
@@ -77,7 +81,9 @@ function setTournamentDetails() {
       (data) =>
         html`
           <ul class="bracket-half">
-            ${data.map((player) => BracketCard(player.player, player.alias)).join("")}
+            ${data
+              .map((player) => BracketCard(player.player, player.alias))
+              .join("")}
           </ul>
         `
     )
@@ -90,7 +96,9 @@ function setTournamentDetails() {
       (data) =>
         html`
           <ul class="bracket-half">
-            ${data.map((player) => BracketCard(player.player, player.alias)).join("")}
+            ${data
+              .map((player) => BracketCard(player.player, player.alias))
+              .join("")}
           </ul>
         `
     )
@@ -109,7 +117,7 @@ function attachEventListeners() {
 }
 
 async function handleRegisterFormSubmit(_data) {
-  if (data.is_registered) {
+  if (data.is_registered && data.is_public) {
     await UnRegisterTournament(id);
     data = await GetTournamentDetails(id);
     setTournamentDetails();
@@ -117,11 +125,12 @@ async function handleRegisterFormSubmit(_data) {
   }
   showPopup({
     title: "Register for the tournament",
-    subtitle: "Feel free to modify your alias",
+    subtitle: "Please enter your alias to register for the tournament",
     inputBody: html`<div class="form-field">
       <input
         class="input-field"
         placeholder="Your alias"
+        required="true"
         type="text"
         name="alias"
         id="alias"
