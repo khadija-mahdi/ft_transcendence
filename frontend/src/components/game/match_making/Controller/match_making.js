@@ -62,23 +62,29 @@ async function handleNormalLobby(game_mode) {
   } else if (game_mode === "localPlayers") {
     offline_game = await getOfflineGameInfo(alias1, alias2);
     const secondPlayerCard = document.getElementById("second-player");
-    const firstPlayer = document.getElementById("my-card");
     secondPlayerCard.innerHTML = "";
     secondPlayerCard.style.height = "null";
-    secondPlayerCard.innerHTML = PlayerCard({
-      username: alias1,
-      image_url: "/public/assets/images/robot.webp",
-      rank: null,
-      current_xp: null,
-    });
-    firstPlayer.innerHTML = "";
-    firstPlayer.style.height = "null";
-    firstPlayer.innerHTML = PlayerCard({
-      username: alias2,
-      image_url: "/public/assets/images/robot.webp",
-      rank: null,
-      current_xp: null,
-    });
+    if (alias2) {
+      secondPlayerCard.innerHTML = PlayerCard({
+        username: alias1,
+        image_url: "/public/assets/images/robot.webp",
+        rank: null,
+        current_xp: null,
+      });
+    } else {
+      secondPlayerCard.innerHTML = PlayerCard(myData);
+    }
+    if (alias1) {
+      const firstPlayer = document.getElementById("my-card");
+      firstPlayer.innerHTML = "";
+      firstPlayer.style.height = "null";
+      firstPlayer.innerHTML = PlayerCard({
+        username: alias2,
+        image_url: "/public/assets/images/robot.webp",
+        rank: null,
+        current_xp: null,
+      });
+    }
     matchCountdown(5, `/game?uuid=${offline_game.game_uuid}`, null);
   } else {
     const loobySocket = new AuthWebSocket(
