@@ -18,7 +18,7 @@ export function BracketCard(player = {}, alias = null) {
             src="${player.image_url}"
             alt="profile Icon"
             class="avatar-image"
-            onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
+            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
           />
         </div>
         <div class="bracket-info">
@@ -41,7 +41,7 @@ export default function tournaments() {
           <img
             class="card-image"
             id="tournament-image"
-            onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
+            onerror="this.src='/public/assets/icons/empty.svg';"
           />
           <div class="card-text">
             <div class="card-title" id="tournament-title"></div>
@@ -150,7 +150,7 @@ export function StatusTableRow(match = {}) {
                 src="${match.first_player?.user?.image_url}"
                 alt="profile"
                 class="avatar-image"
-                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
+                onerror="this.src='/public/assets/images/defaultImageProfile.png';"
               />
             </div>
             <div class="player-avatar">
@@ -158,7 +158,7 @@ export function StatusTableRow(match = {}) {
                 src="${match.second_player?.user?.image_url}"
                 alt="profile"
                 class="avatar-image"
-                onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
+                onerror="this.src='/public/assets/images/defaultImageProfile.png';"
               />
             </div>
           </div>
@@ -191,7 +191,7 @@ export function StatusTableRow(match = {}) {
               src="${match.Winner?.user?.image_url}"
               alt="profile"
               class="avatar-image"
-              onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
+              onerror="this.src='/public/assets/images/defaultImageProfile.png';"
             />
           </div>
           <div class="winner-info">

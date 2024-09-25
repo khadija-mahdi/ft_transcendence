@@ -1,7 +1,7 @@
 import { tournamentWrapper } from "/src/components/tournaments/View/Tournaments.js";
 import OnlinePlayers from "/src/components/home/components/View/OnlinePlayers.js";
-
 const html = String.raw;
+
 export default () => {
   return html`
     <div class="main-container">

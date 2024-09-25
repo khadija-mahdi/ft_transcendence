@@ -8,85 +8,88 @@ let allNotifications = [];
 let Not_length = 0;
 
 export async function fetchNotifications(isScroll = false) {
-	if (!isScroll) apiUrl = `/api/v1/notifications/`;
-	try {
-		const response = await fetchWithAuth(apiUrl, {
-			method: "GET",
-		});
-		allNotifications.push(...response.results);
-		Not_length = response.count;
-		renderNotifications(allNotifications);
-		apiUrl = response.next;
-	} catch (error) {
-		console.error("Error fetching notifications:", error);
-		return [];
-	}
+  if (!isScroll) apiUrl = `/api/v1/notifications/`;
+  try {
+    const response = await fetchWithAuth(apiUrl, {
+      method: "GET",
+    });
+    allNotifications.push(...response.results);
+    Not_length = response.count;
+    renderNotifications(allNotifications);
+    apiUrl = response.next;
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    return [];
+  }
 }
 export function renderNotifications(notifications) {
-	console.log(notifications);
-	function formatDate(dateString) {
-		const options = {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-		};
-		return new Date(dateString).toLocaleString(undefined, options);
-	}
-	let href = "";
-	const notificationList = document.getElementById("notifications-list");
-	notificationList.innerHTML = "";
+  console.log(notifications);
+  function formatDate(dateString) {
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleString(undefined, options);
+  }
+  let href = "";
+  const notificationList = document.getElementById("notifications-list");
+  notificationList.innerHTML = "";
 
-	if (!notifications.length) {
-		const emptyComponent = Empty("No Notification Found");
-		const emptyContainer = document.createElement("div");
-		emptyContainer.className = "emptyContainer";
-		emptyContainer.appendChild(emptyComponent);
-		notificationList.appendChild(emptyContainer);
-	} else {
-		notifications.forEach((notification, index) => {
-			notification.action = SerializeInviteAction(notification.action);
-			if (
-				notification.sender &&
-				(!notification.sender.image_url ||
-					notification.sender.image_url.startsWith(`https://${API_URL}/media/`))
-			) {
-				notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
-			}
-			switch (notification.type) {
-				case "friend-request":
-					href = `/profile?username=${sender.username}`;
-					break;
-				case "messenger":
-					href = `/messenger?chatroom=${sender.id}`;
-					break;
+  if (!notifications.length) {
+    const emptyComponent = Empty("No Notification Found");
+    const emptyContainer = document.createElement("div");
+    emptyContainer.className = "emptyContainer";
+    emptyContainer.appendChild(emptyComponent);
+    notificationList.appendChild(emptyContainer);
+  } else {
+    notifications.forEach((notification, index) => {
+      notification.action = SerializeInviteAction(notification.action);
+      if (
+        notification.sender &&
+        (!notification.sender.image_url ||
+          notification.sender.image_url.startsWith(`https://${API_URL}/media/`))
+      ) {
+        notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
+      }
+      switch (notification.type) {
+        case "friend-request":
+          href = `/profile?username=${sender.username}`;
+          break;
+        case "messenger":
+          href = `/messenger?chatroom=${sender.id}`;
+          break;
 
-				case "game-invite":
-					href = `/game/match_making?player=${notification.action?.player}&invite-uuid=${notification.action?.invite_id}`;
-					break;
+        case "game-invite":
+          href = `/game/match_making?player=${notification.action?.player}&invite-uuid=${notification.action?.invite_id}`;
+          break;
 
-				case "new-game":
-					href = `/game?uuid=${notification.action?.match_uuid}`;
-					break;
-			}
+        case "new-game":
+          href = `/game?uuid=${notification.action?.match_uuid}`;
+          break;
+      }
 
-			const notificationItem = document.createElement("li");
-			notificationItem.className = "notification-item";
+      const notificationItem = document.createElement("li");
+      notificationItem.className = "notification-item";
 
-			notificationItem.innerHTML = /*html*/ `
+      notificationItem.innerHTML = /*html*/ `
             <a href="${href}" class="notification-link">
                 <div class="notification-image-container">
-                    <img class="notification-image" src= ${notification.sender && notification.sender.image_url
-					? notification.sender.image_url
-					: `https://${API_URL}/media/public/profile-images/00_img.jpg`
-				} alt="Profile Image" width="35" height="35" />
+                    <img class="notification-image" src=${
+                      notification.sender && notification.sender.image_url
+                        ? notification.sender.image_url
+                        : `https://${API_URL}/media/public/profile-images/00_img.jpg`
+                    }
+					onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+					alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
                     <div class="notification-time">${formatDate(
-					notification.created_at
-				)}</div>
+                      notification.created_at
+                    )}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">
@@ -97,42 +100,42 @@ export function renderNotifications(notifications) {
 				</svg>
             </div>
         `;
-			notificationList.appendChild(notificationItem);
+      notificationList.appendChild(notificationItem);
 
-			const removeNot = notificationItem.querySelector(".remove-not");
-			if (removeNot) {
-				removeNot.addEventListener("click", async function () {
-					let apiUrl = `/api/v1/notifications/${notification.id}/`;
-					try {
-						await fetchWithAuth(apiUrl, {
-							method: "DELETE",
-						});
+      const removeNot = notificationItem.querySelector(".remove-not");
+      if (removeNot) {
+        removeNot.addEventListener("click", async function () {
+          let apiUrl = `/api/v1/notifications/${notification.id}/`;
+          try {
+            await fetchWithAuth(apiUrl, {
+              method: "DELETE",
+            });
 
-						notifications.splice(index, 1);
+            notifications.splice(index, 1);
 
-						renderNotifications(notifications);
-					} catch (error) {
-						return;
-					}
-				});
-			}
-		});
-	}
+            renderNotifications(notifications);
+          } catch (error) {
+            return;
+          }
+        });
+      }
+    });
+  }
 }
 
 export default function () {
-	fetchNotifications();
-	const NotContent = document.getElementById("notifications-list");
-	if (!NotContent) return;
-	NotContent.addEventListener("scroll", async () => {
-		const scrollPosition = NotContent.scrollTop + NotContent.clientHeight;
-		const scrollHeight = NotContent.scrollHeight;
-		const tolerance = 5;
-		const isAtBottom = scrollPosition >= scrollHeight - tolerance;
-		if (isAtBottom) {
-			if (apiUrl) {
-				await fetchNotifications(true);
-			}
-		}
-	});
+  fetchNotifications();
+  const NotContent = document.getElementById("notifications-list");
+  if (!NotContent) return;
+  NotContent.addEventListener("scroll", async () => {
+    const scrollPosition = NotContent.scrollTop + NotContent.clientHeight;
+    const scrollHeight = NotContent.scrollHeight;
+    const tolerance = 5;
+    const isAtBottom = scrollPosition >= scrollHeight - tolerance;
+    if (isAtBottom) {
+      if (apiUrl) {
+        await fetchNotifications(true);
+      }
+    }
+  });
 }

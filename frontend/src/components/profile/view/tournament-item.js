@@ -6,7 +6,7 @@ export function tournamentItem({ name, icon, description, max_players }) {
       <div class="tournament-item">
         <img
           src="${icon}"
-          onerror="this.onerror=null;this.src='/public/assets/images/Unknown.jpg';"
+          onerror="this.src='/public/assets/images/Unknown.jpg';"
           alt="Tournament Icon"
         />
         <div class="tournament-details">

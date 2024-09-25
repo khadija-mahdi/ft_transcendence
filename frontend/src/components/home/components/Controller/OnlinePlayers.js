@@ -16,9 +16,9 @@ export function OnlinePlayerContainer({ id, name, href, number, index }) {
   image.alt = "Profile Image";
   image.width = 53;
   image.height = 53;
-  image.onerror =
-    "this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';";
-
+  image.onerror = () => {
+    image.src = "/public/assets/images/defaultImageProfile.png";
+  };
   const textContainer = document.createElement("div");
   textContainer.className = "friend-text-container";
 

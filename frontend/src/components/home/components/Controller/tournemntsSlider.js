@@ -29,7 +29,7 @@ export function SliderItem(tournament, index) {
 
 		<div class="t-img-bg-container">
 			<div class="t-img-bg">
-				<img src=${href} alt="anouncement background img" />
+				<img src=${href}  alt="anouncement background img" />
 			</div>
 		</div>
 		<div class="t-primary-img-container">

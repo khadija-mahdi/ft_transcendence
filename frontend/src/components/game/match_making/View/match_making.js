@@ -37,12 +37,16 @@ export default () => {
       </button>
       <div class="main-cards-container">
         <div id="my-card" class="player-card">
-          <img src="" alt="Player Image" class="player-image" />
+          <img
+            alt="Player Image"
+            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+            class="player-image"
+          />
           <div class="player-info">
             <div class="player-name"></div>
             <div class="player-rank">
               <img
-                src="/public/assets/icons/Gold_3_Rank.png"
+                onerror="this.src='/public/assets/icons/unranked.png';"
                 alt="Rank Icon"
                 class="rank-icon"
               />
@@ -60,8 +64,9 @@ export default () => {
                 class="player-image"
               />
               <img
-                src="/public/assets/icons/Gold_3_Rank.png"
+                onerror="this.src='/public/assets/icons/unranked.png';"
                 alt="Rank Icon"
+                src=""
                 class="rank-icon"
               />
               <div class="player-info">
@@ -81,8 +86,9 @@ export default () => {
                 <div class="player-name">@Unknown</div>
                 <div class="player-rank">
                   <img
-                    src="/public/assets/icons/Gold_3_Rank.png"
+                    onerror="this.src='/public/assets/icons/unranked.png';"
                     alt="Rank Icon"
+                    src=""
                     class="rank-icon"
                   />
                   <span class="player-level">Lvl.--- </span>
@@ -98,12 +104,17 @@ export default () => {
 
 export function PlayerCard({ username, image_url, rank, current_xp }) {
   return html` <div class="player-card fade-in-image">
-    <img src="${image_url}" alt="Player Image" class="player-image" />
+    <img
+      src="${image_url}"
+		  onerror="this.src='/public/assets/images/Unknown.jpg';"
+      alt="Player Image"
+      class="player-image"
+    />
     <img
       src="${rank?.icon || "/public/assets/icons/unranked.png"}"
       alt="Rank Icon"
       class="rank-icon"
-      oneerror="this.onerror=null;this.src='/public/assets/icons/unranked.png';"
+      onerror="this.src='/public/assets/icons/unranked.png';"
     />
     <div class="player-info">
       <div class="player-name">@${username}</div>

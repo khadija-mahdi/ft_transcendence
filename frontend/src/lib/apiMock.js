@@ -1,4 +1,3 @@
-
 import { API_URL } from "/config.js";
 export function getCookieValue(name) {
   const cookies = document.cookie.split(";");
@@ -17,9 +16,9 @@ export function destroyCookies() {
   window.location.href = "/auth";
 }
 
-function SetCookies({ access = "", refresh = "" }) {
+function SetCookies({ access = "", refresh = null }) {
   document.cookie = `access=${access}; path=/;`;
-  document.cookie = `refresh=${refresh}; path=/;`;
+  if (refresh) document.cookie = `refresh=${refresh}; path=/;`;
 }
 
 export const fetchWithAuth = async (

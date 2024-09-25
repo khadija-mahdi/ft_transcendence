@@ -1,9 +1,9 @@
 import { fetchWithAuth, destroyCookies } from "/src/lib/apiMock.js";
 import { handleSubmit, Validator, reset } from "/src/lib/Validator.js";
 import { updateProfile, UserDetailByUsername } from "/src/_api/user.js";
+const html = String.raw;
 
 let data = {};
-
 async function UpdateData(UpdateData, schema) {
   try {
     await updateProfile(UpdateData);
@@ -32,8 +32,11 @@ function ImageButton(setSelectedImage = () => {}) {
 
     const closeButton = document.createElement("div");
     closeButton.className = "close-button";
-    closeButton.innerHTML =
-      '<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
+    closeButton.innerHTML = html`<img
+      src="/public/assets/icons/light_close.png"
+      alt="close-icon"
+      class="close-icon"
+    />`;
 
     closeButton.addEventListener("click", () => {
       imageLabel.innerHTML = initialImageLabelContent;

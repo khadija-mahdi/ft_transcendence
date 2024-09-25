@@ -1,5 +1,5 @@
 import { fetchWithAuth } from "/src/lib/apiMock.js";
-
+const html = String.raw;
 export default function () {
   const form = document.getElementById("createTournamentForm");
   let imageInput = document.getElementById("imageInput");
@@ -59,8 +59,11 @@ export default function () {
 
       const closeButton = document.createElement("div");
       closeButton.className = "close-button";
-      closeButton.innerHTML =
-        '<img src="/public/assets/icons/light_close.png" alt="close-icon" class="close-icon">';
+      closeButton.innerHTML = html`<img
+        src="/public/assets/icons/light_close.png"
+        alt="close-icon"
+        class="close-icon"
+      />`;
 
       closeButton.addEventListener("click", () => {
         selectedImage = null;

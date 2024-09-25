@@ -16,7 +16,7 @@ export function tournamentElement({
 							class="tournament-icon"
 							src="${icon}"
 							alt="tournament icon"
-							onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
+							onerror="this.src='/public/assets/icons/empty.svg';"
 						/>
 						<div class="tournament-details">
 							<div class="tournament-name">${name}</div>

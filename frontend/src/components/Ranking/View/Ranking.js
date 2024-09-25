@@ -39,7 +39,11 @@ export function rankingItem({
       <td><p>${index}</p></td>
       <td>
         <div class="ranking-player-container">
-          <img src="${image_url}" alt="player" />
+          <img
+            src="${image_url}"
+            alt="player"
+            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+          />
           <p>${fullname || username}</p>
         </div>
       </td>
@@ -53,21 +57,21 @@ export function rankingItem({
       </td>
       <td>
         <a href="/profile?username=${username}" class="btn btn-primary">
-        <svg
-          width="9"
-          height="16"
-          viewBox="0 0 9 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M1 0.904114L8 7.90411L1 14.9041"
-            stroke="white"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+          <svg
+            width="9"
+            height="16"
+            viewBox="0 0 9 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1 0.904114L8 7.90411L1 14.9041"
+              stroke="white"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </a>
       </td>
     </tr>

@@ -1,5 +1,7 @@
+const html = String.raw;
+
 export default function () {
-	return /*html*/`
+  return html`
 	<div id="chat-container" class="chat-container">
 		<div id="main-panel" class="main-panel">
 			<div id="rooms" class="room-panel">
@@ -60,7 +62,9 @@ export default function () {
 					<button id="popup-sendImage-close" class="close-button">&times;</button>
 				</div>
 				<div class="popup-sendImage-body">
-					<img id="popup-sendImage-preview" src="" alt="Preview" style="width: 100%; border-radius: 8px;">
+					<img id="popup-sendImage-preview"
+					onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+					alt="Preview" style="width: 100%; border-radius: 8px;">
 					<p id="popup-sendImage-error" class="hidden" style="color: red; text-align: center; margin-top: 10px;">
 						The File or Image you are trying to upload is not acceptable. Please use PNG or JPEG formats only.
 					</p>
@@ -75,7 +79,4 @@ export default function () {
 	</div>
 	</div>
 	`;
-};
-
-
-
+}

@@ -10,7 +10,7 @@ export function achievementItem({ name, description, icon }) {
       <div class="top-achievement-icon">
         <img
           src="${icon}"
-          onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
+          onerror="this.src='/public/assets/icons/empty.svg';"
           alt="Icon"
           class="top-achievement-image"
         />

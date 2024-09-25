@@ -1,238 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-</head>
+  <body class="bg-dark">
+    <div class="navbar-container">
+      <div class="nav-links">
+        <a id="playButton" href="/game/choice-game" class="play_now_button">
+          Play Now
+        </a>
+        <div class="desktop-nav">
+          <ul class="nav-list">
+            <!-- nav Link -->
+            <li class="nav-item nav">
+              <a href="/home" class="no-underline group">
+                <div class="nav-icons">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="31"
+                  >
+                    <path
+                      fill-opacity="0.8"
+                      d="M12.5 25.452v-7.5h5v7.5h6.25v-10h3.75L15 4.202 2.5 15.452h3.75v10h6.25Z"
+                    />
+                  </svg>
+                  <p>Home</p>
+                </div>
+              </a>
+            </li>
+            <!-- nav Link -->
+            <li class="nav-item nav">
+              <a href="/tournaments" class="no-underline group">
+                <div class="nav-icons">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="31"
+                  >
+                    <path
+                      fill-opacity="0.6"
+                      d="M5 4.202h20a1.25 1.25 0 0 1 1.25 1.25v8.75H3.75v-8.75A1.25 1.25 0 0 1 5 4.202Zm-1.25 12.5h22.5v8.75a1.25 1.25 0 0 1-1.25 1.25H5a1.25 1.25 0 0 1-1.25-1.25v-8.75Zm5 3.75v2.5h3.75v-2.5H8.75Zm0-12.5v2.5h3.75v-2.5H8.75Z"
+                    />
+                  </svg>
+                  <p>Tournaments</p>
+                </div>
+              </a>
+            </li>
+            <!-- nav Link -->
+            <li class="nav-item nav">
+              <a href="/ranking" class="no-underline group">
+                <div class="nav-icons">
+                  <svg
+                    width="30"
+                    height="31"
+                    viewBox="0 0 30 31"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M4.33 4.78206C2.5 6.61456 2.5 9.55956 2.5 15.4521C2.5 21.3446 2.5 24.2908 4.33 26.1208C6.1625 27.9521 9.1075 27.9521 15 27.9521C20.8925 27.9521 23.8387 27.9521 25.6688 26.1208C27.5 24.2921 27.5 21.3446 27.5 15.4521C27.5 9.55956 27.5 6.61331 25.6688 4.78206C23.84 2.95206 20.8925 2.95206 15 2.95206C9.1075 2.95206 6.16125 2.95206 4.33 4.78206ZM21.97 13.5521C22.1221 13.3603 22.1932 13.1167 22.1682 12.8733C22.1431 12.6298 22.0238 12.4058 21.8358 12.2491C21.6478 12.0925 21.4059 12.0155 21.1619 12.0347C20.9179 12.054 20.6911 12.1679 20.53 12.3521L18.2837 15.0471C17.8212 15.6033 17.535 15.9421 17.3012 16.1533C17.2404 16.213 17.1719 16.2643 17.0975 16.3058L17.0837 16.3121L17.0738 16.3071L17.07 16.3058C16.9952 16.2643 16.9262 16.2131 16.865 16.1533C16.6312 15.9408 16.3463 15.6033 15.8825 15.0471L15.5175 14.6096C15.1075 14.1158 14.7362 13.6721 14.3912 13.3596C14.015 13.0196 13.5413 12.7171 12.9163 12.7171C12.2913 12.7171 11.8187 13.0196 11.4412 13.3596C11.0962 13.6721 10.7263 14.1158 10.3163 14.6096L8.02875 17.3521C7.94996 17.4467 7.89057 17.5559 7.85399 17.6735C7.81741 17.7911 7.80435 17.9147 7.81555 18.0374C7.83817 18.285 7.95825 18.5136 8.14937 18.6727C8.3405 18.8318 8.587 18.9085 8.83467 18.8859C9.08233 18.8633 9.31087 18.7432 9.47 18.5521L11.7163 15.8571C12.1788 15.3008 12.465 14.9621 12.6988 14.7508C12.7596 14.6911 12.8281 14.6398 12.9025 14.5983L12.9113 14.5946L12.9163 14.5921L12.93 14.5983C13.0048 14.6398 13.0738 14.6911 13.135 14.7508C13.3688 14.9633 13.6537 15.3008 14.1175 15.8571L14.4825 16.2946C14.8938 16.7883 15.2638 17.2321 15.6088 17.5446C15.985 17.8846 16.4587 18.1871 17.0837 18.1871C17.7087 18.1871 18.1813 17.8846 18.5588 17.5446C18.9037 17.2321 19.2738 16.7883 19.6838 16.2946L21.97 13.5521Z"
+                    />
+                  </svg>
+                  <p>Ranking</p>
+                </div>
+              </a>
+            </li>
+            <!--  -->
+          </ul>
+        </div>
+      </div>
+      <div class="right-icons">
+        <div class="desktop-nav">
+          <ul class="social-list">
+            <!-- Social Button -->
+            <div class="social-icon">
+              <div id="notification-icon" class="icon-container">
+                <a href="" passHref class="icon-link">
+                  <div class="icon-content">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="17"
+                      fill="#545454"
+                    >
+                      <g fill="#545454" clip-path="url(#a)">
+                        <path
+                          d="M0 12.745h7.37v4.207h3.676V9.35H3.692L11.046.952H7.37L0 9.35v3.395ZM12.63 5.16 16.309.951h-3.677v4.207Z"
+                        />
+                        <path
+                          d="m16.308 5.16-3.677 4.19v4.19h3.677V9.35L20 5.16V.951h-3.692v4.207Z"
+                        />
+                        <path d="m20 9.35-3.692 4.19H20V9.35Z" />
+                      </g>
+                      <defs>
+                        <clipPath id="a">
+                          <path fill="#545454" d="M0 .952h20v16H0z" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <!-- Social Button -->
+            <div class="social-icon">
+              <div id="notification-icon" class="icon-container">
+                <a href="https://www.twitch.tv/" passHref class="icon-link">
+                  <div class="icon-content">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="#545454"
+                    >
+                      <g clip-path="url(#a)">
+                        <path
+                          fill="#545454"
+                          d="M15.28 4.994h-1.509v4.285h1.51V4.994Zm-4.147-.019h-1.51v4.288h1.51V4.975ZM4.72.952.95 4.523v12.858h4.524v3.571l3.771-3.571h3.018l6.787-6.429v-10H4.72Zm12.822 9.287-3.017 2.856h-3.017l-2.64 2.5v-2.5H5.474V2.381h12.068v7.858Z"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="a">
+                          <path fill="#545454" d="M0 .952h20v20H0z" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <!-- Social Button -->
+            <div class="social-icon">
+              <div id="notification-icon" class="icon-container">
+                <a href="https://discord.com/" passHref class="icon-link">
+                  <div class="icon-content">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      fill="#545454"
+                    >
+                      <path
+                        fill="#545454"
+                        d="M15.45.952c1.118 0 2.031.901 2.05 2.025v17.975l-2.15-1.9-1.21-1.12-1.28-1.19.53 1.85H2.05A2.055 2.055 0 0 1 0 16.567V3.012C0 1.884.901.971 2.015.952H15.45Zm-8.13 4.78-.1-.12h-.057c-.273.009-1.486.1-2.753 1.05l-.048.092c-.251.49-1.392 2.872-1.392 5.738l.02.033c.142.217 1.019 1.423 3.03 1.487l.295-.361.375-.469c-1.166-.349-1.666-1.051-1.74-1.164l-.01-.016.041.027c.045.03.127.08.239.143.01.01.02.02.04.03.03.02.06.03.09.05.25.14.5.25.73.34.41.16.9.32 1.47.43.729.136 1.58.187 2.508.025l.082-.015c.47-.08.95-.22 1.45-.43.35-.13.74-.32 1.15-.59l-.016.025c-.096.14-.62.833-1.794 1.165l.165.207c.253.314.495.603.495.603 2.21-.07 3.06-1.52 3.06-1.52 0-3.22-1.44-5.83-1.44-5.83-1.238-.929-2.425-1.037-2.733-1.049l-.077-.001-.14.16c1.508.461 2.3 1.103 2.46 1.243l.03.027a8.152 8.152 0 0 0-5.03-.94c-.06 0-.11.01-.17.02l-.056.005c-.38.039-1.197.179-2.214.625l-.145.068c-.182.086-.314.153-.385.19l-.06.032s.813-.774 2.576-1.294l.054-.016Zm-.38 3.61c.57 0 1.03.5 1.02 1.11 0 .61-.45 1.11-1.02 1.11-.56 0-1.02-.5-1.02-1.11 0-.61.45-1.11 1.02-1.11Zm3.65 0c.57 0 1.02.5 1.02 1.11 0 .61-.45 1.11-1.02 1.11-.56 0-1.02-.5-1.02-1.11 0-.61.45-1.11 1.02-1.11Z"
+                      />
+                    </svg>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="Not">
+              <div class="social-icon">
+                <!-- Parent container for notification icon with position relative -->
+                <div class="notification-icon-container">
+                  <button passHref class="icon-link" id="notif">
+                    <div class="icon-content">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        fill="#545454"
+                      >
+                        <path
+                          fill="#545454"
+                          d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z"
+                        />
+                      </svg>
+                      <span id="notification-badge" class="notification-badge"
+                        >0</span
+                      >
+                    </div>
+                  </button>
 
-<body class="bg-dark">
-	<div class="navbar-container">
-		<div class="nav-links">
-			<a id="playButton" href="/game/choice-game"  class="play_now_button">
-				Play Now
-			</a>
-			<div class="desktop-nav">
-				<ul class="nav-list">
-					<!-- nav Link -->
-					<li class="nav-item nav">
-						<a href="/home" class="no-underline group">
-							<div class="nav-icons">
-								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31">
-									<path fill-opacity="0.8"
-										d="M12.5 25.452v-7.5h5v7.5h6.25v-10h3.75L15 4.202 2.5 15.452h3.75v10h6.25Z" />
-								</svg>
-								<p>Home</p>
-							</div>
-						</a>
-					</li>
-					<!-- nav Link -->
-					<li class="nav-item nav">
-						<a href="/tournaments" class="no-underline group">
-							<div class="nav-icons">
-								<svg xmlns="http://www.w3.org/2000/svg" width="30" height="31">
-									<path fill-opacity="0.6"
-										d="M5 4.202h20a1.25 1.25 0 0 1 1.25 1.25v8.75H3.75v-8.75A1.25 1.25 0 0 1 5 4.202Zm-1.25 12.5h22.5v8.75a1.25 1.25 0 0 1-1.25 1.25H5a1.25 1.25 0 0 1-1.25-1.25v-8.75Zm5 3.75v2.5h3.75v-2.5H8.75Zm0-12.5v2.5h3.75v-2.5H8.75Z" />
-								</svg>
-								<p>Tournaments</p>
-							</div>
-						</a>
-					</li>
-					<!-- nav Link -->
-					<li class="nav-item nav">
-						<a href="/ranking" class="no-underline group">
-							<div class="nav-icons">
-								<svg width="30" height="31" viewBox="0 0 30 31" xmlns="http://www.w3.org/2000/svg">
-									<path fill-rule="evenodd" clip-rule="evenodd"
-										d="M4.33 4.78206C2.5 6.61456 2.5 9.55956 2.5 15.4521C2.5 21.3446 2.5 24.2908 4.33 26.1208C6.1625 27.9521 9.1075 27.9521 15 27.9521C20.8925 27.9521 23.8387 27.9521 25.6688 26.1208C27.5 24.2921 27.5 21.3446 27.5 15.4521C27.5 9.55956 27.5 6.61331 25.6688 4.78206C23.84 2.95206 20.8925 2.95206 15 2.95206C9.1075 2.95206 6.16125 2.95206 4.33 4.78206ZM21.97 13.5521C22.1221 13.3603 22.1932 13.1167 22.1682 12.8733C22.1431 12.6298 22.0238 12.4058 21.8358 12.2491C21.6478 12.0925 21.4059 12.0155 21.1619 12.0347C20.9179 12.054 20.6911 12.1679 20.53 12.3521L18.2837 15.0471C17.8212 15.6033 17.535 15.9421 17.3012 16.1533C17.2404 16.213 17.1719 16.2643 17.0975 16.3058L17.0837 16.3121L17.0738 16.3071L17.07 16.3058C16.9952 16.2643 16.9262 16.2131 16.865 16.1533C16.6312 15.9408 16.3463 15.6033 15.8825 15.0471L15.5175 14.6096C15.1075 14.1158 14.7362 13.6721 14.3912 13.3596C14.015 13.0196 13.5413 12.7171 12.9163 12.7171C12.2913 12.7171 11.8187 13.0196 11.4412 13.3596C11.0962 13.6721 10.7263 14.1158 10.3163 14.6096L8.02875 17.3521C7.94996 17.4467 7.89057 17.5559 7.85399 17.6735C7.81741 17.7911 7.80435 17.9147 7.81555 18.0374C7.83817 18.285 7.95825 18.5136 8.14937 18.6727C8.3405 18.8318 8.587 18.9085 8.83467 18.8859C9.08233 18.8633 9.31087 18.7432 9.47 18.5521L11.7163 15.8571C12.1788 15.3008 12.465 14.9621 12.6988 14.7508C12.7596 14.6911 12.8281 14.6398 12.9025 14.5983L12.9113 14.5946L12.9163 14.5921L12.93 14.5983C13.0048 14.6398 13.0738 14.6911 13.135 14.7508C13.3688 14.9633 13.6537 15.3008 14.1175 15.8571L14.4825 16.2946C14.8938 16.7883 15.2638 17.2321 15.6088 17.5446C15.985 17.8846 16.4587 18.1871 17.0837 18.1871C17.7087 18.1871 18.1813 17.8846 18.5588 17.5446C18.9037 17.2321 19.2738 16.7883 19.6838 16.2946L21.97 13.5521Z" />
-								</svg>
-								<p>Ranking</p>
-							</div>
-						</a>
-					</li>
-					<!--  -->
-				</ul>
-			</div>
-		</div>
-		<div class="right-icons">
-			<div class="desktop-nav">
-				<ul class="social-list">
-					<!-- Social Button -->
-					<div class="social-icon">
-						<div id="notification-icon" class="icon-container">
-							<a href="" passHref class="icon-link">
-								<div class="icon-content">
-									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" fill="#545454">
-										<g fill="#545454" clip-path="url(#a)">
-											<path
-												d="M0 12.745h7.37v4.207h3.676V9.35H3.692L11.046.952H7.37L0 9.35v3.395ZM12.63 5.16 16.309.951h-3.677v4.207Z" />
-											<path
-												d="m16.308 5.16-3.677 4.19v4.19h3.677V9.35L20 5.16V.951h-3.692v4.207Z" />
-											<path d="m20 9.35-3.692 4.19H20V9.35Z" />
-										</g>
-										<defs>
-											<clipPath id="a">
-												<path fill="#545454" d="M0 .952h20v16H0z" />
-											</clipPath>
-										</defs>
-									</svg>
-								</div>
-							</a>
-						</div>
-					</div>
-					<!-- Social Button -->
-					<div class="social-icon">
-						<div id="notification-icon" class="icon-container">
-							<a href="https://www.twitch.tv/" passHref class="icon-link">
-								<div class="icon-content">
-									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
-										<g clip-path="url(#a)">
-											<path fill="#545454"
-												d="M15.28 4.994h-1.509v4.285h1.51V4.994Zm-4.147-.019h-1.51v4.288h1.51V4.975ZM4.72.952.95 4.523v12.858h4.524v3.571l3.771-3.571h3.018l6.787-6.429v-10H4.72Zm12.822 9.287-3.017 2.856h-3.017l-2.64 2.5v-2.5H5.474V2.381h12.068v7.858Z" />
-										</g>
-										<defs>
-											<clipPath id="a">
-												<path fill="#545454" d="M0 .952h20v20H0z" />
-											</clipPath>
-										</defs>
-									</svg>
-								</div>
-							</a>
-						</div>
-					</div>
-					<!-- Social Button -->
-					<div class="social-icon">
-						<div id="notification-icon" class="icon-container">
-							<a href="https://discord.com/" passHref class="icon-link">
-								<div class="icon-content">
-									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
-										<path fill="#545454"
-											d="M15.45.952c1.118 0 2.031.901 2.05 2.025v17.975l-2.15-1.9-1.21-1.12-1.28-1.19.53 1.85H2.05A2.055 2.055 0 0 1 0 16.567V3.012C0 1.884.901.971 2.015.952H15.45Zm-8.13 4.78-.1-.12h-.057c-.273.009-1.486.1-2.753 1.05l-.048.092c-.251.49-1.392 2.872-1.392 5.738l.02.033c.142.217 1.019 1.423 3.03 1.487l.295-.361.375-.469c-1.166-.349-1.666-1.051-1.74-1.164l-.01-.016.041.027c.045.03.127.08.239.143.01.01.02.02.04.03.03.02.06.03.09.05.25.14.5.25.73.34.41.16.9.32 1.47.43.729.136 1.58.187 2.508.025l.082-.015c.47-.08.95-.22 1.45-.43.35-.13.74-.32 1.15-.59l-.016.025c-.096.14-.62.833-1.794 1.165l.165.207c.253.314.495.603.495.603 2.21-.07 3.06-1.52 3.06-1.52 0-3.22-1.44-5.83-1.44-5.83-1.238-.929-2.425-1.037-2.733-1.049l-.077-.001-.14.16c1.508.461 2.3 1.103 2.46 1.243l.03.027a8.152 8.152 0 0 0-5.03-.94c-.06 0-.11.01-.17.02l-.056.005c-.38.039-1.197.179-2.214.625l-.145.068c-.182.086-.314.153-.385.19l-.06.032s.813-.774 2.576-1.294l.054-.016Zm-.38 3.61c.57 0 1.03.5 1.02 1.11 0 .61-.45 1.11-1.02 1.11-.56 0-1.02-.5-1.02-1.11 0-.61.45-1.11 1.02-1.11Zm3.65 0c.57 0 1.02.5 1.02 1.11 0 .61-.45 1.11-1.02 1.11-.56 0-1.02-.5-1.02-1.11 0-.61.45-1.11 1.02-1.11Z" />
-									</svg>
-								</div>
-							</a>
-						</div>
-					</div>
-					<div class="Not">
-						<div class="social-icon">
-							<!-- Parent container for notification icon with position relative -->
-							<div class="notification-icon-container">
-								<button passHref class="icon-link" id="notif">
-									<div class="icon-content">
-										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#545454">
-											<path fill="#545454"
-												d="M3 8.952a6 6 0 0 1 4.03-5.67 2 2 0 1 1 3.95 0A6 6 0 0 1 15 8.952v6l3 2v1H0v-1l3-2v-6Zm8 10a2 2 0 1 1-4 0h4Z" />
-										</svg>
-										<span id="notification-badge" class="notification-badge">0</span>
-									</div>
-								</button>
-
-								<!-- Notification panel under the icon -->
-								<div id="notification-panel" class="notification-panel hidden">
-									<div class="notification-title">NOTIFICATION</div>
-									<div class="notification-divider"></div>
-									<div class="notification-content">
-										<div id="notification-list" class="notification-list">
-											<div class="notification-item">
-												<a href="" class="notification-link">
-													<div class="notification-image-container">
-														<img class="notification-image"
-															src="components/auth/assets/google.svg" alt="Profile Image"
-															width="35" height="35" />
-													</div>
-													<div class="notification-text-container">
-														<div class="notification-text"> is a notification :</div>
-														<div class="notification-time">10:24</div>
-													</div>
-												</a>
-												<div class="notification-menu-container">
-													<div class="notification-menu">
-														<div id="three-points-trigger" class="three-points-trigger">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24"
-																height="24" viewBox="0 0 24 24">
-																<g fill="none">
-																	<path
-																		d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-																	<path fill="currentColor"
-																		d="M12 16.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3" />
-																</g>
-															</svg>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-			</div>
-			<!-- Profile Button -->
-			<div class="profile-icon-container">
-				<button id="profile-icon" class="profile-button" aria-label="Navigate to game">
-					<div class="profile-image-container">
-						<img id="profile-image" class="profile-image" src="" alt="Profile Image" />
-					</div>
-					<div class="profile-info">
-						<div id="profile-username" class="profile-main-username"></div>
-						<div id="profile-level" class="profile-level"></div>
-					</div>
-					<div id="profile-icon-toggle" class="profile-icon-toggle" id="profile-">
-						<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 8">
-							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-								stroke-width="1.52" d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7" />
-						</svg>
-					</div>
-				</button>
-				<div id="profile-panel" class="profile-panel">
-					<div class="profile-panel-header">
-						<div class="profile-image-container">
-							<img id="panel-profile-image" class="profile-image" src="" alt="Profile Image" />
-						</div>
-						<div class="profile-panel-info">
-							<div id="panel-fullname" class="profile-fullname"></div>
-							<div id="panel-username" class="profile-username"></div>
-							<a id="view-profile-link" href="/profile" class="profile-view-link">View Your Profile</a>
-						</div>
-					</div>
-					<div id="icons-panel-links">
-					</div>
-					<div class="profile-panel-links">
-						<a href="/settings" class="profile-panel-link">
-							<span class="settings-icon">
-								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
-									<g stroke="#A2A2A2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-										clip-path="url(#a)">
-										<path
-											d="m11.87 5.205-.213-.119a1.167 1.167 0 0 1-.457-.422l-.038-.066a1.168 1.168 0 0 1-.175-.674l.004-.248c.007-.397.01-.597-.046-.775a1.165 1.165 0 0 0-.243-.43c-.125-.14-.298-.24-.645-.44l-.288-.165c-.346-.2-.519-.3-.703-.337a1.166 1.166 0 0 0-.492.004c-.182.04-.353.144-.694.348h-.002l-.207.124a1.159 1.159 0 0 1-.595.184l-.075.001h-.076a1.165 1.165 0 0 1-.531-.147l-.065-.039-.208-.124c-.344-.207-.516-.31-.7-.351a1.166 1.166 0 0 0-.493-.004c-.184.039-.357.14-.703.34h-.002l-.284.166-.003.002c-.343.198-.515.299-.639.438-.11.124-.193.27-.242.428-.055.18-.053.379-.046.778l.005.247V4a1.168 1.168 0 0 1-.175.599l-.038.064a1.167 1.167 0 0 1-.394.387l-.065.037-.21.117c-.352.194-.527.291-.654.43a1.167 1.167 0 0 0-.251.426c-.059.18-.059.38-.058.78l.001.329c0 .398.002.597.06.775.053.158.138.302.25.424.127.137.301.234.65.428l.208.116.07.04c.183.11.333.267.432.455l.04.07c.098.186.144.396.134.606l-.005.237c-.007.4-.01.601.047.78.05.159.132.305.243.43.125.14.298.24.645.44l.288.165c.346.2.519.3.702.337.163.034.33.032.492-.004.183-.04.354-.144.697-.349l.206-.123c.178-.115.384-.179.595-.185h.152c.185.005.367.056.53.147l.054.032.22.131c.344.207.515.31.7.35.161.037.33.039.493.005.183-.038.357-.14.703-.34l.289-.167c.343-.2.515-.3.639-.439.11-.124.192-.27.242-.428.055-.178.052-.376.045-.769l-.005-.257c-.011-.237.05-.472.175-.673l.039-.065c.098-.158.233-.291.393-.387l.064-.035.002-.001.21-.117c.351-.195.527-.291.655-.43.113-.123.198-.269.25-.426.058-.178.058-.377.057-.774l-.001-.335c0-.398-.001-.598-.06-.776a1.167 1.167 0 0 0-.25-.423c-.127-.137-.3-.234-.648-.427h-.001Z" />
-										<path d="M4.667 7a2.333 2.333 0 1 0 4.666 0 2.333 2.333 0 0 0-4.666 0Z" />
-									</g>
-								</svg>
-
-							</span>
-							<span>Settings</span>
-						</a>
-						<button id="signout-link" class="profile-panel-link">
-							<span class="logout-icon">
-								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
-									viewBox="0 0 14 14">
-									<path stroke="#A2A2A2" stroke-linecap="round" stroke-linejoin="round"
-										stroke-width="1.5"
-										d="M7 7h4.083m0 0-1.75 1.75M11.083 7l-1.75-1.75m1.75-1.75v-.583A1.167 1.167 0 0 0 9.917 1.75H4.083a1.167 1.167 0 0 0-1.166 1.167v8.166a1.167 1.167 0 0 0 1.166 1.167h5.834a1.167 1.167 0 0 0 1.166-1.167V10.5" />
-								</svg>
-							</span>
-							<span>Sign out</span>
-						</button>
-					</div>
-					<div id="social-panel-links">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-</body>
-
+                  <!-- Notification panel under the icon -->
+                  <div
+                    id="notification-panel"
+                    class="notification-panel hidden"
+                  >
+                    <div class="notification-title">NOTIFICATION</div>
+                    <div class="notification-divider"></div>
+                    <div class="notification-content">
+                      <div id="notification-list" class="notification-list">
+                        <div class="notification-item">
+                          <a href="" class="notification-link">
+                            <div class="notification-image-container">
+                              <img
+                                class="notification-image"
+                                src="components/auth/assets/google.svg"
+                                alt="Profile Image"
+                                width="35"
+                                height="35"
+                              />
+                            </div>
+                            <div class="notification-text-container">
+                              <div class="notification-text">
+                                is a notification :
+                              </div>
+                              <div class="notification-time">10:24</div>
+                            </div>
+                          </a>
+                          <div class="notification-menu-container">
+                            <div class="notification-menu">
+                              <div
+                                id="three-points-trigger"
+                                class="three-points-trigger"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <g fill="none">
+                                    <path
+                                      d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"
+                                    />
+                                    <path
+                                      fill="currentColor"
+                                      d="M12 16.5a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3m0-6a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3"
+                                    />
+                                  </g>
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ul>
+        </div>
+        <!-- Profile Button -->
+        <div class="profile-icon-container">
+          <button
+            id="profile-icon"
+            class="profile-button"
+            aria-label="Navigate to game"
+          >
+            <div class="profile-image-container">
+              <img
+                id="profile-image"
+                class="profile-image"
+                onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+                alt="Profile Image"
+              />
+            </div>
+            <div class="profile-info">
+              <div id="profile-username" class="profile-main-username"></div>
+              <div id="profile-level" class="profile-level"></div>
+            </div>
+            <div
+              id="profile-icon-toggle"
+              class="profile-icon-toggle"
+              id="profile-"
+            >
+              <svg
+                class="dropdown-svg"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 8"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.52"
+                  d="M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7"
+                />
+              </svg>
+            </div>
+          </button>
+          <div id="profile-panel" class="profile-panel">
+            <div class="profile-panel-header">
+              <div class="profile-image-container">
+                <img
+                  id="panel-profile-image"
+                  class="profile-image"
+                  onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+                  alt="Profile Image"
+                />
+              </div>
+              <div class="profile-panel-info">
+                <div id="panel-fullname" class="profile-fullname"></div>
+                <div id="panel-username" class="profile-username"></div>
+                <a
+                  id="view-profile-link"
+                  href="/profile"
+                  class="profile-view-link"
+                  >View Your Profile</a
+                >
+              </div>
+            </div>
+            <div id="icons-panel-links"></div>
+            <div class="profile-panel-links">
+              <a href="/settings" class="profile-panel-link">
+                <span class="settings-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                  >
+                    <g
+                      stroke="#A2A2A2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      clip-path="url(#a)"
+                    >
+                      <path
+                        d="m11.87 5.205-.213-.119a1.167 1.167 0 0 1-.457-.422l-.038-.066a1.168 1.168 0 0 1-.175-.674l.004-.248c.007-.397.01-.597-.046-.775a1.165 1.165 0 0 0-.243-.43c-.125-.14-.298-.24-.645-.44l-.288-.165c-.346-.2-.519-.3-.703-.337a1.166 1.166 0 0 0-.492.004c-.182.04-.353.144-.694.348h-.002l-.207.124a1.159 1.159 0 0 1-.595.184l-.075.001h-.076a1.165 1.165 0 0 1-.531-.147l-.065-.039-.208-.124c-.344-.207-.516-.31-.7-.351a1.166 1.166 0 0 0-.493-.004c-.184.039-.357.14-.703.34h-.002l-.284.166-.003.002c-.343.198-.515.299-.639.438-.11.124-.193.27-.242.428-.055.18-.053.379-.046.778l.005.247V4a1.168 1.168 0 0 1-.175.599l-.038.064a1.167 1.167 0 0 1-.394.387l-.065.037-.21.117c-.352.194-.527.291-.654.43a1.167 1.167 0 0 0-.251.426c-.059.18-.059.38-.058.78l.001.329c0 .398.002.597.06.775.053.158.138.302.25.424.127.137.301.234.65.428l.208.116.07.04c.183.11.333.267.432.455l.04.07c.098.186.144.396.134.606l-.005.237c-.007.4-.01.601.047.78.05.159.132.305.243.43.125.14.298.24.645.44l.288.165c.346.2.519.3.702.337.163.034.33.032.492-.004.183-.04.354-.144.697-.349l.206-.123c.178-.115.384-.179.595-.185h.152c.185.005.367.056.53.147l.054.032.22.131c.344.207.515.31.7.35.161.037.33.039.493.005.183-.038.357-.14.703-.34l.289-.167c.343-.2.515-.3.639-.439.11-.124.192-.27.242-.428.055-.178.052-.376.045-.769l-.005-.257c-.011-.237.05-.472.175-.673l.039-.065c.098-.158.233-.291.393-.387l.064-.035.002-.001.21-.117c.351-.195.527-.291.655-.43.113-.123.198-.269.25-.426.058-.178.058-.377.057-.774l-.001-.335c0-.398-.001-.598-.06-.776a1.167 1.167 0 0 0-.25-.423c-.127-.137-.3-.234-.648-.427h-.001Z"
+                      />
+                      <path
+                        d="M4.667 7a2.333 2.333 0 1 0 4.666 0 2.333 2.333 0 0 0-4.666 0Z"
+                      />
+                    </g>
+                  </svg>
+                </span>
+                <span>Settings</span>
+              </a>
+              <button id="signout-link" class="profile-panel-link">
+                <span class="logout-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    viewBox="0 0 14 14"
+                  >
+                    <path
+                      stroke="#A2A2A2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="1.5"
+                      d="M7 7h4.083m0 0-1.75 1.75M11.083 7l-1.75-1.75m1.75-1.75v-.583A1.167 1.167 0 0 0 9.917 1.75H4.083a1.167 1.167 0 0 0-1.166 1.167v8.166a1.167 1.167 0 0 0 1.166 1.167h5.834a1.167 1.167 0 0 0 1.166-1.167V10.5"
+                    />
+                  </svg>
+                </span>
+                <span>Sign out</span>
+              </button>
+            </div>
+            <div id="social-panel-links"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

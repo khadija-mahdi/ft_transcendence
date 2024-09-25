@@ -17,7 +17,7 @@ export default function profileView() {
 							<img
 								id="profile-pic"
 								alt="profile"
-								onerror="this.onerror=null;this.src='/public/assets/icons/empty.svg';"
+								onerror="this.src='/public/assets/icons/empty.svg';"
 							/>
 						</div>
 						<div class="p-profile-details">
@@ -40,7 +40,7 @@ export default function profileView() {
 									<img
 										id="rank-icon"
 										alt="profile"
-										onerror="this.onerror=null;this.src='/public/assets/icons/unranked.png';"
+										onerror="this.src='/public/assets/icons/unranked.png';"
 									/>
 									<p id="rank-title"></p>
 								</div>
