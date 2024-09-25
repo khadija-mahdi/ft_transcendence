@@ -44,12 +44,12 @@ class TournamentRoutine():
         try:
             instance.tournament = await database_sync_to_async(Tournament.objects.get)(uuid=uuid, finished=False)
         except Tournament.DoesNotExist:
-            logger.error(f'''Tournament With This Id {uuid}'''
-                         '''Either Its Not Finished Or It Does Not Exists''')
+            logger.error(f'Tournament With This Id {uuid}'
+                         'Either Its Not Finished Or It Does Not Exists')
             return None
         except Exception as error:
-            logger.error('''Error Occurred While Getting Tournament'''
-                         f'''{uuid}: {error}''')
+            logger.error('Error Occurred While Getting Tournament'
+                         f'{uuid}: {error}')
             return
         logger.debug(f'Launching Tournament-{uuid} Manager')
         asyncio.create_task(instance.tournament_loop())
@@ -57,6 +57,7 @@ class TournamentRoutine():
 
     async def tournament_loop(self):
         """The main loop to handle the tournament logic."""
+
         logger.debug('Tournament loop iteration start...')
         while True:
             self.time_in_s += 1
@@ -72,8 +73,8 @@ class TournamentRoutine():
                 if available_player == self.tournament.max_players or available_player >= self.tournament.max_players / 2:
                     return await self.create_initial_matches()
 
-                logger.warning(f'''less than half required players showed up,required :{
-                               self.tournament.max_players}, available: {available_player}''')
+                logger.warning('less than half required players showed up,required :'
+                               '{self.tournament.max_players}, available: {available_player}')
 
                 await self._declare_tournament_as_finished()
 
@@ -91,30 +92,29 @@ class TournamentRoutine():
     async def create_matches(self, players: List[UserWithAlias]) -> None:
         """Creates matchUps for the players in the current round."""
 
-        logger.debug(f'''Creating the Tournament MatchUps '''
-                     f'''for {self.uuid} players {players}''')
+        logger.debug(f'Creating the Tournament MatchUps'
+                     f'players {[player.alias for player in players]}')
 
         random.shuffle(players)
-        stop_emitting = False
+        keep_emitting = True
+
         await database_sync_to_async(Brackets.objects.filter(
             tournament=self.tournament, round_number=self.current_round
         ).delete)()
 
         while len(players) >= 2:
-            matchup = await self.createMatchUp(players[0], players[1])
+            logger.debug('Creating Match between'
+                         f'-> {players[0].alias} vs {players[1].alias}')
 
-            await self._create_brackets(players[0].user, players[1].user)
-            if stop_emitting:
+            matchup = await self.createMatchUp(players[0], players[1])
+            await self._create_brackets(players[0], players[1])
+            if keep_emitting:
                 await self.emit_match_info(matchup)
-                stop_emitting = self.tournament.is_public
+                keep_emitting = self.tournament.is_public
             del players[0:2]
 
-            logger.info(f'''Staring Game {matchup.first_player.username}'''
-                        f''' vs {matchup.second_player.username}''')
-
         if len(players) == 1:
-            await self._auto_win_last_player(players[0].user)
-
+            await self._auto_win_last_player(players[0])
         self.games_in_progress = True
 
     async def createMatchUp(self, fp: UserWithAlias, sp: UserWithAlias):
@@ -126,7 +126,8 @@ class TournamentRoutine():
             first_player=fGamePlayer,
             second_player=sGamePlayer,
             tournament=self.tournament,
-            round_number=self.current_round
+            round_number=self.current_round,
+            game_type='online' if self.tournament.is_public else 'offline'
         )
         await database_sync_to_async(matchup.save)()
         return matchup
@@ -147,10 +148,10 @@ class TournamentRoutine():
             round_number=self.current_round
         ).count)()
 
-        logger.info(f'''A Round Completed Stats : \n'''
-                    f''' - current_round {self.current_round} \n'''
-                    f''' - Current Round Matches: {current_round_matches} \n'''
-                    f''' - tOtal Round Matches: {total_round_matches} \n''')
+        logger.info(f'A Round Completed Stats : \n'
+                    f' - current_round {self.current_round} \n'
+                    f' - Current Round Matches: {current_round_matches} \n'
+                    f' - tOtal Round Matches: {total_round_matches} \n')
 
         if current_round_matches == total_round_matches and total_round_matches != 0:
             await self.prepare_next_round()
@@ -199,10 +200,9 @@ class TournamentRoutine():
             self.games_in_progress = True
 
             logger.debug(f'got the winners from db {winners_list}')
-
             # fix this it accepts List[UserWithAlias] not List[User]
-            users_list = [UserWithAlias(winner.user, winner.alias)
-                          for winner in winners_list]
+            users_list = [UserWithAlias(await database_sync_to_async(lambda: winner.user)(),
+                                        winner.alias) for winner in winners_list]
             return await self.create_matches(users_list)
 
         return await self._declare_tournament_winner(winners[0])
@@ -210,43 +210,49 @@ class TournamentRoutine():
     async def resend_Game_notifications(self):
         """It sends Game uuid to players who still didn\'t finish the game yet"""
         """intended solely for local tournament"""
+        logger.debug(f'continue Sending Game Notification For Player'
+                     f'{self.current_round}')
 
-        unfinished_matches: List[Matchup] = await database_sync_to_async(
-            lambda: list(Matchup.objects.filter(
+        remainingGame: Matchup = await database_sync_to_async(
+            Matchup.objects.filter(
                 tournament=self.tournament,
                 game_over=False,
+                Winner__isnull=True,
                 round_number=self.current_round
-            ).values())
+            ).first
         )()
 
-        for match in unfinished_matches:
-            first_player: User = await database_sync_to_async(User.objects.get)(id=match.first_player.id)
-            second_player: User = await database_sync_to_async(User.objects.get)(id=match.second_player.id)
-            match_info = {
-                'type': 'match_info',
-                'match_uuid': str(match.game_uuid),
-                'first_player': first_player.username,
-                'first_player': second_player.username,
-            }
-            await self.create_and_send_notification(match_info, first_player, second_player)
+        logger.debug(f'resending the notification for remaining Game : '
+                     f'{remainingGame.round_number}')
+
+        first_player: GamePlayer = await database_sync_to_async(lambda: remainingGame.first_player)()
+        second_player: GamePlayer = await database_sync_to_async(lambda: remainingGame.second_player)()
+        match_info = {
+            'type': 'match_info',
+            'match_uuid': str(remainingGame.game_uuid),
+            'first_player': first_player.alias,
+            'first_player': second_player.alias,
+        }
+        await self.create_and_send_notification(match_info, first_player, second_player)
 
     async def _declare_tournament_winner(self, winner_id: int) -> None:
         """Declare the tournament winner."""
 
         logger.info(f'Tournament Finished and the winner is f{winner_id}')
 
-        winner: User = await database_sync_to_async(User.objects.get)(id=winner_id)
+        winner: GamePlayer = await database_sync_to_async(GamePlayer.objects.get)(id=winner_id)
+        winner_user: User = await database_sync_to_async(lambda: winner.user)()
 
         await self._declare_tournament_as_finished()
-        AchievementsManager().handleUserAchievements(user=winner)
+        AchievementsManager().handleUserAchievements(user=winner_user)
 
         await self.create_and_send_notification(
             {'tournament_id': self.tournament.uuid}, winner, None,
-            title='Congratiolation',
+            title='Congratulation',
             description=f'You have won the tournament {self.tournament.name}',
             type='notification')
 
-        await self.emit({'type': 'tournament_completed', 'winner': winner.username})
+        await self.emit({'type': 'tournament_completed', 'winner': winner.alias})
 
     async def _declare_tournament_as_finished(self):
         """Declare the tournament as Finished"""
@@ -255,14 +261,18 @@ class TournamentRoutine():
         self.tournament.ongoing = False
         await database_sync_to_async(self.tournament.save)()
 
-    async def _auto_win_last_player(self, last_player: User) -> None:
+    async def _auto_win_last_player(self, last_player: UserWithAlias) -> None:
         """Automatically advance the last player to the next round if they have no opponent."""
         logger.debug(
             f'A Player has moved up to next round automatically {last_player}')
+        player = await database_sync_to_async(GamePlayer.objects.create)(user=last_player.user, alias=last_player.alias)
+
         bracket = Brackets(tournament=self.tournament,
-                           round_number=self.current_round, player=last_player)
-        match_up = Matchup(first_player=last_player, second_player=None, tournament=self.tournament,
-                           Winner=last_player, game_over=True, round_number=self.current_round)
+                           round_number=self.current_round, player=last_player.user)
+
+        match_up = Matchup(first_player=player, second_player=None, tournament=self.tournament,
+                           Winner=player, game_over=True, round_number=self.current_round)
+
         await database_sync_to_async(bracket.save)()
         await database_sync_to_async(match_up.save)()
 
@@ -275,8 +285,8 @@ class TournamentRoutine():
                 "Handle public tournament and register only the active players"
                 self.waiting_players.append(UserWithAlias(
                     player, self.get_user_alias(player.pk)))
-                logger.debug(f'''Added player {player.username}'''
-                             f'''to tournament {self.uuid}''')
+                logger.debug(f'Added player {player.username}'
+                             f'to tournament {self.uuid}')
             else:
                 logger.warning(
                     f'Player {player.username} already in waiting list.')
@@ -284,16 +294,18 @@ class TournamentRoutine():
     async def remove_player(self, player: User) -> bool:
         """Removes a player from the waiting list."""
         async with self.lock:
-            if player in [player.user for player in self.waiting_players]:
-                self.waiting_players.remove(player)
-                logger.debug(f'''Removed player {player.username}'''
-                             f'''from tournament {self.uuid}''')
+            player_to_remove = next(
+                (gp for gp in self.waiting_players if gp.user == player), None)
+            if player_to_remove:
+                self.waiting_players.remove(player_to_remove)
+                logger.debug(f'Removed player {player.username}'
+                             f'from tournament {self.uuid}')
             return len(self.waiting_players) == 0
 
     async def private_add_player(self):
         """Handle private tournament and register all register players as active players"""
-        logger.debug(f'''Adding All registered PLayers as active Players'''
-                     f'''to tournament {self.uuid}''')
+        logger.debug(f'Adding All registered PLayers as active Players'
+                     f'to tournament {self.uuid}')
         registered_players: List[TournamentsRegisteredPlayers] = await database_sync_to_async(
             lambda: list(TournamentsRegisteredPlayers.objects.filter(
                 tournament=self.tournament))
@@ -310,14 +322,17 @@ class TournamentRoutine():
                 self.tournament.registered_players().get)(id=pk)
         return registerRecord.alias
 
-    async def create_and_send_notification(self, info: Dict[str, Any], recipient: User,
-                                           sender: User, title=None, description=None,
-                                           type=None, save: bool = True) -> None:
+    async def create_and_send_notification(self, info: Dict[str, Any], recipient: GamePlayer,
+                                           sender: GamePlayer, title=None, description=None, type=None, save: bool = True) -> None:
+
+        recipient_user: User = await database_sync_to_async(lambda: recipient.user)()
+        sender_user: User = await database_sync_to_async(lambda: sender.user)() if sender else None
+
         notification = Notification(
-            recipient=recipient,
-            sender=sender,
+            recipient=recipient_user,
+            sender=sender_user,
             title='You Are Scheduled to new game' if not title else title,
-            description=f'You are to play against {sender.username}'
+            description=f'You are to play against {sender_user.username}'
             if not description else description,
             type='new-game' if not type else type,
             action=json.dumps(info)
@@ -327,16 +342,12 @@ class TournamentRoutine():
         await sync_to_async(NotificationManager().send_notification)(notification)
 
     @database_sync_to_async
-    def _create_brackets(self, first_player: User, second_player: User) -> None:
+    def _create_brackets(self, fp: UserWithAlias, sp: UserWithAlias) -> None:
         """Creates the brackets for two players."""
-        Brackets(tournament=self.tournament,
-                 round_number=self.current_round,
-                 player=first_player,
-                 alias='').save()
-        Brackets(tournament=self.tournament,
-                 round_number=self.current_round,
-                 player=second_player,
-                 alias='').save()
+        Brackets(tournament=self.tournament, round_number=self.current_round,
+                 player=fp.user, alias=fp.alias).save()
+        Brackets(tournament=self.tournament, round_number=self.current_round,
+                 player=sp.user, alias=sp.alias).save()
 
     async def emit(self, dict_data) -> None:
         """Sends a message to the tournament group."""
@@ -350,13 +361,13 @@ class TournamentRoutine():
     async def emit_match_info(self, match: Matchup, save: bool = True) -> None:
         """Emit match info to the Users channel."""
 
-        first_player: User = await database_sync_to_async(User.objects.get)(id=match.first_player.id)
-        second_player: User = await database_sync_to_async(User.objects.get)(id=match.second_player.id)
+        first_player: GamePlayer = await database_sync_to_async(GamePlayer.objects.get)(pk=match.first_player.pk)
+        second_player: GamePlayer = await database_sync_to_async(GamePlayer.objects.get)(pk=match.second_player.pk)
         match_info = {
             'type': 'match_info',
             'match_uuid': str(match.game_uuid),
-            'first_player': first_player.username,
-            'second_player': second_player.username
+            'first_player': first_player.alias,
+            'second_player': second_player.alias
         }
         await self.create_and_send_notification(match_info, first_player, second_player)
         await self.create_and_send_notification(match_info, second_player, first_player)

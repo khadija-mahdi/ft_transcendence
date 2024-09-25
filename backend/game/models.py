@@ -78,7 +78,7 @@ class GamePlayer(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.alias:
-            self.alias = self.user.username if self.user else 'The Machine'
+            self.alias = self.user.username if self.user else 'root'
         return super().save(*args, **kwargs)
 
 

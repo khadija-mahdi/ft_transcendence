@@ -9,7 +9,7 @@ urlpatterns = [
     path('match-info/<str:game_uuid>/',
          view=views.MatchInfo.as_view(), name='game-info'),
     path('Tournament/', view=views.listTournaments.as_view(), name='tournament'),
-    path('Tournament-announcements/', view=views.listTournaments.as_view(),
+    path('Tournament-announcements/', view=views.listAnnouncements.as_view(),
          name='Tournament-announcements'),
     path('Tournament/detail/<int:pk>/',
          view=views.RetrieveTournament.as_view(), name='tournament-detail'),

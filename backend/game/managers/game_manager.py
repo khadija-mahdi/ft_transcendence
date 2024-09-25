@@ -17,7 +17,7 @@ class Game():
     second_player: GamePlayer = None
     first_player_user: User = None
     second_player_user: User = None
-    tournament = None
+    tournament: Tournament = None
 
     def __init__(self, room_id):
         self.room_id = room_id
@@ -166,7 +166,7 @@ class Game():
             }
         )
 
-    async def NotifyTournamentConsumer(self, Winner):
+    async def NotifyTournamentConsumer(self, Winner: GamePlayer):
         logger.debug(f'Notify Tournament {self.tournament}'
                      f'About this Game Winner {Winner}')
         if self.tournament is None:
@@ -176,8 +176,8 @@ class Game():
             {
                 'type': 'match_result',
                 'message':  json.dumps({
-                    'match_id': self.matchup.id,
-                    'winner_id': Winner.id
+                    'match_id': self.matchup.pk,
+                    'winner_id': Winner.pk
                 })
             }
         )
@@ -213,16 +213,17 @@ class Game():
             await database_sync_to_async(self.matchup.save)()
 
             await self.NotifyTournamentConsumer(winner)
-            winner_user: User = await database_sync_to_async(lambda: winner.user)
+            winner_user: User = await database_sync_to_async(lambda: winner.user)()
+            Loser_user: User = await database_sync_to_async(lambda: Loser.user)()
             await self.emit(dict_data={
                 'type': 'game_over',
-                'winner': winner_user.username if winner else "The Machine"
+                'winner': winner_user.username if winner_user else "root"
             })
             if self.tournament is None and self.matchup.game_type == 'online':
-                if winner:
-                    await AchievementsManager().handleUserAchievements(user=winner)
-                if Loser:
-                    await AchievementsManager().handleLoserUser(user=Loser)
+                if winner_user:
+                    await AchievementsManager().handleUserAchievements(user=winner_user)
+                if Loser_user:
+                    await AchievementsManager().handleLoserUser(user=Loser_user)
             self.is_running = False
 
         await self.emit(dict_data={

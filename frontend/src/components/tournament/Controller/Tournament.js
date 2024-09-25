@@ -35,6 +35,7 @@ function setTournamentDetails() {
     is_registered,
     finished,
     is_public,
+    ongoing,
   } = data;
 
   const tournamentImage = document.getElementById("tournament-image");
@@ -58,6 +59,7 @@ function setTournamentDetails() {
   RegisterButton.innerText =
     is_registered && is_public ? "Unregister" : "Register";
 
+  RegisterButton.disabled = finished || ongoing;
   const statusPanel = document.querySelector(".status-table-wrapper");
   if (games_states.length === 0) {
     statusPanel.innerHTML = "";

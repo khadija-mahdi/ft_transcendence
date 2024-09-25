@@ -9,6 +9,13 @@ export default function () {
 
   let selectedImage = null;
 
+  // Get the current time
+  const now = new Date();
+  now.setHours(now.getHours() + 2);
+  // Convert the time to a format suitable for input type="datetime-local"
+  const formattedDateTime = now.toISOString().slice(0, 16); // "YYYY-MM-DDTHH:MM"
+  document.getElementById("startDate").value = formattedDateTime;
+
   const initialImageLabelContent = imageLabel.innerHTML;
   function toggleMonetize() {
     const monetizeText = document.getElementById("monetizeText");
@@ -26,7 +33,7 @@ export default function () {
       isMonetized.checked = false;
       monetizeText.style.color = "gray";
       monetizeDesc.style.color = "gray";
-      monetizeSwitch.style.opacity = "0.5"; 
+      monetizeSwitch.style.opacity = "0.5";
     }
   }
   document

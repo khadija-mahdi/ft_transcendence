@@ -32,7 +32,7 @@ class TournamentConsumer(AsyncWebsocketConsumer):
             return
         lastPlayer = await self.tournament_routine.remove_player(self.user)
         logger.debug(f'lastPlayer {lastPlayer}')
-        if lastPlayer:
+        if lastPlayer and self.tournament_routine.tournament.finished:
             await self.tournament_manager.remove_tournament(self.tournament_id)
         await self.channel_layer.group_discard(
             self.tournament_group_name,

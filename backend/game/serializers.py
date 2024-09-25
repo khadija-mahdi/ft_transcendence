@@ -75,13 +75,13 @@ class TournamentDetailsSerializer(serializers.ModelSerializer, BaseTournamentSer
     match_ups = serializers.SerializerMethodField()
     is_my_tournament = serializers.SerializerMethodField()
     is_registered = serializers.SerializerMethodField()
-    finished = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Tournament
         fields = ['id', 'uuid', 'icon', 'name', 'description', 'max_players', 'is_public', 'is_monetized',
-                  'is_registered', 'finished', 'is_my_tournament', 'tournament_bracket', 'start_date', 'registered_users',
+                  'is_registered', 'finished', 'ongoing', 'is_my_tournament', 'tournament_bracket', 'start_date', 'registered_users',
                   'streams', 'games_states', 'match_ups', 'created_at', 'updated_at']
+        read_only_fields = ['finished', 'ongoing', 'created_at', 'updated_at']
 
     def get_games_states(self, obj):
         games_states = Matchup.objects.all().filter(
@@ -155,9 +155,9 @@ class MatchInfoSerializer(serializers.ModelSerializer):
             representation["second_player"] = {
                 'user': {
                     'image_url': 'https://imgcdn.stablediffusionweb.com/2024/3/16/56c125c5-daa3-45aa-8c74-bc8e2bc26128.jpg',
-                    'username': 'The Machine',
+                    'username': 'root',
                 },
-                'alias': 'The Machine'
+                'alias': 'root'
             }
         return representation
 

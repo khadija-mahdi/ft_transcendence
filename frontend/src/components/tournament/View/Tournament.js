@@ -147,7 +147,7 @@ export function StatusTableRow(match = {}) {
           <div class="player-images">
             <div class="player-avatar">
               <img
-                src="${match.first_player?.image_url}"
+                src="${match.first_player?.user?.image_url}"
                 alt="profile"
                 class="avatar-image"
                 onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
@@ -155,7 +155,7 @@ export function StatusTableRow(match = {}) {
             </div>
             <div class="player-avatar">
               <img
-                src="${match.second_player?.image_url}"
+                src="${match.second_player?.user?.image_url}"
                 alt="profile"
                 class="avatar-image"
                 onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
@@ -163,26 +163,24 @@ export function StatusTableRow(match = {}) {
             </div>
           </div>
           <div class="player-info">
-            <div class="player-name">
-              ${match.first_player.username || "USER"}
-            </div>
+            <div class="player-name">${match.first_player.alias || "USER"}</div>
             <div class="player-level">
-              Level <span>${match.first_player.current_xp || "0"}</span>
+              Level <span>${match.first_player?.user.current_xp || "0"}</span>
             </div>
           </div>
           <p class="vs-text">VS</p>
           <div class="player-info">
             <div class="player-name">
-              ${match.second_player.username || "USER"}
+              ${match.second_player.alias || "USER"}
             </div>
             <div class="player-level">
-              Level <span>${match.second_player.current_xp || "0"}</span>
+              Level <span>${match.second_player?.user.current_xp || "0"}</span>
             </div>
           </div>
         </div>
       </td>
       <td>
-        ${match.first_player_score || 0} VS ${match.second_player_score || 0}
+        ${match.first_player.score || 0} VS ${match.second_player.score || 0}
       </td>
       <td>${new Date(match?.created_at).toLocaleString()}</td>
       <td>${new Date(match?.updated_at).toLocaleString()}</td>
@@ -190,16 +188,16 @@ export function StatusTableRow(match = {}) {
         <div class="winner-row">
           <div class="winner-avatar">
             <img
-              src="${match.Winner?.image_url}"
+              src="${match.Winner?.user?.image_url}"
               alt="profile"
               class="avatar-image"
               onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
             />
           </div>
           <div class="winner-info">
-            <div class="winner-name">${match.Winner?.username}</div>
+            <div class="winner-name">${match?.Winner?.alias}</div>
             <div class="winner-level">
-              Level <span>${match.Winner?.current_xp}</span>
+              Level <span>${match.Winner?.user?.current_xp}</span>
             </div>
           </div>
         </div>

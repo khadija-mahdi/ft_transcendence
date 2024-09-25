@@ -531,11 +531,11 @@ function handleMovement(Socket, action, playerOrder = null) {
 }
 
 async function InitScoreBoard({ first_player, second_player }) {
-  SetPlayerInfo(first_player.user, first_player.score, true);
-  SetPlayerInfo(second_player.user, second_player.score);
+  SetPlayerInfo(first_player, true);
+  SetPlayerInfo(second_player);
 }
 
-function SetPlayerInfo(player, score, isMe = false) {
+function SetPlayerInfo(player, isMe = false) {
   const PlayerImage = document.getElementById(
     `player-image-${isMe ? "1" : "2"}`
   );
@@ -543,9 +543,10 @@ function SetPlayerInfo(player, score, isMe = false) {
   const PlayerScore = document.getElementById(
     `player-score-${isMe ? "1" : "2"}`
   );
-  PlayerImage.src = player?.image_url || "/public/assets/images/robot.webp";
-  PlayerName.innerText = player?.username || "The Machine";
-  PlayerScore.innerText = score || 0;
+  PlayerImage.src =
+    player?.user?.image_url || "/public/assets/images/robot.webp";
+  PlayerName.innerText = player?.alias || "root";
+  PlayerScore.innerText = player?.score || 0;
 }
 
 const UpdateScore = (FpScore, SpScore) => {

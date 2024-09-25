@@ -97,6 +97,7 @@ export default function () {
               placeholder="The maximum number of players (4-16)"
               min="4"
               max="16"
+              value="4"
               required
             />
           </div>
@@ -136,7 +137,7 @@ export default function () {
                   the homepage.</span
                 >
               </div>
-              <label class="switch switch-monet " >
+              <label class="switch switch-monet ">
                 <input type="checkbox" id="isMonetized" />
                 <span class="slider round"></span>
               </label>

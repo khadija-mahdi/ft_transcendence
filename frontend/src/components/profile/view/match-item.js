@@ -8,7 +8,7 @@ export function matchItem({ first_player, second_player, Winner }) {
         <div class="player-icons">
           <div class="player-icon">
             <img
-              src="${first_player?.image_url ||
+              src="${first_player?.user?.image_url ||
               "/public/assets/images/robot.webp"}"
               alt="profile"
               onerror="this.onerror=null;this.src='/public/assets/images/defaultImageProfile.png';"
@@ -26,16 +26,16 @@ export function matchItem({ first_player, second_player, Winner }) {
         <div class="player-details">
           <div
             class="player-name"
-            title="${first_player?.username || "Machine"}"
+            title="${first_player?.alias || "Machine"}"
           >
-            ${first_player?.username || "Machine"}
+            ${first_player?.alias || "Machine"}
           </div>
           <div class="player-level">
             Level
             <span
-              >${first_player?.current_xp === undefined
+              >${first_player?.user?.current_xp === undefined
                 ? "---"
-                : `${first_player?.current_xp}xp`}</span
+                : `${first_player?.user?.current_xp}xp`}</span
             >
           </div>
         </div>
@@ -43,16 +43,16 @@ export function matchItem({ first_player, second_player, Winner }) {
         <div class="player-details">
           <div
             class="player-name"
-            title="${second_player?.username || "Machine"}"
+            title="${second_player?.alias || "Machine"}"
           >
-            ${second_player?.username || "Machine"}
+            ${second_player?.alias || "Machine"}
           </div>
           <div class="player-level">
             Level
             <span
-              >${second_player?.current_xp === undefined
+              >${second_player?.user?.current_xp === undefined
                 ? "---"
-                : `${second_player?.current_xp}xp`}</span
+                : `${second_player?.user?.current_xp}xp`}</span
             >
           </div>
         </div>

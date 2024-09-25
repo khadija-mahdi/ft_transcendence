@@ -95,8 +95,9 @@ class listTournaments(ListCreateAPIView):
 class listAnnouncements(ListCreateAPIView):
     serializer_class = TournamentSerializer
     queryset = Tournament.objects.all().filter(
-        is_monetized=True).filter(finished=False).\
-        filter(ongoing=False).order_by('created_at').reverse()[:3]
+        is_monetized=True, finished=False,
+        ongoing=False, is_public=True)\
+        .order_by('created_at').reverse()[:3]
 
 
 class RetrieveTournament(RetrieveDestroyAPIView):
@@ -179,7 +180,7 @@ class MatchHistory(ListAPIView):
         pk = self.kwargs['pk']
         try:
             user = User.objects.get(id=pk)
-            return Matchup.objects.filter(Q(first_player=user) | Q(second_player=user)).filter(game_type='online')
+            return Matchup.objects.filter(Q(first_player__user=user) | Q(second_player__user=user)).filter(game_type='online')
         except User.DoesNotExist:
             return []
 
@@ -197,7 +198,7 @@ class TournamentHistory(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return TournamentsRegisteredPlayers.objects.filter(user=self.request.user)
+        return TournamentsRegisteredPlayers.objects.filter(user=self.request.user, tournament__is_public=True).distinct()
 
 
 class OngoingTournaments(ListAPIView):
@@ -205,7 +206,9 @@ class OngoingTournaments(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Tournament.objects.filter(registered_users=self.request.user).filter(ongoing=True)
+        return Tournament.objects\
+            .filter(registered_users=self.request.user)\
+            .filter(ongoing=True).distinct()
 
 
 class JoinGameLooby():

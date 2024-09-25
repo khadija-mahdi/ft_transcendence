@@ -365,6 +365,11 @@
   text-transform: uppercase;
 }
 
+.register-button:disabled {
+  background-color: #ff3d00;
+  opacity: 0.5;
+}
+
 .error-text {
   margin-top: -0.5rem;
   font-size: 0.75rem;
