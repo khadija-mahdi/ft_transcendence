@@ -284,7 +284,7 @@ class TournamentRoutine():
             elif player not in [player.user for player in self.waiting_players]:
                 "Handle public tournament and register only the active players"
                 self.waiting_players.append(UserWithAlias(
-                    player, self.get_user_alias(player.pk)))
+                    player, await self.get_user_alias(player.pk)))
                 logger.debug(f'Added player {player.username}'
                              f'to tournament {self.uuid}')
             else:
@@ -318,8 +318,8 @@ class TournamentRoutine():
 
     async def get_user_alias(self, pk: int) -> str:
         registerRecord: TournamentsRegisteredPlayers = await \
-            database_sync_to_async(
-                self.tournament.registered_players().get)(id=pk)
+            database_sync_to_async(TournamentsRegisteredPlayers.objects.filter(
+                user__pk=pk, tournament=self.tournament).first)()
         return registerRecord.alias
 
     async def create_and_send_notification(self, info: Dict[str, Any], recipient: GamePlayer,
