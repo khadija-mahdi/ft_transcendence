@@ -19,7 +19,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from user.models import User
 import logging
 
-logger =  logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
+
 
 class AuthApi(generics.GenericAPIView):
     class AuthSerializer(serializers.Serializer):
@@ -165,19 +166,21 @@ class AuthView(generics.CreateAPIView):
                 'refresh': refresh_token
             })
 
-    def verify_email(self, serializer):
+    def verify_email(self, serializer) -> User:
         validated_data = serializer.validated_data
         email = validated_data.get('email')
         password = validated_data.get('password')
 
         try:
-            user = User.objects.get(email=email)
+            user: User = User.objects.get(email=email)
         except User.DoesNotExist:
             raise Exception('Invalid email or password.')
 
         if not user.check_password(password):
             raise Exception('Invalid email or password.')
-
+        if user.status != 'offline':
+            raise Exception('This Account is Open on another computer or browser,'
+                            'make sure to disconnect before trying again')
         return user
 
     def send_mail(self, serializer):

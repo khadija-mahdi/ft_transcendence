@@ -180,7 +180,9 @@ class MatchHistory(ListAPIView):
         pk = self.kwargs['pk']
         try:
             user = User.objects.get(id=pk)
-            return Matchup.objects.filter(Q(first_player__user=user) | Q(second_player__user=user)).filter(game_type='online')
+            return Matchup.objects.filter(Q(first_player__user=user) | Q(second_player__user=user))\
+                .filter(game_type='online')\
+                .filter(tournament__isnull=True)
         except User.DoesNotExist:
             return []
 

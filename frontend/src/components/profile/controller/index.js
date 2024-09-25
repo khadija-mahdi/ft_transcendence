@@ -262,7 +262,7 @@ function ProfileButtonContent() {
     `;
   }
   return ProfileCTA(
-    "./assets/icons/add-fill.svg",
+    "/public/assets/icons/add-fill.svg",
     "Add Friend",
     "SendFriendRequest"
   );

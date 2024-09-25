@@ -20,7 +20,7 @@ class AchievementsManager:
 
     def relevantGames(self, user: User, achievement_type: str) -> QuerySet:
         match_up = Matchup.objects.filter(
-            first_player=user, second_player=user)\
+            first_player__user=user, second_player__user=user)\
             .filter(game_over=True).order_by('-created_at')
         obtained_achievement: Achievements = user.achievements.filter(
             requirement_type=achievement_type).order_by('-created_at').first()
@@ -36,10 +36,10 @@ class AchievementsManager:
             requirement_type='win_streak')
         if not win_strike_achievements.exists():
             return
-        last_match_ups = self.relevantGames(user, 'win_streak')
+        last_match_ups: list[Matchup] = self.relevantGames(user, 'win_streak')
         for matchUp in last_match_ups:
-            winner = matchUp.Winner()
-            if winner is not user:
+            winner = matchUp.Winner
+            if winner.user is not user:
                 break
             win_streak += 1
 
@@ -66,12 +66,13 @@ class AchievementsManager:
             requirement_type='win_with_zero_loss')
         if not achievements.exists():
             return
-        last_match_ups = self.relevantGames(user, 'win_with_zero_loss')
+        last_match_ups: list[Matchup] = self.relevantGames(
+            user, 'win_with_zero_loss')
         for matchUp in last_match_ups:
-            winner = matchUp.Winner()
-            loser_score = matchUp.first_player_score if\
-                matchUp.first_player != winner else matchUp.second_player_score
-            if winner == user and loser_score == 0:
+            winner = matchUp.Winner
+            loser_score = matchUp.first_player.score if\
+                matchUp.first_player != winner else matchUp.second_player.score
+            if winner.user == user and loser_score == 0:
                 total_zero_loss += 1
 
         for achievement in achievements:
@@ -86,10 +87,10 @@ class AchievementsManager:
             requirement_type='total_wins')
         if not achievements.exists():
             return
-        last_match_ups = self.relevantGames(user, 'total_wins')
+        last_match_ups: list[Matchup] = self.relevantGames(user, 'total_wins')
         for matchUp in last_match_ups:
-            winner = matchUp.Winner()
-            if winner == user:
+            winner = matchUp.Winner
+            if winner.user == user:
                 total_wins += 1
         for achievement in achievements:
             if total_wins >= achievement.requirement_value:

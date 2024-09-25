@@ -289,7 +289,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 5rem;
+  max-width: 3rem;
 }
 
 .bracket-level {

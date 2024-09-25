@@ -3,8 +3,9 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 import uuid
 from channels.db import database_sync_to_async
-from game.models import Matchup
+from game.models import Matchup, GamePlayer
 from game.managers.match_maker import InvitesManager
+from user.models import User
 import logging
 
 logger = logging.getLogger(__name__)
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 class GameInvite(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope['user']
+        self.user: User = self.scope['user']
         if not self.user:
             self.close()
         self.InvitesManager: InvitesManager = self.scope['url_route']['kwargs']['InvitesManager']
@@ -44,12 +45,14 @@ class GameInvite(AsyncWebsocketConsumer):
         message = event['message']
         await self.send(text_data=json.dumps(message))
 
-    async def create_game(self, matched_user):
+    async def create_game(self, matched_user: User):
         game_uuid = str(uuid.uuid4())
+        game_player = await database_sync_to_async(GamePlayer.objects.create)(user=self.user)
+        matched_game_player = await database_sync_to_async(GamePlayer.objects.create)(user=matched_user)
         await database_sync_to_async(Matchup.objects.create)(
             game_uuid=game_uuid,
-            first_player=self.user,
-            second_player=matched_user if matched_user else None)
+            first_player=game_player,
+            second_player=matched_game_player)
 
         return {
             "type": 'broadcast',

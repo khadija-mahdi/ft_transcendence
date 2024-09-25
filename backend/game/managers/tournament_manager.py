@@ -95,7 +95,7 @@ class TournamentRoutine():
         logger.debug(f'Creating the Tournament MatchUps'
                      f'players {[player.alias for player in players]}')
 
-        random.shuffle(players)
+        # random.shuffle(players)
         keep_emitting = True
 
         await database_sync_to_async(Brackets.objects.filter(
