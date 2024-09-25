@@ -178,9 +178,9 @@ class AuthView(generics.CreateAPIView):
 
         if not user.check_password(password):
             raise Exception('Invalid email or password.')
-        if user.status != 'offline':
-            raise Exception('This Account is Open on another computer or browser,'
-                            'make sure to disconnect before trying again')
+        # if user.status != 'offline':
+        #     raise Exception('This Account is Open on another computer or browser,'
+        #                     'make sure to disconnect before trying again')
         return user
 
     def send_mail(self, serializer):

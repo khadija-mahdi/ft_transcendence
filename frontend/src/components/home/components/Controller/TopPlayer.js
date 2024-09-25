@@ -90,11 +90,7 @@ export default async function rendertopPlayers() {
     topPlayers.slice(0, 4).forEach((friend, index) => {
       const friendComponent = TopPlayerContainer({
         name: friend.username,
-        href:
-          friend.image &&
-          friend.image_url.startsWith(`https://${API_URL}/media/`)
-            ? friend.image_url
-            : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
+        href: friend.image_url,
         number: friend.current_xp && friend.current_xp,
         index: index + 1, // Assuming index starts from 1
       });

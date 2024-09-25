@@ -308,7 +308,7 @@ export default async function renderAllPlayers() {
 			Recommended.forEach((friend) => {
 				const friendComponent = AllPlayerContainer({
 					name: friend.username,
-					href: friend.image && friend.image_url.startsWith(`https://${API_URL}/media/`) ? friend.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
+					href: friend.image,
 					number: friend.current_xp && friend.current_xp
 
 				});
@@ -334,7 +334,7 @@ export default async function renderAllPlayers() {
 			pending.forEach((user) => {
 				const friendComponent = PendingContainer({
 					name: user.username,
-					href: user.image && user.image_url.startsWith(`https://${API_URL}/media/`) ? user.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
+					href: user.image ,
 					number: user.current_xp && user.current_xp
 				});
 

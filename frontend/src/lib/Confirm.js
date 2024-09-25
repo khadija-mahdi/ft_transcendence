@@ -67,6 +67,13 @@ export async function showMainPopup({
   duration = 10000,
 }) {
   action = SerializeInviteAction(action);
+  if (
+    (type === "messenger" && window.location.pathname === "/messenger") ||
+    (type !== "new-game" &&
+      type !== "tournament" &&
+      window.location.pathname.startsWith("/game?uuid="))
+  )
+    return;
   const popupContainer = document.getElementById("main-popup-container");
   const popupTitle = document.getElementById("main-popup-title");
   const popupSubtitle = document.getElementById("main-popup-subtitle");

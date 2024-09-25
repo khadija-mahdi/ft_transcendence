@@ -44,7 +44,7 @@ const routes = {
 		css: "/src/components/auth/assets/auth.css",
 		controller: () => import("/src/components/auth/Controller/sing_in.js"),
 	},
-	"/auth/2fa/": {
+	"/auth/2fa": {
 		title: "Two-Factor Authentication",
 		component: () => import("/src/components/auth/View/totp.js"),
 		css: "/src/components/auth/assets/auth.css",

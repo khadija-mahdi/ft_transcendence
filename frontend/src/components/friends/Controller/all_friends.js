@@ -130,7 +130,7 @@ export default async function renderFriends() {
 			friends.forEach((user) => {
 				const friendComponent = FriendContainer({
 					name: user.username,
-					href: user.image && user.image_url.startsWith(`https://${API_URL}/media/`) ? user.image_url : `https://${API_URL}/media/public/profile-images/00_img.jpg`,
+					href: user.image,
 					number: user.current_xp && user.current_xp
 				});
 				const friendWrapper = document.createElement("div");
