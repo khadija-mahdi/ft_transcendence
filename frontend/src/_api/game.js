@@ -28,10 +28,16 @@ export const getMatchInfo = async (uuid) => {
   return Response;
 };
 
-export const getOfflineGameInfo = async () => {
+export const getOfflineGameInfo = async (alias1, alias2) => {
+  alias1 = alias1 === null ? "" : alias1
+  alias2 = alias2 === null ? "" : alias2
   try {
     const Response = await fetchWithAuth(`/api/v1/game/create-offline-game`, {
       method: "POST",
+      body: JSON.stringify({
+        first_player_alias: alias1,
+        second_player_alias: alias2,
+      }),
     });
     return Response;
   } catch (e) {

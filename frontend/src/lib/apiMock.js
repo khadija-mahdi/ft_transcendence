@@ -1,5 +1,5 @@
-import { API_URL } from "/config.js";
 
+import { API_URL } from "/config.js";
 export function getCookieValue(name) {
   const cookies = document.cookie.split(";");
   for (let i = 0; i < cookies.length; i++) {
