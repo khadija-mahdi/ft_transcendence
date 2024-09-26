@@ -113,9 +113,9 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
             <div class="panel-room-name">${selectedChat.room_name}</div>
             <div class="panel-room-status">
               ${selectedChat.type === "private"
-                ? selectedChat.receiverUser &&
-                  selectedChat.receiverUser[0].status
-                : "No members"}
+      ? selectedChat.receiverUser &&
+      selectedChat.receiverUser[0].status
+      : "No members"}
             </div>
           </a>
         </div>
@@ -144,11 +144,10 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
       <div id="send-message" class="send-message">
         <div class="send-message-container">
           ${isFriend || selectedChat.type !== "private"
-            ? `
+      ? `
                         <div class="send-message-content">
-                            ${
-                              selectedChat.type === "private"
-                                ? `
+                            ${selectedChat.type === "private"
+        ? `
                                 <div  id="invite-chat" class="invite-icon-container">
                                     <div>
                                         <svg
@@ -166,8 +165,8 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                                     <div class="invite-text">Invite</div>
                                 </div>
                             `
-                                : ""
-                            }
+        : ""
+      }
 					
 							<div class="send-image-container" id="send-image-container">
 								<!-- Image upload UI will be rendered here -->
@@ -192,16 +191,15 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
                             </button>
                         </div>
                     `
-            : `
-                        ${
-                          selectedChat.type === "private"
-                            ? `
+      : `
+                        ${selectedChat.type === "private"
+        ? `
                             <div class="no-friend-message">
                                 You can't send a message to a user that you are not friends with
                             </div>
                         `
-                            : ""
-                        }
+        : ""
+      }
                     `}
         </div>
       </div>
@@ -221,7 +219,7 @@ function handleWebSocket(selectedChat) {
       };
       socket.onmessage = (event) => {
         const receivedMessage = JSON.parse(event.data);
-        console.log("receivedMessage", receivedMessage);
+
         if (!receivedMessage.message) return;
         const newMessage = {
           message: receivedMessage.message.message,
@@ -255,8 +253,8 @@ function appendMessageToUI(message, prepend = false) {
       messageElement.innerHTML = html`
         <div
           class="image_file ${message.sender_username === myData.username
-            ? "sent"
-            : "received"}"
+          ? "sent"
+          : "received"}"
         >
           <img
             class="image_file-content"
@@ -269,8 +267,7 @@ function appendMessageToUI(message, prepend = false) {
     } else {
       messageElement.innerHTML = `
 				<div class="message-content">${message.message}</div>
-				<div class="message-time ${
-          message.sender_username === myData.username ? "sent" : ""
+				<div class="message-time ${message.sender_username === myData.username ? "sent" : ""
         }">
 					${new Date(message.created_at).toLocaleTimeString()}
 				</div>
@@ -319,7 +316,6 @@ async function sendMessage(content, selectedChat, imageFile = null) {
       created_at: new Date().toISOString(),
     };
     if (socket && socket.readyState === WebSocket.OPEN) {
-      console.log("payload", socket);
       socket.send(JSON.stringify(payload));
       appendMessageToUI(payload);
     } else {

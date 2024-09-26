@@ -32,19 +32,23 @@ def create_notification(recipient, title, description, type, action):
 
 def notify_tournament_users(tournament_id):
     logger.info(f'Notify Tournament {tournament_id} Users ')
-    tournament = Tournament.objects.get(id=tournament_id)
-    tournament.ongoing = True
-    tournament.save()
-    logger.debug(f'Tournament {tournament.uuid} is about to start')
-    registeredUsers = tournament.registered_users.all()
-    for user in registeredUsers:
-        logger.debug(
-            f'Sending Notification To User-{user.username}')
-        create_notification(
-            user,
-            tournament.name,
-            f'Tournament {tournament.name} is about to start',
-            'tournament',
-            tournament.uuid
-        )
-    return
+    try:
+        tournament = Tournament.objects.get(id=tournament_id)
+        tournament.ongoing = True
+        tournament.save()
+        logger.debug(f'Tournament {tournament.uuid} is about to start')
+        registeredUsers = tournament.registered_users.all()
+        for user in registeredUsers:
+            logger.debug(
+                f'Sending Notification To User-{user.username}')
+            create_notification(
+                user,
+                tournament.name,
+                f'Tournament {tournament.name} is about to start',
+                'tournament',
+                tournament.uuid
+            )
+        return
+    except Exception as e:
+        logger.error(f'Job failed for tournament {tournament_id}: {e}')
+        raise  # This will trigger the retry logic

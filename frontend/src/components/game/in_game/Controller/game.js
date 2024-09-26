@@ -124,22 +124,22 @@ async function loadTable(scene) {
   // Load textures
   const diffuseTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_diff_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load diffuse texture", err)
   );
   const roughnessTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_rough_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load roughness texture", err)
   );
   const normalTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_nor_gl_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load normal texture", err)
   );
   const displacementTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_disp_1k.png",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load displacement texture", err)
   );
 
@@ -287,7 +287,7 @@ function Camera(isFirstPlayer = true, game_type) {
   const near = 0.1;
   const far = 1000;
   config.selectedPerspective = !isFirstPlayer ? "FPerspective" : "SPerspective";
-  console.log("game_type", game_type);
+
   if (game_type === "offline") config.selectedPerspective = "GPerspective";
   const PlayerPerspective = config.Perspectives[config.selectedPerspective];
 
@@ -357,19 +357,16 @@ export default async function () {
   async function init() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
-    console.log(GameInfo);
+
     const camera = Camera(
       GameInfo.first_player.user.username === me.username,
       GameInfo.game_type
     );
+
     renderer = Renderer(scene);
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
 
-    controls.addEventListener("change", () => {
-      console.log("Camera position:", camera.position);
-      console.log("Camera rotation:", camera.rotation);
-    });
 
     Lights(scene);
 
@@ -385,7 +382,7 @@ export default async function () {
         UpdateScore(data.first_player_score, data.second_player_score);
         ShowModal({
           view: CountDownModal(2),
-          onConfirm: () => {},
+          onConfirm: () => { },
         });
       } else if (data.type === "game_over") {
         let view = null;

@@ -87,9 +87,9 @@ class listTournaments(ListCreateAPIView):
                 "Start date must be in the future")
 
         tournament: Tournament = serializer.save()
+        # MockTest(tournament)
         if tournament.is_public:
-            MockTest(tournament)
-            # start_scheduler(tournament.id, start_date)
+            start_scheduler(tournament.id, start_date)
 
 
 class listAnnouncements(ListCreateAPIView):

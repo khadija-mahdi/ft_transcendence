@@ -68,7 +68,8 @@
   letter-spacing: -0.01562em;
 }
 
-.card-description {
+.card-description,
+.card-start-date {
   color: #878787;
   font-size: 0.875rem;
   font-weight: normal;
@@ -77,8 +78,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   width: 80%;
+  max-height: 1.2rem;
 }
-
+.card-start-date{
+  margin-top: 0.3rem;
+  color: #c2c2c2;
+}
 .card-info {
   display: flex;
   flex-direction: row;
@@ -126,6 +131,7 @@
 .menu-button {
   background: transparent;
 }
+
 .form-group,
 .form-row {
   display: flex;
@@ -152,6 +158,7 @@
   font-size: 0.875rem;
   color: #a2a2a2;
 }
+
 .input-field {
   height: 50px;
   background-color: rgba(96, 96, 96, 0.5);
@@ -187,7 +194,7 @@
   border-radius: 0.25rem;
 }
 
-#menu-popover:popover-open + .menu {
+#menu-popover:popover-open+.menu {
   display: flex;
 }
 
@@ -375,6 +382,7 @@
   font-size: 0.75rem;
   color: #ff0000;
 }
+
 .register-button:hover {
   background-color: rgba(255, 60, 0, 0.8);
 }
@@ -442,6 +450,7 @@
   border: 1px solid #ff3d00;
   overflow: hidden;
 }
+
 .player-avatar:last-child {
   margin-left: -10px;
 }
@@ -521,9 +530,11 @@
   .status-table-container .status-table-wrapper {
     overflow-x: hidden;
   }
+
   .bracket-streaming {
     min-height: 50vh;
   }
+
   .status-table-wrapper {
     overflow-x: hidden;
   }
@@ -538,14 +549,15 @@
   .bracket {
     max-height: 28.5rem;
   }
+
   .bracket-streaming {
     min-height: auto;
   }
+
   .streaming-card {
     width: 24rem;
   }
 }
 
 /* xl screen and above */
-@media only screen and (min-width: 1280px) {
-}
+@media only screen and (min-width: 1280px) {}

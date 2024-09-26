@@ -8,15 +8,14 @@ export function matchItem({ first_player, second_player, Winner }) {
         <div class="player-icons">
           <div class="player-icon">
             <img
-              src="${first_player?.user?.image_url ||
-              "/public/assets/images/robot.webp"}"
+              src="${first_player?.user?.image_url}"
               alt="profile"
               onerror="this.src='/public/assets/images/defaultImageProfile.png';"
             />
           </div>
           <div class="player-icon">
             <img
-              src="${second_player?.image_url ||
+              src="${second_player?.user?.image_url ||
               "/public/assets/images/robot.webp"}"
               alt="profile"
               onerror="this.src='/public/assets/images/defaultImageProfile.png';"

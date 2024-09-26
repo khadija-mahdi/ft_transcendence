@@ -17,7 +17,7 @@ export default function profileView() {
 							<img
 								id="profile-pic"
 								alt="profile"
-								onerror="this.src='/public/assets/icons/empty.svg';"
+								onerror="this.src='/public/assets/images/defaultImageProfile.png';"
 							/>
 						</div>
 						<div class="p-profile-details">

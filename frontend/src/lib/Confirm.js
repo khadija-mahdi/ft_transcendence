@@ -81,7 +81,7 @@ export async function showMainPopup({
   const popupIcon = document.getElementById("main-popup-icon");
   const progress = document.querySelector(".progress_popup");
   const link = document.getElementById("not-Type");
-  console.log("action", action, "type", type);
+
   switch (type) {
     case "friend-request":
       link.href = `/profile?username=${sender.username}`;
@@ -99,7 +99,6 @@ export async function showMainPopup({
       break;
     case "tournament":
       const me = await fetchMyData();
-      console.log("me", me);
       TournamentWs(action, me);
       break;
   }

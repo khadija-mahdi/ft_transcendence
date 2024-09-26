@@ -23,7 +23,6 @@ export async function fetchNotifications(isScroll = false) {
   }
 }
 export function renderNotifications(notifications) {
-  console.log(notifications);
   function formatDate(dateString) {
     const options = {
       year: "numeric",
@@ -78,8 +77,8 @@ export function renderNotifications(notifications) {
                 <div class="notification-text-container">
                     <div class="notification-text">${notification.title}</div>
                     <div class="notification-time">${formatDate(
-                      notification.created_at
-                    )}</div>
+        notification.created_at
+      )}</div>
                 </div>
             </a>
             <div class="notification-menu-container remove-not">

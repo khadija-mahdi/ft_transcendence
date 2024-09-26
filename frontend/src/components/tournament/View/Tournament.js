@@ -46,6 +46,7 @@ export default function tournaments() {
           <div class="card-text">
             <div class="card-title" id="tournament-title"></div>
             <div class="card-description" id="tournament-description"></div>
+            <div class="card-start-date" id="tournament-start-date"></div>
           </div>
         </div>
 

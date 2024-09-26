@@ -40,13 +40,18 @@ function setTournamentDetails() {
     finished,
     is_public,
     ongoing,
+    start_date,
+    registered_users
   } = data;
-
   const tournamentImage = document.getElementById("tournament-image");
   const tournamentTitle = document.getElementById("tournament-title");
   const tournamentDescription = document.getElementById(
     "tournament-description"
   );
+  const tournamentStartDate = document.getElementById(
+    "tournament-start-date"
+  );
+
   const playerCount = document.getElementById("player-count");
   const statusTableBody = document.getElementById("status-table-body");
   const menuButton = document.querySelector(".menu-button");
@@ -57,7 +62,8 @@ function setTournamentDetails() {
   menuButton.style.display = is_my_tournament ? "block" : "none";
   tournamentImage.src = icon;
   tournamentTitle.innerText = name;
-  tournamentDescription.innerText = description;
+  tournamentDescription.innerText = description
+  tournamentStartDate.innerText = new Date(start_date).toLocaleString()
   playerCount.innerText = max_players;
 
   RegisterButton.innerText =
@@ -70,7 +76,6 @@ function setTournamentDetails() {
     statusPanel.appendChild(Empty("No games states available"));
   } else {
     games_states.forEach((match) => {
-      console.log(match);
       statusTableBody.innerHTML += StatusTableRow(match);
     });
   }
@@ -79,7 +84,8 @@ function setTournamentDetails() {
   const [first_half, second_half] = processBracketData(
     tournament_bracket || [],
     max_players,
-    finished
+    finished,
+    registered_users.length
   );
 
   bracketContent.innerHTML = first_half
@@ -88,8 +94,8 @@ function setTournamentDetails() {
         html`
           <ul class="bracket-half">
             ${data
-              .map((player) => BracketCard(player.player, player.alias))
-              .join("")}
+            .map((player) => BracketCard(player.player, player.alias))
+            .join("")}
           </ul>
         `
     )
@@ -103,8 +109,8 @@ function setTournamentDetails() {
         html`
           <ul class="bracket-half">
             ${data
-              .map((player) => BracketCard(player.player, player.alias))
-              .join("")}
+            .map((player) => BracketCard(player.player, player.alias))
+            .join("")}
           </ul>
         `
     )

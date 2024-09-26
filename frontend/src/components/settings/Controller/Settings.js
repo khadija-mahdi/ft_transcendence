@@ -161,7 +161,6 @@ function ChangePasswordForm() {
 
   async function UpdatePassword(data) {
     try {
-      console.log('fetchWithAuth("api/v1/users/change-password/", data);');
       await fetchWithAuth("/api/v1/users/change-password/", {
         method: "PUT",
         body: JSON.stringify(data),

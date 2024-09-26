@@ -20,6 +20,9 @@ def start_scheduler(tournament_id, trigger_time):
         id=f"notify_tournament_users_{tournament_id}",
         max_instances=1,
         replace_existing=True,
+        misfire_grace_time=60,
+        max_retries=5,
+        retry_delay=60
     )
     register_events(scheduler)
     scheduler.start()
