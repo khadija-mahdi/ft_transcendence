@@ -7,16 +7,19 @@ let data = {};
 async function UpdateData(UpdateData, schema) {
   try {
     await updateProfile(UpdateData);
+    window.location.reload()
   } catch (error) {
-    document.getElementById("security-error-message").innerHTML = error.message;
+    document.getElementById("security-error-message").innerHTML =
+      JSON.parse(error.message)?.message || error.message;
   } finally {
     reset(schema);
     for (let key in UpdateData) data[key] = UpdateData[key] || data[key];
     SetPersonalInfo();
+
   }
 }
 
-function ImageButton(setSelectedImage = () => {}) {
+function ImageButton(setSelectedImage = () => { }) {
   let imageInput = document.getElementById("imageInput");
   const imageLabel = document.getElementById("imageLabel");
   const initialImageLabelContent = imageLabel.innerHTML;
@@ -32,7 +35,7 @@ function ImageButton(setSelectedImage = () => {}) {
 
     const closeButton = document.createElement("div");
     closeButton.className = "close-button";
-    closeButton.innerHTML = html`w
+    closeButton.innerHTML = html`<img
       src="/public/assets/icons/light_close.png"
       alt="close-icon"
       class="close-icon"
@@ -169,6 +172,7 @@ function ChangePasswordForm() {
       document.getElementById("error-message").innerHTML = error.message;
     } finally {
       reset(schema);
+      window.location.reload()
     }
   }
 }

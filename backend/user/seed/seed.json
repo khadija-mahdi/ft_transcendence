@@ -1,781 +1,750 @@
 [
-    {
-        "model": "user.ranks",
-        "pk": 1,
-        "fields": {
-            "name": "Iron I",
-            "icon": "media/public/ranks/Iron_1_Rank.png",
-            "hierarchy_order": 1,
-            "xp_required": 1000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 2,
-        "fields": {
-            "name": "Iron II",
-            "icon": "media/public/ranks/Iron_2_Rank.png",
-            "hierarchy_order": 2,
-            "xp_required": 2000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 3,
-        "fields": {
-            "name": "Iron III",
-            "icon": "media/public/ranks/Iron_3_Rank.png",
-            "hierarchy_order": 3,
-            "xp_required": 3000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 4,
-        "fields": {
-            "name": "Bronze I",
-            "icon": "media/public/ranks/Bronze_1_Rank.png",
-            "hierarchy_order": 4,
-            "xp_required": 4000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 5,
-        "fields": {
-            "name": "Bronze II",
-            "icon": "media/public/ranks/Bronze_2_Rank.png",
-            "hierarchy_order": 5,
-            "xp_required": 5000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 6,
-        "fields": {
-            "name": "Bronze III",
-            "icon": "media/public/ranks/Bronze_3_Rank.png",
-            "hierarchy_order": 6,
-            "xp_required": 6000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 7,
-        "fields": {
-            "name": "Silver I",
-            "icon": "media/public/ranks/Silver_1_Rank.png",
-            "hierarchy_order": 7,
-            "xp_required": 7000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 8,
-        "fields": {
-            "name": "Silver II",
-            "icon": "media/public/ranks/Silver_2_Rank.png",
-            "hierarchy_order": 8,
-            "xp_required": 8000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 9,
-        "fields": {
-            "name": "Silver III",
-            "icon": "media/public/ranks/Silver_3_Rank.png",
-            "hierarchy_order": 9,
-            "xp_required": 9000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 10,
-        "fields": {
-            "name": "Gold I",
-            "icon": "media/public/ranks/Gold_1_Rank.png",
-            "hierarchy_order": 10,
-            "xp_required": 10000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 11,
-        "fields": {
-            "name": "Gold II",
-            "icon": "media/public/ranks/Gold_2_Rank.png",
-            "hierarchy_order": 11,
-            "xp_required": 11000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 12,
-        "fields": {
-            "name": "Gold III",
-            "icon": "media/public/ranks/Gold_3_Rank.png",
-            "hierarchy_order": 12,
-            "xp_required": 12000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 13,
-        "fields": {
-            "name": "Platinum I",
-            "icon": "media/public/ranks/Platinum_1_Rank.png",
-            "hierarchy_order": 13,
-            "xp_required": 13000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 14,
-        "fields": {
-            "name": "Platinum II",
-            "icon": "media/public/ranks/Platinum_2_Rank.png",
-            "hierarchy_order": 14,
-            "xp_required": 14000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 15,
-        "fields": {
-            "name": "Platinum III",
-            "icon": "media/public/ranks/Platinum_3_Rank.png",
-            "hierarchy_order": 15,
-            "xp_required": 15000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 16,
-        "fields": {
-            "name": "Diamond I",
-            "icon": "media/public/ranks/Diamond_1_Rank.png",
-            "hierarchy_order": 16,
-            "xp_required": 16000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 17,
-        "fields": {
-            "name": "Diamond II",
-            "icon": "media/public/ranks/Diamond_2_Rank.png",
-            "hierarchy_order": 17,
-            "xp_required": 17000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 18,
-        "fields": {
-            "name": "Diamond III",
-            "icon": "media/public/ranks/Diamond_3_Rank.png",
-            "hierarchy_order": 18,
-            "xp_required": 18000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 19,
-        "fields": {
-            "name": "Ascendant I",
-            "icon": "media/public/ranks/Ascendant_1_Rank.png",
-            "hierarchy_order": 19,
-            "xp_required": 19000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 20,
-        "fields": {
-            "name": "Ascendant II",
-            "icon": "media/public/ranks/Ascendant_2_Rank.png",
-            "hierarchy_order": 20,
-            "xp_required": 20000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 21,
-        "fields": {
-            "name": "Ascendant III",
-            "icon": "media/public/ranks/Ascendant_3_Rank.png",
-            "hierarchy_order": 21,
-            "xp_required": 21000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 22,
-        "fields": {
-            "name": "Immortal I",
-            "icon": "media/public/ranks/Immortal_1_Rank.png",
-            "hierarchy_order": 22,
-            "xp_required": 22000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 23,
-        "fields": {
-            "name": "Immortal II",
-            "icon": "media/public/ranks/Immortal_2_Rank.png",
-            "hierarchy_order": 23,
-            "xp_required": 23000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 24,
-        "fields": {
-            "name": "Immortal III",
-            "icon": "media/public/ranks/Immortal_3_Rank.png",
-            "hierarchy_order": 24,
-            "xp_required": 24000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.ranks",
-        "pk": 25,
-        "fields": {
-            "name": "Radiant",
-            "icon": "media/public/ranks/Radiant_Rank.png",
-            "hierarchy_order": 25,
-            "xp_required": 25000,
-            "created_at": "2024-05-11T19:01:54Z",
-            "updated_at": "2024-05-11T19:01:54Z"
-        }
-    },
-    {
-        "model": "user.Achievements",
-        "pk": 1,
-        "fields": {
-            "name": "Win streak",
-            "icon": "/media/public/badges/Arctic-Code-Vault-Contributor.png",
-            "description": "You won your first Lucky streak",
-            "requirement_value": 5,
-            "requirement_type": "win_streak",
-            "created_at": "2024-04-24T13:30:16.345Z",
-            "updated_at": "2024-04-24T13:30:16.345Z"
-        }
-    },
-    {
-        "model": "user.Achievements",
-        "pk": 2,
-        "fields": {
-            "name": "Win With Zero Loss",
-            "icon": "/media/public/badges/GalaxyBrain.png",
-            "description": "You won 10 games without losing any points, pretty impressive!",
-            "requirement_value": 10,
-            "requirement_type": "win_with_zero_loss",
-            "created_at": "2024-04-24T13:30:16.345Z",
-            "updated_at": "2024-04-24T13:30:16.345Z"
-        }
-    },
-    {
-        "model": "user.Achievements",
-        "pk": 3,
-        "fields": {
-            "name": "Total Wins",
-            "icon": "/media/public/badges/HeartOnYourSleeve.png",
-            "description": "You won your first Total Wins",
-            "requirement_value": 20,
-            "requirement_type": "total_wins",
-            "created_at": "2024-04-24T13:30:16.345Z",
-            "updated_at": "2024-04-24T13:30:16.345Z"
-        }
-    },
-    {
-        "model": "user.Achievements",
-        "pk": 4,
-        "fields": {
-            "name": "Total Points",
-            "icon": "/media/public/badges/OpenSourcerer.png",
-            "description": "You won your first 200 Points",
-            "requirement_value": 200,
-            "requirement_type": "total_points",
-            "created_at": "2024-04-24T13:30:16.345Z",
-            "updated_at": "2024-04-24T13:30:16.345Z"
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 1,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": true,
-            "username": "ayoub",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "ayoub@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                3,
-                4
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 2,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "aitouna",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "aitouna@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                1,
-                3,
-                4,
-                5,
-                6,
-                7,
-                8
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 3,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "mehdi",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "mehdi@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                1,
-                2
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 4,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "khadija",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "khadija@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                1,
-                2
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 5,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test5",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "khadijaa@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                1,
-                2
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 6,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test6",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "khadija1@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                1,
-                2
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 7,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test7",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "khadija55@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                1,
-                2
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 8,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test8",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "khadijwa@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [
-                1,
-                2
-            ],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 9,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test9",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "test9@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.Friends_Request",
-        "pk": 4,
-        "fields": {
-            "requester": 9,
-            "addressee": 1,
-            "created_at": "2024-04-24T02:04:51.557Z",
-            "updated_at": "2024-04-24T02:04:51.557Z"
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 10,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test10",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "test10@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 11,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test11",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "test11@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.Friends_Request",
-        "pk": 6,
-        "fields": {
-            "requester": 11,
-            "addressee": 3,
-            "created_at": "2024-04-24T02:04:51.557Z",
-            "updated_at": "2024-04-24T02:04:51.557Z"
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 12,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test12",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "test12@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.Friends_Request",
-        "pk": 7,
-        "fields": {
-            "requester": 12,
-            "addressee": 4,
-            "created_at": "2024-04-24T02:04:51.557Z",
-            "updated_at": "2024-04-24T02:04:51.557Z"
-        }
-    },
-    {
-        "model": "user.user",
-        "pk": 13,
-        "fields": {
-            "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
-            "last_login": "2024-04-24T02:04:35.402Z",
-            "is_superuser": false,
-            "username": "test13",
-            "first_name": "",
-            "last_name": "",
-            "is_staff": true,
-            "is_active": true,
-            "date_joined": "2024-04-24T02:04:06.438Z",
-            "email": "test13@gmail.com",
-            "registration_method": "email",
-            "image_url": "/media/public/profile-images/00_img.jpg",
-            "groups": [],
-            "rank": 2,
-            "ranking_logs": [
-                1,2
-            ],
-            "friends": [],
-            "user_permissions": [],
-            "achievements": []
-        }
-    },
-    {
-        "model": "user.Friends_Request",
-        "pk": 1,
-        "fields": {
-            "requester": 1,
-            "addressee": 2,
-            "created_at": "2024-04-24T02:04:51.557Z",
-            "updated_at": "2024-04-24T02:04:51.557Z"
-        }
-    },
-    {
-        "model": "user.Friends_Request",
-        "pk": 3,
-        "fields": {
-            "requester": 3,
-            "addressee": 4,
-            "created_at": "2024-04-24T02:04:51.557Z",
-            "updated_at": "2024-04-24T02:04:51.557Z"
-        }
-    },
-    {
-        "model": "user.Friends_Request",
-        "pk": 5,
-        "fields": {
-            "requester": 10,
-            "addressee": 2,
-            "created_at": "2024-04-24T02:04:51.557Z",
-            "updated_at": "2024-04-24T02:04:51.557Z"
-        }
+  {
+    "model": "user.ranks",
+    "pk": 1,
+    "fields": {
+      "name": "Iron I",
+      "icon": "media/public/ranks/Iron_1_Rank.png",
+      "hierarchy_order": 1,
+      "xp_required": 1000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
     }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 2,
+    "fields": {
+      "name": "Iron II",
+      "icon": "media/public/ranks/Iron_2_Rank.png",
+      "hierarchy_order": 2,
+      "xp_required": 2000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 3,
+    "fields": {
+      "name": "Iron III",
+      "icon": "media/public/ranks/Iron_3_Rank.png",
+      "hierarchy_order": 3,
+      "xp_required": 3000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 4,
+    "fields": {
+      "name": "Bronze I",
+      "icon": "media/public/ranks/Bronze_1_Rank.png",
+      "hierarchy_order": 4,
+      "xp_required": 4000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 5,
+    "fields": {
+      "name": "Bronze II",
+      "icon": "media/public/ranks/Bronze_2_Rank.png",
+      "hierarchy_order": 5,
+      "xp_required": 5000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 6,
+    "fields": {
+      "name": "Bronze III",
+      "icon": "media/public/ranks/Bronze_3_Rank.png",
+      "hierarchy_order": 6,
+      "xp_required": 6000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 7,
+    "fields": {
+      "name": "Silver I",
+      "icon": "media/public/ranks/Silver_1_Rank.png",
+      "hierarchy_order": 7,
+      "xp_required": 7000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 8,
+    "fields": {
+      "name": "Silver II",
+      "icon": "media/public/ranks/Silver_2_Rank.png",
+      "hierarchy_order": 8,
+      "xp_required": 8000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 9,
+    "fields": {
+      "name": "Silver III",
+      "icon": "media/public/ranks/Silver_3_Rank.png",
+      "hierarchy_order": 9,
+      "xp_required": 9000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 10,
+    "fields": {
+      "name": "Gold I",
+      "icon": "media/public/ranks/Gold_1_Rank.png",
+      "hierarchy_order": 10,
+      "xp_required": 10000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 11,
+    "fields": {
+      "name": "Gold II",
+      "icon": "media/public/ranks/Gold_2_Rank.png",
+      "hierarchy_order": 11,
+      "xp_required": 11000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 12,
+    "fields": {
+      "name": "Gold III",
+      "icon": "media/public/ranks/Gold_3_Rank.png",
+      "hierarchy_order": 12,
+      "xp_required": 12000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 13,
+    "fields": {
+      "name": "Platinum I",
+      "icon": "media/public/ranks/Platinum_1_Rank.png",
+      "hierarchy_order": 13,
+      "xp_required": 13000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 14,
+    "fields": {
+      "name": "Platinum II",
+      "icon": "media/public/ranks/Platinum_2_Rank.png",
+      "hierarchy_order": 14,
+      "xp_required": 14000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 15,
+    "fields": {
+      "name": "Platinum III",
+      "icon": "media/public/ranks/Platinum_3_Rank.png",
+      "hierarchy_order": 15,
+      "xp_required": 15000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 16,
+    "fields": {
+      "name": "Diamond I",
+      "icon": "media/public/ranks/Diamond_1_Rank.png",
+      "hierarchy_order": 16,
+      "xp_required": 16000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 17,
+    "fields": {
+      "name": "Diamond II",
+      "icon": "media/public/ranks/Diamond_2_Rank.png",
+      "hierarchy_order": 17,
+      "xp_required": 17000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 18,
+    "fields": {
+      "name": "Diamond III",
+      "icon": "media/public/ranks/Diamond_3_Rank.png",
+      "hierarchy_order": 18,
+      "xp_required": 18000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 19,
+    "fields": {
+      "name": "Ascendant I",
+      "icon": "media/public/ranks/Ascendant_1_Rank.png",
+      "hierarchy_order": 19,
+      "xp_required": 19000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 20,
+    "fields": {
+      "name": "Ascendant II",
+      "icon": "media/public/ranks/Ascendant_2_Rank.png",
+      "hierarchy_order": 20,
+      "xp_required": 20000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 21,
+    "fields": {
+      "name": "Ascendant III",
+      "icon": "media/public/ranks/Ascendant_3_Rank.png",
+      "hierarchy_order": 21,
+      "xp_required": 21000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 22,
+    "fields": {
+      "name": "Immortal I",
+      "icon": "media/public/ranks/Immortal_1_Rank.png",
+      "hierarchy_order": 22,
+      "xp_required": 22000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 23,
+    "fields": {
+      "name": "Immortal II",
+      "icon": "media/public/ranks/Immortal_2_Rank.png",
+      "hierarchy_order": 23,
+      "xp_required": 23000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 24,
+    "fields": {
+      "name": "Immortal III",
+      "icon": "media/public/ranks/Immortal_3_Rank.png",
+      "hierarchy_order": 24,
+      "xp_required": 24000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.ranks",
+    "pk": 25,
+    "fields": {
+      "name": "Radiant",
+      "icon": "media/public/ranks/Radiant_Rank.png",
+      "hierarchy_order": 25,
+      "xp_required": 25000,
+      "created_at": "2024-05-11T19:01:54Z",
+      "updated_at": "2024-05-11T19:01:54Z"
+    }
+  },
+  {
+    "model": "user.Achievements",
+    "pk": 1,
+    "fields": {
+      "name": "Win streak",
+      "icon": "/media/public/badges/Arctic-Code-Vault-Contributor.png",
+      "description": "You won your first Lucky streak",
+      "requirement_value": 5,
+      "requirement_type": "win_streak",
+      "created_at": "2024-04-24T13:30:16.345Z",
+      "updated_at": "2024-04-24T13:30:16.345Z"
+    }
+  },
+  {
+    "model": "user.Achievements",
+    "pk": 2,
+    "fields": {
+      "name": "Win With Zero Loss",
+      "icon": "/media/public/badges/GalaxyBrain.png",
+      "description": "You won 10 games without losing any points, pretty impressive!",
+      "requirement_value": 10,
+      "requirement_type": "win_with_zero_loss",
+      "created_at": "2024-04-24T13:30:16.345Z",
+      "updated_at": "2024-04-24T13:30:16.345Z"
+    }
+  },
+  {
+    "model": "user.Achievements",
+    "pk": 3,
+    "fields": {
+      "name": "Total Wins",
+      "icon": "/media/public/badges/HeartOnYourSleeve.png",
+      "description": "You won your first Total Wins",
+      "requirement_value": 20,
+      "requirement_type": "total_wins",
+      "created_at": "2024-04-24T13:30:16.345Z",
+      "updated_at": "2024-04-24T13:30:16.345Z"
+    }
+  },
+  {
+    "model": "user.Achievements",
+    "pk": 4,
+    "fields": {
+      "name": "Total Points",
+      "icon": "/media/public/badges/OpenSourcerer.png",
+      "description": "You won your first 200 Points",
+      "requirement_value": 200,
+      "requirement_type": "total_points",
+      "created_at": "2024-04-24T13:30:16.345Z",
+      "updated_at": "2024-04-24T13:30:16.345Z"
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": true,
+      "username": "ayoub",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "ayoub@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [2, 3, 4],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "aitouna",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "aitouna@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [1, 3, 4, 5, 6, 7, 8],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "mehdi",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "mehdi@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [1, 2],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "khadija",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "khadija@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [1, 2],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test5",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "khadijaa@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [1, 2],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test6",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "khadija1@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [1, 2],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test7",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "khadija55@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [1, 2],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test8",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "khadijwa@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [1, 2],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test9",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "test9@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.Friends_Request",
+    "pk": 4,
+    "fields": {
+      "requester": 9,
+      "addressee": 1,
+      "created_at": "2024-04-24T02:04:51.557Z",
+      "updated_at": "2024-04-24T02:04:51.557Z"
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test10",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "test10@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test11",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "test11@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.Friends_Request",
+    "pk": 6,
+    "fields": {
+      "requester": 11,
+      "addressee": 3,
+      "created_at": "2024-04-24T02:04:51.557Z",
+      "updated_at": "2024-04-24T02:04:51.557Z"
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test12",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "test12@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.Friends_Request",
+    "pk": 7,
+    "fields": {
+      "requester": 12,
+      "addressee": 4,
+      "created_at": "2024-04-24T02:04:51.557Z",
+      "updated_at": "2024-04-24T02:04:51.557Z"
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test13",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "test13@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.user",
+    "pk": 14,
+    "fields": {
+      "password": "pbkdf2_sha256$720000$GUN3clwL5m3nkCZAUD6wKu$fFNlSNWchURhqyFnD6SClI+pOoc3yfL67zLPbPvX63c=",
+      "last_login": "2024-04-24T02:04:35.402Z",
+      "is_superuser": false,
+      "username": "test14",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2024-04-24T02:04:06.438Z",
+      "email": "test14@gmail.com",
+      "registration_method": "email",
+      "image_url": "/media/public/default/default-profile.jpeg",
+      "groups": [],
+      "rank": 2,
+      "ranking_logs": [1, 2],
+      "friends": [],
+      "user_permissions": [],
+      "achievements": []
+    }
+  },
+  {
+    "model": "user.Friends_Request",
+    "pk": 1,
+    "fields": {
+      "requester": 1,
+      "addressee": 2,
+      "created_at": "2024-04-24T02:04:51.557Z",
+      "updated_at": "2024-04-24T02:04:51.557Z"
+    }
+  },
+  {
+    "model": "user.Friends_Request",
+    "pk": 3,
+    "fields": {
+      "requester": 3,
+      "addressee": 4,
+      "created_at": "2024-04-24T02:04:51.557Z",
+      "updated_at": "2024-04-24T02:04:51.557Z"
+    }
+  },
+  {
+    "model": "user.Friends_Request",
+    "pk": 5,
+    "fields": {
+      "requester": 10,
+      "addressee": 2,
+      "created_at": "2024-04-24T02:04:51.557Z",
+      "updated_at": "2024-04-24T02:04:51.557Z"
+    }
+  }
 ]

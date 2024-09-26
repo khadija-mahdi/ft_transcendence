@@ -44,7 +44,7 @@ class User(AbstractUser):
                                            default='email')
     status = models.CharField(
         max_length=10, choices=STATUS_CHOICES, default='offline')
-    image_url = models.URLField(blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True, default='/media/public/default/default-profile.jpeg')
     achievements = models.ManyToManyField('Achievements', blank=True)
     friends = models.ManyToManyField('self', symmetrical=False)
     ranking_logs = models.ManyToManyField('Ranks', through=RankAchievement)
