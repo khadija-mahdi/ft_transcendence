@@ -26,12 +26,12 @@ class InGame(AsyncWebsocketConsumer):
                         f'The Game Not Available ')
             raise DenyConnection('The Game Not Available')
 
-        # if self.isUserPartOfThisGame():
-        #     logger.info(f'An Unauthorized User: {self.user.username} '
-        #                 f'Tried To Connect To Game: `{self.room_name}` '
-        #                 f'That Isn\'t Part Of.')
-        #     raise DenyConnection(
-        #         'User That Tried To Connect To Game Isn\'t Part Of.')
+        if not self.isUserPartOfThisGame():
+            logger.info(f'An Unauthorized User: {self.user.username} '
+                        f'Tried To Connect To Game: `{self.room_name}` '
+                        f'That Isn\'t Part Of.')
+            raise DenyConnection(
+                'User That Tried To Connect To Game Isn\'t Part Of.')
 
         self.room_group_name = f"game_{self.room_name}"
         await self.channel_layer.group_add(
@@ -57,8 +57,7 @@ class InGame(AsyncWebsocketConsumer):
             self.user.username != self.game.matchup.second_player.username
         logger.info(
             f'this game users {self.game.matchup.first_player} and {self.game.matchup.second_player}')
-        # return isFp and isSp
-        return True
+        return isFp or isSp
 
     async def receive(self, text_data=None, bytes_data=None):
         try:
@@ -72,6 +71,7 @@ class InGame(AsyncWebsocketConsumer):
     async def broadcast(self, event):
         message = event['message']
         if self.get_message_object(message).get('action') == 'close':
+            logger.debug('closing socket ...')
             await self.close(reason='Socket closed by broadcast action')
             return
         if isinstance(message, dict):

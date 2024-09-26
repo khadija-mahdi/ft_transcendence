@@ -86,20 +86,31 @@ class Game():
                 paddle = self.player_1_paddle if player == self.first_player_user else self.player_2_paddle
             paddle.movePaddle(action)
 
+    async def findLoserWinnerInstances(self, loser: User):
+        if loser == self.first_player_user:
+            return self.first_player, self.second_player
+        elif loser == self.second_player_user:
+            return self.second_player, self.first_player
+        return None, None
+
     async def remove_player(self, player):
         async with self.lock:
             if player in self.players:
                 try:
                     self.matchup.game_over = True
                     if len(self.players) > 1:
-                        Loser = player
+                        Loser, winner = await self.findLoserWinnerInstances(player)
+                        if not Loser and not winner:
+                            return
                         self.players.remove(player)
                         if self.matchup.Winner:
+                            logger.debug('match has winner already '
+                                         f'{self.matchup.Winner.alias}')
                             return
-                        winner = self.players[0]
                         await self.handle_winner(winner=winner, Loser=Loser)
                     await database_sync_to_async(self.matchup.save)()
-                except ValueError:
+                except ValueError as e:
+                    logger.error(f'failed while removing player {e}')
                     pass
             return len(self.players) == 0
 
@@ -167,8 +178,8 @@ class Game():
         )
 
     async def NotifyTournamentConsumer(self, Winner: GamePlayer):
-        logger.debug(f'Notify Tournament {self.tournament}'
-                     f'About this Game Winner {Winner}')
+        logger.debug(f'Notify Tournament {self.tournament} '
+                     f'About this Game Winner {Winner.alias}')
         if self.tournament is None:
             return
         await self.channel_layer.group_send(
@@ -283,5 +294,8 @@ class GameManager():
 
         async with self.lock:
             if room_id in self.games:
-                await self.games[room_id].cleanup()
+                room = self.games[room_id]
+                logger.debug(f'before del {self.games} ')
                 del self.games[room_id]
+                logger.debug(f'after del {self.games} ')
+                await room.cleanup()

@@ -176,12 +176,9 @@ class TournamentRoutine():
 
         logger.info(f"""Preparing Next Round \n"""
                     f"""- current_round {self.current_round + 1} \n"""
-                    f"""- this round Winners {winners}  \n""")
+                    f"""- this round Winners_id_list {winners}, count {len(winners)} \n""")
 
         self.current_round += 1
-
-        logger.debug(
-            f'length of the Winners list {len(winners)} before first if')
 
         if len(winners) == 0:
             if not self.tournament.finished:
@@ -190,17 +187,15 @@ class TournamentRoutine():
                 return await self.emit({'type': 'tournament_end', 'message': 'No Winner Found'})
             return
 
-        logger.debug(
-            f'length of the Winners list {len(winners)} before second if')
-
         if len(winners) > 1:
             winners_list: List[GamePlayer] = await database_sync_to_async(
                 lambda: list(GamePlayer.objects.filter(id__in=winners))
             )()
             self.games_in_progress = True
 
-            logger.debug(f'got the winners from db {winners_list}')
-            # fix this it accepts List[UserWithAlias] not List[User]
+            logger.debug(f'got the winners from db '
+                         f'{[winner.alias for winner in winners_list]}')
+
             users_list = [UserWithAlias(await database_sync_to_async(lambda: winner.user)(),
                                         winner.alias) for winner in winners_list]
             return await self.create_matches(users_list)
@@ -238,7 +233,7 @@ class TournamentRoutine():
     async def _declare_tournament_winner(self, winner_id: int) -> None:
         """Declare the tournament winner."""
 
-        logger.info(f'Tournament Finished and the winner is f{winner_id}')
+        logger.info(f'Tournament Finished and the winner is {winner_id}')
 
         winner: GamePlayer = await database_sync_to_async(GamePlayer.objects.get)(id=winner_id)
         winner_user: User = await database_sync_to_async(lambda: winner.user)()
@@ -263,21 +258,19 @@ class TournamentRoutine():
 
     async def _auto_win_last_player(self, last_player: UserWithAlias) -> None:
         """Automatically advance the last player to the next round if they have no opponent."""
+
         logger.debug(
-            f'A Player has moved up to next round automatically {last_player}')
+            f'A Player has moved up to next round automatically {last_player.alias}')
+
         player = await database_sync_to_async(GamePlayer.objects.create)(user=last_player.user, alias=last_player.alias)
-
-        bracket = Brackets(tournament=self.tournament,
-                           round_number=self.current_round, player=last_player.user)
-
+        await self._create_brackets(last_player, None)
         match_up = Matchup(first_player=player, second_player=None, tournament=self.tournament,
                            Winner=player, game_over=True, round_number=self.current_round)
-
-        await database_sync_to_async(bracket.save)()
         await database_sync_to_async(match_up.save)()
 
     async def add_player(self, player: User) -> None:
         """Adds a player to the waiting list if not already present."""
+
         async with self.lock:
             if not self.tournament.is_public:
                 await self.private_add_player()
@@ -293,6 +286,7 @@ class TournamentRoutine():
 
     async def remove_player(self, player: User) -> bool:
         """Removes a player from the waiting list."""
+
         async with self.lock:
             player_to_remove = next(
                 (gp for gp in self.waiting_players if gp.user == player), None)
@@ -347,7 +341,7 @@ class TournamentRoutine():
         Brackets(tournament=self.tournament, round_number=self.current_round,
                  player=fp.user, alias=fp.alias).save()
         Brackets(tournament=self.tournament, round_number=self.current_round,
-                 player=sp.user, alias=sp.alias).save()
+                 player=sp.user if sp else fp.user, alias=sp.alias if sp else 'Empty').save()
 
     async def emit(self, dict_data) -> None:
         """Sends a message to the tournament group."""
@@ -392,15 +386,12 @@ class TournamentManager():
 
         self.lock = await self.get_lock()
         async with self.lock:
-            logger.debug(f'looking by {uuid} ')
-            logger.debug(f'stored tournaments {self.tournaments} ')
             if uuid not in self.tournaments:
-                logger.debug('create new tournament')
+                logger.info('create new tournament')
                 tournament = await TournamentRoutine.create(uuid)
                 if tournament is None:
-                    logger.debug(f'No Tournament Record Found {uuid}')
+                    logger.info(f'No Tournament Record Found {uuid}')
                     return None
-
                 self.tournaments[uuid] = tournament
             return self.tournaments[uuid]
 

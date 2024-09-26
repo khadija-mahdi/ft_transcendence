@@ -47,8 +47,13 @@ const loadUserData = async (username) => {
  * It will also handle the communication between the model and the view
  */
 export default async function Controller() {
+  let user = null;
   if (username === null) return (window.location.href = "/profile?username=me");
-  const user = await loadUserData(username);
+  try {
+    user = await loadUserData(username);
+  } catch (e) {
+    return (window.location.href = "/");
+  }
   data = user.data;
   if (data.is_blocked) return window.location.replace("/not-found");
   setProfile();

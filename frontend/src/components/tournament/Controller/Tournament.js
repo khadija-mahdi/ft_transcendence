@@ -17,7 +17,11 @@ const id = new URLSearchParams(window.location.search).get(
 export default async function () {
   if (!id) return window.location.replace("/tournaments");
 
-  data = await GetTournamentDetails(id);
+  try {
+    data = await GetTournamentDetails(id);
+  } catch (e) {
+    return (window.location.href = "/");
+  }
   setTournamentDetails();
   attachEventListeners();
   useDragToScroll();

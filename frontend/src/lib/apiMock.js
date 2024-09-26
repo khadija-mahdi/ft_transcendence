@@ -81,8 +81,9 @@ export const fetchWithAuth = async (
         ? await response.json()
         : await response.text();
 
+    if (!response.ok) throw new Error(JSON.stringify(data));
     return data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    throw new Error(error.message);
   }
 };
