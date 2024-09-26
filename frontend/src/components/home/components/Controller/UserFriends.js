@@ -84,7 +84,7 @@ export default async function renderFriends() {
       const friendComponent = FriendContainer({
         name: friend.username,
         href:
-          friend.image ,
+          friend.image_url ,
         number: friend.current_xp && friend.current_xp,
       });
       const friendWrapper = document.createElement("div");

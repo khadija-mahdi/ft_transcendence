@@ -314,7 +314,7 @@ export default async function renderAllPlayers() {
       Recommended.forEach((friend) => {
         const friendComponent = AllPlayerContainer({
           name: friend.username,
-          href: friend.image,
+          href: friend.image_url,
           number: friend.current_xp && friend.current_xp,
         });
 
@@ -339,7 +339,7 @@ export default async function renderAllPlayers() {
       pending.forEach((user) => {
         const friendComponent = PendingContainer({
           name: user.username,
-          href: user.image,
+          href: user.image_url,
           number: user.current_xp && user.current_xp,
         });
 

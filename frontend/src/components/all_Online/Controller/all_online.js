@@ -174,7 +174,7 @@ export default async function renderOnlinePlayers() {
       OnlinePlayers.forEach((user) => {
         const friendComponent = OnlinePlayerContainer({
           name: user.username,
-          href: user.image,
+          href: user.image_url,
           number: user.current_xp && user.current_xp,
         });
         const friendWrapper = document.createElement("div");
