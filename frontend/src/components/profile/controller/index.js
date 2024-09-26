@@ -161,6 +161,7 @@ function setOptionsMenu() {
         await BlockUser(data.id);
         data.is_friend = false;
         ManageFriendButton();
+        window.location.reload()
       },
     },
     {
