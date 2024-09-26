@@ -3,7 +3,6 @@ import AuthWebSocket from "/src/lib/authwebsocket.js";
 import { handleThreeDotPanel } from "./threeDot.js";
 import { ChatRoomsPanel } from "./chat.js";
 import { fetchMyData, fetchMyFriends } from "/src/_api/user.js";
-import { API_URL } from "/config.js";
 import { InvitePlayer } from "/src/_api/user.js";
 
 const html = String.raw;
@@ -103,11 +102,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
           </div>
           <img
             class="panel-image"
-            src="${selectedChat.room_icon.startsWith(
-              `https://${API_URL}/media/`
-            )
-              ? selectedChat.room_icon
-              : `https://${API_URL}/media/public/profile-images/00_img.jpg`}"
+            src="selectedChat.room_icon"
             onerror="this.src='/public/assets/images/defaultImageProfile.png';"
             alt="Profile Image"
           />
@@ -144,13 +139,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
           </div>
         </div>
       </button>
-
-      <!-- Options Panel -->
-      <div id="options-panel" class="options-panel hidden">
-        <!-- Options content will be inserted here by JavaScript -->
-      </div>
-
-      <!-- Messages and Send Message Content -->
+      <div id="options-panel" class="options-panel hidden"></div>
       <div id="messages-content" class="messages-content"></div>
       <div id="send-message" class="send-message">
         <div class="send-message-container">
@@ -238,9 +227,7 @@ function handleWebSocket(selectedChat) {
           message: receivedMessage.message.message,
           image_file: receivedMessage.message.image,
           seen: false,
-          created_at: new Date(
-            receivedMessage.message.created_at
-          ).toLocaleTimeString(),
+          created_at: new Date().toISOString(),
           id: receivedMessage.message.id || 0,
           sender_username: receivedMessage.message.sender_username,
           type: receivedMessage.message.message ? "text" : "image",

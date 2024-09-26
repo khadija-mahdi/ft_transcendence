@@ -114,19 +114,12 @@ export function renderNotifications(notifications) {
   } else {
     notifications.forEach((notification, index) => {
       notification.action = SerializeInviteAction(notification.action);
-      if (
-        notification.sender &&
-        (!notification.sender.image_url ||
-          notification.sender.image_url.startsWith(`https://${API_URL}/media/`))
-      ) {
-        notification.sender.image_url = `https://${API_URL}/media/public/profile-images/00_img.jpg`;
-      }
       switch (notification.type) {
         case "friend-request":
-          href = `/profile?username=${sender.username}`;
+          href = `/profile?username=${notification.sender.username}`;
           break;
         case "messenger":
-          href = `/messenger?chatroom=${sender.id}`;
+          href = `/messenger?chatroom=${notification.sender.id}`;
           break;
 
         case "game-invite":
@@ -145,9 +138,7 @@ export function renderNotifications(notifications) {
           <div class="notification-image-container">
             <img
               class="notification-image"
-              src=${notification.sender && notification.sender.image_url
-                ? notification.sender.image_url
-                : `https://${API_URL}/media/public/profile-images/00_img.jpg`}
+              src= notification.sender.image_url
               alt="Profile Image"
               width="35"
               height="35"

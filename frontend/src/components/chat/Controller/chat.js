@@ -144,9 +144,7 @@ function renderRoomsList(rooms) {
     messengerContainer.innerHTML = "";
     rooms.forEach((item) => {
       if (item.room_icon)
-        item.room_icon = item.room_icon.startsWith(`https://${API_URL}/media/`)
-          ? item.room_icon
-          : `https://${API_URL}/media/public/profile-images/00_img.jpg`;
+        item.room_icon = item.room_icon
       renderMessengerItem(item);
     });
   }
