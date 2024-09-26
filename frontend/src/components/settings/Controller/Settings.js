@@ -32,7 +32,7 @@ function ImageButton(setSelectedImage = () => {}) {
 
     const closeButton = document.createElement("div");
     closeButton.className = "close-button";
-    closeButton.innerHTML = html`<img
+    closeButton.innerHTML = html`w
       src="/public/assets/icons/light_close.png"
       alt="close-icon"
       class="close-icon"

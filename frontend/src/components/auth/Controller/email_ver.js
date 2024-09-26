@@ -27,7 +27,7 @@ export default function init() {
 			fetch(`/api/v1/auth/verify-email/`, {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json",
+					"Content-Type": " /json",
 				},
 				body: JSON.stringify({ email: email, code: verificationCode }),
 			})
