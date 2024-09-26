@@ -44,7 +44,7 @@ nav a {
 
 #main {
 	margin: 3rem 0;
-	/* height: 100%; */
+	height: 100%;
 	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
@@ -188,44 +188,10 @@ click-counter button:active {
 	color: rgb(0, 0, 0);
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-	.header {
-		padding: 10px;
-	}
-
-	.authBar {
-		position: absolute;
-		top: 0px;
-		right: 0px;
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.logo {
-		top: 0;
-		left: 0;
-		width: 100%;
-		justify-content: top;
-	}
-}
 
 @media (max-width: 480px) {
-	.logo img {
-		height: 30px;
-		/* Adjust logo size */
-	}
-
-	.authBar {
-		flex-direction: column;
-		/* Stack radio buttons vertically */
-	}
-
-	.radio-group {
-		flex-direction: column;
-		/* Stack radio buttons vertically */
-		gap: 10px;
+	.logo {
+		display: none;
 	}
 }
 

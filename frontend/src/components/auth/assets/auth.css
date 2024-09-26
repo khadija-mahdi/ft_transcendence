@@ -156,6 +156,10 @@ body {
 	font-size: 16px;
 }
 
+.submit-btn:disabled{
+	opacity: .5;
+}
+
 #privacy {
 	font-size: 13px;
 	color: #838383;

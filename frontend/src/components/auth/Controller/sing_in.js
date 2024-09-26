@@ -68,23 +68,22 @@ export async function handleOAuthLogin() {
   const params = new URLSearchParams(window.location.search);
   const code = params.get("code");
   const provider = params.get("state");
+  const continueButton = document.getElementById("conIn");
   const errorMessage = document.querySelector(".error-message");
+  errorMessage.textContent = "";
+  continueButton.disabled = true;
+  continueButton.textContent = "Loading ...";
 
   if (code && provider) {
     try {
       const response = await fetch(`/api/v1/auth/${provider}/?code=${code}`);
       const data = await response.json();
-      console.log("data ", data)
+      console.log("data ", data);
 
-      if (!response.ok)
-        throw new Error(`${data.error}`);
+      if (!response.ok) throw new Error(`${data.error}`);
 
-      if ((!data.access || !data.refresh ) && data.email) {
-        history.pushState(
-          null,
-          null,
-          `/auth/2fa?email=${data.email}`
-        );
+      if ((!data.access || !data.refresh) && data.email) {
+        history.pushState(null, null, `/auth/2fa?email=${data.email}`);
         window.location.reload();
         return;
       }
@@ -94,9 +93,11 @@ export async function handleOAuthLogin() {
       history.pushState(null, null, "/");
       window.location.reload();
     } catch (error) {
-      errorMessage.textContent = error
+      errorMessage.textContent = `An error occurred when trying to log in. Please make sure you have the right access.`;
       return;
     }
+    continueButton.disabled = false;
+    continueButton.textContent = "Continue";
   }
 }
 
