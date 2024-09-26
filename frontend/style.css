@@ -599,8 +599,11 @@ input[type="number"] {
 	display: flex;
 	animation: slidein 0.1s;
 	z-index: 1;
+	pointer-events: auto;
 }
-
+.drop-down-menu-items {
+    pointer-events: auto;
+}
 
 @keyframes slidein {
 	from {

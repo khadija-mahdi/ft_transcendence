@@ -183,6 +183,7 @@ function setOptionsMenu() {
   dropdown.innerHTML = view;
   dropdown.dataset.show = true;
   Controller();
+
 }
 
 async function SendInvitation(username, id) {

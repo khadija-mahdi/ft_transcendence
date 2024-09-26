@@ -40,6 +40,9 @@ export function DropDown(items) {
       button.addEventListener("click", (event) => {
         items[index]?.handler();
       });
+      button.addEventListener("touchstart", (event) => {
+        items[index]?.handler();
+      });
     });
   };
 
