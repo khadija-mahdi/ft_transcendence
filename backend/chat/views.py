@@ -132,12 +132,15 @@ class CheckPrivateChatRoomView(ListAPIView):
             message.seen = True
             message.save()
         if not queryset.exists():
-            user2 = User.objects.get(id=user_id)
-            chat_room = ChatRoom.objects.create(type='private')
-            chat_room.members.add(user, user2)
-            chat_room.save()
-            queryset = ChatRoom.objects.filter(
-                type='private', members=user).filter(members=user_id)
+            try:
+                user2 = User.objects.get(id=user_id)
+                chat_room = ChatRoom.objects.create(type='private')
+                chat_room.members.add(user, user2)
+                chat_room.save()
+                queryset = ChatRoom.objects.filter(
+                    type='private', members=user).filter(members=user_id)
+            except Exception:
+                return []
         return queryset
 
 
