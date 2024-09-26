@@ -74,15 +74,16 @@ export async function handleOAuthLogin() {
     try {
       const response = await fetch(`/api/v1/auth/${provider}/?code=${code}`);
       const data = await response.json();
+      console.log("data ", data)
 
       if (!response.ok)
         throw new Error(`${data.error}`);
 
-      if (!data.access || !data.refresh) {
+      if ((!data.access || !data.refresh ) && data.email) {
         history.pushState(
           null,
           null,
-          `/auth/2fa?email=${"khadijamahdi6@gmail.com"}`
+          `/auth/2fa?email=${data.email}`
         );
         window.location.reload();
         return;

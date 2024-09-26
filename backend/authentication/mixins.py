@@ -15,9 +15,14 @@ from user.models import User
 from django.shortcuts import redirect
 from urllib.parse import urlencode
 from .utils import generate_user_tokens
+from typing import Dict
+import random
+from django.core.cache import cache
 
 import logging
+from django.core.mail import send_mail
 
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 
@@ -74,22 +79,37 @@ class OAuth2Authentication:
         try:
             access_token = self.OAuth2_get_access_token(code)
             user_data = self.OAuth2_get_user_data(access_token)
+
         except ValidationError as e:
             logger.error(f'error While getting user token fom oAuth => {e}')
             return Response(status=400, data={'error': str(e)})
-
         try:
             user = User.objects.get(email=user_data['email'])
+            if user.enabled_2fa:
+                self.send_mail(user.email)
+                return Response({
+                    'email': user.email,
+                    'detail': '2FA enabled. Check your email.'
+                })
             return Response(self.get_response_data(user, request))
         except User.DoesNotExist:
             if (self.serializer_class is None):
                 raise ValidationError('serializer_class is not defined')
-            user = User.objects.filter(username=user_data['username']).exists()
-            user_data['username'] += f'-{uuid.uuid4().hex[:6].upper()}'
+            logger.debug('user data', user_data)
+            key, value = self.get_username_kv(user_data)
+            user = User.objects.filter(
+                username=value).exists()
+            user_data[key] += f'-{uuid.uuid4().hex[:6].upper()}'
             serializer = self.serializer_class(data=user_data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
             return Response(self.get_response_data(user, request))
+
+    def get_username_kv(self, user_data: Dict[str, str]):
+        username = user_data.get('username')
+        if username:
+            return 'username', username
+        return 'login', user_data.get('login')
 
     def get_response_data(self, user, request) -> dict:
         access_token, refresh_token = generate_user_tokens(user)
@@ -98,6 +118,22 @@ class OAuth2Authentication:
             'access': str(access_token),
             'refresh': str(refresh_token),
         }
+
+    def send_mail(self, email):
+        code = random.randint(1000, 9999)
+        cache.set(email, code, timeout=5*60)
+        try:
+            status = send_mail(
+                'Two-Factor Authentication (2FA) Code',
+                f'Your verification code is {code} ',
+                from_email='mail@api.reducte.tech',
+                recipient_list=[email],
+                fail_silently=False
+            )
+            return status
+        except Exception as e:
+            logger.error(f'Error sending email: {e}')
+            raise
 
     def OAuth2_get_access_token(self, code) -> str:
 
