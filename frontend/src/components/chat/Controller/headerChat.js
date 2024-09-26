@@ -97,7 +97,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
           </div>
           <img
             class="panel-image"
-            src="selectedChat.room_icon"
+            src="${selectedChat.room_icon}"
             onerror="this.src='/public/assets/images/defaultImageProfile.png';"
             alt="Profile Image"
           />
