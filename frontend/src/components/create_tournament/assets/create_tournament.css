@@ -10,35 +10,44 @@
     align-items: center;
 }
 
-.create-tr-container{
-	max-width: 640px;
-	height: 100%;
-	padding: 24px 0px 0px 0px;
-	gap: 24px;
-	border-radius: 8px 0px 0px 0px;
-	opacity: 0px;
-	
+.create-tr-container {
+    max-width: 640px;
+    height: 100%;
+    padding: 24px 0px 0px 0px;
+    gap: 24px;
+    border-radius: 8px 0px 0px 0px;
+    opacity: 0px;
+    min-width: 381px;
+
+}
+
+@media (max-width: 650px) {
+    .create-tr-container {
+        width: 100%;
+        min-width: 381px;
+        padding: 10px;
+    }
 }
 
 .create-tr-title {
-	font-family: Inter;
-	font-size: 18px;
-	font-weight: 600;
-	line-height: 21.78px;
-	letter-spacing: 0.03em;
-	text-align: left;
-	color: #FFFFFF;
-	
+    font-family: Inter;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 21.78px;
+    letter-spacing: 0.03em;
+    text-align: left;
+    color: #FFFFFF;
+
 }
 
 .create-tr-subtitle {
-	font-family: Inter;
-	font-size: 14px;
-	font-weight: 300;
-	line-height: 16.94px;
-	text-align: left;
-	padding-top: 10px;
-	padding-bottom: 20px;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 16.94px;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 20px;
     color: #94969C;
 }
 
@@ -50,13 +59,13 @@
 }
 
 .upload-text {
-	font-family: Inter;
-	font-size: 14px;
-	font-weight: 600;
-	line-height: 16.94px;
-	letter-spacing: -0.03em;
-	text-align: center;	
-	padding-top: 10px;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.94px;
+    letter-spacing: -0.03em;
+    text-align: center;
+    padding-top: 10px;
 }
 
 .image-upload-container {
@@ -79,14 +88,14 @@
 }
 
 .form-group {
-	font-family: Inter;
-	font-size: 14px;
-	font-weight: 400;
-	line-height: 16.94px;
-	text-align: left;
-	padding: 10px 0;
-	gap: 10px;
-	}
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16.94px;
+    text-align: left;
+    padding: 10px 0;
+    gap: 10px;
+}
 
 .form-input {
     background-color: #373737;
@@ -97,8 +106,8 @@
     width: 100%;
     padding-left: 1rem;
     font-size: 12px;
-	resize: none;
-	outline: none;
+    resize: none;
+    outline: none;
 }
 
 .form-input-des {
@@ -110,14 +119,18 @@
     width: 100%;
     padding: 1rem;
     font-size: 12px;
-	resize: none;
-	outline: none;
+    resize: none;
+    outline: none;
 }
 
 
 .text-muted {
     color: #878787;
     font-size: 12px;
+    max-width: 100%;
+    display: inline-block;
+    word-break: break-word;
+    width: fit-content;
 }
 
 .error-text {
@@ -127,7 +140,7 @@
 
 .toggle-group {
     padding-top: 2rem;
-	width: 545px;
+    width: 100%;
 }
 
 .toggle-item {
@@ -164,8 +177,8 @@
     background-color: white;
     transition: .4s;
     border-radius: 50px;
-	width: 50px;
-	height: 25px;
+    width: 50px;
+    height: 25px;
 }
 
 .slider:before {
@@ -175,13 +188,13 @@
     width: 25px;
     right: 0;
     bottom: 0;
-	top: 0px;
+    top: 0px;
     background-color: #292929;
     transition: .4s;
     border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
     background-color: #2196F3;
 }
 
@@ -202,13 +215,13 @@ input:checked + .slider {
 
 .cancel {
     background-color: #363636;
-	color: white;
-	font-family: Inter;
-	font-size: 14px;
-	font-weight: 600;
-	line-height: 16.94px;
-	letter-spacing: -0.03em;
-	/* text-align: left; */
+    color: white;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.94px;
+    letter-spacing: -0.03em;
+    /* text-align: left; */
 
 }
 
@@ -218,18 +231,18 @@ input:checked + .slider {
 }
 
 .play_now_button {
-	background: linear-gradient(90deg, #Ff4106 0%, #Ff4106 37%, #FE284F 64%, #FF0099 100%);
-	border: none;
-	margin-right: 20px;
-	color: white;
-	padding: 3px 30px;
-	font-size: 15px;
-	cursor: pointer;
-	border-radius: 5px;
+    background: linear-gradient(90deg, #Ff4106 0%, #Ff4106 37%, #FE284F 64%, #FF0099 100%);
+    border: none;
+    margin-right: 20px;
+    color: white;
+    padding: 3px 30px;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 5px;
 }
-	
+
 .play_now_button:hover {
-		opacity: 0.8;
+    opacity: 0.8;
 }
 
 .image-preview-container {
@@ -259,5 +272,5 @@ input:checked + .slider {
 
 .close-icon {
     width: 12px;
-    height: 12px; 
+    height: 12px;
 }

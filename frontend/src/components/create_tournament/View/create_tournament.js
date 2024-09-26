@@ -120,7 +120,7 @@ export default function () {
             <div class="toggle-item">
               <div class="toggle-text">
                 <span class="text-muted"
-                  >Make your tournament public so that everyone can join.</span
+                  >Make your tournament public , so that everyone can join.</span
                 >
               </div>
               <label class="switch">
@@ -133,7 +133,7 @@ export default function () {
             <div class="toggle-item">
               <div class="toggle-text">
                 <span id="monetizeDesc" class="text-muted"
-                  >By enabling this feature, your tournament will be featured on
+                  >By enabling this feature your tournament will be featured on
                   the homepage.</span
                 >
               </div>
