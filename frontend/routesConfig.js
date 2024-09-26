@@ -56,13 +56,13 @@ const routes = {
 		css: "/src/components/auth/assets/auth.css",
 		controller: () => import("/src/components/auth/Controller/sign_up.js"),
 	},
-	"/auth/verify/": {
+	"/auth/register/verify/": {
 		title: "Email Verification",
 		component: () => import("/src/components/auth/View/email_ver.js"),
 		css: "/src/components/auth/assets/auth.css",
 		controller: () => import("/src/components/auth/Controller/email_ver.js"),
 	},
-	"/auth/user-info/": {
+	"/auth/register/user-info/": {
 		title: "Your Information",
 		component: () => import("/src/components/auth/View/use_info.js"),
 		css: "/src/components/auth/assets/auth.css",
