@@ -296,7 +296,5 @@ class GameManager():
         async with self.lock:
             if room_id in self.games:
                 room = self.games[room_id]
-                logger.debug(f'before del {self.games} ')
                 del self.games[room_id]
-                logger.debug(f'after del {self.games} ')
                 await room.cleanup()

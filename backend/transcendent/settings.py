@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-dw_@61pe!%l28pl0ebw$ueihq21-d&5r2@(p%ux0*61o2!m=#5'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', "")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -183,32 +183,21 @@ REST_FRAMEWORK = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+BASE_FRONTEND_URL = os.getenv(
+    'DJANGO_BASE_FRONTEND_URL', default='https://localhost/')
+
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost",
-    "https://localhost:8000",
-    "https://192.168.122.1:3000",
-    "https://192.168.122.1:3000",
-    "https://10.14.3.1:4433",
-    "https://localhost:4433",
-    # Add other origins as needed
+    BASE_FRONTEND_URL
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://localhost",
-    "https://localhost:8000",
-    "https://192.168.122.1:3000",
-    "https://localhost:4433",
-    "https://10.14.3.1:4433",
-
-    # Add other origins as needed
+    BASE_FRONTEND_URL
 ]
+
 CORS_URLS_REGEX = r"^/api/.*$"
 
 MEDIA_URL = '/media/'
 
-
-BASE_FRONTEND_URL = os.getenv(
-    'DJANGO_BASE_FRONTEND_URL', default='https://localhost/auth')
 
 # Google OAuth2 settings
 GOOGLE_OAUTH2_CLIENT_ID = os.getenv('GOOGLE_OAUTH2_CLIENT_ID')
@@ -251,7 +240,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=80),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
@@ -267,7 +256,7 @@ SPECTACULAR_SETTINGS = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {  # Define custom formats for log messages
+    'formatters': {
         'verbose': {
             'format': '{asctime} {levelname} {name} {message}',
             'style': '{',
@@ -281,13 +270,13 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',  # You can use 'simple' if preferred
+            'formatter': 'verbose',
         },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log'),  # Save to a file
-            'formatter': 'verbose',  # Custom format for the file output
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'formatter': 'verbose',
         },
     },
     'loggers': {

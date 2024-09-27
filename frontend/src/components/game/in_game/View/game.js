@@ -1,7 +1,7 @@
 const html = String.raw;
 
 export function PlayerBoard(firstPlayer = true) {
-	return html`<div class="player-board" data-reversed="${!firstPlayer}">
+  return html`<div class="player-board" data-reversed="${!firstPlayer}">
     <div class="player-info" data-reversed="${!firstPlayer}">
       <img
         id="player-image-${firstPlayer ? 1 : 2}"
@@ -15,7 +15,7 @@ export function PlayerBoard(firstPlayer = true) {
 }
 
 export default () => {
-	return html`
+  return html`
     <div id="loading-screen">
       <div id="progress-bar-container">
         <div id="progress-bar"></div>
@@ -34,45 +34,46 @@ export default () => {
 };
 
 export function ShowModal({
-	view,
-	onConfirm = () => { },
-	onCancel = () => { },
-	hasPriority = false,
+  view,
+  onConfirm = () => { },
+  onCancel = () => { },
+  hasPriority = false,
 }) {
-	const modalContainer = document.querySelector(".popup-container");
+  const modalContainer = document.querySelector(".popup-container");
 
-	const modalPriority = modalContainer.dataset.hasPriority;
-	if (modalPriority === "true" && !hasPriority) return;
-	modalContainer.style.visibility = "visible";
-	modalContainer.innerHTML = "";
-	modalContainer.dataset.hasPriority = hasPriority;
+  const modalPriority = modalContainer.dataset.hasPriority;
+  if (modalPriority === "true" && !hasPriority) return;
+  modalContainer.style.visibility = "visible";
+  modalContainer.innerHTML = "";
+  modalContainer.dataset.hasPriority = hasPriority;
 
-	const modal = document.createElement("div");
-	modal.classList.add("modal");
-	modal.innerHTML = view;
+  const modal = document.createElement("div");
+  modal.classList.add("modal");
+  modal.innerHTML = view;
 
-	const confirmButton = modal.querySelector(".confirm");
-	const cancelButton = modal.querySelector(".cancel");
+  const confirmButton = modal.querySelector(".confirm");
+  const cancelButton = modal.querySelector(".cancel");
 
-	function remove() {
-		modalContainer.style.visibility = "hidden";
-		modal.remove();
-	}
-	confirmButton?.addEventListener("click", () => {
-		onConfirm();
-		remove();
-	});
+  function remove() {
+    modalContainer.style.visibility = "hidden";
+    modal.remove();
+  }
+  confirmButton?.addEventListener("click", () => {
+    onConfirm();
+    remove();
+  });
 
-	cancelButton?.addEventListener("click", () => {
-		onCancel();
-		remove();
-	});
+  cancelButton?.addEventListener("click", () => {
+    onCancel();
+    remove();
+  });
 
-	modalContainer.appendChild(modal);
+  modalContainer.appendChild(modal);
+  return remove
 }
 
 export function WinModal() {
-	return html`
+  return html`
     <div class="win-modal-container">
       <div class="icon-container">
         <img
@@ -91,7 +92,7 @@ export function WinModal() {
 }
 
 export function LoseModal() {
-	return html`
+  return html`
     <div class="win-modal-container">
       <div class="icon-container">
         <img
@@ -111,7 +112,7 @@ export function LoseModal() {
 }
 
 export function ErrorModal() {
-	return html`
+  return html`
     <div class="win-modal-container">
       <div class="icon-container">
         <img
@@ -133,29 +134,32 @@ export function ErrorModal() {
   `;
 }
 
-export function CountDownModal(startNumber) {
-	let currentNumber = startNumber;
-	const countDownInterval = setInterval(() => {
-		const countDownPlaceholder = document.getElementById(
-			"count-down-placeholder"
-		);
-		if (!countDownPlaceholder) return clearInterval(countDownInterval);
-		if (currentNumber <= 0) {
-			const modalContainer = document.querySelector(".popup-container");
-			modalContainer.style.visibility = "hidden";
+export function CountDownModal(startNumber, text = null) {
+  let currentNumber = startNumber;
+  const countDownInterval = setInterval(() => {
+    const countDownPlaceholder = document.getElementById(
+      "count-down-placeholder"
+    );
+    if (!countDownPlaceholder) return clearInterval(countDownInterval);
+    if (currentNumber <= 0) {
+      const modalContainer = document.querySelector(".popup-container");
+      modalContainer.style.visibility = "hidden";
 
-			return clearInterval(countDownInterval);
-		}
-		currentNumber -= 1;
-		countDownPlaceholder.innerText = currentNumber !== 0 ? currentNumber : "GO";
-		countDownPlaceholder.style.animation = "none";
-		void countDownPlaceholder.offsetWidth; // by accessing offsetWidth forces the browser to perform a layout recalculation (reflow)
-		countDownPlaceholder.style.animation = " pop-in 0.3s ease-out";
-	}, 1000);
+      return clearInterval(countDownInterval);
+    }
+    currentNumber -= 1;
+    if (text !== null)
+      countDownPlaceholder.innerText = currentNumber !== 0 ? text : "GO";
+    else
+      countDownPlaceholder.innerText = currentNumber !== 0 ? currentNumber : "GO";
+    countDownPlaceholder.style.animation = "none";
+    void countDownPlaceholder.offsetWidth; // by accessing offsetWidth forces the browser to perform a layout recalculation (reflow)
+    countDownPlaceholder.style.animation = " pop-in 0.3s ease-out";
+  }, 1000);
 
-	return html`
+  return html`
     <div class="countdown-container">
-      <p id="count-down-placeholder">${startNumber}</p>
+      <p id="count-down-placeholder">${text ? text : startNumber}</p>
     </div>
   `;
 }

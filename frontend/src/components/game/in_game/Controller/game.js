@@ -124,22 +124,22 @@ async function loadTable(scene) {
   // Load textures
   const diffuseTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_diff_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load diffuse texture", err)
   );
   const roughnessTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_rough_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load roughness texture", err)
   );
   const normalTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_nor_gl_1k.jpg",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load normal texture", err)
   );
   const displacementTexture = loadTexture(
     "/src/components/game/in_game/assets/table_textures/wood_table_001_disp_1k.png",
-    () => {},
+    () => { },
     (err) => console.error("Failed to load displacement texture", err)
   );
 
@@ -356,6 +356,10 @@ export default async function () {
   let SecondintervalId = null;
 
   async function init() {
+    // let remove = ShowModal({
+    //   view: CountDownModal(3000, "Waiting"),
+    //   onConfirm: () => { },
+    // });
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87ceeb);
 
@@ -382,7 +386,7 @@ export default async function () {
         UpdateScore(data.first_player_score, data.second_player_score);
         ShowModal({
           view: CountDownModal(2),
-          onConfirm: () => {},
+          onConfirm: () => { },
         });
       } else if (data.type === "game_over") {
         let view = null;
@@ -444,6 +448,7 @@ export default async function () {
     animate();
 
     const GameSocket = setupWebSocket();
+
     const directions = {
       left: config.selectedPerspective !== "FPerspective" ? "left" : "right",
       right: config.selectedPerspective !== "FPerspective" ? "right" : "left",

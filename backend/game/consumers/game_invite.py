@@ -6,6 +6,7 @@ from channels.db import database_sync_to_async
 from game.models import Matchup, GamePlayer
 from game.managers.match_maker import InvitesManager
 from user.models import User
+from channels.exceptions import DenyConnection
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,9 +27,12 @@ class GameInvite(AsyncWebsocketConsumer):
     async def matchmaking(self):
         match_user = await self.InvitesManager.get_match_users(self.invite_id)
         if match_user is None:
-            return await self.InvitesManager.addPlayer(self.invite_id, self.user)
+            if not await self.InvitesManager.addPlayer(self.invite_id, self.user):
+                raise DenyConnection('Same User is waiting')
+            return
         logger.info(f'''The invited User has accepted {
             self.user} Playing against {match_user}''')
+        
         game_started_obj = await self.create_game(match_user)
         await self.emit(self.user.id, game_started_obj)
         await self.emit(match_user.id, game_started_obj)
