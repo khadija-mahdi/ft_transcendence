@@ -6,7 +6,7 @@ export function PlayerBoard(firstPlayer = true) {
       <img
         id="player-image-${firstPlayer ? 1 : 2}"
         alt=""
-        onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+        onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
         />
       <p id="player-name-${firstPlayer ? 1 : 2}"></p>
     </div>

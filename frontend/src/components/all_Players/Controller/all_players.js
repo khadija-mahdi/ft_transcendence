@@ -14,7 +14,7 @@ export function AllPlayerContainer({ name, href, number }) {
   image.className = "friend-profile-image";
   image.src = href;
   image.onerror = () => {
-    image.src = "/public/assets/images/defaultImageProfile.png";
+    image.src = "/public/assets/images/defaultImageProfile.jpeg";
   };
   image.alt = "Profile Image";
   image.width = 53;
@@ -106,7 +106,7 @@ export function PendingContainer({ name, href, number }) {
   image.src = href;
   image.alt = "Profile Image";
   image.onerror = () => {
-    image.src = "/public/assets/images/defaultImageProfile.png";
+    image.src = "/public/assets/images/defaultImageProfile.jpeg";
   };
   image.width = 53;
   image.height = 53;

@@ -18,7 +18,7 @@ export function BracketCard(player = {}, alias = null) {
             src="${player.image_url}"
             alt="profile Icon"
             class="avatar-image"
-            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+            onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
           />
         </div>
         <div class="bracket-info">
@@ -151,7 +151,7 @@ export function StatusTableRow(match = {}) {
                 src="${match.first_player?.user?.image_url}"
                 alt="profile"
                 class="avatar-image"
-                onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+                onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
               />
             </div>
             <div class="player-avatar">
@@ -159,7 +159,7 @@ export function StatusTableRow(match = {}) {
                 src="${match.second_player?.user?.image_url}"
                 alt="profile"
                 class="avatar-image"
-                onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+                onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
               />
             </div>
           </div>
@@ -192,7 +192,7 @@ export function StatusTableRow(match = {}) {
               src="${match.Winner?.user?.image_url}"
               alt="profile"
               class="avatar-image"
-              onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+              onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
             />
           </div>
           <div class="winner-info">

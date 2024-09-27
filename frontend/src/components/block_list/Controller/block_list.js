@@ -16,7 +16,7 @@ export function BlockListContainer({ name, href, number, index }) {
   image.alt = "Profile Image";
   image.width = 53;
   image.onerror = () => {
-    image.src = "/public/assets/images/defaultImageProfile.png";
+    image.src = "/public/assets/images/defaultImageProfile.jpeg";
   };
   image.height = 53;
   const textContainer = document.createElement("div");

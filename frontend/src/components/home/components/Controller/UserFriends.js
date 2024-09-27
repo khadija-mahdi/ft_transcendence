@@ -15,7 +15,7 @@ export function FriendContainer({ name, href, number }) {
   image.src = href;
   image.alt = "Profile Image";
   image.onerror = () => {
-    image.src = "/public/assets/images/defaultImageProfile.png";
+    image.src = "/public/assets/images/defaultImageProfile.jpeg";
   };
   image.width = 53;
   image.height = 53;

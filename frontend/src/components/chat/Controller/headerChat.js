@@ -98,7 +98,7 @@ export function ChatRoomHeaderUi(selectedChat, isFriend) {
           <img
             class="panel-image"
             src="${selectedChat.room_icon}"
-            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+            onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
             alt="Profile Image"
           />
           <a
@@ -256,7 +256,7 @@ function appendMessageToUI(message, prepend = false) {
           <img
             class="image_file-content"
             src="${message.image_file}"
-            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+            onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
             alt="image message"
           />
         </div>

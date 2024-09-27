@@ -8,7 +8,7 @@ export default function () {
           <img
             id="user-image"
             class="user-image"
-            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+            onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
             alt="user Image"
           />
           <div class="user-info">

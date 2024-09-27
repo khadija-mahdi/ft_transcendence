@@ -99,17 +99,18 @@ class OAuth2Authentication:
             key, value = self.get_username_kv(user_data)
             user = User.objects.filter(
                 username=value).exists()
-            user_data[key] += f'-{uuid.uuid4().hex[:6].upper()}'
+            user_data[key] = f'{value}-{uuid.uuid4().hex[:6].upper()}'
             serializer = self.serializer_class(data=user_data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
             return Response(self.get_response_data(user, request))
 
     def get_username_kv(self, user_data: Dict[str, str]):
-        username = user_data.get('username')
-        if username:
-            return 'username', username
-        return 'login', user_data.get('login')
+        login = user_data.get('login')
+        if login:
+            return 'login', login
+        username = user_data.get('email').split('@')[0]
+        return 'username', username
 
     def get_response_data(self, user, request) -> dict:
         access_token, refresh_token = generate_user_tokens(user)

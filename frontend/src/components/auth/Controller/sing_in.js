@@ -52,7 +52,7 @@ function handleIntraLogin() {
 export async function OAuthSingIn() {
   const googleAuthButton = document.getElementById("googleAuth");
   const intraAuthButton = document.getElementById("intraAuth");
-  if (googleAuthButton) {
+  if (googleAuthButton && API_URL === 'localhost:4433') {
     googleAuthButton.addEventListener("click", function () {
       handleGoogleLogin();
     });

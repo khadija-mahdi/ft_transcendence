@@ -71,7 +71,7 @@ export function renderNotifications(notifications) {
                 <div class="notification-image-container">
                     <img class="notification-image" src=  notification.sender.image_url
  
-					onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+					onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
 					alt="Profile Image" width="35" height="35" />
                 </div>
                 <div class="notification-text-container">

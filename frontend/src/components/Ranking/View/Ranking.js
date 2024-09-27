@@ -42,7 +42,7 @@ export function rankingItem({
           <img
             src="${image_url}"
             alt="player"
-            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+            onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
           />
           <p>${fullname || username}</p>
         </div>

@@ -17,7 +17,7 @@ export function OnlinePlayerContainer({ id, name, href, number, index }) {
   image.width = 53;
   image.height = 53;
   image.onerror = () => {
-    image.src = "/public/assets/images/defaultImageProfile.png";
+    image.src = "/public/assets/images/defaultImageProfile.jpeg";
   };
   const textContainer = document.createElement("div");
   textContainer.className = "friend-text-container";

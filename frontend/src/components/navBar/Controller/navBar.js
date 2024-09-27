@@ -142,7 +142,7 @@ export function renderNotifications(notifications) {
               alt="Profile Image"
               width="35"
               height="35"
-              onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+              onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
               ;
             />
           </div>
@@ -287,9 +287,9 @@ function ProfilePanel(user) {
   });
 
   document.getElementById("profile-image").src =
-    user.image_url || "/public/assets/images/defaultImageProfile.png";
+    user.image_url || "/public/assets/images/defaultImageProfile.jpeg";
   document.getElementById("panel-profile-image").src =
-    user.image_url || "/public/assets/images/defaultImageProfile.png";
+    user.image_url || "/public/assets/images/defaultImageProfile.jpeg";
   document.getElementById("profile-username").textContent = user.username;
   document.getElementById(
     "profile-level"

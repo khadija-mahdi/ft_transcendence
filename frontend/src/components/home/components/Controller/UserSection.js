@@ -84,7 +84,7 @@ export default async function () {
 	const user = await fetchMyData();
 
 	document.getElementById("user-image").src =
-		user.image_url || "/public/assets/images/defaultImageProfile.png";
+		user.image_url || "/public/assets/images/defaultImageProfile.jpeg";
 	document.getElementById("fullname").innerText = user.fullname
 		? user?.fullname
 		: "";

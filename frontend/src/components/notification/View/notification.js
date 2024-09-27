@@ -12,7 +12,7 @@ export default function () {
               <div class="notifications-image-container">
                 <img
                   class="notifications-image"
-                  onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+                  onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
                   alt="Profile Image"
                   width="35"
                   height="35"

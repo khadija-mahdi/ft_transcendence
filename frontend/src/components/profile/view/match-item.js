@@ -10,7 +10,7 @@ export function matchItem({ first_player, second_player, Winner }) {
             <img
               src="${first_player?.user?.image_url}"
               alt="profile"
-              onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+              onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
             />
           </div>
           <div class="player-icon">
@@ -18,7 +18,7 @@ export function matchItem({ first_player, second_player, Winner }) {
               src="${second_player?.user?.image_url ||
               "/public/assets/images/robot.webp"}"
               alt="profile"
-              onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+              onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
             />
           </div>
         </div>

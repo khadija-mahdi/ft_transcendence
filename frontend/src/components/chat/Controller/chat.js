@@ -82,7 +82,7 @@ function renderMessengerItem(item) {
         <img
           class="img_avatar_room"
           src="${item.room_icon}"
-		  onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+		  onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
           alt="${item.room_name}"
         />
       </div>

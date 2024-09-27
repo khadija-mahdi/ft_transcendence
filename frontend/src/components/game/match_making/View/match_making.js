@@ -39,7 +39,7 @@ export default () => {
         <div id="my-card" class="player-card">
           <img
             alt="Player Image"
-            onerror="this.src='/public/assets/images/defaultImageProfile.png';"
+            onerror="this.src='/public/assets/images/defaultImageProfile.jpeg';"
             class="player-image"
           />
           <div class="player-info">
