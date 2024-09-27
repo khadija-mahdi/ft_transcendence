@@ -66,17 +66,18 @@ class Game():
         logger.debug(f'Add Player {player}')
         async with self.lock:
             if len(self.players) == 2 or player in self.players or not self.matchup:
-                logger.debug(f'either player list is full > {len(self.players) == 2}'
-                             'or player already in player list '
-                             f'> {player in self.players}'
-                             f'or matchup is null {not self.matchup}')
+                logger.debug(f'  > either player list is full > {len(self.players) == 2}\n'
+                             f'  > or player already in player list\n'
+                             f'     - {player in self.players} \n'
+                             f'  > or matchup is null {not self.matchup}')
                 return False
             if player == self.first_player_user or player == self.second_player_user:
                 logger.debug('Adding player {player}')
                 self.players.append(player)
+                return True
             else:
                 logger.info('player is neither Fp or Sp')
-            return True
+            return False
 
     async def move_paddle(self, player, action, player_order=None):
         async with self.lock:

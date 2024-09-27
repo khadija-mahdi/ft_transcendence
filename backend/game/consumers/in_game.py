@@ -37,7 +37,9 @@ class InGame(AsyncWebsocketConsumer):
         await self.channel_layer.group_add(
             self.room_group_name, self.channel_name
         )
-        await self.game.add_player(self.user)
+        if not await self.game.add_player(self.user):
+            raise DenyConnection(
+                'The Room Is Full Or The Users Already Connected On Other Session')
         await self.accept()
         self.Connected = True
 
