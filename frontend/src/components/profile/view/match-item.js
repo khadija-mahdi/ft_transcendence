@@ -1,7 +1,7 @@
 const html = String.raw;
 
-export function matchItem({ first_player, second_player, Winner }) {
-  const IWon = Winner?.id === first_player?.id;
+export function matchItem({ first_player, second_player, Winner, me }) {
+  const IWon = Winner?.user?.id === me;
   return html`
     <div class="match-item">
       <div class="match-players">

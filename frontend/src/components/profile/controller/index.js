@@ -58,7 +58,7 @@ export default async function Controller() {
   if (data.is_blocked) return window.location.replace("/not-found");
   setProfile();
   PopulateTournamentMatches(user.tournamentHistory);
-  PopulateMatches(user.matchHistory);
+  PopulateMatches(user.matchHistory, data.id);
   PopulateTopAchievements(user.data.achievements);
 }
 
@@ -214,14 +214,14 @@ function PopulateTournamentMatches(data) {
   });
 }
 
-function PopulateMatches(data) {
+function PopulateMatches(data, me) {
   const matchHistory = document.getElementById("match-history");
   if (data.count === 0) {
     matchHistory.append(Empty("No matches found"));
     return;
   }
   data.results.forEach((match) => {
-    matchHistory.innerHTML += matchItem(match);
+    matchHistory.innerHTML += matchItem({...match, me});
   });
 }
 

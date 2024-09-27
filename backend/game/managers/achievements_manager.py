@@ -31,6 +31,9 @@ class AchievementsManager:
 
     @database_sync_to_async
     def handleWinStreak(self, user: User) -> None:
+        if user is None:
+            logger.error("Winner is None, cannot handle win streak.")
+            return
         win_streak = 0
         win_strike_achievements: QuerySet = Achievements.objects.filter(
             requirement_type='win_streak')
@@ -39,7 +42,7 @@ class AchievementsManager:
         last_match_ups: list[Matchup] = self.relevantGames(user, 'win_streak')
         for matchUp in last_match_ups:
             winner = matchUp.Winner
-            if winner.user is not user:
+            if winner and winner.user and winner.user is not user:
                 break
             win_streak += 1
 
@@ -50,6 +53,9 @@ class AchievementsManager:
 
     @database_sync_to_async
     def handleTotalPoints(self, user: User) -> None:
+        if user is None:
+            logger.error("Winner is None, cannot handle win streak.")
+            return
         total_point_achievements = Achievements.objects.filter(
             requirement_type='total_points')
         if not total_point_achievements.exists():
@@ -61,6 +67,9 @@ class AchievementsManager:
 
     @database_sync_to_async
     def handleZeroLoss(self, user: User) -> None:
+        if user is None:
+            logger.error("Winner is None, cannot handle win streak.")
+            return
         total_zero_loss = 0
         achievements = Achievements.objects.filter(
             requirement_type='win_with_zero_loss')
@@ -72,7 +81,7 @@ class AchievementsManager:
             winner = matchUp.Winner
             loser_score = matchUp.first_player.score if\
                 matchUp.first_player != winner else matchUp.second_player.score
-            if winner.user == user and loser_score == 0:
+            if winner and winner.user and winner.user == user and loser_score == 0:
                 total_zero_loss += 1
 
         for achievement in achievements:
@@ -82,6 +91,9 @@ class AchievementsManager:
 
     @database_sync_to_async
     def handleTotalWins(self, user: User) -> None:
+        if user is None:
+            logger.error("Winner is None, cannot handle win streak.")
+            return
         total_wins = 0
         achievements = Achievements.objects.filter(
             requirement_type='total_wins')
@@ -90,7 +102,7 @@ class AchievementsManager:
         last_match_ups: list[Matchup] = self.relevantGames(user, 'total_wins')
         for matchUp in last_match_ups:
             winner = matchUp.Winner
-            if winner.user == user:
+            if winner and winner.user and winner.user == user:
                 total_wins += 1
         for achievement in achievements:
             if total_wins >= achievement.requirement_value:

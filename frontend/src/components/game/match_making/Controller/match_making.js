@@ -58,7 +58,7 @@ async function handleLocalPlayer() {
   if (alias2) {
     secondPlayerCard.innerHTML = PlayerCard({
       username: alias1,
-      image_url: "/public/assets/images/robot.webp",
+      image_url: "frontend/public/assets/images/defaultImageProfile.jpeg",
       rank: null,
       current_xp: null,
     });
@@ -71,7 +71,7 @@ async function handleLocalPlayer() {
     firstPlayer.style.height = "null";
     firstPlayer.innerHTML = PlayerCard({
       username: alias2,
-      image_url: "/public/assets/images/robot.webp",
+      image_url: "/public/assets/images/defaultImageProfile.jpeg",
       rank: null,
       current_xp: null,
     });

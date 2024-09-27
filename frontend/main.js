@@ -16,7 +16,7 @@ function handleConnectWebSocket() {
 		showMainPopup({
 			title: data.title,
 			subtitle: data.description,
-			icon: data.icon,
+			icon: data.icon || "/public/assets/images/fortnait.jpg" ,
 			type: data.type,
 			sender: data.sender,
 			action: data.action,

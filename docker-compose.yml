@@ -7,8 +7,8 @@ services:
     networks:
       - mynetwork
     ports:
-      - "8022:8022"
-      - "4433:4433"
+      - "80:80"
+      - "443:443"
     depends_on:
       - frontend
       - backend
@@ -26,6 +26,7 @@ services:
       - .env
     depends_on:
       - backend
+    user: root
 
   backend:
     restart: always
@@ -42,6 +43,7 @@ services:
     depends_on:
       - db
       - redis
+    user: root
 
   redis:
     restart: always
